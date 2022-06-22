@@ -10,12 +10,13 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.nullpointer.nullsiteadmin.models.InfoType
 import com.nullpointer.nullsiteadmin.ui.screens.infoProfile.dialogChange.viewModel.DialogChangeViewModel
 
 @Composable
 fun DialogChangeInfo(
-    actionAccept: (String) -> Unit,
     dialogChangeVM: DialogChangeViewModel,
+    actionAccept: (InfoType, String) -> Unit,
 ) {
     AlertDialog(
         title = {
@@ -35,7 +36,12 @@ fun DialogChangeInfo(
             }
         },
         confirmButton = {
-            TextButton(onClick = { actionAccept(dialogChangeVM.currentTextValue) }) {
+            TextButton(onClick = {
+                actionAccept(
+                    dialogChangeVM.infoType,
+                    dialogChangeVM.currentTextValue
+                )
+            }) {
                 Text(text = "Confirmar")
             }
         }, onDismissRequest = dialogChangeVM::hideDialog

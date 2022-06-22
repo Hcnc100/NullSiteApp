@@ -5,6 +5,7 @@ plugins {
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
     id "com.google.devtools.ksp" version "1.6.10-1.0.4"
+    id 'com.google.gms.google-services'
 }
 kotlin {
     sourceSets {
@@ -123,4 +124,13 @@ dependencies {
 
     // * data store
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    // * Firebase
+    implementation platform('com.google.firebase:firebase-bom:29.0.0')
+    implementation 'com.google.firebase:firebase-firestore-ktx'
+    implementation 'com.google.firebase:firebase-storage-ktx'
+    implementation 'com.google.firebase:firebase-auth-ktx'
+    implementation 'com.google.firebase:firebase-messaging-ktx'
+    implementation 'com.google.android.gms:play-services-auth:20.2.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.1'
 }

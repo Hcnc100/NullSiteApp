@@ -18,18 +18,18 @@ import coil.compose.AsyncImage
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.models.InfoType
+import com.nullpointer.nullsiteadmin.models.InfoType.*
 import com.nullpointer.nullsiteadmin.models.PersonalInfo
+import com.nullpointer.nullsiteadmin.services.InfoUserViewModel
 import com.nullpointer.nullsiteadmin.ui.screens.infoProfile.dialogChange.DialogChangeInfo
 import com.nullpointer.nullsiteadmin.ui.screens.infoProfile.dialogChange.viewModel.DialogChangeViewModel
-import com.nullpointer.nullsiteadmin.ui.screens.infoProfile.viewModel.EditableViewModel
 
 @Composable
 fun InfoProfile(
-    editableVM: EditableViewModel = hiltViewModel(),
+    infoUserVM: InfoUserViewModel = hiltViewModel(),
     dialogChangeVM: DialogChangeViewModel = hiltViewModel(),
 ) {
-
-    val stateInfoProfile by editableVM.personalInfo.collectAsState()
+    val stateInfoProfile by infoUserVM.infoUser.collectAsState()
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Profile") })
@@ -37,7 +37,9 @@ fun InfoProfile(
     ) {
 
         when (stateInfoProfile) {
-            is Resource.Failure -> TODO()
+            is Resource.Failure ->{
+
+            }
             is Resource.Loading -> {
                 Box(modifier = Modifier.fillMaxSize()) {
                     CircularProgressIndicator()
@@ -60,11 +62,14 @@ fun InfoProfile(
                 }
                 if (dialogChangeVM.isVisible) {
                     DialogChangeInfo(
-                        actionAccept = {
-
-                        },
                         dialogChangeVM = dialogChangeVM
-                    )
+                    ) { infoType, newValue ->
+                        when (infoType) {
+                            NAME -> infoUserVM.updateAnyFieldUser(nameAdmin = newValue)
+                            PROFESSION -> infoUserVM.updateAnyFieldUser(profession = newValue)
+                            DESCRIPTION -> infoUserVM.updateAnyFieldUser(description = newValue)
+                        }
+                    }
                 }
             }
         }
@@ -96,19 +101,19 @@ private fun EditInfoProfile(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         LabelAndInfo(
-            infoType = InfoType.NAME,
+            infoType = NAME,
             text = personalInfo.name,
             actionEditText = actionEditText
         )
         Spacer(modifier = Modifier.height(10.dp))
         LabelAndInfo(
-            infoType = InfoType.PROCESSION,
+            infoType = PROFESSION,
             text = personalInfo.profession,
             actionEditText = actionEditText
         )
         Spacer(modifier = Modifier.height(10.dp))
         LabelAndInfo(
-            infoType = InfoType.DESCRIPTION,
+            infoType = DESCRIPTION,
             text = personalInfo.description,
             modifier = Modifier.height(200.dp),
             actionEditText = actionEditText
