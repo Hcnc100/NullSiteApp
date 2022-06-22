@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.nullpointer.nullsiteadmin">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
+        android:name=".inject.Application"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -14,9 +16,8 @@
         android:theme="@style/Theme.NullSiteAdmin"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.activitys.MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.NullSiteAdmin">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
