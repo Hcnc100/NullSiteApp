@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.domain
+package com.nullpointer.nullsiteadmin.domain.infoUser
 
 import com.nullpointer.nullsiteadmin.models.PersonalInfo
 import kotlinx.coroutines.flow.Flow

@@ -38,7 +38,6 @@ fun DialogChangeInfo(
                         modifier = Modifier.height(height)
                     )
                     Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 5.dp),
@@ -85,6 +84,7 @@ fun DialogChangeInfo(
                         dialogChangeVM.infoType,
                         dialogChangeVM.currentTextValue
                     )
+                    dialogChangeVM.hideDialog()
                 }
             ) {
                 Text(text = "Confirmar")

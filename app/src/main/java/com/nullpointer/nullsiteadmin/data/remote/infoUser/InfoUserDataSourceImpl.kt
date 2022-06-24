@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.data.remote
+package com.nullpointer.nullsiteadmin.data.remote.infoUser
 
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase

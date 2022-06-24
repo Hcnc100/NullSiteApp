@@ -1,9 +1,8 @@
 package com.nullpointer.nullsiteadmin.inject
 
-import com.nullpointer.nullsiteadmin.data.remote.InfoUserDataSource
-import com.nullpointer.nullsiteadmin.data.remote.InfoUserDataSourceImpl
-import com.nullpointer.nullsiteadmin.domain.InfoUserRepoImpl
-import com.nullpointer.nullsiteadmin.domain.InfoUserRepository
+import com.nullpointer.nullsiteadmin.data.remote.infoUser.InfoUserDataSource
+import com.nullpointer.nullsiteadmin.data.remote.infoUser.InfoUserDataSourceImpl
+import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepoImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
