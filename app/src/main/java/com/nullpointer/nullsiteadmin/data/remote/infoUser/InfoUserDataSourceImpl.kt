@@ -1,6 +1,7 @@
 package com.nullpointer.nullsiteadmin.data.remote.infoUser
 
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.nullpointer.nullsiteadmin.models.PersonalInfo
 import kotlinx.coroutines.channels.awaitClose
@@ -22,7 +23,7 @@ class InfoUserDataSourceImpl : InfoUserDataSource {
         val listener = refMyInfo.addSnapshotListener { value, error ->
             error?.let { channel.close(it) }
             try {
-                val info = value!!.toObject(PersonalInfo::class.java)!!
+                val info = value?.toObject<PersonalInfo>()!!
                 trySend(info)
             } catch (e: Exception) {
                 channel.close(CancellationException(e))

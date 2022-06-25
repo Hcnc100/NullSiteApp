@@ -3,6 +3,7 @@ package com.nullpointer.nullsiteadmin.data.remote.email
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.nullpointer.nullsiteadmin.models.EmailContact
 import kotlinx.coroutines.channels.awaitClose
@@ -23,18 +24,17 @@ class EmailDataSourceImpl : EmailDataSource {
             .addSnapshotListener { value, error ->
                 error?.let { channel.close(it) }
                 try {
-                    val listEmails = value!!.documents.mapNotNull {
-                        val email = it.toObject(EmailContact::class.java)
-                        email?.copy(
-                            timestamp = it.getTimestamp(
+                    val listEmails = value!!.documents.mapNotNull { documentSnapshot ->
+                        documentSnapshot.toObject<EmailContact>()?.copy(
+                            timestamp = documentSnapshot.getTimestamp(
                                 "timestamp",
                                 DocumentSnapshot.ServerTimestampBehavior.ESTIMATE
                             )?.toDate(),
-                            id = it.id
-                    )
-                }
-                trySend(listEmails)
-            } catch (e: Exception) {
+                            id = documentSnapshot.id
+                        )
+                    }
+                    trySend(listEmails)
+                } catch (e: Exception) {
                 channel.close(e)
             }
         }
