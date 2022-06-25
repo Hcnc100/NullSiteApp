@@ -1,6 +1,7 @@
 package com.nullpointer.nullsiteadmin.data.remote.email
 
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.nullpointer.nullsiteadmin.models.EmailContact
@@ -18,17 +19,18 @@ class EmailDataSourceImpl : EmailDataSource {
 
 
     override fun getAllEmails(): Flow<List<EmailContact>> = callbackFlow {
-        val listener = collectionEmail.orderBy("timestamp").addSnapshotListener { value, error ->
-            error?.let { channel.close(it) }
-            try {
-                val listEmails = value!!.documents.mapNotNull {
-                    val email = it.toObject(EmailContact::class.java)
-                    email?.copy(
-                        timestamp = it.getTimestamp(
-                            "timestamp",
-                            DocumentSnapshot.ServerTimestampBehavior.ESTIMATE
-                        )?.toDate(),
-                        id = it.id
+        val listener = collectionEmail.orderBy("timestamp", Query.Direction.DESCENDING)
+            .addSnapshotListener { value, error ->
+                error?.let { channel.close(it) }
+                try {
+                    val listEmails = value!!.documents.mapNotNull {
+                        val email = it.toObject(EmailContact::class.java)
+                        email?.copy(
+                            timestamp = it.getTimestamp(
+                                "timestamp",
+                                DocumentSnapshot.ServerTimestampBehavior.ESTIMATE
+                            )?.toDate(),
+                            id = it.id
                     )
                 }
                 trySend(listEmails)

@@ -59,6 +59,11 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+
+    // * clear advertising experimentalAnnotation
+    kotlin.sourceSets.all {
+        languageSettings.useExperimentalAnnotation("kotlin.RequiresOptIn")
+    }
 }
 
 dependencies {
