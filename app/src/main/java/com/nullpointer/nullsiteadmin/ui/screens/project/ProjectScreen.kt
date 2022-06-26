@@ -1,6 +1,7 @@
 package com.nullpointer.nullsiteadmin.ui.screens.project
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
@@ -15,7 +16,9 @@ import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.models.Project
 import com.nullpointer.nullsiteadmin.presentation.ProjectViewModel
 import com.nullpointer.nullsiteadmin.ui.screens.animation.AnimationScreen
+import com.ramcosta.composedestinations.annotation.Destination
 
+@Destination
 @Composable
 fun ProjectScreen(
     projectVM: ProjectViewModel = hiltViewModel()
@@ -33,10 +36,14 @@ fun ProjectScreen(
         when (val listProject = stateListProject) {
             Resource.Failure -> AnimationScreen(
                 animation = R.raw.error,
-                textEmpty = "Error load project"
+                textEmpty = "Error load project",
+                modifier = Modifier.padding(it)
             )
             Resource.Loading -> {}
-            is Resource.Success -> ListProjects(listProject = listProject.data)
+            is Resource.Success -> ListProjects(
+                listProject = listProject.data,
+                modifier = Modifier.padding(it)
+            )
         }
     }
 }
@@ -44,9 +51,10 @@ fun ProjectScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ListProjects(
-    listProject: List<Project>
+    listProject: List<Project>,
+    modifier: Modifier = Modifier
 ) {
-    LazyColumn {
+    LazyColumn(modifier = modifier) {
         items(
             count = listProject.size,
             key = { listProject[it].id }

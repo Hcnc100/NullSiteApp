@@ -14,10 +14,12 @@ import androidx.compose.ui.unit.dp
 import com.valentinilk.shimmer.shimmer
 
 @Composable
-fun LoadingInfoUser() {
+fun LoadingInfoUser(
+    modifier: Modifier = Modifier,
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(15.dp)
             .verticalScroll(rememberScrollState())

@@ -18,7 +18,9 @@ import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.models.EmailContact
 import com.nullpointer.nullsiteadmin.presentation.EmailsViewModel
 import com.nullpointer.nullsiteadmin.ui.screens.animation.AnimationScreen
+import com.ramcosta.composedestinations.annotation.Destination
 
+@Destination
 @Composable
 fun EmailScreen(
     emailsVM: EmailsViewModel = hiltViewModel()
