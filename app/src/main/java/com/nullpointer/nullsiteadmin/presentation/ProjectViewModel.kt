@@ -20,7 +20,7 @@ class ProjectViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _messageErrorProject = Channel<String>()
-    val messageErrorProject = _messageErrorProject.consumeAsFlow()
+    val messageErrorProject = _messageErrorProject.receiveAsFlow()
 
     val listProject = flow<Resource<List<Project>>> {
         projectRepository.listProjects.collect {

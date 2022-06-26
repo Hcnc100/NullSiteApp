@@ -33,9 +33,6 @@ fun InfoProfile(
     }
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = {
-            TopAppBar(title = { Text("Profile") })
-        }
     ) {
 
         when (val infoProfile = stateInfoProfile) {

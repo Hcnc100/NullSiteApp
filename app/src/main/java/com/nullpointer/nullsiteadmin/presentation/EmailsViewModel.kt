@@ -20,7 +20,7 @@ class EmailsViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _errorEmail = Channel<String>()
-    val errorEmail = _errorEmail.consumeAsFlow()
+    val errorEmail = _errorEmail.receiveAsFlow()
 
     val listEmails = flow<Resource<List<EmailContact>>> {
         emailsRepository.listEmails.collect {
