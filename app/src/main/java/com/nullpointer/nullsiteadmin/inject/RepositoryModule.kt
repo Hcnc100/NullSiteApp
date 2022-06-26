@@ -4,6 +4,8 @@ import com.nullpointer.nullsiteadmin.domain.email.EmailsRepoImpl
 import com.nullpointer.nullsiteadmin.domain.email.EmailsRepository
 import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepoImpl
 import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepository
+import com.nullpointer.nullsiteadmin.domain.project.ProjectRepoImpl
+import com.nullpointer.nullsiteadmin.domain.project.ProjectRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -16,7 +18,7 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun provideConfigRepository(
+    abstract fun provideInfoUserRepository(
         infoUserRepoImpl: InfoUserRepoImpl
     ): InfoUserRepository
 
@@ -25,4 +27,11 @@ abstract class RepositoryModule {
     abstract fun provideEmailRepository(
         emailsRepository: EmailsRepoImpl
     ): EmailsRepository
+
+    @Binds
+    @Singleton
+    abstract fun provideProjectRepository(
+        projectRepoImpl: ProjectRepoImpl
+    ): ProjectRepository
+
 }

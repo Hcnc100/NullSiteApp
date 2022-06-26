@@ -138,4 +138,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging-ktx'
     implementation 'com.google.android.gms:play-services-auth:20.2.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.1'
+
+    // * web view
+    implementation "com.google.accompanist:accompanist-webview:0.24.12-rc"
 }

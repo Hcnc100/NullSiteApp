@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -22,25 +24,34 @@ fun EmailScreen(
     emailsVM: EmailsViewModel = hiltViewModel()
 ) {
     val emailsState by emailsVM.listEmails.collectAsState()
+    val scaffoldState = rememberScaffoldState()
+    LaunchedEffect(key1 = Unit) {
+        emailsVM.errorEmail.collect {
+            scaffoldState.snackbarHostState.showSnackbar(it)
+        }
+    }
     Scaffold(
-
+        scaffoldState = scaffoldState
     ) {
         when (val listEmails = emailsState) {
             Resource.Failure -> AnimationScreen(
                 animation = R.raw.error,
-                textEmpty = "Error al cargar los emails"
+                textEmpty = "Error al cargar los emails",
+                modifier = Modifier.padding(it)
             )
             Resource.Loading -> {}
             is Resource.Success -> {
                 if (listEmails.data.isEmpty()) {
                     AnimationScreen(
                         animation = R.raw.empty1,
-                        textEmpty = "La bandeja de entrada esta vacia"
+                        textEmpty = "La bandeja de entrada esta vacia",
+                        modifier = Modifier.padding(it)
                     )
                 } else {
                     ListEmails(
                         listEmails = listEmails.data,
-                        actionDeleter = emailsVM::deleterEmail
+                        actionDeleter = emailsVM::deleterEmail,
+                        modifier = Modifier.padding(it)
                     )
                 }
             }
@@ -53,9 +64,10 @@ fun EmailScreen(
 @Composable
 private fun ListEmails(
     listEmails: List<EmailContact>,
-    actionDeleter: (String) -> Unit
+    actionDeleter: (String) -> Unit,
+    modifier:Modifier = Modifier
 ) {
-    LazyColumn {
+    LazyColumn(modifier = modifier) {
         item {
             Text(
                 text = "Numero de emails: ${listEmails.size}",
