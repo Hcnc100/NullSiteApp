@@ -16,6 +16,7 @@ import com.nullpointer.nullsiteadmin.models.Project
 @Composable
 fun ProjectItem(
     project: Project,
+    actionEditProject: (Project) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -39,10 +40,13 @@ fun ProjectItem(
             Spacer(modifier = Modifier.height(20.dp))
             Text(text = project.description, style = MaterialTheme.typography.body1)
             Spacer(modifier = Modifier.height(20.dp))
-            Button(onClick = { /*TODO*/ }) {
+            Button(onClick = { actionEditProject(project) }) {
                 Row {
-                   Icon(painter = painterResource(id =R.drawable.ic_edit), contentDescription = "")
-                   Spacer(modifier = Modifier.width(5.dp))
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_edit),
+                        contentDescription = ""
+                    )
+                    Spacer(modifier = Modifier.width(5.dp))
                     Text("Editar")
                 }
             }

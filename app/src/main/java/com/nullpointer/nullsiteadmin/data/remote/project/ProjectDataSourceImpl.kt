@@ -7,6 +7,7 @@ import com.nullpointer.nullsiteadmin.models.Project
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
 
 class ProjectDataSourceImpl : ProjectDataSource {
     companion object {
@@ -33,6 +34,15 @@ class ProjectDataSourceImpl : ProjectDataSource {
     }
 
     override suspend fun editProject(project: Project) {
-        TODO("Not yet implemented")
+        refProjects.document(project.id).update(project.toMap()).await()
     }
+}
+
+private fun Project.toMap(): Map<String, Any> {
+    return mapOf(
+        "name" to name,
+        "description" to description,
+        "urlRepo" to urlRepo,
+        "urlImg" to urlImg
+    )
 }

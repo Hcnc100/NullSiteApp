@@ -25,3 +25,23 @@ fun ToolbarMenu(
         }
     )
 }
+
+@Composable
+fun ToolbarBack(
+    title: String,
+    actionBack: () -> Unit
+) {
+    TopAppBar(
+        backgroundColor = MaterialTheme.colors.primary,
+        title = { Text(text = title, color = Color.White) },
+        navigationIcon = {
+            IconButton(onClick = actionBack) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_arrow_back),
+                    contentDescription = "",
+                    tint = Color.White
+                )
+            }
+        }
+    )
+}

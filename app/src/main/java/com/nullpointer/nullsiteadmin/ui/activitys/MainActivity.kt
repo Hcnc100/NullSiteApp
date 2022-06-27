@@ -30,20 +30,23 @@ class MainActivity : ComponentActivity() {
                     var titleNav by remember { mutableStateOf(MainDestinations.PersonalInfoScreen.label) }
                     val scope = rememberCoroutineScope()
                     val navController = rememberNavController()
-                    val scaffoldState= rememberScaffoldState(rememberDrawerState(initialValue = DrawerValue.Closed))
+                    val scaffoldState =
+                        rememberScaffoldState(rememberDrawerState(initialValue = DrawerValue.Closed))
+                    var isHomeRoute by remember { mutableStateOf(false) }
                     navController.addOnDestinationChangedListener { _, destination, _ ->
-//                        MainDestinations.isHomeRoute(destination.route)
+                        isHomeRoute = MainDestinations.isHomeRoute(destination.route)
                         titleNav = MainDestinations.getLabel(destination.route)
                     }
 
                     Scaffold(
                         scaffoldState = scaffoldState,
                         topBar = {
-                            ToolbarMenu(title = titleNav) {
-                                scope.launch {
-                                    scaffoldState.drawerState.open()
+                            if (isHomeRoute)
+                                ToolbarMenu(title = titleNav) {
+                                    scope.launch {
+                                        scaffoldState.drawerState.open()
+                                    }
                                 }
-                            }
                         },
                         drawerContent = {
                             NavigatorDrawer(

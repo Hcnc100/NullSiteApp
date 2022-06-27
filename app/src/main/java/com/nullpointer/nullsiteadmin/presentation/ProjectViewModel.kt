@@ -39,8 +39,9 @@ class ProjectViewModel @Inject constructor(
     fun editProject(project: Project) = viewModelScope.launch(Dispatchers.IO) {
         try {
             projectRepository.editProject(project)
+            _messageErrorProject.trySend("Projecto actualizado")
         } catch (e: Exception) {
-            Timber.e("Failed to edit project $project")
+            Timber.e("Failed to edit project $e")
             when (e) {
                 is CancellationException -> throw e
                 else -> _messageErrorProject.trySend("Error while edit project")

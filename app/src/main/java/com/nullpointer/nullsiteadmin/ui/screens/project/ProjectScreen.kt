@@ -16,13 +16,21 @@ import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.models.Project
 import com.nullpointer.nullsiteadmin.presentation.ProjectViewModel
 import com.nullpointer.nullsiteadmin.ui.screens.animation.AnimationScreen
+import com.nullpointer.nullsiteadmin.ui.screens.destinations.EditProjectScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.result.ResultRecipient
 
 @Destination
 @Composable
 fun ProjectScreen(
-    projectVM: ProjectViewModel = hiltViewModel()
+    projectVM: ProjectViewModel = hiltViewModel(),
+    navigator: DestinationsNavigator,
+    resultRecipient: ResultRecipient<EditProjectScreenDestination, Project>
 ) {
+    resultRecipient.onResult(listener = {
+        projectVM.editProject(it)
+    })
     val stateListProject by projectVM.listProject.collectAsState()
     val scaffoldState = rememberScaffoldState()
     LaunchedEffect(key1 = Unit) {
@@ -42,7 +50,10 @@ fun ProjectScreen(
             Resource.Loading -> {}
             is Resource.Success -> ListProjects(
                 listProject = listProject.data,
-                modifier = Modifier.padding(it)
+                modifier = Modifier.padding(it),
+                actionEditProject = { project ->
+                    navigator.navigate(EditProjectScreenDestination.invoke(project))
+                }
             )
         }
     }
@@ -52,6 +63,7 @@ fun ProjectScreen(
 @Composable
 private fun ListProjects(
     listProject: List<Project>,
+    actionEditProject: (Project) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier) {
@@ -61,7 +73,8 @@ private fun ListProjects(
         ) { index ->
             ProjectItem(
                 project = listProject[index],
-                modifier = Modifier.animateItemPlacement()
+                modifier = Modifier.animateItemPlacement(),
+                actionEditProject = actionEditProject
             )
         }
     }
