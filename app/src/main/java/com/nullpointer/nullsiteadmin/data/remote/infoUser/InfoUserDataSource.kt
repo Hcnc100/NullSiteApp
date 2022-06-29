@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface InfoUserDataSource {
     fun getMyInfo(): Flow<PersonalInfo>
-    suspend fun updateAnyInfo(nameAdmin: String?, profession: String?, description: String?)
+    suspend fun updatePersonalInfo(personalInfo:PersonalInfo)
 }

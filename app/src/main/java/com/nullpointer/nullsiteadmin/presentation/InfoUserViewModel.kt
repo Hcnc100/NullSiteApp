@@ -36,20 +36,15 @@ class InfoUserViewModel @Inject constructor(
         Resource.Loading
     )
 
-
-    fun updateAnyFieldUser(
-        nameAdmin: String? = null,
-        profession: String? = null,
-        description: String? = null
-    ) = viewModelScope.launch(Dispatchers.IO) {
+    fun updatePersonalInfo(personalInfo: PersonalInfo) = viewModelScope.launch(Dispatchers.IO) {
         try {
-            infoUserRepository.updateAnyFieldUser(nameAdmin, profession, description)
+            infoUserRepository.updatePersonalInfo(personalInfo)
+            _messageError.trySend("Datos actualizados")
         } catch (e: Exception) {
             when (e) {
                 is CancellationException -> throw e
                 else -> _messageError.trySend("Error to update info user")
             }
         }
-
     }
 }

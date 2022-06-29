@@ -28,9 +28,7 @@ fun ProjectScreen(
     navigator: DestinationsNavigator,
     resultRecipient: ResultRecipient<EditProjectScreenDestination, Project>
 ) {
-    resultRecipient.onResult(listener = {
-        projectVM.editProject(it)
-    })
+    resultRecipient.onResult(listener = projectVM::editProject)
     val stateListProject by projectVM.listProject.collectAsState()
     val scaffoldState = rememberScaffoldState()
     LaunchedEffect(key1 = Unit) {

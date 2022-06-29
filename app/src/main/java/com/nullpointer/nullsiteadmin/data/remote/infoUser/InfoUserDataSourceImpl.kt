@@ -36,13 +36,16 @@ class InfoUserDataSourceImpl : InfoUserDataSource {
         }
     }
 
-    override suspend fun updateAnyInfo(
-        nameAdmin: String?,
-        profession: String?,
-        description: String?
-    ) {
-        nameAdmin?.let { refMyInfo.update(mapOf("name" to it)).await() }
-        profession?.let { refMyInfo.update(mapOf("profession" to it)).await() }
-        description?.let { refMyInfo.update(mapOf("description" to it)).await() }
+    override suspend fun updatePersonalInfo(personalInfo: PersonalInfo) {
+        refMyInfo.update(personalInfo.toMap()).await()
     }
+}
+
+private fun PersonalInfo.toMap(): Map<String, Any> {
+    return mapOf(
+        "name" to this.name,
+        "description" to this.description,
+        "profession" to this.profession,
+        "urlImg" to this.urlImg
+    )
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.nullpointer.nullsiteadmin.core.delagetes.SavableComposeState
 import com.nullpointer.nullsiteadmin.core.delagetes.SavableProperty
+import com.nullpointer.nullsiteadmin.core.utils.validateError
 import com.nullpointer.nullsiteadmin.models.Project
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -117,22 +118,11 @@ class EditProjectViewModel @Inject constructor(
         )
     }
 
-    private fun validateError(
-        stringValue: String,
-        maxLength: Int,
-        emptyError: String,
-        maxLengthError: String
-    ): String {
-        return when {
-            stringValue.isEmpty() -> emptyError
-            stringValue.length > maxLength -> maxLengthError
-            else -> ""
-        }
-    }
+
 
     fun getUpdatedProject(): Project? {
-        if (hasAnyChange) {
-            return initProject?.copy(
+        return if (hasAnyChange) {
+            initProject?.copy(
                 name = this.name,
                 description = this.description,
                 urlRepo = this.urlRepository,
@@ -140,7 +130,7 @@ class EditProjectViewModel @Inject constructor(
             )
         } else {
             _messageError.trySend("No hay cambios que guardar")
-            return null
+            null
         }
 
     }

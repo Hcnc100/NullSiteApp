@@ -10,10 +10,8 @@ class InfoUserRepoImpl(
     override val myPersonalInfo: Flow<PersonalInfo> =
         infoUserDataSource.getMyInfo()
 
+    override suspend fun updatePersonalInfo(personalInfo: PersonalInfo) =
+        infoUserDataSource.updatePersonalInfo(personalInfo)
 
-    override suspend fun updateAnyFieldUser(
-        nameAdmin: String?,
-        profession: String?,
-        description: String?
-    ) =  infoUserDataSource.updateAnyInfo(nameAdmin, profession, description)
+
 }

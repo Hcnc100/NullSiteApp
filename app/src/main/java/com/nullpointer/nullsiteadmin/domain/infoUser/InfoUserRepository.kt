@@ -7,5 +7,5 @@ interface InfoUserRepository {
 
     val myPersonalInfo:Flow<PersonalInfo>
 
-    suspend fun updateAnyFieldUser(nameAdmin:String?,profession:String?,description:String?)
+    suspend fun updatePersonalInfo(personalInfo:PersonalInfo)
 }

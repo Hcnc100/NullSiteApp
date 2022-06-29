@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">NullSiteAdmin</string>
+
+    <!-- edit info admin -->
+    <string name="label_name_admin">Nombre de perfil</string>
+    <string name="error_name_admin_empty">El nombre no puede estar vacio</string>
+    <string name="error_name_admin_length">El nombre no puede ser tan largo</string>
+    <string name="hint_name_admin">Escribe un nombre</string>
+
+    <string name="label_profession_admin">Profile</string>
+    <string name="error_profess_admin_empty">La profession es requerida</string>
+    <string name="error_profess_admin_length">La profession es muy larga</string>
+    <string name="hint_profession_admin">Escribe la profesion</string>
+
+    <string name="label_description_admin">Descripción</string>
+    <string name="error_description_admin_empty">La descripcion es muy importante</string>
+    <string name="error_description_admin_length">La descripcion debe ser corta y concisa</string>
+    <string name="hint_description_admin">Escribe una descripcion breve</string>
+
+    <string name="error_no_data_change">No hay cambios que guardar</string>
 </resources>

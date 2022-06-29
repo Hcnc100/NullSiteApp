@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.nullpointer.nullsiteadmin.ui.navigator.MainDestinations
 import com.nullpointer.nullsiteadmin.ui.screens.NavGraphs
+import com.nullpointer.nullsiteadmin.ui.screens.editInfoProfile.EditInfoProfile
 import com.nullpointer.nullsiteadmin.ui.share.NavigatorDrawer
 import com.nullpointer.nullsiteadmin.ui.share.ToolbarMenu
 import com.nullpointer.nullsiteadmin.ui.theme.NullSiteAdminTheme

@@ -1,33 +1,27 @@
 package com.nullpointer.nullsiteadmin.ui.screens.infoProfile
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.nullpointer.nullsiteadmin.R
-import com.nullpointer.nullsiteadmin.models.InfoType
 import com.nullpointer.nullsiteadmin.models.PersonalInfo
-import com.nullpointer.nullsiteadmin.ui.screens.infoProfile.dialogChange.DialogChangeInfo
-import com.nullpointer.nullsiteadmin.ui.screens.infoProfile.dialogChange.viewModel.DialogChangeViewModel
 
 @Composable
 fun InfoUser(
     modifier: Modifier = Modifier,
-    dialogChangeVM: DialogChangeViewModel = hiltViewModel(),
     personalInfo: PersonalInfo,
-    actionAccept: (InfoType, String) -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -35,85 +29,67 @@ fun InfoUser(
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        EditImgProfile(personalInfo.urlImg)
-        EditInfoProfile(
+        PhotoProfile(urlImgProfile = personalInfo.urlImg)
+        ListInfoPersonal(
             personalInfo = personalInfo,
-            actionEditText = dialogChangeVM::showDialog
-        )
-    }
-    if (dialogChangeVM.isVisible) {
-        DialogChangeInfo(
-            dialogChangeVM = dialogChangeVM,
-            actionAccept = actionAccept
+            modifier = Modifier.padding(10.dp)
         )
     }
 }
 
 @Composable
-private fun EditImgProfile(
-    urlImg: String
-) {
-    Card(
-        shape = CircleShape, modifier = Modifier
-            .padding(20.dp)
-            .size(150.dp)
-    ) {
-        AsyncImage(model = urlImg, contentDescription = "")
-    }
-}
-
-@Composable
-private fun EditInfoProfile(
+private fun ListInfoPersonal(
     personalInfo: PersonalInfo,
-    modifier: Modifier = Modifier,
-    actionEditText: (infoType: InfoType, initValue: String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        LabelAndInfo(
-            infoType = InfoType.NAME,
-            text = personalInfo.name,
-            actionEditText = actionEditText
+    Column(modifier = modifier) {
+        FieldInfoPersonal(
+            nameFiled = stringResource(id = R.string.label_name_admin),
+            valueFiled = personalInfo.name
         )
         Spacer(modifier = Modifier.height(10.dp))
-        LabelAndInfo(
-            infoType = InfoType.PROFESSION,
-            text = personalInfo.profession,
-            actionEditText = actionEditText
+        FieldInfoPersonal(
+            nameFiled = stringResource(id = R.string.label_profession_admin),
+            valueFiled = personalInfo.profession
         )
         Spacer(modifier = Modifier.height(10.dp))
-        LabelAndInfo(
-            infoType = InfoType.DESCRIPTION,
-            text = personalInfo.description,
-            modifier = Modifier.height(200.dp),
-            actionEditText = actionEditText
+        FieldInfoPersonal(
+            nameFiled = stringResource(id = R.string.label_description_admin),
+            valueFiled = personalInfo.description
         )
     }
 }
 
 @Composable
-private fun LabelAndInfo(
-    infoType: InfoType,
-    text: String,
-    modifier: Modifier = Modifier,
-    actionEditText: (infoType: InfoType, initValue: String) -> Unit,
+private fun FieldInfoPersonal(
+    nameFiled: String,
+    valueFiled: String,
 ) {
+    Column {
+        Text(text = nameFiled, style = MaterialTheme.typography.h6, fontSize = 12.sp)
+        Spacer(modifier = Modifier.height(5.dp))
+        Text(text = valueFiled, style = MaterialTheme.typography.body1)
+    }
+}
 
-    OutlinedTextField(
-            modifier = modifier
-                .clickable { actionEditText(infoType, text) }
-                .fillMaxWidth(.9f),
-            value = text,
-            onValueChange = {},
-            enabled = false,
-            label = { Text(infoType.label) },
-            trailingIcon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_edit),
-                    contentDescription = ""
-                )
-            }
-        )
+@Composable
+private fun PhotoProfile(
+    modifier: Modifier = Modifier,
+    urlImgProfile: String,
+) {
+    Box(
+        modifier = modifier.fillMaxWidth(),
+        contentAlignment = Alignment.Center
+    ) {
+        Box {
+            AsyncImage(
+                model = urlImgProfile,
+                contentDescription = "",
+                modifier = Modifier
+                    .size(200.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop,
+            )
+        }
+    }
 }
