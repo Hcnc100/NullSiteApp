@@ -3,18 +3,24 @@ package com.nullpointer.nullsiteadmin.ui.screens.editProject
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.models.Project
+import com.nullpointer.nullsiteadmin.models.PropertySavableString
 import com.nullpointer.nullsiteadmin.ui.screens.editProject.viewModel.EditProjectViewModel
+import com.nullpointer.nullsiteadmin.ui.share.EditableTextSavable
 import com.nullpointer.nullsiteadmin.ui.share.ToolbarBack
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.result.ResultBackNavigator
@@ -36,7 +42,10 @@ fun EditProjectScreen(
         editProjectVM.initVM(project)
     }
     Scaffold(scaffoldState = scaffoldState, topBar = {
-        ToolbarBack(title = "Edit Project", actionBack = resultNavigator::navigateBack)
+        ToolbarBack(
+            title = stringResource(R.string.title_edit_project),
+            actionBack = resultNavigator::navigateBack
+        )
     }) { it ->
         Column(
             modifier = Modifier
@@ -44,97 +53,68 @@ fun EditProjectScreen(
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            AsyncImage(
-                model = editProjectVM.urlImage,
-                contentDescription = "",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(1.8f)
+            ImageProject(urlImgProject = editProjectVM.urlImgProject.value)
+            ListInfoProject(
+                urlImgProject = editProjectVM.urlImgProject,
+                nameProject = editProjectVM.nameProject,
+                urlRepositoryProject = editProjectVM.urlRepositoryProject,
+                descriptionProject = editProjectVM.descriptionProject,
+                modifier = Modifier.padding(10.dp)
             )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            EditableProperty(
-                name = "Url Image",
-                currentValue = editProjectVM.urlImage,
-                changeValue = editProjectVM::updateUrlImage,
-                errorValue = editProjectVM.errorUrlImage,
-                countValue = editProjectVM.urlImgLength,
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-            EditableProperty(
-                name = "Name",
-                currentValue = editProjectVM.name,
-                changeValue = editProjectVM::updateName,
-                errorValue = editProjectVM.errorName,
-                countValue = editProjectVM.nameLength
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-
-            EditableProperty(
-                name = "Url Repository",
-                currentValue = editProjectVM.urlRepository,
-                changeValue = editProjectVM::updateUrlRepository,
-                errorValue = editProjectVM.errorUrlRepo,
-                countValue = editProjectVM.urlRepoLength
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-
-            EditableProperty(
-                name = "Description",
-                currentValue = editProjectVM.description,
-                changeValue = editProjectVM::updateDescription,
-                errorValue = editProjectVM.errorDescription,
-                countValue = editProjectVM.descriptionLength
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Button(
-                onClick = {
-                    editProjectVM.getUpdatedProject()?.let {
-                        resultNavigator.navigateBack(it)
-                    }
-                },
-                enabled = editProjectVM.isSaveEnable
-            ) {
-                Text("Actualiza  el projecto")
+            ButtonUpdateProject(isEnable = editProjectVM.isDataValid) {
+                editProjectVM.getUpdatedProject()?.let {
+                    resultNavigator.navigateBack(it)
+                }
             }
         }
     }
 }
 
 @Composable
-fun EditableProperty(
-    name: String,
-    currentValue: String,
-    changeValue: (String) -> Unit,
-    errorValue: String,
-    countValue: String,
+private fun ButtonUpdateProject(
     modifier: Modifier = Modifier,
+    isEnable: Boolean,
+    actionClick: () -> Unit
 ) {
-    Column(modifier = modifier.fillMaxWidth()) {
-        OutlinedTextField(
-            label = { Text(text = name) },
-            value = currentValue,
-            onValueChange = changeValue,
-            isError = errorValue.isNotEmpty(),
-            modifier = Modifier.fillMaxWidth()
-        )
-        Row {
-            Text(
-                text = errorValue,
-                style = MaterialTheme.typography.caption,
-                color = MaterialTheme.colors.error,
-                modifier = Modifier.weight(.9f)
-            )
-            Text(
-                text = countValue,
-                color = if (errorValue.isEmpty()) Color.Unspecified else MaterialTheme.colors.error,
-                style = MaterialTheme.typography.caption
-            )
-        }
+    Button(
+        onClick = actionClick,
+        enabled = isEnable,
+        modifier = modifier
+    ) {
+        Text(stringResource(R.string.text_update_project))
+    }
+}
 
+@Composable
+private fun ImageProject(
+    urlImgProject: String,
+    modifier: Modifier = Modifier
+) {
+    AsyncImage(
+        model = urlImgProject,
+        contentDescription = "",
+        contentScale = ContentScale.Crop,
+        modifier = modifier
+            .fillMaxWidth()
+            .aspectRatio(1.8f)
+    )
+}
+
+@Composable
+private fun ListInfoProject(
+    urlImgProject: PropertySavableString,
+    nameProject: PropertySavableString,
+    urlRepositoryProject: PropertySavableString,
+    descriptionProject: PropertySavableString,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
+        EditableTextSavable(valueProperty = urlImgProject)
+        Spacer(modifier = Modifier.height(10.dp))
+        EditableTextSavable(valueProperty = nameProject)
+        Spacer(modifier = Modifier.height(10.dp))
+        EditableTextSavable(valueProperty = urlRepositoryProject)
+        Spacer(modifier = Modifier.height(10.dp))
+        EditableTextSavable(valueProperty = descriptionProject)
     }
 }

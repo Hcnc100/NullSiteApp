@@ -18,4 +18,26 @@
     <string name="hint_description_admin">Escribe una descripcion breve</string>
 
     <string name="error_no_data_change">No hay cambios que guardar</string>
+
+    <!-- edit project -->
+    <string name="label_name_project">Nombre del projecto</string>
+    <string name="hint_name_project">Escribe el nombre del projecto</string>
+    <string name="error_empty_name_project">El projecto necesita un nombre</string>
+    <string name="error_length_name_project">El nombre del projecto no puede ser tan largo</string>
+
+    <string name="label_description_project">Descripcion del projecto</string>
+    <string name="hint_description_project">Escribe una descripcion del porjecto</string>
+    <string name="error_description_project">La descripcion no puede estar vacia</string>
+    <string name="error_length_description_project">La descripcion no pede ser tan larga</string>
+
+    <string name="label_repo_project">Link del Projecto</string>
+    <string name="hint_repo_project">Escribe el link del projecto</string>
+    <string name="error_empty_link_project">El link no puede estar vacio</string>
+    <string name="error_length_link_project">El link no puede ser tan largo</string>
+    <string name="hint_img_project">Proporciona el link de la imagen</string>
+    <string name="label_img_project">Link de la imagen</string>
+
+    <!-- text buttons -->
+    <string name="title_edit_project">Edit Project</string>
+    <string name="text_update_project">Actualiza  el projecto</string>
 </resources>
