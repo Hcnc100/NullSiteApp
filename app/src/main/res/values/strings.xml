@@ -67,5 +67,15 @@
     <string name="text_date_email">Date: %s</string>
     <string name="description_deleter_email">Icono de eliminar, para eliminar el email</string>
 
+    <!-- screen auth -->
+    <string name="label_email">Email</string>
+    <string name="hint_email">Escribe tu email</string>
+    <string name="error_empty_email">Se necesita el correo</string>
+    <string name="error_length_email">El email no puede ser tan largo</string>
+    <string name="label_password">Contraseña</string>
+    <string name="hint_password">Escribe la contraseña</string>
+    <string name="error_empty_passwod">La contraseña es indispensable</string>
+    <string name="error_length_password">La contraseña no puede ser tan larga</string>
+
 
 </resources>
