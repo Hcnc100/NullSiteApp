@@ -60,17 +60,27 @@ fun EditInfoProfile(
                 descriptionAdmin = editProjectViewModel.description,
                 modifier = Modifier.padding(10.dp)
             )
-            Button(
-                onClick = {
-                    editProjectViewModel.getUpdatedPersonalInfo()?.let {
-                        resultNavigator.navigateBack(it)
-                    }
-                },
-                enabled = editProjectViewModel.isDataValid
-            ) {
-                Text(text = "Save Info Profile")
+            ButtonUpdateInfoProfile(isEnable = editProjectViewModel.isDataValid) {
+                editProjectViewModel.getUpdatedPersonalInfo()?.let {
+                    resultNavigator.navigateBack(it)
+                }
             }
         }
+    }
+}
+
+@Composable
+fun ButtonUpdateInfoProfile(
+    modifier: Modifier = Modifier,
+    isEnable: Boolean,
+    actionClick: () -> Unit
+) {
+    Button(
+        modifier = modifier,
+        onClick = actionClick,
+        enabled = isEnable
+    ) {
+        Text(text = stringResource(R.string.text_save_personal_info))
     }
 }
 
@@ -92,8 +102,8 @@ private fun EditableInformation(
 
 @Composable
 private fun EditPhotoProfile(
+    urlImg: String,
     modifier: Modifier = Modifier,
-    urlImg: String
 ) {
     Box(
         modifier = modifier.fillMaxWidth(),
@@ -102,7 +112,7 @@ private fun EditPhotoProfile(
         Box {
             AsyncImage(
                 model = urlImg,
-                contentDescription = "",
+                contentDescription = stringResource(R.string.description_current_img_profile),
                 modifier = Modifier
                     .size(200.dp)
                     .clip(CircleShape),
@@ -117,11 +127,10 @@ private fun EditPhotoProfile(
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_edit),
-                    contentDescription = ""
+                    contentDescription = stringResource(R.string.description_edit_img_profile)
                 )
             }
         }
-
     }
 }
 

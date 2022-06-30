@@ -12,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -33,23 +34,26 @@ fun EditProjectScreen(
     resultNavigator: ResultBackNavigator<Project>
 ) {
     val scaffoldState = rememberScaffoldState()
+    val context = LocalContext.current
     LaunchedEffect(key1 = Unit) {
         editProjectVM.messageError.collect {
-            scaffoldState.snackbarHostState.showSnackbar(it)
+            scaffoldState.snackbarHostState.showSnackbar(context.getString(it))
         }
     }
     LaunchedEffect(key1 = Unit) {
         editProjectVM.initVM(project)
     }
-    Scaffold(scaffoldState = scaffoldState, topBar = {
-        ToolbarBack(
-            title = stringResource(R.string.title_edit_project),
-            actionBack = resultNavigator::navigateBack
-        )
-    }) { it ->
+    Scaffold(
+        scaffoldState = scaffoldState,
+        topBar = {
+            ToolbarBack(
+                title = stringResource(R.string.title_edit_project),
+                actionBack = resultNavigator::navigateBack
+            )
+        }) { paddingValues ->
         Column(
             modifier = Modifier
-                .padding(it)
+                .padding(paddingValues)
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -92,7 +96,7 @@ private fun ImageProject(
 ) {
     AsyncImage(
         model = urlImgProject,
-        contentDescription = "",
+        contentDescription = stringResource(R.string.description_current_img_project),
         contentScale = ContentScale.Crop,
         modifier = modifier
             .fillMaxWidth()

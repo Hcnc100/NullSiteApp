@@ -62,7 +62,7 @@ class EditProjectViewModel @Inject constructor(
     )
 
 
-    private val _messageError = Channel<String>()
+    private val _messageError = Channel<Int>()
     val messageError = _messageError.consumeAsFlow()
 
     val isDataValid: Boolean
@@ -97,7 +97,7 @@ class EditProjectViewModel @Inject constructor(
                 urlImg = urlImgProject.value
             )
         } else {
-            _messageError.trySend("No hay cambios que guardar")
+            _messageError.trySend(R.string.error_no_data_change)
             null
         }
 

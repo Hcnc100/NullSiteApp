@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.states.Resource
@@ -42,12 +43,13 @@ fun InfoProfile(
         scaffoldState = scaffoldState,
         floatingActionButton = {
             if (stateInfoProfile is Resource.Success) {
+                val project = (stateInfoProfile as Resource.Success<PersonalInfo>).data
                 FloatingActionButton(onClick = {
-                    navigator.navigate(EditInfoProfileDestination.invoke((stateInfoProfile as Resource.Success<PersonalInfo>).data))
+                    navigator.navigate(EditInfoProfileDestination.invoke(project))
                 }) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_edit),
-                        contentDescription = ""
+                        contentDescription = stringResource(R.string.description_edit_info_user)
                     )
                 }
             }
@@ -58,14 +60,13 @@ fun InfoProfile(
             is Resource.Loading -> LoadingInfoUser(modifier = Modifier.padding(it))
             is Resource.Failure -> AnimationScreen(
                 animation = R.raw.error,
-                textEmpty = "Hubo un error al cargar los datos",
+                textEmpty = stringResource(R.string.message_error_load_info_user),
                 modifier = Modifier.padding(it)
             )
             is Resource.Success -> InfoUser(
                 personalInfo = infoProfile.data,
                 modifier = Modifier.padding(it)
             )
-
         }
     }
 

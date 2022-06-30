@@ -11,6 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.nullsiteadmin.R
@@ -38,7 +39,7 @@ fun EmailScreen(
         when (val listEmails = emailsState) {
             Resource.Failure -> AnimationScreen(
                 animation = R.raw.error,
-                textEmpty = "Error al cargar los emails",
+                textEmpty = stringResource(R.string.message_error_contact),
                 modifier = Modifier.padding(it)
             )
             Resource.Loading -> {}
@@ -46,7 +47,7 @@ fun EmailScreen(
                 if (listEmails.data.isEmpty()) {
                     AnimationScreen(
                         animation = R.raw.empty1,
-                        textEmpty = "La bandeja de entrada esta vacia",
+                        textEmpty = stringResource(R.string.message_empty_contact),
                         modifier = Modifier.padding(it)
                     )
                 } else {
@@ -72,7 +73,7 @@ private fun ListEmails(
     LazyColumn(modifier = modifier) {
         item {
             Text(
-                text = "Numero de emails: ${listEmails.size}",
+                text = stringResource(R.string.text_number_emails,listEmails.size),
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)
             )
         }

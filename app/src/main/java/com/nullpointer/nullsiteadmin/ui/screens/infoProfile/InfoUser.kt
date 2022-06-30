@@ -84,7 +84,7 @@ private fun PhotoProfile(
         Box {
             AsyncImage(
                 model = urlImgProfile,
-                contentDescription = "",
+                contentDescription = stringResource(id = R.string.description_current_img_profile),
                 modifier = Modifier
                     .size(200.dp)
                     .clip(CircleShape),

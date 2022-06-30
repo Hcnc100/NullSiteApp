@@ -10,6 +10,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.states.Resource
@@ -42,7 +43,7 @@ fun ProjectScreen(
         when (val listProject = stateListProject) {
             Resource.Failure -> AnimationScreen(
                 animation = R.raw.error,
-                textEmpty = "Error load project",
+                textEmpty = stringResource(R.string.message_error_project),
                 modifier = Modifier.padding(it)
             )
             Resource.Loading -> {}

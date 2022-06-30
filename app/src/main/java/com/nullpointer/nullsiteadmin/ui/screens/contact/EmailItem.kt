@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.nullpointer.nullsiteadmin.R
@@ -58,20 +59,22 @@ private fun HeaderEmail(
                 .weight(.9f)
         ) {
             Text(
-                text = "To: ${email.email}",
+                text = stringResource(R.string.text_to_email,email.email,),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 style = MaterialTheme.typography.body1
             )
             Spacer(modifier = Modifier.height(10.dp))
             Text(
-                text = "Subject: ${email.subject}",
+                text = stringResource(R.string.text_subject_email,email.subject),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 style = MaterialTheme.typography.body2
             )
         }
-        Box(modifier = Modifier.weight(.1f), contentAlignment = Alignment.Center) {
+        Box(
+            modifier = Modifier.weight(.1f),
+            contentAlignment = Alignment.Center) {
             IndicatorOpenEmail(isExpanded = isExpanded)
         }
     }
@@ -87,7 +90,7 @@ fun IndicatorOpenEmail(isExpanded: Boolean) {
     ) {
         Icon(
             painter = painterResource(id = if (isExpanded) R.drawable.ic_arrow_up else R.drawable.ic_arrow_down),
-            contentDescription = ""
+            contentDescription = stringResource(R.string.description_icon_email_open)
         )
     }
 }
@@ -104,7 +107,7 @@ private fun ContainerEmail(
             .fillMaxWidth()
     ) {
         Text(
-            text = "Date: ${email.timestamp.toFormat(context)}",
+            text = stringResource(R.string.text_date_email, email.timestamp.toFormat(context)),
             style = MaterialTheme.typography.caption
         )
         Spacer(modifier = Modifier.height(10.dp))
@@ -116,7 +119,7 @@ private fun ContainerEmail(
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_deleter),
-                contentDescription = ""
+                contentDescription = stringResource(R.string.description_deleter_email)
             )
         }
     }

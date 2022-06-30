@@ -2,6 +2,10 @@
     <string name="app_name">NullSiteAdmin</string>
 
     <!-- edit info admin -->
+
+    <string name="description_current_img_profile">Imagen de perfil actual</string>
+    <string name="description_edit_img_profile">Iniciala interfaz para seleccionar una nueva imagen de perfil</string>
+
     <string name="label_name_admin">Nombre de perfil</string>
     <string name="error_name_admin_empty">El nombre no puede estar vacio</string>
     <string name="error_name_admin_length">El nombre no puede ser tan largo</string>
@@ -40,4 +44,28 @@
     <!-- text buttons -->
     <string name="title_edit_project">Edit Project</string>
     <string name="text_update_project">Actualiza  el projecto</string>
+    <string name="text_save_personal_info">Guardar informacion</string>
+    <string name="description_current_img_project">Imagen del projecto actual</string>
+    <string name="text_edit_button">Editar</string>
+
+    <!-- screen project -->
+    <string name="message_error_project">Error load project</string>
+    <string name="description_img_project">Imagen del proecto actual</string>
+    <string name="description_icon_edit">Icono de editar</string>
+
+    <!-- screen info profile -->
+    <string name="message_error_load_info_user">Hubo un error al cargar los datos</string>
+    <string name="description_edit_info_user">Icono de editar, para ir a la edicion de la informacion del usuario</string>
+
+    <!-- screen contact-->
+    <string name="message_error_contact">Error al cargar los emails</string>
+    <string name="message_empty_contact">La bandeja de entrada esta vacia</string>
+    <string name="text_number_emails">Numero de emails: %d</string>
+    <string name="text_to_email">To: %s</string>
+    <string name="text_subject_email">Subject: %s</string>
+    <string name="description_icon_email_open">Indicador de si el email esta expandido o no</string>
+    <string name="text_date_email">Date: %s</string>
+    <string name="description_deleter_email">Icono de eliminar, para eliminar el email</string>
+
+
 </resources>
