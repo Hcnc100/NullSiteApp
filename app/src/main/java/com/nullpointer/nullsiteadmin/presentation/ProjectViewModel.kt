@@ -26,7 +26,7 @@ class ProjectViewModel @Inject constructor(
         projectRepository.listProjects.collect {
             emit(Resource.Success(it))
         }
-    }.catch {
+    }.flowOn(Dispatchers.IO).catch {
         Timber.e("Failed to list projects $it")
         _messageErrorProject.trySend("Error while loading projects")
         emit(Resource.Failure)
@@ -36,7 +36,9 @@ class ProjectViewModel @Inject constructor(
         Resource.Loading
     )
 
-    fun editProject(project: Project) = viewModelScope.launch(Dispatchers.IO) {
+    fun editProject(
+        project: Project
+    ) = viewModelScope.launch(Dispatchers.IO) {
         try {
             projectRepository.editProject(project)
             _messageErrorProject.trySend("Projecto actualizado")

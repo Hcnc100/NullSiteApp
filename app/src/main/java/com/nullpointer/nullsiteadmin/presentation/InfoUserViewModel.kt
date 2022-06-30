@@ -26,7 +26,7 @@ class InfoUserViewModel @Inject constructor(
         infoUserRepository.myPersonalInfo.collect {
             emit(Resource.Success(it))
         }
-    }.catch {
+    }.flowOn(Dispatchers.IO).catch {
         Timber.e("Error to load info user $it")
         _messageError.trySend("Error to load info user")
         emit(Resource.Failure)
@@ -36,7 +36,9 @@ class InfoUserViewModel @Inject constructor(
         Resource.Loading
     )
 
-    fun updatePersonalInfo(personalInfo: PersonalInfo) = viewModelScope.launch(Dispatchers.IO) {
+    fun updatePersonalInfo(
+        personalInfo: PersonalInfo
+    ) = viewModelScope.launch(Dispatchers.IO) {
         try {
             infoUserRepository.updatePersonalInfo(personalInfo)
             _messageError.trySend("Datos actualizados")

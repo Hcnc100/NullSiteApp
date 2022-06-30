@@ -26,7 +26,7 @@ class EmailsViewModel @Inject constructor(
         emailsRepository.listEmails.collect {
             emit(Resource.Success(it))
         }
-    }.catch {
+    }.flowOn(Dispatchers.IO).catch {
         Timber.e("Error to load emails $it")
         _errorEmail.trySend("Error to load list emails")
         emit(Resource.Failure)
@@ -36,7 +36,9 @@ class EmailsViewModel @Inject constructor(
         Resource.Loading
     )
 
-    fun deleterEmail(idEmail: String) = viewModelScope.launch(Dispatchers.IO) {
+    fun deleterEmail(
+        idEmail: String
+    ) = viewModelScope.launch(Dispatchers.IO) {
         try {
             emailsRepository.deleterEmail(idEmail)
         } catch (e: Exception) {

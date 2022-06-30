@@ -1,5 +1,7 @@
 package com.nullpointer.nullsiteadmin.inject
 
+import com.nullpointer.nullsiteadmin.domain.auth.AuthRepoImpl
+import com.nullpointer.nullsiteadmin.domain.auth.AuthRepository
 import com.nullpointer.nullsiteadmin.domain.email.EmailsRepoImpl
 import com.nullpointer.nullsiteadmin.domain.email.EmailsRepository
 import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepoImpl
@@ -33,5 +35,11 @@ abstract class RepositoryModule {
     abstract fun provideProjectRepository(
         projectRepoImpl: ProjectRepoImpl
     ): ProjectRepository
+
+    @Binds
+    @Singleton
+    abstract fun provideAuthRepository(
+        authRepository: AuthRepoImpl
+    ): AuthRepository
 
 }

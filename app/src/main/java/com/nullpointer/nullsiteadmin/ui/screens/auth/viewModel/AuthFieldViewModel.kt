@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.models.PropertySavableString
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,5 +37,13 @@ class AuthFieldViewModel @Inject constructor(
         maxLength = MAX_LENGTH_PASSWORD
     )
 
-    val isDataValid get() = !emailAdmin.hasError && !passwordAdmin.hasError
+    private val isDataValid get() = !emailAdmin.hasError && !passwordAdmin.hasError
+
+    fun getDataAuth(): Pair<String, String>? {
+        return if (isDataValid) {
+            Pair(emailAdmin.value, passwordAdmin.value)
+        } else {
+            null
+        }
+    }
 }

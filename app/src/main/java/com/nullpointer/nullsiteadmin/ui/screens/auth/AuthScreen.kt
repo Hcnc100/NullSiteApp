@@ -3,19 +3,21 @@ package com.nullpointer.nullsiteadmin.ui.screens.auth
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExtendedFloatingActionButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.models.PropertySavableString
+import com.nullpointer.nullsiteadmin.presentation.AuthViewModel
 import com.nullpointer.nullsiteadmin.ui.screens.auth.viewModel.AuthFieldViewModel
 import com.nullpointer.nullsiteadmin.ui.share.EditableTextSavable
 import com.ramcosta.composedestinations.annotation.Destination
@@ -23,9 +25,16 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Destination
 @Composable
 fun AuthScreen(
-    authFieldVM: AuthFieldViewModel = hiltViewModel()
+    authFieldVM: AuthFieldViewModel = hiltViewModel(),
+    authViewModel: AuthViewModel = hiltViewModel()
 ) {
-    Scaffold {
+    val scaffoldState = rememberScaffoldState()
+    LaunchedEffect(key1 = Unit) {
+        authViewModel.messageErrorAuth.collect {
+            scaffoldState.snackbarHostState.showSnackbar(it)
+        }
+    }
+    Scaffold(scaffoldState = scaffoldState) {
         Column(
             modifier = Modifier
                 .padding(it)
@@ -41,12 +50,16 @@ fun AuthScreen(
                 password = authFieldVM.passwordAdmin,
                 modifier = Modifier.width(300.dp)
             )
-            ButtonAuth(
-                modifier = Modifier.padding(vertical = 20.dp)
-            ) {
-
+            Box(modifier = Modifier.padding(vertical = 20.dp)) {
+                if(authViewModel.isAuthenticating){
+                    CircularProgressIndicator(color = MaterialTheme.colors.onPrimary)
+                }else{
+                    ButtonAuth {
+                        val dataUser = authFieldVM.getDataAuth()
+                        authViewModel.authWithEmailAndPassword(dataUser)
+                    }
+                }
             }
-
         }
     }
 }
@@ -73,14 +86,21 @@ private fun FieldLogin(
         ContainerFieldAuth {
             EditableTextSavable(
                 valueProperty = email,
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(10.dp),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Email,
+                    capitalization = KeyboardCapitalization.None
+                )
             )
         }
         Spacer(modifier = Modifier.height(15.dp))
         ContainerFieldAuth {
             EditableTextSavable(
                 valueProperty = password,
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(10.dp),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Password
+                )
             )
         }
     }
