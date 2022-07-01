@@ -11,4 +11,7 @@ class AuthRepoImpl(
 
     override suspend fun authUserWithEmailAndPassword(email: String, password: String) =
         authDataSource.authWithEmailAndPassword(email, password)
+
+    override suspend fun logout()=
+        authDataSource.logout()
 }

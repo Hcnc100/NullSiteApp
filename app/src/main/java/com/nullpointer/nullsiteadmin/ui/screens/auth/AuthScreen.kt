@@ -2,8 +2,10 @@ package com.nullpointer.nullsiteadmin.ui.screens.auth
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,7 +28,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Composable
 fun AuthScreen(
     authFieldVM: AuthFieldViewModel = hiltViewModel(),
-    authViewModel: AuthViewModel = hiltViewModel()
+    authViewModel: AuthViewModel
 ) {
     val scaffoldState = rememberScaffoldState()
     LaunchedEffect(key1 = Unit) {
@@ -39,7 +41,8 @@ fun AuthScreen(
             modifier = Modifier
                 .padding(it)
                 .fillMaxSize()
-                .background(MaterialTheme.colors.primary),
+                .background(MaterialTheme.colors.primary)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
@@ -48,7 +51,8 @@ fun AuthScreen(
             FieldLogin(
                 email = authFieldVM.emailAdmin,
                 password = authFieldVM.passwordAdmin,
-                modifier = Modifier.width(300.dp)
+                modifier = Modifier.width(300.dp),
+                isEnabled = !authViewModel.isAuthenticating
             )
             Box(modifier = Modifier.padding(vertical = 20.dp)) {
                 if(authViewModel.isAuthenticating){
@@ -80,11 +84,13 @@ private fun ButtonAuth(
 private fun FieldLogin(
     email: PropertySavableString,
     password: PropertySavableString,
-    modifier: Modifier = Modifier
+    isEnabled: Boolean,
+    modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         ContainerFieldAuth {
             EditableTextSavable(
+                isEnabled = isEnabled,
                 valueProperty = email,
                 modifier = Modifier.padding(10.dp),
                 keyboardOptions = KeyboardOptions.Default.copy(
@@ -96,6 +102,7 @@ private fun FieldLogin(
         Spacer(modifier = Modifier.height(15.dp))
         ContainerFieldAuth {
             EditableTextSavable(
+                isEnabled = isEnabled,
                 valueProperty = password,
                 modifier = Modifier.padding(10.dp),
                 keyboardOptions = KeyboardOptions.Default.copy(

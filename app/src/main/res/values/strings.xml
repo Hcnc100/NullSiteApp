@@ -76,6 +76,10 @@
     <string name="hint_password">Escribe la contraseña</string>
     <string name="error_empty_passwod">La contraseña es indispensable</string>
     <string name="error_length_password">La contraseña no puede ser tan larga</string>
+    <string name="description_img_web">Imagen de portada de el sitio web</string>
+    <string name="description_close_session">Icono de cerrar session</string>
+    <string name="text_log_out">LogOut</string>
+    <string name="description_icon_draw_menu">Icono de el destino de navegacion</string>
 
 
 </resources>

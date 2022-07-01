@@ -6,4 +6,5 @@ interface AuthRepository {
     val isUserAuth: Flow<Boolean>
 
     suspend fun authUserWithEmailAndPassword(email: String, password: String)
+    suspend fun logout()
 }

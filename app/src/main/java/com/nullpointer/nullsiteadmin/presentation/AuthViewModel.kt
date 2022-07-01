@@ -52,6 +52,7 @@ class AuthViewModel @Inject constructor(
     ) = viewModelScope.launch(Dispatchers.IO) {
         try {
             isAuthenticating = true
+//            delay(3000)
             if (dataUser != null) {
                 val (email, password) = dataUser
                 authRepository.authUserWithEmailAndPassword(email, password)
@@ -69,5 +70,9 @@ class AuthViewModel @Inject constructor(
         } finally {
             isAuthenticating = false
         }
+    }
+
+    fun logOut() = viewModelScope.launch(Dispatchers.IO) {
+        authRepository.logout()
     }
 }

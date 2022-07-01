@@ -29,7 +29,10 @@ fun InfoUser(
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        PhotoProfile(urlImgProfile = personalInfo.urlImg)
+        PhotoProfile(
+            urlImgProfile = personalInfo.urlImg,
+            modifier = Modifier.padding(15.dp)
+        )
         ListInfoPersonal(
             personalInfo = personalInfo,
             modifier = Modifier.padding(10.dp)

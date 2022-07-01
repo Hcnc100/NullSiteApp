@@ -13,8 +13,12 @@ class AuthDataSourceImpl : AuthDataSource {
     private val auth = Firebase.auth
 
     override suspend fun authWithEmailAndPassword(email: String, pass: String) {
-        val response = auth.signInWithEmailAndPassword(email, pass).await()
+        auth.signInWithEmailAndPassword(email, pass).await()
     }
+
+    override suspend fun logout() =
+        auth.signOut()
+
 
     override fun isAuthUser() = callbackFlow {
         val listener = FirebaseAuth.AuthStateListener {

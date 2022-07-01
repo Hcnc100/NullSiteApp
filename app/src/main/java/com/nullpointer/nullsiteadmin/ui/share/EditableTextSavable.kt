@@ -21,9 +21,11 @@ fun EditableTextSavable(
     valueProperty: PropertySavableString,
     modifier: Modifier = Modifier,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    isEnabled: Boolean = true
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         OutlinedTextField(
+            enabled = isEnabled,
             label = { Text(stringResource(id = valueProperty.label)) },
             placeholder = { Text(stringResource(id = valueProperty.hint)) },
             value = valueProperty.value,
