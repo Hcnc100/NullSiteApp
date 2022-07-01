@@ -9,6 +9,9 @@ class AuthRepoImpl(
     override val isUserAuth: Flow<Boolean> =
         authDataSource.isAuthUser()
 
+    override suspend fun updateTokenUser(token: String?, uuidUser: String?) =
+        authDataSource.updateTokenUser(token, uuidUser)
+
     override suspend fun authUserWithEmailAndPassword(email: String, password: String) =
         authDataSource.authWithEmailAndPassword(email, password)
 

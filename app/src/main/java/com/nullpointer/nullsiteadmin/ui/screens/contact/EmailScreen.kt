@@ -19,9 +19,16 @@ import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.models.EmailContact
 import com.nullpointer.nullsiteadmin.presentation.EmailsViewModel
 import com.nullpointer.nullsiteadmin.ui.screens.animation.AnimationScreen
+import com.ramcosta.composedestinations.annotation.DeepLink
 import com.ramcosta.composedestinations.annotation.Destination
 
-@Destination
+@Destination(
+    deepLinks = [
+        DeepLink(
+            uriPattern = "https://www.nullsiteadmin.com/contact/"
+        )
+    ]
+)
 @Composable
 fun EmailScreen(
     emailsVM: EmailsViewModel = hiltViewModel()
