@@ -15,12 +15,11 @@ class EmailDeserializer : JsonDeserializer<EmailContact?> {
         context: JsonDeserializationContext?,
     ): EmailContact {
         val jsonObject = json.asJsonObject
-        val userObject = jsonObject["userInNotify"].asJsonObject
         return EmailContact(
-            name = userObject["name"].asString,
-            message = userObject["message"].asString,
-            subject = userObject["subject"].asString,
-            email = userObject["email"].asString,
+            name = jsonObject["name"].asString,
+            message = jsonObject["message"].asString,
+            subject = jsonObject["subject"].asString,
+            email = jsonObject["email"].asString,
         )
     }
 }

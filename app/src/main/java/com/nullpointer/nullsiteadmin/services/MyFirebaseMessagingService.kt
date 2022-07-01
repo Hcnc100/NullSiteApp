@@ -106,7 +106,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             // * create pending intent compose
             val deepLinkPendingIntent = TaskStackBuilder.create(context).run {
                 addNextIntentWithParentStack(deepLinkIntent)
-                getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+                getPendingIntent(0, PendingIntent.FLAG_IMMUTABLE)
             }
             return deepLinkPendingIntent
         }
