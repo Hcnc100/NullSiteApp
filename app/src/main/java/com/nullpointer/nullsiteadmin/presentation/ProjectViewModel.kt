@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -41,6 +42,7 @@ class ProjectViewModel @Inject constructor(
     ) = viewModelScope.launch(Dispatchers.IO) {
         try {
             projectRepository.editProject(project)
+            delay(300)
             _messageErrorProject.trySend("Projecto actualizado")
         } catch (e: Exception) {
             Timber.e("Failed to edit project $e")

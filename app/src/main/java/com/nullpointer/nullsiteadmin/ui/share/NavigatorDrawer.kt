@@ -3,7 +3,10 @@ package com.nullpointer.nullsiteadmin.ui.share
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedButton
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -13,34 +16,38 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.compose.AsyncImage
 import com.nullpointer.nullsiteadmin.R
-import com.nullpointer.nullsiteadmin.ui.activitys.MainAppState
 import com.nullpointer.nullsiteadmin.ui.navigator.MainDestinations
+import com.nullpointer.nullsiteadmin.ui.screens.appDestination
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.Destination
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.DirectionDestination
+import com.nullpointer.nullsiteadmin.ui.screens.main.MainScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.navDestination
+import com.ramcosta.composedestinations.navigation.navigate
 import com.ramcosta.composedestinations.navigation.navigateTo
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 @Composable
 fun NavigatorDrawer(
-    mainAppState:MainAppState,
+    mainAppState: MainScreenState,
     closeSession: () -> Unit
 ) {
     Drawer(
-        closeSession = closeSession,
+        closeSession = {
+            closeSession()
+            mainAppState.closeDrawer()
+        },
         navController = mainAppState.navController,
         onDestinationClicked = { route ->
-            mainAppState.navController.navigateTo(route) {
+            mainAppState.navController.navigate(route, fun NavOptionsBuilder.() {
                 popUpTo(mainAppState.navController.graph.findStartDestination().id) {
                     saveState = true
                 }
                 launchSingleTop = true
                 restoreState = true
-            }
+            })
             mainAppState.closeDrawer()
         }
     )
@@ -53,7 +60,7 @@ private fun Drawer(
     onDestinationClicked: (destination: DirectionDestination) -> Unit
 ) {
     val currentDestination = navController.currentBackStackEntryAsState()
-        .value?.navDestination
+        .value?.appDestination()
     Column(modifier = Modifier.fillMaxHeight()) {
         ImageDraw()
         ListDestinationDrawer(

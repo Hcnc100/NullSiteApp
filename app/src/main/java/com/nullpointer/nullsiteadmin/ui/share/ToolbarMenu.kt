@@ -9,20 +9,12 @@ import com.nullpointer.nullsiteadmin.R
 @Composable
 fun ToolbarMenu(
     title: String,
-    actionClickMenu: () -> Unit,
-    actionClickBack: () -> Unit,
-    isMainScreen: Boolean
+    actionClickMenu: () -> Unit
 ) {
     TopAppBar(
         backgroundColor = MaterialTheme.colors.primary,
         title = { Text(text = title, color = Color.White) },
-        navigationIcon = {
-            if(isMainScreen) {
-                IconMenu(actionClickMenu)
-            }else{
-                IconBack(actionClickBack)
-            }
-        }
+        navigationIcon = { IconMenu(actionClickMenu) }
     )
 }
 

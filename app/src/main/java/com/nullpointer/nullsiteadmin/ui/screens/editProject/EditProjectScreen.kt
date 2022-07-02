@@ -1,5 +1,6 @@
 package com.nullpointer.nullsiteadmin.ui.screens.editProject
 
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -16,23 +17,26 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.models.Project
 import com.nullpointer.nullsiteadmin.models.PropertySavableString
+import com.nullpointer.nullsiteadmin.presentation.ProjectViewModel
+import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.screens.editProject.viewModel.EditProjectViewModel
 import com.nullpointer.nullsiteadmin.ui.share.EditableTextSavable
 import com.nullpointer.nullsiteadmin.ui.share.ToolbarBack
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.result.ResultBackNavigator
 
 @Destination
 @Composable
 fun EditProjectScreen(
     project: Project,
     editProjectVM: EditProjectViewModel = hiltViewModel(),
-    resultNavigator: ResultBackNavigator<Project>
+    actionRootDestinations: ActionRootDestinations
 ) {
+    val projectVM:ProjectViewModel =viewModel(LocalContext.current as ComponentActivity)
     val scaffoldState = rememberScaffoldState()
     val context = LocalContext.current
     LaunchedEffect(key1 = Unit) {
@@ -44,7 +48,10 @@ fun EditProjectScreen(
         editProjectVM.initVM(project)
     }
     Scaffold(
-        scaffoldState = scaffoldState
+        scaffoldState = scaffoldState,
+        topBar = {
+            ToolbarBack(title = "Edit Project", actionBack = actionRootDestinations::backDestination)
+        }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -62,7 +69,8 @@ fun EditProjectScreen(
             )
             ButtonUpdateProject(isEnable = editProjectVM.isDataValid) {
                 editProjectVM.getUpdatedProject()?.let {
-                    resultNavigator.navigateBack(it)
+                    projectVM.editProject(it)
+                    actionRootDestinations.backDestination()
                 }
             }
         }

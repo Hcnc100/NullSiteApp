@@ -72,7 +72,9 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun logOut() = viewModelScope.launch(Dispatchers.IO) {
-        authRepository.logout()
+    fun logOut(){
+        viewModelScope.launch(Dispatchers.IO) {
+            authRepository.logout()
+        }
     }
 }

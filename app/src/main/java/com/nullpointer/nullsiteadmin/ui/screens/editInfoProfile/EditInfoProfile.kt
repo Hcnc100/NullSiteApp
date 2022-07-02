@@ -1,5 +1,6 @@
 package com.nullpointer.nullsiteadmin.ui.screens.editInfoProfile
 
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -14,24 +15,26 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.models.PersonalInfo
 import com.nullpointer.nullsiteadmin.models.PropertySavableString
-import com.nullpointer.nullsiteadmin.ui.screens.animation.DetailsTransition
+import com.nullpointer.nullsiteadmin.presentation.InfoUserViewModel
+import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.screens.editInfoProfile.viewModel.EditInfoViewModel
 import com.nullpointer.nullsiteadmin.ui.share.EditableTextSavable
+import com.nullpointer.nullsiteadmin.ui.share.ToolbarBack
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.result.ResultBackNavigator
 
 @Destination
 @Composable
 fun EditInfoProfile(
     editProjectViewModel: EditInfoViewModel = hiltViewModel(),
     personalInfo: PersonalInfo,
-    resultNavigator: ResultBackNavigator<PersonalInfo>
+    actionRootDestinations: ActionRootDestinations
 ) {
-
+    val infoViewModel: InfoUserViewModel = viewModel(LocalContext.current as ComponentActivity)
     val scaffoldState = rememberScaffoldState()
     val context = LocalContext.current
 
@@ -46,7 +49,13 @@ fun EditInfoProfile(
         }
     }
 
-    Scaffold(scaffoldState = scaffoldState) { padding ->
+    Scaffold(scaffoldState = scaffoldState,
+        topBar = {
+            ToolbarBack(
+                title = "Edit Personl Info",
+                actionBack = actionRootDestinations::backDestination
+            )
+        }) { padding ->
         Column(
             modifier = Modifier.padding(padding),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -63,7 +72,8 @@ fun EditInfoProfile(
             )
             ButtonUpdateInfoProfile(isEnable = editProjectViewModel.isDataValid) {
                 editProjectViewModel.getUpdatedPersonalInfo()?.let {
-                    resultNavigator.navigateBack(it)
+                    infoViewModel.updatePersonalInfo(it)
+                    actionRootDestinations.backDestination()
                 }
             }
         }
