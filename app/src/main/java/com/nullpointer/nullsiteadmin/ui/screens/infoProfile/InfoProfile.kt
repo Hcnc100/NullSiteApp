@@ -18,12 +18,13 @@ import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.models.PersonalInfo
 import com.nullpointer.nullsiteadmin.presentation.InfoUserViewModel
 import com.nullpointer.nullsiteadmin.ui.screens.animation.AnimationScreen
+import com.nullpointer.nullsiteadmin.ui.screens.animation.DetailsTransition
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EditInfoProfileDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.ResultRecipient
 
-@Destination(start = true)
+@Destination(start = true, style = DetailsTransition::class)
 @Composable
 fun InfoProfile(
     infoUserVM: InfoUserViewModel = hiltViewModel(),

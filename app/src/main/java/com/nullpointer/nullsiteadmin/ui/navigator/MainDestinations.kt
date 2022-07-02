@@ -5,13 +5,13 @@ import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.*
 
 enum class MainDestinations(
-    val label: String = "",
+    val label: String,
     @DrawableRes
     val icon: Int,
     val destinations: DirectionDestination
 ) {
     PersonalInfoScreen(
-        label = "Personal Info",
+        label = "InfoPersonal",
         icon = R.drawable.ic_home,
         destinations = InfoProfileDestination
     ),
@@ -42,7 +42,11 @@ enum class MainDestinations(
 
         fun getLabel(route: String?): String {
             if (route == null) return ""
-            return values().find { it.destinations.route == route }?.label ?: ""
+            val label = values().find { it.destinations.route == route }?.label
+            if (label != null) return label
+            if (route == EditInfoProfileDestination.route) return "Edit Info Profile"
+            if (route == EditProjectScreenDestination.route) return "Edit Project Info"
+            return ""
         }
     }
 }

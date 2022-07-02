@@ -44,13 +44,8 @@ fun EditProjectScreen(
         editProjectVM.initVM(project)
     }
     Scaffold(
-        scaffoldState = scaffoldState,
-        topBar = {
-            ToolbarBack(
-                title = stringResource(R.string.title_edit_project),
-                actionBack = resultNavigator::navigateBack
-            )
-        }) { paddingValues ->
+        scaffoldState = scaffoldState
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .padding(paddingValues)

@@ -18,6 +18,7 @@ import coil.compose.AsyncImage
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.models.PersonalInfo
 import com.nullpointer.nullsiteadmin.models.PropertySavableString
+import com.nullpointer.nullsiteadmin.ui.screens.animation.DetailsTransition
 import com.nullpointer.nullsiteadmin.ui.screens.editInfoProfile.viewModel.EditInfoViewModel
 import com.nullpointer.nullsiteadmin.ui.share.EditableTextSavable
 import com.ramcosta.composedestinations.annotation.Destination

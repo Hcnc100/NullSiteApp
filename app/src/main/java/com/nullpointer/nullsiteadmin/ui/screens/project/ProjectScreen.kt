@@ -17,12 +17,15 @@ import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.models.Project
 import com.nullpointer.nullsiteadmin.presentation.ProjectViewModel
 import com.nullpointer.nullsiteadmin.ui.screens.animation.AnimationScreen
+import com.nullpointer.nullsiteadmin.ui.screens.animation.DetailsTransition
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EditProjectScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.ResultRecipient
 
-@Destination
+@Destination(
+    style = DetailsTransition::class
+)
 @Composable
 fun ProjectScreen(
     projectVM: ProjectViewModel = hiltViewModel(),

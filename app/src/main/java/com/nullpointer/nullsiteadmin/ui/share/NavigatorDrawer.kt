@@ -16,6 +16,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.compose.AsyncImage
 import com.nullpointer.nullsiteadmin.R
+import com.nullpointer.nullsiteadmin.ui.activitys.MainAppState
 import com.nullpointer.nullsiteadmin.ui.navigator.MainDestinations
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.Destination
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.DirectionDestination
@@ -26,25 +27,21 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun NavigatorDrawer(
-    drawerState: DrawerState,
-    scope: CoroutineScope,
-    navController: NavController,
+    mainAppState:MainAppState,
     closeSession: () -> Unit
 ) {
     Drawer(
         closeSession = closeSession,
-        navController = navController,
+        navController = mainAppState.navController,
         onDestinationClicked = { route ->
-            navController.navigateTo(route) {
-                popUpTo(navController.graph.findStartDestination().id) {
+            mainAppState.navController.navigateTo(route) {
+                popUpTo(mainAppState.navController.graph.findStartDestination().id) {
                     saveState = true
                 }
                 launchSingleTop = true
                 restoreState = true
             }
-            scope.launch {
-                drawerState.close()
-            }
+            mainAppState.closeDrawer()
         }
     )
 }
@@ -84,7 +81,8 @@ private fun ButtonLogOut(
         modifier = modifier
     ) {
         Row {
-            Icon(painterResource(id = R.drawable.ic_logout),
+            Icon(
+                painterResource(id = R.drawable.ic_logout),
                 contentDescription = stringResource(R.string.description_close_session)
                             )
             Spacer(modifier = Modifier.width(10.dp))
