@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.presentation.AuthViewModel
@@ -29,6 +30,9 @@ class MainActivity : ComponentActivity() {
     private val authViewModel: AuthViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        var loading = true
+        val splash = installSplashScreen()
+        splash.setKeepOnScreenCondition { loading }
         setContent {
             NullSiteAdminTheme {
                 // A surface container using the 'background' color from the theme
@@ -48,9 +52,8 @@ class MainActivity : ComponentActivity() {
                         titleNav = MainDestinations.getLabel(destination.route)
                     }
                     when (val isAuthUser = isAuthUserState) {
-                        Resource.Failure -> {}
-                        Resource.Loading -> {}
                         is Resource.Success -> {
+                            loading = false
                             Scaffold(
                                 scaffoldState = scaffoldState,
                                 topBar = {
@@ -86,6 +89,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         }
+                        else -> Unit
                     }
                 }
             }

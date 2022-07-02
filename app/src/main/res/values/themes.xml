@@ -2,6 +2,14 @@
 <resources>
 
     <style name="Theme.NullSiteAdmin" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/purple_700</item>
+        <item name="android:statusBarColor">#000</item>
     </style>
+    <style name="Theme.MySplash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenAnimationDuration">300</item>
+        <item name="splashScreenIconSize">150dp</item>
+        <item name="windowSplashScreenBackground">@color/primary_color</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_background</item>
+        <item name="postSplashScreenTheme">@style/Theme.NullSiteAdmin</item>
+    </style>
+
 </resources>
