@@ -27,7 +27,7 @@ import com.nullpointer.nullsiteadmin.ui.screens.destinations.EditInfoProfileDest
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.result.ResultRecipient
 
-@Destination(start = true, style = DetailsTransition::class)
+@Destination(start = true)
 @Composable
 fun InfoProfile(
     actionRootDestinations: ActionRootDestinations

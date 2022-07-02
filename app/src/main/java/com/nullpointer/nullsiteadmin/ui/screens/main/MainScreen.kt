@@ -14,6 +14,7 @@ import com.google.accompanist.navigation.material.ExperimentalMaterialNavigation
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.MainDestinations
 import com.nullpointer.nullsiteadmin.ui.screens.NavGraphs
+import com.nullpointer.nullsiteadmin.ui.screens.animation.DetailsTransition
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.InfoProfileDestination
 import com.nullpointer.nullsiteadmin.ui.share.NavigatorDrawer
 import com.nullpointer.nullsiteadmin.ui.share.ToolbarMenu
@@ -26,7 +27,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialNavigationApi::class)
-@Destination
+@Destination(
+    style = DetailsTransition::class
+)
 @Composable
  fun MainScreen(
     mainScreenState: MainScreenState = rememberMainScreenState(),

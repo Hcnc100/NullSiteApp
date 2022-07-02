@@ -26,9 +26,7 @@ import com.nullpointer.nullsiteadmin.ui.screens.destinations.EditProjectScreenDe
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.result.ResultRecipient
 
-@Destination(
-    style = DetailsTransition::class
-)
+@Destination
 @Composable
 fun ProjectScreen(
     actionRootDestinations: ActionRootDestinations,
