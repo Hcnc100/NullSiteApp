@@ -1,11 +1,16 @@
 package com.nullpointer.nullsiteadmin.ui.screens.editInfoProfile
 
+import android.content.Context
+import android.net.Uri
 import androidx.activity.ComponentActivity
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -15,7 +20,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.models.PersonalInfo
@@ -24,64 +28,117 @@ import com.nullpointer.nullsiteadmin.presentation.InfoUserViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.screens.editInfoProfile.viewModel.EditInfoViewModel
 import com.nullpointer.nullsiteadmin.ui.share.EditableTextSavable
+import com.nullpointer.nullsiteadmin.ui.share.SelectImgButtonSheet
 import com.nullpointer.nullsiteadmin.ui.share.ToolbarBack
 import com.ramcosta.composedestinations.annotation.Destination
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @Destination
 @Composable
 fun EditInfoProfile(
     editProjectViewModel: EditInfoViewModel = hiltViewModel(),
+    infoViewModel: InfoUserViewModel = hiltViewModel(LocalContext.current as ComponentActivity),
+    stateEditInfo: EditInfoState = rememberEditInfoState(),
     personalInfo: PersonalInfo,
     actionRootDestinations: ActionRootDestinations
 ) {
-    val infoViewModel: InfoUserViewModel = viewModel(LocalContext.current as ComponentActivity)
-    val scaffoldState = rememberScaffoldState()
-    val context = LocalContext.current
-
     // * init info in view model
     LaunchedEffect(key1 = Unit) {
         editProjectViewModel.initInfoProfile(personalInfo)
     }
 
     LaunchedEffect(key1 = Unit) {
-        editProjectViewModel.messageError.collect {
-            scaffoldState.snackbarHostState.showSnackbar(context.getString(it))
-        }
+        editProjectViewModel.messageError.collect(stateEditInfo::showMessage)
     }
 
-    Scaffold(scaffoldState = scaffoldState,
-        topBar = {
-            ToolbarBack(
-                title = "Edit Personl Info",
-                actionBack = actionRootDestinations::backDestination
+    ModalBottomSheetLayout(
+        sheetState = stateEditInfo.modalState,
+        sheetContent = {
+            SelectImgButtonSheet(
+                isVisible = stateEditInfo.isModalVisible,
+                actionHidden = stateEditInfo::hideModal,
+                actionBeforeSelect = { uri ->
+                    stateEditInfo.hideModal()
+                    uri?.let {
+                        editProjectViewModel.updateImg(it, stateEditInfo.context)
+                    }
+                }
             )
-        }) { padding ->
-        Column(
-            modifier = Modifier.padding(padding),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            EditPhotoProfile(
-                urlImg = "https://picsum.photos/200",
-                modifier = Modifier.padding(10.dp)
-            )
-            EditableInformation(
-                nameAdmin = editProjectViewModel.name,
-                professionAdmin = editProjectViewModel.profession,
-                descriptionAdmin = editProjectViewModel.description,
-                modifier = Modifier.padding(10.dp)
-            )
-            ButtonUpdateInfoProfile(isEnable = editProjectViewModel.isDataValid) {
-                editProjectViewModel.getUpdatedPersonalInfo()?.let {
-                    infoViewModel.updatePersonalInfo(it)
-                    actionRootDestinations.backDestination()
+        }) {
+        Scaffold(
+            scaffoldState = stateEditInfo.scaffoldState,
+            topBar = {
+                ToolbarBack(
+                    title = "Edit Personl Info",
+                    actionBack = actionRootDestinations::backDestination
+                )
+            }) { padding ->
+            Column(
+                modifier = Modifier.padding(padding),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                EditPhotoProfile(
+                    urlImg = editProjectViewModel.imageProfile.value,
+                    modifier = Modifier.padding(10.dp),
+                    actionClick = stateEditInfo::showModal
+                )
+                EditableInformation(
+                    nameAdmin = editProjectViewModel.name,
+                    professionAdmin = editProjectViewModel.profession,
+                    descriptionAdmin = editProjectViewModel.description,
+                    modifier = Modifier.padding(10.dp)
+                )
+                ButtonUpdateInfoProfile(isEnable = editProjectViewModel.isDataValid) {
+                    editProjectViewModel.getUpdatedPersonalInfo()?.let {
+                        infoViewModel.updatePersonalInfo(it)
+                        actionRootDestinations.backDestination()
+                    }
                 }
             }
         }
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
+class EditInfoState constructor(
+    val scaffoldState: ScaffoldState,
+    val modalState: ModalBottomSheetState,
+    val scope: CoroutineScope,
+    val context: Context,
+) {
+
+    val isModalVisible get() = modalState.isVisible
+
+    fun hideModal() {
+        scope.launch { modalState.hide() }
+    }
+
+    fun showModal() {
+        scope.launch { modalState.show() }
+    }
+
+    suspend fun showMessage(@StringRes resource: Int) {
+        scaffoldState.snackbarHostState.showSnackbar(
+            context.getString(resource)
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ButtonUpdateInfoProfile(
+private fun rememberEditInfoState(
+    scaffoldState: ScaffoldState = rememberScaffoldState(),
+    modalState: ModalBottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden),
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
+    context: Context = LocalContext.current
+) = remember {
+    EditInfoState(scaffoldState, modalState, coroutineScope, context)
+}
+
+@Composable
+private fun ButtonUpdateInfoProfile(
     modifier: Modifier = Modifier,
     isEnable: Boolean,
     actionClick: () -> Unit
@@ -113,8 +170,9 @@ private fun EditableInformation(
 
 @Composable
 private fun EditPhotoProfile(
-    urlImg: String,
+    urlImg: Uri,
     modifier: Modifier = Modifier,
+    actionClick: () -> Unit
 ) {
     Box(
         modifier = modifier.fillMaxWidth(),
@@ -130,7 +188,7 @@ private fun EditPhotoProfile(
                 contentScale = ContentScale.Crop,
             )
             FloatingActionButton(
-                onClick = { /*TODO*/ },
+                onClick = actionClick,
                 modifier = Modifier
                     .padding(15.dp)
                     .size(40.dp)

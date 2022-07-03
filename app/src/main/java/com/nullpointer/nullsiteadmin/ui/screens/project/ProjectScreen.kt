@@ -14,24 +14,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.models.Project
 import com.nullpointer.nullsiteadmin.presentation.ProjectViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.screens.animation.AnimationScreen
-import com.nullpointer.nullsiteadmin.ui.screens.animation.DetailsTransition
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EditProjectScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.result.ResultRecipient
 
 @Destination
 @Composable
 fun ProjectScreen(
     actionRootDestinations: ActionRootDestinations,
+    projectVM: ProjectViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
-    val projectVM:ProjectViewModel = viewModel(LocalContext.current as ComponentActivity)
     val stateListProject by projectVM.listProject.collectAsState()
     val scaffoldState = rememberScaffoldState()
     LaunchedEffect(key1 = Unit) {

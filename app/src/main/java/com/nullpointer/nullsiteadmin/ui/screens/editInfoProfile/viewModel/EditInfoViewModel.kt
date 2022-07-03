@@ -1,10 +1,15 @@
 package com.nullpointer.nullsiteadmin.ui.screens.editInfoProfile.viewModel
 
+import android.content.Context
+import android.net.Uri
+import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.delagetes.SavableProperty
 import com.nullpointer.nullsiteadmin.models.PersonalInfo
+import com.nullpointer.nullsiteadmin.models.PropertySavableImg
 import com.nullpointer.nullsiteadmin.models.PropertySavableString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -19,9 +24,13 @@ class EditInfoViewModel @Inject constructor(
         private const val MAX_LENGTH_NAME = 50
         private const val MAX_LENGTH_DESCRIPTION = 250
         private const val MAX_LENGTH_PROFESSION = 50
+        private const val KEY_PROJECT_SAVED = "KEY_PROJECT_SAVED"
     }
 
-    private var personalInfo: PersonalInfo? by SavableProperty(state, "", null)
+    private var personalInfo: PersonalInfo? by SavableProperty(state, KEY_PROJECT_SAVED, null)
+    private val _messageError = Channel<Int>()
+    val messageError = _messageError.consumeAsFlow()
+
 
     val name = PropertySavableString(
         state = state,
@@ -48,16 +57,20 @@ class EditInfoViewModel @Inject constructor(
         hint = R.string.hint_description_admin
     )
 
+    val imageProfile = PropertySavableImg(
+        state = state,
+        scope = viewModelScope,
+        actionSendError = _messageError::trySend
+    )
+
     val isDataValid: Boolean
         get() = !name.hasError && !profession.hasError && !description.hasError
 
     private val hasAnyChange: Boolean
         get() = name.value != personalInfo?.name ||
                 profession.value != personalInfo?.profession ||
-                description.value != personalInfo?.description
+                description.value != personalInfo?.description || imageProfile.value != personalInfo?.urlImg?.toUri()
 
-    private val _messageError = Channel<Int>()
-    val messageError = _messageError.consumeAsFlow()
 
     fun initInfoProfile(personalInfo: PersonalInfo) {
         this.personalInfo = personalInfo
@@ -65,6 +78,7 @@ class EditInfoViewModel @Inject constructor(
             name.changeValue(it.name)
             profession.changeValue(it.profession)
             description.changeValue(it.description)
+            imageProfile.initValue(personalInfo.urlImg.toUri())
         }
     }
 
@@ -79,7 +93,11 @@ class EditInfoViewModel @Inject constructor(
             _messageError.trySend(R.string.error_no_data_change)
             null
         }
+    }
 
+
+    fun updateImg(uri: Uri, context: Context) {
+        imageProfile.changeValue(uri, context)
     }
 
     override fun onCleared() {
@@ -87,5 +105,6 @@ class EditInfoViewModel @Inject constructor(
         name.clearValue()
         description.clearValue()
         profession.clearValue()
+        imageProfile.clearValue()
     }
 }

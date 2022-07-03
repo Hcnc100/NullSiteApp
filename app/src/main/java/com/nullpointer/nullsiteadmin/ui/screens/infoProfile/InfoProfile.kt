@@ -30,9 +30,9 @@ import com.ramcosta.composedestinations.result.ResultRecipient
 @Destination(start = true)
 @Composable
 fun InfoProfile(
-    actionRootDestinations: ActionRootDestinations
+    actionRootDestinations: ActionRootDestinations,
+    infoViewModel: InfoUserViewModel = hiltViewModel(LocalContext.current as ComponentActivity),
 ) {
-    val infoViewModel:InfoUserViewModel = viewModel(LocalContext.current as ComponentActivity)
 
     val stateInfoProfile by infoViewModel.infoUser.collectAsState()
     val scaffoldState = rememberScaffoldState()

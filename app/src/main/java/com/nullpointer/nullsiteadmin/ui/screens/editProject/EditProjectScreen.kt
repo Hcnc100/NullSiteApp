@@ -34,9 +34,9 @@ import com.ramcosta.composedestinations.annotation.Destination
 fun EditProjectScreen(
     project: Project,
     editProjectVM: EditProjectViewModel = hiltViewModel(),
-    actionRootDestinations: ActionRootDestinations
+    actionRootDestinations: ActionRootDestinations,
+    projectVM: ProjectViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
-    val projectVM:ProjectViewModel =viewModel(LocalContext.current as ComponentActivity)
     val scaffoldState = rememberScaffoldState()
     val context = LocalContext.current
     LaunchedEffect(key1 = Unit) {

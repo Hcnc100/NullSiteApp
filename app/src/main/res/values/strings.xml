@@ -84,6 +84,13 @@
     <!-- label navigation -->
 
 
+    <!-- select imager picker -->
+    <string name="text_select_option">Select an option</string>
+    <string name="option_img_camera">Camera</string>
+    <string name="description_img_camera">Take a photo</string>
+    <string name="option_img_gallery">Gallery</string>
+    <string name="description_img_gallery">Select a photo from the gallery</string>
+    <string name="error_compress_img">Error al seleccionar la imagen</string>
 
 
 </resources>
