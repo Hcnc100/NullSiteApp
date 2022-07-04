@@ -14,7 +14,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Composable
 fun PreviewScreen() {
     val webState= rememberWebViewState(url = "https://nullpointer-716ae.web.app/")
-    Scaffold() { it ->
+    Scaffold { it ->
         WebView(
             modifier= Modifier.padding(it),
             state = webState,

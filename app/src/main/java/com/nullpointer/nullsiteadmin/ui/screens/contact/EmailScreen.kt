@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -19,6 +18,8 @@ import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.models.EmailContact
 import com.nullpointer.nullsiteadmin.presentation.EmailsViewModel
 import com.nullpointer.nullsiteadmin.ui.screens.animation.AnimationScreen
+import com.nullpointer.nullsiteadmin.ui.screens.states.SimpleScreenState
+import com.nullpointer.nullsiteadmin.ui.screens.states.rememberSimpleScreenState
 import com.ramcosta.composedestinations.annotation.DeepLink
 import com.ramcosta.composedestinations.annotation.Destination
 
@@ -31,17 +32,15 @@ import com.ramcosta.composedestinations.annotation.Destination
 )
 @Composable
 fun EmailScreen(
-    emailsVM: EmailsViewModel = hiltViewModel()
+    emailsVM: EmailsViewModel = hiltViewModel(),
+    emailScreenState: SimpleScreenState = rememberSimpleScreenState()
 ) {
     val emailsState by emailsVM.listEmails.collectAsState()
-    val scaffoldState = rememberScaffoldState()
     LaunchedEffect(key1 = Unit) {
-        emailsVM.errorEmail.collect {
-            scaffoldState.snackbarHostState.showSnackbar(it)
-        }
+        emailsVM.errorEmail.collect(emailScreenState::showSnackMessage)
     }
     Scaffold(
-        scaffoldState = scaffoldState
+        scaffoldState = emailScreenState.scaffoldState
     ) {
         when (val listEmails = emailsState) {
             Resource.Failure -> AnimationScreen(
@@ -65,7 +64,6 @@ fun EmailScreen(
                     )
                 }
             }
-
         }
     }
 }

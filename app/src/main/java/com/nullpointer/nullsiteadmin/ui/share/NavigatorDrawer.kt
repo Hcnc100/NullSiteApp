@@ -24,31 +24,29 @@ import com.nullpointer.nullsiteadmin.ui.navigator.MainDestinations
 import com.nullpointer.nullsiteadmin.ui.screens.appDestination
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.Destination
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.DirectionDestination
-import com.nullpointer.nullsiteadmin.ui.screens.main.MainScreenState
-import com.nullpointer.nullsiteadmin.ui.screens.navDestination
 import com.ramcosta.composedestinations.navigation.navigate
-import com.ramcosta.composedestinations.navigation.navigateTo
 
 @Composable
 fun NavigatorDrawer(
-    mainAppState: MainScreenState,
-    closeSession: () -> Unit
+    closeSession: () -> Unit,
+    closeDrawer:()->Unit,
+    navController: NavController
 ) {
     Drawer(
         closeSession = {
             closeSession()
-            mainAppState.closeDrawer()
+            closeDrawer()
         },
-        navController = mainAppState.navController,
+        navController =navController,
         onDestinationClicked = { route ->
-            mainAppState.navController.navigate(route, fun NavOptionsBuilder.() {
-                popUpTo(mainAppState.navController.graph.findStartDestination().id) {
+            navController.navigate(route, fun NavOptionsBuilder.() {
+                popUpTo(navController.graph.findStartDestination().id) {
                     saveState = true
                 }
                 launchSingleTop = true
                 restoreState = true
             })
-            mainAppState.closeDrawer()
+            closeDrawer()
         }
     )
 }

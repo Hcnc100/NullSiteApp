@@ -2,6 +2,7 @@ package com.nullpointer.nullsiteadmin.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.domain.email.EmailsRepository
 import com.nullpointer.nullsiteadmin.models.EmailContact
@@ -19,7 +20,7 @@ class EmailsViewModel @Inject constructor(
     private val emailsRepository: EmailsRepository
 ) : ViewModel() {
 
-    private val _errorEmail = Channel<String>()
+    private val _errorEmail = Channel<Int>()
     val errorEmail = _errorEmail.receiveAsFlow()
 
     val listEmails = flow<Resource<List<EmailContact>>> {
@@ -28,7 +29,7 @@ class EmailsViewModel @Inject constructor(
         }
     }.flowOn(Dispatchers.IO).catch {
         Timber.e("Error to load emails $it")
-        _errorEmail.trySend("Error to load list emails")
+        _errorEmail.trySend(R.string.error_load_list_email)
         emit(Resource.Failure)
     }.stateIn(
         viewModelScope,
@@ -42,11 +43,11 @@ class EmailsViewModel @Inject constructor(
         try {
             emailsRepository.deleterEmail(idEmail)
         } catch (e: Exception) {
-            Timber.e("Error to delete email $idEmail")
             when (e) {
                 is CancellationException -> throw e
-                else -> {
-                    _errorEmail.trySend("Error deleter this email")
+                else ->{
+                    Timber.e("Error to delete email $idEmail : $e")
+                    _errorEmail.trySend(R.string.error_deleter_email)
                 }
             }
         }

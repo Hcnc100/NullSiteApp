@@ -21,23 +21,23 @@ import com.nullpointer.nullsiteadmin.presentation.ProjectViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.screens.animation.AnimationScreen
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EditProjectScreenDestination
+import com.nullpointer.nullsiteadmin.ui.screens.states.SimpleScreenState
+import com.nullpointer.nullsiteadmin.ui.screens.states.rememberSimpleScreenState
 import com.ramcosta.composedestinations.annotation.Destination
 
 @Destination
 @Composable
 fun ProjectScreen(
     actionRootDestinations: ActionRootDestinations,
-    projectVM: ProjectViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
+    projectVM: ProjectViewModel = hiltViewModel(LocalContext.current as ComponentActivity),
+    projectScreenState: SimpleScreenState = rememberSimpleScreenState()
 ) {
     val stateListProject by projectVM.listProject.collectAsState()
-    val scaffoldState = rememberScaffoldState()
     LaunchedEffect(key1 = Unit) {
-        projectVM.messageErrorProject.collect {
-            scaffoldState.snackbarHostState.showSnackbar(it)
-        }
+        projectVM.messageErrorProject.collect(projectScreenState::showSnackMessage)
     }
     Scaffold(
-        scaffoldState = scaffoldState
+        scaffoldState = projectScreenState.scaffoldState
     ) {
         when (val listProject = stateListProject) {
             Resource.Failure -> AnimationScreen(

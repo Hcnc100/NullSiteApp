@@ -103,7 +103,14 @@
     <string name="message_change_upload">Cambios Guardados</string>
     <string name="message_cancel_upload">Se cancelo la actualizacion</string>
     <string name="message_init_upload">Subiendo Cambios</string>
-
+    <string name="error_load_list_email">Error to load list emails</string>
+    <string name="error_deleter_email">Error deleter this email</string>
+    <string name="error_load_info_user">Error to load info user</string>
+    <string name="message_data_upload">Datos actualizados</string>
+    <string name="error_data_user_upload">Error to update info user</string>
+    <string name="error_load_project">Error while loading projects</string>
+    <string name="message_upload_project">Projecto actualizado</string>
+    <string name="message_error_upload_project">Error while edit project</string>
 
 
 </resources>

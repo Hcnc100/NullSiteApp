@@ -2,6 +2,7 @@ package com.nullpointer.nullsiteadmin.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepository
 import com.nullpointer.nullsiteadmin.models.PersonalInfo
@@ -20,7 +21,7 @@ class InfoUserViewModel @Inject constructor(
     private val infoUserRepository: InfoUserRepository
 ) : ViewModel() {
 
-    private val _messageError = Channel<String>()
+    private val _messageError = Channel<Int>()
     val messageError = _messageError.receiveAsFlow()
 
     val infoUser = flow<Resource<PersonalInfo>> {
@@ -29,7 +30,7 @@ class InfoUserViewModel @Inject constructor(
         }
     }.flowOn(Dispatchers.IO).catch {
         Timber.e("Error to load info user $it")
-        _messageError.trySend("Error to load info user")
+        _messageError.trySend(R.string.error_load_info_user)
         emit(Resource.Failure)
     }.stateIn(
         viewModelScope,
@@ -43,11 +44,14 @@ class InfoUserViewModel @Inject constructor(
         try {
             infoUserRepository.updatePersonalInfo(personalInfo)
             delay(300)
-            _messageError.trySend("Datos actualizados")
+            _messageError.trySend(R.string.message_data_upload)
         } catch (e: Exception) {
             when (e) {
                 is CancellationException -> throw e
-                else -> _messageError.trySend("Error to update info user")
+                else ->{
+                    Timber.e("Error to update info personal $e")
+                    _messageError.trySend(R.string.error_data_user_upload)
+                }
             }
         }
     }

@@ -16,6 +16,8 @@ import com.nullpointer.nullsiteadmin.ui.navigator.MainDestinations
 import com.nullpointer.nullsiteadmin.ui.screens.NavGraphs
 import com.nullpointer.nullsiteadmin.ui.screens.animation.DetailsTransition
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.InfoProfileDestination
+import com.nullpointer.nullsiteadmin.ui.screens.states.MainScreenState
+import com.nullpointer.nullsiteadmin.ui.screens.states.rememberMainScreenState
 import com.nullpointer.nullsiteadmin.ui.share.NavigatorDrawer
 import com.nullpointer.nullsiteadmin.ui.share.ToolbarMenu
 import com.ramcosta.composedestinations.DestinationsNavHost
@@ -45,8 +47,9 @@ import kotlinx.coroutines.launch
         },
         drawerContent = {
             NavigatorDrawer(
-                mainAppState = mainScreenState,
-                closeSession = actionRootDestinations::logout
+                closeSession = actionRootDestinations::logout,
+                closeDrawer = mainScreenState::closeDrawer,
+                navController = mainScreenState.navController
             )
         },
     ) { paddingValues ->
@@ -69,43 +72,3 @@ import kotlinx.coroutines.launch
     }
 }
 
- class MainScreenState(
-    val scaffoldState: ScaffoldState,
-    val navController: NavHostController,
-    private val coroutineScope: CoroutineScope,
-) {
-    var isHomeRoute by mutableStateOf(false)
-        private set
-
-    var titleNav by mutableStateOf(MainDestinations.PersonalInfoScreen.label)
-        private set
-
-    init {
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            isHomeRoute = MainDestinations.isHomeRoute(destination.route)
-            titleNav = MainDestinations.getLabel(destination.route)
-        }
-    }
-
-    fun openDrawer() {
-        coroutineScope.launch {
-            scaffoldState.drawerState.open()
-        }
-    }
-
-    fun closeDrawer() {
-        coroutineScope.launch {
-            scaffoldState.drawerState.close()
-        }
-    }
-}
-
-@OptIn(ExperimentalAnimationApi::class)
-@Composable
-private fun rememberMainScreenState(
-    scaffoldState: ScaffoldState = rememberScaffoldState(),
-    navController: NavHostController = rememberAnimatedNavController(),
-    coroutineScope: CoroutineScope = rememberCoroutineScope()
-) = remember(scaffoldState, navController, coroutineScope) {
-    MainScreenState(scaffoldState, navController, coroutineScope)
-}

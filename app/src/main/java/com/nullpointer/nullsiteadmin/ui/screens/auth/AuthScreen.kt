@@ -1,6 +1,5 @@
 package com.nullpointer.nullsiteadmin.ui.screens.auth
 
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -10,11 +9,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -24,8 +21,9 @@ import coil.compose.AsyncImage
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.models.PropertySavableString
 import com.nullpointer.nullsiteadmin.presentation.AuthViewModel
-import com.nullpointer.nullsiteadmin.ui.screens.auth.state.AuthScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.auth.viewModel.AuthFieldViewModel
+import com.nullpointer.nullsiteadmin.ui.screens.states.SimpleScreenState
+import com.nullpointer.nullsiteadmin.ui.screens.states.rememberSimpleScreenState
 import com.nullpointer.nullsiteadmin.ui.share.EditableTextSavable
 import com.ramcosta.composedestinations.annotation.Destination
 
@@ -34,10 +32,10 @@ import com.ramcosta.composedestinations.annotation.Destination
 fun AuthScreen(
     authViewModel: AuthViewModel,
     authFieldVM: AuthFieldViewModel = hiltViewModel(),
-    authScreenState: AuthScreenState = rememberAuthScreenState()
+    authScreenState: SimpleScreenState = rememberSimpleScreenState()
 ) {
     LaunchedEffect(key1 = Unit) {
-        authViewModel.messageErrorAuth.collect(authScreenState::showMessage)
+        authViewModel.messageErrorAuth.collect(authScreenState::showSnackMessage)
     }
     Scaffold(scaffoldState = authScreenState.scaffoldState) { paddingValues ->
         ContainerAuthScreen(
@@ -62,13 +60,6 @@ fun AuthScreen(
     }
 }
 
-@Composable
-fun rememberAuthScreenState(
-    scaffoldState: ScaffoldState = rememberScaffoldState(),
-    context: Context = LocalContext.current
-) = remember {
-    AuthScreenState(scaffoldState, context)
-}
 
 @Composable
 private fun ContainerAuthScreen(

@@ -1,9 +1,7 @@
 package com.nullpointer.nullsiteadmin.ui.screens.editInfoProfile
 
-import android.content.Context
 import android.net.Uri
 import androidx.activity.ComponentActivity
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -11,18 +9,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -34,12 +25,12 @@ import com.nullpointer.nullsiteadmin.models.PropertySavableString
 import com.nullpointer.nullsiteadmin.presentation.InfoUserViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.screens.editInfoProfile.viewModel.EditInfoViewModel
+import com.nullpointer.nullsiteadmin.ui.screens.states.EditInfoState
+import com.nullpointer.nullsiteadmin.ui.screens.states.rememberEditInfoState
 import com.nullpointer.nullsiteadmin.ui.share.EditableTextSavable
 import com.nullpointer.nullsiteadmin.ui.share.SelectImgButtonSheet
 import com.nullpointer.nullsiteadmin.ui.share.ToolbarBack
 import com.ramcosta.composedestinations.annotation.Destination
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Destination
@@ -57,7 +48,7 @@ fun EditInfoProfile(
     }
 
     LaunchedEffect(key1 = Unit) {
-        editProjectViewModel.messageError.collect(stateEditInfo::showMessage)
+        editProjectViewModel.messageError.collect(stateEditInfo::showSnackMessage)
     }
 
     ModalBottomSheetLayout(
@@ -112,55 +103,6 @@ fun EditInfoProfile(
             }
         }
     }
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-class EditInfoState constructor(
-    val scaffoldState: ScaffoldState,
-    val modalState: ModalBottomSheetState,
-    val scope: CoroutineScope,
-    val context: Context,
-    private val focusManager: FocusManager
-) {
-
-    val isModalVisible get() = modalState.isVisible
-
-    fun hideModal() {
-        scope.launch { modalState.hide() }
-    }
-
-    fun showModal() {
-        hiddenKeyBoard()
-        scope.launch { modalState.show() }
-    }
-
-    fun hiddenKeyBoard()= focusManager.clearFocus()
-
-
-
-    suspend fun showMessage(@StringRes resource: Int) {
-        scaffoldState.snackbarHostState.showSnackbar(
-            context.getString(resource)
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-private fun rememberEditInfoState(
-    scaffoldState: ScaffoldState = rememberScaffoldState(),
-    modalState: ModalBottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden),
-    coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    context: Context = LocalContext.current,
-    focusManager: FocusManager = LocalFocusManager.current
-) = remember {
-    EditInfoState(
-        scaffoldState,
-        modalState,
-        coroutineScope,
-        context,
-        focusManager
-    )
 }
 
 @Composable

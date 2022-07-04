@@ -2,6 +2,7 @@ package com.nullpointer.nullsiteadmin.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.domain.project.ProjectRepository
 import com.nullpointer.nullsiteadmin.models.Project
@@ -20,7 +21,7 @@ class ProjectViewModel @Inject constructor(
     private val projectRepository: ProjectRepository
 ) : ViewModel() {
 
-    private val _messageErrorProject = Channel<String>()
+    private val _messageErrorProject = Channel<Int>()
     val messageErrorProject = _messageErrorProject.receiveAsFlow()
 
     val listProject = flow<Resource<List<Project>>> {
@@ -29,7 +30,7 @@ class ProjectViewModel @Inject constructor(
         }
     }.flowOn(Dispatchers.IO).catch {
         Timber.e("Failed to list projects $it")
-        _messageErrorProject.trySend("Error while loading projects")
+        _messageErrorProject.trySend(R.string.error_load_project)
         emit(Resource.Failure)
     }.stateIn(
         viewModelScope,
@@ -43,12 +44,15 @@ class ProjectViewModel @Inject constructor(
         try {
             projectRepository.editProject(project)
             delay(300)
-            _messageErrorProject.trySend("Projecto actualizado")
+            _messageErrorProject.trySend(R.string.message_upload_project)
         } catch (e: Exception) {
             Timber.e("Failed to edit project $e")
             when (e) {
                 is CancellationException -> throw e
-                else -> _messageErrorProject.trySend("Error while edit project")
+                else -> {
+                    _messageErrorProject.trySend(R.string.message_error_upload_project)
+                    Timber.e("Failed upload project $e")
+                }
             }
         }
     }

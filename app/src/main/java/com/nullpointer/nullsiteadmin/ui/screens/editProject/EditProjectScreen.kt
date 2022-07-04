@@ -26,6 +26,8 @@ import com.nullpointer.nullsiteadmin.models.PropertySavableString
 import com.nullpointer.nullsiteadmin.presentation.ProjectViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.screens.editProject.viewModel.EditProjectViewModel
+import com.nullpointer.nullsiteadmin.ui.screens.states.SimpleScreenState
+import com.nullpointer.nullsiteadmin.ui.screens.states.rememberSimpleScreenState
 import com.nullpointer.nullsiteadmin.ui.share.EditableTextSavable
 import com.nullpointer.nullsiteadmin.ui.share.ToolbarBack
 import com.ramcosta.composedestinations.annotation.Destination
@@ -35,13 +37,13 @@ import com.ramcosta.composedestinations.annotation.Destination
 fun EditProjectScreen(
     project: Project,
     actionRootDestinations: ActionRootDestinations,
-    editProjectState: EditProjectState = rememberEditProjectState(),
+    editProjectState: SimpleScreenState = rememberSimpleScreenState(),
     editProjectVM: EditProjectViewModel = hiltViewModel(),
     projectVM: ProjectViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
 
     LaunchedEffect(key1 = Unit, editProjectState) {
-        editProjectVM.messageError.collect(editProjectState::showMessage)
+        editProjectVM.messageError.collect(editProjectState::showSnackMessage)
     }
     LaunchedEffect(key1 = Unit) {
         editProjectVM.initVM(project)
@@ -80,29 +82,7 @@ fun EditProjectScreen(
     }
 }
 
-class EditProjectState(
-    val scaffoldState: ScaffoldState,
-    val context: Context,
-    private val focusManager: FocusManager
-) {
-    suspend fun showMessage(@StringRes resource: Int) {
-        scaffoldState.snackbarHostState.showSnackbar(
-            context.getString(resource)
-        )
-    }
 
-    fun hiddenKeyBoard() = focusManager.clearFocus()
-
-}
-
-@Composable
-fun rememberEditProjectState(
-    scaffoldState: ScaffoldState = rememberScaffoldState(),
-    context: Context = LocalContext.current,
-    focusManager: FocusManager = LocalFocusManager.current
-) = remember {
-    EditProjectState(scaffoldState, context, focusManager)
-}
 
 @Composable
 private fun ButtonUpdateProject(
