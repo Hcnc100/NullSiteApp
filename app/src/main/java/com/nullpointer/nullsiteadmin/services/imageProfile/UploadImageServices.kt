@@ -78,6 +78,9 @@ class UploadImageServices : LifecycleService() {
         uriImage: Uri,
         actionBeforeUpload: suspend (uri: String) -> Unit,
     ) {
+
+        notifyHelper.startServicesForeground(this)
+
         repoImageProfileImpl.uploadImageProfile(uriImage).catch { exception ->
             // ! if has Error send error and killer service
             Timber.e("Error upload img flow $exception")

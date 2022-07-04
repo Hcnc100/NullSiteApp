@@ -42,11 +42,7 @@ enum class MainDestinations(
 
         fun getLabel(route: String?): String {
             if (route == null) return ""
-            val label = values().find { it.destinations.route == route }?.label
-            if (label != null) return label
-            if (route == EditInfoProfileDestination.route) return "Edit Info Profile"
-            if (route == EditProjectScreenDestination.route) return "Edit Project Info"
-            return ""
+            return values().find { it.destinations.route == route }?.label ?: ""
         }
     }
 }

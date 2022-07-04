@@ -49,7 +49,9 @@
 
         <service
             android:name=".services.imageProfile.UploadImageServices"
-            android:foregroundServiceType="dataSync" />
+            android:foregroundServiceType="dataSync"
+            android:exported="false"
+            />
     </application>
 
 </manifest>
