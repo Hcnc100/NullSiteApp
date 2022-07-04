@@ -8,6 +8,8 @@ import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepoImpl
 import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepository
 import com.nullpointer.nullsiteadmin.domain.project.ProjectRepoImpl
 import com.nullpointer.nullsiteadmin.domain.project.ProjectRepository
+import com.nullpointer.nullsiteadmin.domain.storage.RepoImageProfileImpl
+import com.nullpointer.nullsiteadmin.domain.storage.RepositoryImageProfile
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -42,4 +44,9 @@ abstract class RepositoryModule {
         authRepository: AuthRepoImpl
     ): AuthRepository
 
+    @Binds
+    @Singleton
+    abstract fun provideImageProfileRepository(
+        repoImageProfileImpl: RepoImageProfileImpl
+    ):RepositoryImageProfile
 }

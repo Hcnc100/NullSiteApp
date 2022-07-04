@@ -92,5 +92,11 @@
     <string name="description_img_gallery">Select a photo from the gallery</string>
     <string name="error_compress_img">Error al seleccionar la imagen</string>
 
+    <!-- services upload -->
+    <string name="error_upload_info">Error al subir los cambios</string>
+    <string name="message_change_upload">Cambios Guardados</string>
+    <string name="message_cancel_upload">Se cancelo la actualizacion</string>
+    <string name="message_init_upload">Subiendo Cambios</string>
+
 
 </resources>

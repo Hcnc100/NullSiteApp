@@ -4,6 +4,8 @@
     package="com.nullpointer.nullsiteadmin">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <application
         android:name=".inject.Application"
         android:allowBackup="true"
@@ -44,6 +46,10 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <service
+            android:name=".services.imageProfile.UploadImageServices"
+            android:foregroundServiceType="dataSync" />
     </application>
 
 </manifest>

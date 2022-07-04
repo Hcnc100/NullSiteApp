@@ -11,6 +11,7 @@ import com.nullpointer.nullsiteadmin.core.delagetes.SavableProperty
 import com.nullpointer.nullsiteadmin.models.PersonalInfo
 import com.nullpointer.nullsiteadmin.models.PropertySavableImg
 import com.nullpointer.nullsiteadmin.models.PropertySavableString
+import com.nullpointer.nullsiteadmin.services.imageProfile.UploadImageServicesControl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
@@ -66,7 +67,7 @@ class EditInfoViewModel @Inject constructor(
     val isDataValid: Boolean
         get() = !name.hasError && !profession.hasError && !description.hasError
 
-    private val hasAnyChange: Boolean
+     val hasAnyChange: Boolean
         get() = name.value != personalInfo?.name ||
                 profession.value != personalInfo?.profession ||
                 description.value != personalInfo?.description || imageProfile.value != personalInfo?.urlImg?.toUri()
@@ -82,13 +83,19 @@ class EditInfoViewModel @Inject constructor(
         }
     }
 
-    fun getUpdatedPersonalInfo(): PersonalInfo? {
-        return if (hasAnyChange) {
-            personalInfo?.copy(
-                name = name.value,
-                description = description.value,
-                profession = profession.value
-            )
+    fun getUpdatedPersonalInfo(context: Context):PersonalInfo?{
+         return if (hasAnyChange) {
+             val finishInfo=personalInfo!!.copy(
+                 name = name.value,
+                 description = description.value,
+                 profession = profession.value
+             )
+             if(imageProfile.value!= personalInfo!!.urlImg.toUri()){
+                 UploadImageServicesControl.init(context,finishInfo,imageProfile.value)
+                 null
+             }else{
+                 finishInfo
+             }
         } else {
             _messageError.trySend(R.string.error_no_data_change)
             null

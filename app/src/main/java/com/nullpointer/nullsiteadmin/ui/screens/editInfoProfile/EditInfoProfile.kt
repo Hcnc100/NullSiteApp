@@ -5,17 +5,24 @@ import android.net.Uri
 import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -76,7 +83,9 @@ fun EditInfoProfile(
                 )
             }) { padding ->
             Column(
-                modifier = Modifier.padding(padding),
+                modifier = Modifier
+                    .padding(padding)
+                    .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 EditPhotoProfile(
@@ -90,11 +99,15 @@ fun EditInfoProfile(
                     descriptionAdmin = editProjectViewModel.description,
                     modifier = Modifier.padding(10.dp)
                 )
-                ButtonUpdateInfoProfile(isEnable = editProjectViewModel.isDataValid) {
-                    editProjectViewModel.getUpdatedPersonalInfo()?.let {
+                ButtonUpdateInfoProfile(
+                    isEnable = editProjectViewModel.isDataValid,
+                    modifier = Modifier.padding(10.dp)
+                ) {
+                    stateEditInfo.hiddenKeyBoard()
+                    editProjectViewModel.getUpdatedPersonalInfo(stateEditInfo.context)?.let {
                         infoViewModel.updatePersonalInfo(it)
-                        actionRootDestinations.backDestination()
                     }
+                    if (editProjectViewModel.hasAnyChange) actionRootDestinations.backDestination()
                 }
             }
         }
@@ -107,6 +120,7 @@ class EditInfoState constructor(
     val modalState: ModalBottomSheetState,
     val scope: CoroutineScope,
     val context: Context,
+    private val focusManager: FocusManager
 ) {
 
     val isModalVisible get() = modalState.isVisible
@@ -116,8 +130,13 @@ class EditInfoState constructor(
     }
 
     fun showModal() {
+        hiddenKeyBoard()
         scope.launch { modalState.show() }
     }
+
+    fun hiddenKeyBoard()= focusManager.clearFocus()
+
+
 
     suspend fun showMessage(@StringRes resource: Int) {
         scaffoldState.snackbarHostState.showSnackbar(
@@ -132,9 +151,16 @@ private fun rememberEditInfoState(
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     modalState: ModalBottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    context: Context = LocalContext.current
+    context: Context = LocalContext.current,
+    focusManager: FocusManager = LocalFocusManager.current
 ) = remember {
-    EditInfoState(scaffoldState, modalState, coroutineScope, context)
+    EditInfoState(
+        scaffoldState,
+        modalState,
+        coroutineScope,
+        context,
+        focusManager
+    )
 }
 
 @Composable
