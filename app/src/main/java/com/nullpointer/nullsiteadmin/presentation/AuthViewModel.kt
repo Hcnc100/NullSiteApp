@@ -11,7 +11,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -52,16 +51,12 @@ class AuthViewModel @Inject constructor(
     ) = viewModelScope.launch(Dispatchers.IO) {
         try {
             isAuthenticating = true
-//            delay(3000)
-            if (dataUser != null) {
-                val (email, password) = dataUser
-                authRepository.authUserWithEmailAndPassword(email, password)
-            } else {
-                _messageErrorAuth.trySend("Datos invalidos")
-            }
+            val (email, password) = dataUser!!
+            authRepository.authUserWithEmailAndPassword(email, password)
         } catch (e: Exception) {
             when (e) {
                 is CancellationException -> throw e
+                is NullPointerException -> _messageErrorAuth.trySend("Datos invalidos")
                 else -> {
                     _messageErrorAuth.trySend("Verifique sus datos")
                     Timber.e("Error al autenticar $e")

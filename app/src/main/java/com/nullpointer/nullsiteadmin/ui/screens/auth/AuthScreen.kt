@@ -12,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -54,15 +55,12 @@ fun AuthScreen(
                 modifier = Modifier.width(300.dp),
                 isEnabled = !authViewModel.isAuthenticating
             )
-            Box(modifier = Modifier.padding(vertical = 20.dp)) {
-                if(authViewModel.isAuthenticating){
-                    CircularProgressIndicator(color = MaterialTheme.colors.onPrimary)
-                }else{
-                    ButtonAuth {
-                        val dataUser = authFieldVM.getDataAuth()
-                        authViewModel.authWithEmailAndPassword(dataUser)
-                    }
-                }
+            ButtonAuth(
+                isAuthenticating = authViewModel.isAuthenticating,
+                modifier = Modifier.padding(vertical = 20.dp)
+            ) {
+                val dataUser = authFieldVM.getDataAuth()
+                authViewModel.authWithEmailAndPassword(dataUser)
             }
         }
     }
@@ -71,13 +69,20 @@ fun AuthScreen(
 @Composable
 private fun ButtonAuth(
     modifier: Modifier = Modifier,
+    isAuthenticating: Boolean,
     actionClick: () -> Unit,
 ) {
-    ExtendedFloatingActionButton(
-        modifier = modifier,
-        text = { Text(text = "Authtenticate") },
-        onClick = actionClick
-    )
+    Box(modifier = modifier) {
+        if (isAuthenticating) {
+            CircularProgressIndicator(color = MaterialTheme.colors.onPrimary)
+        } else {
+            ExtendedFloatingActionButton(
+                text = { Text(text = stringResource(R.string.text_auth_button)) },
+                onClick = actionClick
+            )
+        }
+    }
+
 }
 
 @Composable
@@ -132,7 +137,7 @@ private fun LogoApp(
 ) {
     AsyncImage(
         model = R.drawable.ic_safe,
-        contentDescription = "",
+        contentDescription = stringResource(R.string.description_logo_app),
         modifier = modifier.size(130.dp)
     )
 }

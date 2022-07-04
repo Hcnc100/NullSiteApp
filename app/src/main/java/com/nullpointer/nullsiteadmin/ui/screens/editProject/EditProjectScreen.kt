@@ -1,23 +1,24 @@
 package com.nullpointer.nullsiteadmin.ui.screens.editProject
 
+import android.content.Context
 import androidx.activity.ComponentActivity
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.models.Project
@@ -33,24 +34,25 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Composable
 fun EditProjectScreen(
     project: Project,
-    editProjectVM: EditProjectViewModel = hiltViewModel(),
     actionRootDestinations: ActionRootDestinations,
+    editProjectState: EditProjectState = rememberEditProjectState(),
+    editProjectVM: EditProjectViewModel = hiltViewModel(),
     projectVM: ProjectViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
-    val scaffoldState = rememberScaffoldState()
-    val context = LocalContext.current
-    LaunchedEffect(key1 = Unit) {
-        editProjectVM.messageError.collect {
-            scaffoldState.snackbarHostState.showSnackbar(context.getString(it))
-        }
+
+    LaunchedEffect(key1 = Unit, editProjectState) {
+        editProjectVM.messageError.collect(editProjectState::showMessage)
     }
     LaunchedEffect(key1 = Unit) {
         editProjectVM.initVM(project)
     }
     Scaffold(
-        scaffoldState = scaffoldState,
+        scaffoldState = editProjectState.scaffoldState,
         topBar = {
-            ToolbarBack(title = "Edit Project", actionBack = actionRootDestinations::backDestination)
+            ToolbarBack(
+                title = stringResource(id = R.string.title_edit_project),
+                actionBack = actionRootDestinations::backDestination
+            )
         }
     ) { paddingValues ->
         Column(
@@ -69,12 +71,37 @@ fun EditProjectScreen(
             )
             ButtonUpdateProject(isEnable = editProjectVM.isDataValid) {
                 editProjectVM.getUpdatedProject()?.let {
+                    editProjectState.hiddenKeyBoard()
                     projectVM.editProject(it)
                     actionRootDestinations.backDestination()
                 }
             }
         }
     }
+}
+
+class EditProjectState(
+    val scaffoldState: ScaffoldState,
+    val context: Context,
+    private val focusManager: FocusManager
+) {
+    suspend fun showMessage(@StringRes resource: Int) {
+        scaffoldState.snackbarHostState.showSnackbar(
+            context.getString(resource)
+        )
+    }
+
+    fun hiddenKeyBoard() = focusManager.clearFocus()
+
+}
+
+@Composable
+fun rememberEditProjectState(
+    scaffoldState: ScaffoldState = rememberScaffoldState(),
+    context: Context = LocalContext.current,
+    focusManager: FocusManager = LocalFocusManager.current
+) = remember {
+    EditProjectState(scaffoldState, context, focusManager)
 }
 
 @Composable

@@ -42,7 +42,7 @@
     <string name="label_img_project">Link de la imagen</string>
 
     <!-- text buttons -->
-    <string name="title_edit_project">Edit Project</string>
+    <string name="title_edit_project">Editar Projecto</string>
     <string name="text_update_project">Actualiza  el projecto</string>
     <string name="text_save_personal_info">Guardar informacion</string>
     <string name="description_current_img_project">Imagen del projecto actual</string>
@@ -80,6 +80,8 @@
     <string name="description_close_session">Icono de cerrar session</string>
     <string name="text_log_out">LogOut</string>
     <string name="description_icon_draw_menu">Icono de el destino de navegacion</string>
+    <string name="text_auth_button">Authenticate</string>
+    <string name="description_logo_app">Icono prinicpla de la aplicacion</string>
 
     <!-- label navigation -->
 
@@ -97,6 +99,7 @@
     <string name="message_change_upload">Cambios Guardados</string>
     <string name="message_cancel_upload">Se cancelo la actualizacion</string>
     <string name="message_init_upload">Subiendo Cambios</string>
+
 
 
 </resources>
