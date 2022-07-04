@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.domain.auth.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +22,7 @@ class AuthViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
-    private val _messageErrorAuth = Channel<String>()
+    private val _messageErrorAuth = Channel<Int>()
     val messageErrorAuth = _messageErrorAuth.receiveAsFlow()
 
     val isUserAuth = flow<Resource<Boolean>> {
@@ -32,7 +33,7 @@ class AuthViewModel @Inject constructor(
         Dispatchers.IO
     ).catch {
         Timber.e("Error to load info auth $it")
-        _messageErrorAuth.trySend("Error desconocido")
+        _messageErrorAuth.trySend(R.string.error_unkown_auth)
         emit(Resource.Failure)
     }.stateIn(
         viewModelScope,
@@ -56,10 +57,10 @@ class AuthViewModel @Inject constructor(
         } catch (e: Exception) {
             when (e) {
                 is CancellationException -> throw e
-                is NullPointerException -> _messageErrorAuth.trySend("Datos invalidos")
+                is NullPointerException -> _messageErrorAuth.trySend(R.string.error_data_invalid)
                 else -> {
-                    _messageErrorAuth.trySend("Verifique sus datos")
-                    Timber.e("Error al autenticar $e")
+                    _messageErrorAuth.trySend(R.string.error_authenticated)
+                    Timber.e("Error auth $e")
                 }
             }
         } finally {

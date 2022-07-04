@@ -83,6 +83,10 @@
     <string name="text_auth_button">Authenticate</string>
     <string name="description_logo_app">Icono prinicpla de la aplicacion</string>
 
+    <string name="error_unkown_auth">Error desconocido</string>
+    <string name="error_data_invalid">Datos invalidos</string>
+    <string name="error_authenticated">Verifique sus credenciales</string>
+
     <!-- label navigation -->
 
 

@@ -1,5 +1,6 @@
 package com.nullpointer.nullsiteadmin.ui.screens.auth
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -9,9 +10,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -21,6 +24,7 @@ import coil.compose.AsyncImage
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.models.PropertySavableString
 import com.nullpointer.nullsiteadmin.presentation.AuthViewModel
+import com.nullpointer.nullsiteadmin.ui.screens.auth.state.AuthScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.auth.viewModel.AuthFieldViewModel
 import com.nullpointer.nullsiteadmin.ui.share.EditableTextSavable
 import com.ramcosta.composedestinations.annotation.Destination
@@ -28,27 +32,18 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Destination
 @Composable
 fun AuthScreen(
+    authViewModel: AuthViewModel,
     authFieldVM: AuthFieldViewModel = hiltViewModel(),
-    authViewModel: AuthViewModel
+    authScreenState: AuthScreenState = rememberAuthScreenState()
 ) {
-    val scaffoldState = rememberScaffoldState()
     LaunchedEffect(key1 = Unit) {
-        authViewModel.messageErrorAuth.collect {
-            scaffoldState.snackbarHostState.showSnackbar(it)
-        }
+        authViewModel.messageErrorAuth.collect(authScreenState::showMessage)
     }
-    Scaffold(scaffoldState = scaffoldState) {
-        Column(
-            modifier = Modifier
-                .padding(it)
-                .fillMaxSize()
-                .background(MaterialTheme.colors.primary)
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceEvenly
+    Scaffold(scaffoldState = authScreenState.scaffoldState) { paddingValues ->
+        ContainerAuthScreen(
+            modifier = Modifier.padding(paddingValues)
         ) {
             LogoApp(modifier = Modifier.padding(20.dp))
-
             FieldLogin(
                 email = authFieldVM.emailAdmin,
                 password = authFieldVM.passwordAdmin,
@@ -59,11 +54,38 @@ fun AuthScreen(
                 isAuthenticating = authViewModel.isAuthenticating,
                 modifier = Modifier.padding(vertical = 20.dp)
             ) {
-                val dataUser = authFieldVM.getDataAuth()
-                authViewModel.authWithEmailAndPassword(dataUser)
+                authFieldVM.getDataAuth().let {
+                    authViewModel.authWithEmailAndPassword(it)
+                }
             }
         }
     }
+}
+
+@Composable
+fun rememberAuthScreenState(
+    scaffoldState: ScaffoldState = rememberScaffoldState(),
+    context: Context = LocalContext.current
+) = remember {
+    AuthScreenState(scaffoldState, context)
+}
+
+@Composable
+private fun ContainerAuthScreen(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.primary)
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceEvenly
+    ) {
+        content()
+    }
+
 }
 
 @Composable
