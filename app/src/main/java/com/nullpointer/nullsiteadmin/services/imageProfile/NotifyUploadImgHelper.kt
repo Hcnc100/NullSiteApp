@@ -9,6 +9,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.nullpointer.nullsiteadmin.R
+import com.nullpointer.nullsiteadmin.core.utils.correctFlag
 import com.nullpointer.nullsiteadmin.core.utils.getNotifyServices
 import com.nullpointer.nullsiteadmin.services.imageProfile.UploadImageServicesControl.STOP_COMMAND
 import com.nullpointer.nullsiteadmin.ui.activitys.MainActivity
@@ -31,7 +32,7 @@ class NotifyUploadImgHelper(private val context: Context) {
             // * if is needed create channel notification
             val channel = NotificationChannel(
                 ID_CHANNEL_UPLOAD_IMG,
-                "Canal de subidad",
+                context.getString(R.string.name_channel_upload),
                 NotificationManager.IMPORTANCE_DEFAULT,
             )
             notificationManager.createNotificationChannel(channel)
@@ -40,17 +41,17 @@ class NotifyUploadImgHelper(private val context: Context) {
 
     private fun getPendingIntentStop(): PendingIntent =
         PendingIntent.getService(
-            context, 1,
-            Intent(context, UploadImageServices::class.java).apply {
-                action = STOP_COMMAND
-            }, PendingIntent.FLAG_IMMUTABLE
+            context,
+            1,
+            Intent(context, UploadImageServices::class.java).apply { action = STOP_COMMAND },
+            context.correctFlag
         )
 
     private fun getPendingIntentToClick(): PendingIntent = PendingIntent.getActivity(
         context,
         0,
         Intent(context, MainActivity::class.java),
-        PendingIntent.FLAG_IMMUTABLE
+        context.correctFlag
     )
 
     private fun getNotificationUpload() =
@@ -59,9 +60,11 @@ class NotifyUploadImgHelper(private val context: Context) {
             .setAutoCancel(false)
             .setOngoing(true)
             .setSmallIcon(R.drawable.ic_safe)
-            .setContentTitle("Subiendo...")
+            .setContentTitle(context.getString(R.string.title_upload_notify))
             .setContentIntent(getPendingIntentToClick())
-            .addAction(R.drawable.ic_stop, "Stop", getPendingIntentStop())
+            .addAction(R.drawable.ic_stop,
+                context.getString(R.string.name_Action_stop),
+                getPendingIntentStop())
 
     fun startServicesForeground(service: Service){
         service.startForeground(ID_NOTIFY_UPLOAD_IMG,baseNotifyUpload.build())
@@ -78,4 +81,6 @@ class NotifyUploadImgHelper(private val context: Context) {
     }
 
 }
+
+
 

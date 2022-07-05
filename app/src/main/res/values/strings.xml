@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">NullSiteAdmin</string>
 
+    <string name="description_icon_back">Icono de retroceder</string>
+    <string name="description_drawer_menu">Icono para abir el menu</string>
+
     <!-- edit info admin -->
 
     <string name="description_current_img_profile">Imagen de perfil actual</string>
@@ -111,6 +114,14 @@
     <string name="error_load_project">Error while loading projects</string>
     <string name="message_upload_project">Projecto actualizado</string>
     <string name="message_error_upload_project">Error while edit project</string>
+
+
+    <!-- services -->
+    <string name="name_channel_upload">Progresso de la actuliazion</string>
+    <string name="title_upload_notify">Actualizando datos</string>
+    <string name="name_Action_stop">Stop</string>
+    <string name="name_channel_contact">Mensajes de contacto</string>
+    <string name="title_notify_new_email">Nuevo Email</string>
 
 
 </resources>

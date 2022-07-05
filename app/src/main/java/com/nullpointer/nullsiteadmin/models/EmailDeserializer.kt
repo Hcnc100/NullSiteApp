@@ -5,6 +5,7 @@ import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.JsonParseException
 import java.lang.reflect.Type
+import java.util.*
 
 
 class EmailDeserializer : JsonDeserializer<EmailContact?> {
@@ -20,6 +21,8 @@ class EmailDeserializer : JsonDeserializer<EmailContact?> {
             message = jsonObject["message"].asString,
             subject = jsonObject["subject"].asString,
             email = jsonObject["email"].asString,
+            id = jsonObject["id"].asString,
+            timestamp = Date(jsonObject["timestamp"].asLong),
         )
     }
 }

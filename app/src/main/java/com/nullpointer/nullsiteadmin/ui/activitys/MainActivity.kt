@@ -1,5 +1,7 @@
 package com.nullpointer.nullsiteadmin.ui.activitys
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -76,6 +78,9 @@ class MainActivity : ComponentActivity() {
 
                                             override fun logout() = authViewModel.logOut()
 
+                                            override fun changeRoot(route: Uri) =navController.navigate(route)
+                                            override fun changeRoot(route: String) =navController.navigate(route)
+
                                         }
                                     )
                                 }
@@ -87,6 +92,22 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+//    override fun onNewIntent(intent: Intent?) {
+//        super.onNewIntent(intent)
+//        handleIntent(intent)
+//    }
+//
+//    private fun handleIntent(intent: Intent?) {
+//        val extras = intent?.extras
+//        val type = extras?.getString("type")
+//        val isFromFcm = extras?.containsKey("google.message_id") == true
+//        when {
+//            type == MESSAGE -> launchChatScreen(intent.extras!!)
+//            type == NOTIFICATION -> launchNotificationsScreen()
+//            isFromFcm -> launchNotificationsScreen()
+//        }
+//    }
 }
 
 

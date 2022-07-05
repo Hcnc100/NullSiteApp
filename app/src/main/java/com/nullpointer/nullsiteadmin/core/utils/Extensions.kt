@@ -1,14 +1,22 @@
 package com.nullpointer.nullsiteadmin.core.utils
 
 import android.app.NotificationManager
-import android.app.Service
+import android.app.PendingIntent
 import android.content.Context
+import android.os.Build
 import android.text.format.DateFormat.is24HourFormat
 import android.widget.Toast
 import androidx.annotation.StringRes
-import androidx.lifecycle.ViewModel
 import java.text.SimpleDateFormat
 import java.util.*
+
+val Context.correctFlag:Int get() {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    } else {
+        PendingIntent.FLAG_UPDATE_CURRENT
+    }
+}
 
 fun Date?.toFormat(context: Context): String {
     val pattern = "EEEE dd/MM/yyyy HH:mm:ss".let {
@@ -23,6 +31,6 @@ fun Context.getNotifyServices(): NotificationManager {
     return getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 }
 
-fun Context.showToastMessage(@StringRes stringRes:Int){
-    Toast.makeText(this,getString(stringRes), Toast.LENGTH_SHORT).show()
+fun Context.showToastMessage(@StringRes stringRes: Int) {
+    Toast.makeText(this, getString(stringRes), Toast.LENGTH_SHORT).show()
 }
