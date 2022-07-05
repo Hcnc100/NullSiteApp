@@ -24,13 +24,14 @@ class MainScreenState(
     var isHomeRoute by mutableStateOf(false)
         private set
 
-    var titleNav by mutableStateOf(MainDestinations.PersonalInfoScreen.label)
+    var titleNav by mutableStateOf("")
         private set
 
     init {
-        navController.addOnDestinationChangedListener { _, destination, _ ->
+        navController.addOnDestinationChangedListener { controller, destination, _ ->
             isHomeRoute = MainDestinations.isHomeRoute(destination.route)
             titleNav = MainDestinations.getLabel(destination.route)
+            controller
         }
     }
 

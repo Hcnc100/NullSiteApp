@@ -1,6 +1,7 @@
 package com.nullpointer.nullsiteadmin.ui.screens.detailsEmail
 
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,15 +19,17 @@ import com.nullpointer.nullsiteadmin.core.utils.toFormat
 import com.nullpointer.nullsiteadmin.models.EmailContact
 import com.nullpointer.nullsiteadmin.presentation.EmailsViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
+import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
 import com.nullpointer.nullsiteadmin.ui.screens.animation.LottieContainer
 import com.nullpointer.nullsiteadmin.ui.share.ToolbarBack
 import com.ramcosta.composedestinations.annotation.DeepLink
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.FULL_ROUTE_PLACEHOLDER
 
+@RootNavGraph
 @Destination(
     deepLinks = [
-        DeepLink(uriPattern = "https://myapp.com/$FULL_ROUTE_PLACEHOLDER")
+        DeepLink(uriPattern = "https://www.nullsiteadmin.com/$FULL_ROUTE_PLACEHOLDER")
     ]
 )
 @Composable
@@ -36,6 +39,7 @@ fun EmailDetailsScreen(
     emailsViewModel: EmailsViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
     val context = LocalContext.current
+    BackHandler(onBack = rootDestinations::backDestination)
     Scaffold(
         topBar = {
             ToolbarBack(title = "Email details", actionBack = rootDestinations::backDestination)

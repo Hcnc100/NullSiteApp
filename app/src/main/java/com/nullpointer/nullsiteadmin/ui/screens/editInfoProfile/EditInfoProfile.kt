@@ -24,6 +24,7 @@ import com.nullpointer.nullsiteadmin.models.PersonalInfo
 import com.nullpointer.nullsiteadmin.models.PropertySavableString
 import com.nullpointer.nullsiteadmin.presentation.InfoUserViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
+import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
 import com.nullpointer.nullsiteadmin.ui.screens.editInfoProfile.viewModel.EditInfoViewModel
 import com.nullpointer.nullsiteadmin.ui.screens.states.EditInfoState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberEditInfoState
@@ -33,6 +34,7 @@ import com.nullpointer.nullsiteadmin.ui.share.ToolbarBack
 import com.ramcosta.composedestinations.annotation.Destination
 
 @OptIn(ExperimentalMaterialApi::class)
+@RootNavGraph
 @Destination
 @Composable
 fun EditInfoProfile(

@@ -1,6 +1,5 @@
 package com.nullpointer.nullsiteadmin.ui.activitys
 
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -29,7 +28,6 @@ import com.ramcosta.composedestinations.animations.defaults.RootNavGraphDefaultA
 import com.ramcosta.composedestinations.animations.rememberAnimatedNavHostEngine
 import com.ramcosta.composedestinations.navigation.dependency
 import com.ramcosta.composedestinations.navigation.navigate
-import com.ramcosta.composedestinations.navigation.navigateTo
 import com.ramcosta.composedestinations.spec.Direction
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -77,9 +75,8 @@ class MainActivity : ComponentActivity() {
                                                 navController.navigate(direction)
 
                                             override fun logout() = authViewModel.logOut()
-
-                                            override fun changeRoot(route: Uri) =navController.navigate(route)
-                                            override fun changeRoot(route: String) =navController.navigate(route)
+                                            override fun changeRoot(route: Uri) =
+                                                navController.navigate(route)
 
                                         }
                                     )

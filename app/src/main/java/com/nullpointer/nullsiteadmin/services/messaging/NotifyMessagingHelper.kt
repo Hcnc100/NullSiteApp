@@ -43,11 +43,11 @@ class NotifyMessagingHelper(private val context: Context) {
     private fun getPendingIntentCompose(email: EmailContact): PendingIntent? {
         // * create deep link
         // * this go to post for notificaation
-        val destination=EmailDetailsScreenDestination(email).route
+        val route= EmailDetailsScreenDestination(email).route
 
         val deepLinkIntent = Intent(
             Intent.ACTION_VIEW,
-            "https://www.nullsiteadmin.com/contact/$destination".toUri(),
+            "https://www.nullsiteadmin.com/$route".toUri(),
             context,
             MainActivity::class.java
         )

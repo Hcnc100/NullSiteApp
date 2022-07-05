@@ -13,6 +13,7 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.MainDestinations
+import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
 import com.nullpointer.nullsiteadmin.ui.screens.NavGraphs
 import com.nullpointer.nullsiteadmin.ui.screens.animation.DetailsTransition
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.InfoProfileDestination
@@ -29,6 +30,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialNavigationApi::class)
+@RootNavGraph
 @Destination(
     style = DetailsTransition::class
 )
@@ -61,7 +63,7 @@ import kotlinx.coroutines.launch
 
         DestinationsNavHost(
             startRoute = InfoProfileDestination,
-            navGraph = NavGraphs.root,
+            navGraph = NavGraphs.home,
             navController = mainScreenState.navController,
             engine = navHostEngine,
             modifier = Modifier.padding(paddingValues),

@@ -7,8 +7,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewState
+import com.nullpointer.nullsiteadmin.ui.navigator.HomeNavGraph
 import com.ramcosta.composedestinations.annotation.Destination
 
+@HomeNavGraph
 @Destination
 @SuppressLint("SetJavaScriptEnabled")
 @Composable

@@ -21,6 +21,7 @@ import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.models.EmailContact
 import com.nullpointer.nullsiteadmin.presentation.EmailsViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
+import com.nullpointer.nullsiteadmin.ui.navigator.HomeNavGraph
 import com.nullpointer.nullsiteadmin.ui.screens.animation.AnimationScreen
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EditProjectScreenDestination
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EmailDetailsScreenDestination
@@ -29,6 +30,7 @@ import com.nullpointer.nullsiteadmin.ui.screens.states.rememberSimpleScreenState
 import com.ramcosta.composedestinations.annotation.DeepLink
 import com.ramcosta.composedestinations.annotation.Destination
 
+@HomeNavGraph
 @Destination
 @Composable
 fun EmailScreen(
@@ -63,7 +65,7 @@ fun EmailScreen(
                         actionDetails = {
                             val route=EmailDetailsScreenDestination(it).route
                             actionRootDestinations.changeRoot(
-                                "https://myapp.com/$route".toUri()
+                                "https://www.nullsiteadmin.com/$route".toUri()
                             )
                         },
                         modifier = Modifier.padding(paddingValues)

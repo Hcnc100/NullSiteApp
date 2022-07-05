@@ -19,12 +19,14 @@ import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.models.Project
 import com.nullpointer.nullsiteadmin.presentation.ProjectViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
+import com.nullpointer.nullsiteadmin.ui.navigator.HomeNavGraph
 import com.nullpointer.nullsiteadmin.ui.screens.animation.AnimationScreen
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EditProjectScreenDestination
 import com.nullpointer.nullsiteadmin.ui.screens.states.SimpleScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberSimpleScreenState
 import com.ramcosta.composedestinations.annotation.Destination
 
+@HomeNavGraph
 @Destination
 @Composable
 fun ProjectScreen(

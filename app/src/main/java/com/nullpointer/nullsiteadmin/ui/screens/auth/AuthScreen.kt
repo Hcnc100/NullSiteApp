@@ -21,12 +21,14 @@ import coil.compose.AsyncImage
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.models.PropertySavableString
 import com.nullpointer.nullsiteadmin.presentation.AuthViewModel
+import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
 import com.nullpointer.nullsiteadmin.ui.screens.auth.viewModel.AuthFieldViewModel
 import com.nullpointer.nullsiteadmin.ui.screens.states.SimpleScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberSimpleScreenState
 import com.nullpointer.nullsiteadmin.ui.share.EditableTextSavable
 import com.ramcosta.composedestinations.annotation.Destination
 
+@RootNavGraph(start = true)
 @Destination
 @Composable
 fun AuthScreen(
