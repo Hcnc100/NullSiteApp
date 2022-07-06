@@ -60,3 +60,35 @@ fun ToolbarBack(
         }
     )
 }
+
+
+@Composable
+fun ToolbarBackWithDeleter(
+    title: String,
+    contentDescription: String,
+    actionBack: () -> Unit,
+    actionDeleter: () -> Unit,
+) {
+    TopAppBar(
+        backgroundColor = MaterialTheme.colors.primary,
+        title = { Text(text = title, color = Color.White) },
+        navigationIcon = {
+            IconButton(onClick = actionBack) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_arrow_back),
+                    contentDescription = stringResource(R.string.description_icon_back),
+                    tint = Color.White
+                )
+            }
+        },
+        actions = {
+            IconButton(onClick = actionDeleter) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_deleter),
+                    contentDescription = contentDescription,
+                    tint = Color.White
+                )
+            }
+        }
+    )
+}

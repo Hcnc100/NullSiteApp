@@ -15,7 +15,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun PreviewScreen() {
-    val webState= rememberWebViewState(url = "https://nullpointer-716ae.web.app/")
+    val webState = rememberWebViewState(url = "https://nullpointer-716ae.web.app/")
     Scaffold { it ->
         WebView(
             modifier= Modifier.padding(it),

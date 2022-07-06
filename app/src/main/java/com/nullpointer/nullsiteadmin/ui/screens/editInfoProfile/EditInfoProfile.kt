@@ -1,7 +1,6 @@
 package com.nullpointer.nullsiteadmin.ui.screens.editInfoProfile
 
 import android.net.Uri
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -13,14 +12,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.nullpointer.nullsiteadmin.R
-import com.nullpointer.nullsiteadmin.models.PersonalInfo
+import com.nullpointer.nullsiteadmin.core.utils.shareViewModel
 import com.nullpointer.nullsiteadmin.models.PropertySavableString
 import com.nullpointer.nullsiteadmin.presentation.InfoUserViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
@@ -33,24 +30,20 @@ import com.nullpointer.nullsiteadmin.ui.share.SelectImgButtonSheet
 import com.nullpointer.nullsiteadmin.ui.share.ToolbarBack
 import com.ramcosta.composedestinations.annotation.Destination
 
+
 @OptIn(ExperimentalMaterialApi::class)
 @RootNavGraph
 @Destination
 @Composable
 fun EditInfoProfile(
-    editProjectViewModel: EditInfoViewModel = hiltViewModel(),
-    infoViewModel: InfoUserViewModel = hiltViewModel(LocalContext.current as ComponentActivity),
+    editInfoVM: EditInfoViewModel = shareViewModel(),
+    infoViewModel: InfoUserViewModel = shareViewModel(),
     stateEditInfo: EditInfoState = rememberEditInfoState(),
-    personalInfo: PersonalInfo,
     actionRootDestinations: ActionRootDestinations
 ) {
-    // * init info in view model
-    LaunchedEffect(key1 = Unit) {
-        editProjectViewModel.initInfoProfile(personalInfo)
-    }
 
     LaunchedEffect(key1 = Unit) {
-        editProjectViewModel.messageError.collect(stateEditInfo::showSnackMessage)
+        editInfoVM.messageError.collect(stateEditInfo::showSnackMessage)
     }
 
     ModalBottomSheetLayout(
@@ -62,7 +55,7 @@ fun EditInfoProfile(
                 actionBeforeSelect = { uri ->
                     stateEditInfo.hideModal()
                     uri?.let {
-                        editProjectViewModel.updateImg(it, stateEditInfo.context)
+                        editInfoVM.updateImg(it, stateEditInfo.context)
                     }
                 }
             )
@@ -82,25 +75,25 @@ fun EditInfoProfile(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 EditPhotoProfile(
-                    urlImg = editProjectViewModel.imageProfile.value,
+                    urlImg = editInfoVM.imageProfile.value,
                     modifier = Modifier.padding(10.dp),
                     actionClick = stateEditInfo::showModal
                 )
                 EditableInformation(
-                    nameAdmin = editProjectViewModel.name,
-                    professionAdmin = editProjectViewModel.profession,
-                    descriptionAdmin = editProjectViewModel.description,
+                    nameAdmin = editInfoVM.name,
+                    professionAdmin = editInfoVM.profession,
+                    descriptionAdmin = editInfoVM.description,
                     modifier = Modifier.padding(10.dp)
                 )
                 ButtonUpdateInfoProfile(
-                    isEnable = editProjectViewModel.isDataValid,
+                    isEnable = editInfoVM.isDataValid,
                     modifier = Modifier.padding(10.dp)
                 ) {
                     stateEditInfo.hiddenKeyBoard()
-                    editProjectViewModel.getUpdatedPersonalInfo(stateEditInfo.context)?.let {
+                    editInfoVM.getUpdatedPersonalInfo(stateEditInfo.context)?.let {
                         infoViewModel.updatePersonalInfo(it)
                     }
-                    if (editProjectViewModel.hasAnyChange) actionRootDestinations.backDestination()
+                    if (editInfoVM.hasAnyChange) actionRootDestinations.backDestination()
                 }
             }
         }

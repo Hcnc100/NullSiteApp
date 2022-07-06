@@ -21,20 +21,15 @@ class MainScreenState(
     val scope: CoroutineScope,
     val navController: NavHostController
 ) : SimpleScreenState(scaffoldState, context, focusManager) {
-    var isHomeRoute by mutableStateOf(false)
-        private set
 
     var titleNav by mutableStateOf("")
         private set
 
     init {
-        navController.addOnDestinationChangedListener { controller, destination, _ ->
-            isHomeRoute = MainDestinations.isHomeRoute(destination.route)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
             titleNav = MainDestinations.getLabel(destination.route)
-            controller
         }
     }
-
     fun openDrawer() {
         scope.launch {
             scaffoldState.drawerState.open()

@@ -2,72 +2,70 @@
     <string name="app_name">NullSiteAdmin</string>
 
     <string name="description_icon_back">Icono de retroceder</string>
-    <string name="description_drawer_menu">Icono para abir el menu</string>
+    <string name="description_drawer_menu">Icono para abrir el menú</string>
 
     <!-- edit info admin -->
 
     <string name="description_current_img_profile">Imagen de perfil actual</string>
-    <string name="description_edit_img_profile">Iniciala interfaz para seleccionar una nueva imagen de perfil</string>
+    <string name="description_edit_img_profile">Inicia la interfaz para seleccionar una nueva imagen de perfil</string>
 
     <string name="label_name_admin">Nombre de perfil</string>
-    <string name="error_name_admin_empty">El nombre no puede estar vacio</string>
+    <string name="error_name_admin_empty">El nombre no puede estar vacío</string>
     <string name="error_name_admin_length">El nombre no puede ser tan largo</string>
     <string name="hint_name_admin">Escribe un nombre</string>
 
-    <string name="label_profession_admin">Profile</string>
-    <string name="error_profess_admin_empty">La profession es requerida</string>
+    <string name="label_profession_admin">Perfil</string>
+    <string name="error_profess_admin_empty">La profesión es requerida</string>
     <string name="error_profess_admin_length">La profession es muy larga</string>
-    <string name="hint_profession_admin">Escribe la profesion</string>
+    <string name="hint_profession_admin">Escribe la profesión</string>
 
     <string name="label_description_admin">Descripción</string>
-    <string name="error_description_admin_empty">La descripcion es muy importante</string>
-    <string name="error_description_admin_length">La descripcion debe ser corta y concisa</string>
-    <string name="hint_description_admin">Escribe una descripcion breve</string>
+    <string name="error_description_admin_empty">La descripción es muy importante</string>
+    <string name="error_description_admin_length">La descripción debe ser corta y concisa</string>
+    <string name="hint_description_admin">Escribe una descripción breve</string>
 
     <string name="error_no_data_change">No hay cambios que guardar</string>
 
     <!-- edit project -->
-    <string name="label_name_project">Nombre del projecto</string>
-    <string name="hint_name_project">Escribe el nombre del projecto</string>
-    <string name="error_empty_name_project">El projecto necesita un nombre</string>
-    <string name="error_length_name_project">El nombre del projecto no puede ser tan largo</string>
+    <string name="label_name_project">Nombre del proyecto</string>
+    <string name="hint_name_project">Escribe el nombre del proyecto</string>
+    <string name="error_empty_name_project">El proyecto necesita un nombre</string>
+    <string name="error_length_name_project">El nombre del proyecto no puede ser tan largo</string>
 
-    <string name="label_description_project">Descripcion del projecto</string>
-    <string name="hint_description_project">Escribe una descripcion del porjecto</string>
-    <string name="error_description_project">La descripcion no puede estar vacia</string>
-    <string name="error_length_description_project">La descripcion no pede ser tan larga</string>
+    <string name="label_description_project">Descripción del proyecto</string>
+    <string name="hint_description_project">Escribe una descripción del proyecto</string>
+    <string name="error_description_project">La descripción no puede estar vacía</string>
+    <string name="error_length_description_project">La descripción no puede ser tan larga</string>
 
-    <string name="label_repo_project">Link del Projecto</string>
-    <string name="hint_repo_project">Escribe el link del projecto</string>
-    <string name="error_empty_link_project">El link no puede estar vacio</string>
+    <string name="label_repo_project">Link del Proyecto</string>
+    <string name="hint_repo_project">Escribe el link del proyecto</string>
+    <string name="error_empty_link_project">El link no puede estar vacío</string>
     <string name="error_length_link_project">El link no puede ser tan largo</string>
     <string name="hint_img_project">Proporciona el link de la imagen</string>
     <string name="label_img_project">Link de la imagen</string>
 
     <!-- text buttons -->
-    <string name="title_edit_project">Editar Projecto</string>
-    <string name="text_update_project">Actualiza  el projecto</string>
-    <string name="text_save_personal_info">Guardar informacion</string>
-    <string name="description_current_img_project">Imagen del projecto actual</string>
+    <string name="title_edit_project">Editar Proyecto</string>
+    <string name="text_update_project">Actualiza el proyecto</string>
+    <string name="text_save_personal_info">Guardar información</string>
+    <string name="description_current_img_project">Imagen del proyecto actual</string>
     <string name="text_edit_button">Editar</string>
 
     <!-- screen project -->
-    <string name="message_error_project">Error load project</string>
-    <string name="description_img_project">Imagen del proecto actual</string>
+    <string name="message_error_project">Error al cargar el proyecto</string>
     <string name="description_icon_edit">Icono de editar</string>
 
     <!-- screen info profile -->
     <string name="message_error_load_info_user">Hubo un error al cargar los datos</string>
-    <string name="description_edit_info_user">Icono de editar, para ir a la edicion de la informacion del usuario</string>
+    <string name="description_edit_info_user">Icono para ir a la edición de la información del usuario</string>
 
     <!-- screen contact-->
     <string name="message_error_contact">Error al cargar los emails</string>
     <string name="message_empty_contact">La bandeja de entrada esta vacia</string>
-    <string name="text_number_emails">Numero de emails: %d</string>
-    <string name="text_to_email">To: %s</string>
-    <string name="text_subject_email">Subject: %s</string>
-    <string name="description_icon_email_open">Indicador de si el email esta expandido o no</string>
-    <string name="text_date_email">Date: %s</string>
+    <string name="text_number_emails">Número de emails: %d</string>
+    <string name="text_to_email">De: %s</string>
+    <string name="text_subject_email">Asunto: %s</string>
+    <string name="text_date_email">Fecha: %s</string>
     <string name="description_deleter_email">Icono de eliminar, para eliminar el email</string>
 
     <!-- screen auth -->
@@ -79,24 +77,24 @@
     <string name="hint_password">Escribe la contraseña</string>
     <string name="error_empty_passwod">La contraseña es indispensable</string>
     <string name="error_length_password">La contraseña no puede ser tan larga</string>
-    <string name="description_img_web">Imagen de portada de el sitio web</string>
-    <string name="description_close_session">Icono de cerrar session</string>
-    <string name="text_log_out">LogOut</string>
-    <string name="description_icon_draw_menu">Icono de el destino de navegacion</string>
-    <string name="text_auth_button">Authenticate</string>
-    <string name="description_logo_app">Icono prinicpla de la aplicacion</string>
+    <string name="description_img_web">Imagen de portada del sitio web</string>
+    <string name="description_close_session">Icono de cerrar sesión</string>
+    <string name="text_log_out">Cerrar sesión</string>
+    <string name="description_icon_draw_menu">Icono del destino de navegación</string>
+    <string name="text_auth_button">Autenticar</string>
+    <string name="description_logo_app">Icono principal de la aplicación</string>
 
     <string name="error_unkown_auth">Error desconocido</string>
-    <string name="error_data_invalid">Datos invalidos</string>
+    <string name="error_data_invalid">Datos inválidos</string>
     <string name="error_authenticated">Verifique sus credenciales</string>
 
     <!-- label navigation -->
 
 
     <!-- select imager picker -->
-    <string name="text_select_option">Select an option</string>
-    <string name="option_img_camera">Camera</string>
-    <string name="description_img_camera">Take a photo</string>
+    <string name="text_select_option">Selecciona una opción</string>
+    <string name="option_img_camera">Cámara</string>
+    <string name="description_img_camera">Toma una foto</string>
     <string name="option_img_gallery">Gallery</string>
     <string name="description_img_gallery">Select a photo from the gallery</string>
     <string name="error_compress_img">Error al seleccionar la imagen</string>
@@ -104,24 +102,28 @@
     <!-- services upload -->
     <string name="error_upload_info">Error al subir los cambios</string>
     <string name="message_change_upload">Cambios Guardados</string>
-    <string name="message_cancel_upload">Se cancelo la actualizacion</string>
+    <string name="message_cancel_upload">Se canceló la actualización</string>
     <string name="message_init_upload">Subiendo Cambios</string>
-    <string name="error_load_list_email">Error to load list emails</string>
-    <string name="error_deleter_email">Error deleter this email</string>
-    <string name="error_load_info_user">Error to load info user</string>
+    <string name="error_load_list_email">Error al cargar la lista de emails</string>
+    <string name="error_deleter_email">Error al eliminar el email</string>
+    <string name="error_load_info_user">Error al cargar la información del usuario</string>
     <string name="message_data_upload">Datos actualizados</string>
-    <string name="error_data_user_upload">Error to update info user</string>
-    <string name="error_load_project">Error while loading projects</string>
-    <string name="message_upload_project">Projecto actualizado</string>
-    <string name="message_error_upload_project">Error while edit project</string>
+    <string name="error_data_user_upload">Error al actualizar la información del usuario</string>
+    <string name="error_load_project">Error al cargar proyectos</string>
+    <string name="message_upload_project">Proyecto actualizado</string>
+    <string name="message_error_upload_project">Error al editar proyecto</string>
 
 
     <!-- services -->
-    <string name="name_channel_upload">Progresso de la actuliazion</string>
+    <string name="name_channel_upload">Progreso de la actualización</string>
     <string name="title_upload_notify">Actualizando datos</string>
-    <string name="name_Action_stop">Stop</string>
+    <string name="name_Action_stop">Detener</string>
     <string name="name_channel_contact">Mensajes de contacto</string>
     <string name="title_notify_new_email">Nuevo Email</string>
+    <string name="back_again">Presione nuevamente</string>
+    <string name="description_reply_email">Contestar el email actual</string>
+    <string name="title_email_details">Detalles del Email</string>
+    <string name="message_deleter_email_success">Email eliminado con éxito</string>
 
 
 </resources>

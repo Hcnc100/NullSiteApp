@@ -3,7 +3,6 @@ package com.nullpointer.nullsiteadmin.inject
 import com.nullpointer.nullsiteadmin.data.remote.project.ProjectDataSource
 import com.nullpointer.nullsiteadmin.data.remote.project.ProjectDataSourceImpl
 import com.nullpointer.nullsiteadmin.domain.project.ProjectRepoImpl
-import com.nullpointer.nullsiteadmin.domain.project.ProjectRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

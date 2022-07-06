@@ -1,6 +1,5 @@
 package com.nullpointer.nullsiteadmin.core.states
 
-import com.google.firebase.storage.FileDownloadTask
 import com.google.firebase.storage.UploadTask
 
 sealed class StorageTaskResult {

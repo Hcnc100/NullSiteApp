@@ -39,13 +39,13 @@ fun NavigatorDrawer(
         },
         navController =navController,
         onDestinationClicked = { route ->
-            navController.navigate(route, fun NavOptionsBuilder.() {
+            navController.navigate(route){
                 popUpTo(navController.graph.findStartDestination().id) {
                     saveState = true
                 }
                 launchSingleTop = true
                 restoreState = true
-            })
+            }
             closeDrawer()
         }
     )

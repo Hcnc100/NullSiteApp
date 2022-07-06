@@ -45,7 +45,7 @@ fun ProjectItem(
 private fun ImageProject(urlImg: String) {
     AsyncImage(
         model = urlImg,
-        contentDescription = stringResource(R.string.description_img_project),
+        contentDescription = stringResource(R.string.description_current_img_project),
         contentScale = ContentScale.Crop,
         modifier = Modifier
             .width(250.dp)

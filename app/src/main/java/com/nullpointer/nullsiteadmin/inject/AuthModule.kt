@@ -3,7 +3,6 @@ package com.nullpointer.nullsiteadmin.inject
 import com.nullpointer.nullsiteadmin.data.remote.auth.AuthDataSource
 import com.nullpointer.nullsiteadmin.data.remote.auth.AuthDataSourceImpl
 import com.nullpointer.nullsiteadmin.domain.auth.AuthRepoImpl
-import com.nullpointer.nullsiteadmin.domain.auth.AuthRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

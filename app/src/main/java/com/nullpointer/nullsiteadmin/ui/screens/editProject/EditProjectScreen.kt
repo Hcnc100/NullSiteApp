@@ -1,27 +1,22 @@
 package com.nullpointer.nullsiteadmin.ui.screens.editProject
 
-import android.content.Context
-import androidx.activity.ComponentActivity
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.nullpointer.nullsiteadmin.R
-import com.nullpointer.nullsiteadmin.models.Project
+import com.nullpointer.nullsiteadmin.core.utils.shareViewModel
 import com.nullpointer.nullsiteadmin.models.PropertySavableString
 import com.nullpointer.nullsiteadmin.presentation.ProjectViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
@@ -37,19 +32,16 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Destination
 @Composable
 fun EditProjectScreen(
-    project: Project,
     actionRootDestinations: ActionRootDestinations,
     editProjectState: SimpleScreenState = rememberSimpleScreenState(),
     editProjectVM: EditProjectViewModel = hiltViewModel(),
-    projectVM: ProjectViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
+    projectVM: ProjectViewModel = shareViewModel()
 ) {
 
     LaunchedEffect(key1 = Unit, editProjectState) {
         editProjectVM.messageError.collect(editProjectState::showSnackMessage)
     }
-    LaunchedEffect(key1 = Unit) {
-        editProjectVM.initVM(project)
-    }
+
     Scaffold(
         scaffoldState = editProjectState.scaffoldState,
         topBar = {

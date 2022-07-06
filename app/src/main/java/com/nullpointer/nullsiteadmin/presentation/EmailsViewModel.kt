@@ -10,6 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -42,6 +43,8 @@ class EmailsViewModel @Inject constructor(
     ) = viewModelScope.launch(Dispatchers.IO) {
         try {
             emailsRepository.deleterEmail(idEmail)
+            delay(300)
+            _errorEmail.trySend(R.string.message_deleter_email_success)
         } catch (e: Exception) {
             when (e) {
                 is CancellationException -> throw e
