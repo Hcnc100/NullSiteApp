@@ -6,9 +6,7 @@ import androidx.navigation.NavBackStackEntry
 import com.nullpointer.nullsiteadmin.ui.screens.appDestination
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EditInfoProfileDestination
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EditProjectScreenDestination
-import com.nullpointer.nullsiteadmin.ui.screens.navDestination
 import com.ramcosta.composedestinations.spec.DestinationStyle
-import com.ramcosta.composedestinations.utils.destinationSpec
 
 @OptIn(ExperimentalAnimationApi::class)
 object DetailsTransition: DestinationStyle.Animated {

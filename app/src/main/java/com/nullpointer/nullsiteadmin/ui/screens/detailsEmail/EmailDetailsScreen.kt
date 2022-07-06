@@ -1,7 +1,6 @@
 package com.nullpointer.nullsiteadmin.ui.screens.detailsEmail
 
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -39,7 +38,6 @@ fun EmailDetailsScreen(
     emailsViewModel: EmailsViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
     val context = LocalContext.current
-    BackHandler(onBack = rootDestinations::backDestination)
     Scaffold(
         topBar = {
             ToolbarBack(title = "Email details", actionBack = rootDestinations::backDestination)

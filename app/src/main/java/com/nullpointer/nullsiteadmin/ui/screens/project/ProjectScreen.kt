@@ -1,27 +1,25 @@
 package com.nullpointer.nullsiteadmin.ui.screens.project
 
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.states.Resource
+import com.nullpointer.nullsiteadmin.core.utils.shareViewModel
 import com.nullpointer.nullsiteadmin.models.Project
 import com.nullpointer.nullsiteadmin.presentation.ProjectViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.HomeNavGraph
 import com.nullpointer.nullsiteadmin.ui.screens.animation.AnimationScreen
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EditProjectScreenDestination
+import com.nullpointer.nullsiteadmin.ui.screens.editProject.viewModel.EditProjectViewModel
 import com.nullpointer.nullsiteadmin.ui.screens.states.SimpleScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberSimpleScreenState
 import com.ramcosta.composedestinations.annotation.Destination
@@ -31,7 +29,8 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Composable
 fun ProjectScreen(
     actionRootDestinations: ActionRootDestinations,
-    projectVM: ProjectViewModel = hiltViewModel(LocalContext.current as ComponentActivity),
+    projectVM: ProjectViewModel = shareViewModel(),
+    editProjectVM: EditProjectViewModel = shareViewModel(),
     projectScreenState: SimpleScreenState = rememberSimpleScreenState()
 ) {
     val stateListProject by projectVM.listProject.collectAsState()
@@ -52,7 +51,8 @@ fun ProjectScreen(
                 listProject = listProject.data,
                 modifier = Modifier.padding(it),
                 actionEditProject = { project ->
-                    actionRootDestinations.changeRoot(EditProjectScreenDestination.invoke(project))
+                    editProjectVM.initVM(project)
+                    actionRootDestinations.changeRoot(EditProjectScreenDestination)
                 }
             )
         }
@@ -67,6 +67,7 @@ private fun ListProjects(
     actionEditProject: (Project) -> Unit,
     modifier: Modifier = Modifier
 ) {
+
     LazyColumn(modifier = modifier) {
         items(
             count = listProject.size,

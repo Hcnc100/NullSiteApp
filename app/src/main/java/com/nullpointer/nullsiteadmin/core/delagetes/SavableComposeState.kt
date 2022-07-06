@@ -13,7 +13,8 @@ class SavableComposeState<T>(
     defaultValue: T,
 ) {
     private var _state by mutableStateOf(
-        savedStateHandle.get<T>(key) ?: defaultValue)
+        savedStateHandle.get<T>(key) ?: defaultValue
+    )
 
     operator fun getValue(
         thisRef: Any?,

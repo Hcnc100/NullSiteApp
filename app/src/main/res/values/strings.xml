@@ -122,6 +122,7 @@
     <string name="name_Action_stop">Stop</string>
     <string name="name_channel_contact">Mensajes de contacto</string>
     <string name="title_notify_new_email">Nuevo Email</string>
+    <string name="back_again">Presione nuevamente</string>
 
 
 </resources>

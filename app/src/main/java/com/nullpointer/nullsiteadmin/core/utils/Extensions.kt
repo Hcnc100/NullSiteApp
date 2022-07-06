@@ -6,7 +6,12 @@ import android.content.Context
 import android.os.Build
 import android.text.format.DateFormat.is24HourFormat
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -33,4 +38,10 @@ fun Context.getNotifyServices(): NotificationManager {
 
 fun Context.showToastMessage(@StringRes stringRes: Int) {
     Toast.makeText(this, getString(stringRes), Toast.LENGTH_SHORT).show()
+}
+
+@Composable
+inline fun <reified VM : ViewModel> shareViewModel():VM {
+    val activity= LocalContext.current as ComponentActivity
+    return hiltViewModel(activity)
 }

@@ -3,7 +3,6 @@ package com.nullpointer.nullsiteadmin.inject
 import com.nullpointer.nullsiteadmin.data.remote.storage.StorageDataSource
 import com.nullpointer.nullsiteadmin.data.remote.storage.StorageDataSourceImpl
 import com.nullpointer.nullsiteadmin.domain.storage.RepoImageProfileImpl
-import com.nullpointer.nullsiteadmin.domain.storage.RepositoryImageProfile
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
