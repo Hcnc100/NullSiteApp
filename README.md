@@ -2,14 +2,20 @@
 
 This only one of three components for admin:
 
-<a href="https://github.com/Hcnc100/NullSiteApp" target="_blank">NullSiteApp</a>
-<a href="https://github.com/Hcnc100/NullPointerPage" target="_blank">NullPointerPage</a>
-<a href="https://github.com/Hcnc100/NullSiteApp" target="_blank">NullSite CloudFunctions</a>
+<p>
+  <a href="https://github.com/Hcnc100/NullSiteApp" target="_blank">NullSiteApp</a>
+</p>
+<p>
+  <a href="https://github.com/Hcnc100/NullPointerPage" target="_blank">NullPointerPage</a>
+</p>
+<p>
+  <a href="https://github.com/Hcnc100/NullSiteApp" target="_blank">NullSite CloudFunctions</a>
+</p>
 
 ## NullSiteApp
 
 A simple app to edit information in <a href="https://nullpointer-716ae.web.app" target="_blank">
-NullSite</a>, using firebase for using realtime and notify when anywhere send email contact.
+NullPointerPage</a>, using firebase for using realtime and notify when anywhere send email contact.
 
 ### Screenshots
 
