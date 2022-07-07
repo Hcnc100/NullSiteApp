@@ -34,9 +34,11 @@ fun ProjectScreen(
     projectScreenState: SimpleScreenState = rememberSimpleScreenState()
 ) {
     val stateListProject by projectVM.listProject.collectAsState()
+
     LaunchedEffect(key1 = Unit) {
         projectVM.messageErrorProject.collect(projectScreenState::showSnackMessage)
     }
+
     Scaffold(
         scaffoldState = projectScreenState.scaffoldState
     ) {
@@ -46,7 +48,7 @@ fun ProjectScreen(
                 textEmpty = stringResource(R.string.message_error_project),
                 modifier = Modifier.padding(it)
             )
-            Resource.Loading -> {}
+            Resource.Loading -> LoadingProgressScreen(Modifier.padding(it))
             is Resource.Success -> ListProjects(
                 listProject = listProject.data,
                 modifier = Modifier.padding(it),

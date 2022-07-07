@@ -18,6 +18,7 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.states.Resource
+import com.nullpointer.nullsiteadmin.core.utils.shareViewModel
 import com.nullpointer.nullsiteadmin.models.EmailContact
 import com.nullpointer.nullsiteadmin.presentation.EmailsViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
@@ -32,7 +33,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Destination
 @Composable
 fun EmailScreen(
-    emailsVM: EmailsViewModel= hiltViewModel(LocalContext.current as ComponentActivity),
+    emailsVM: EmailsViewModel= shareViewModel(),
     emailScreenState: SimpleScreenState = rememberSimpleScreenState(),
     actionRootDestinations: ActionRootDestinations
 ) {
@@ -49,7 +50,7 @@ fun EmailScreen(
                 textEmpty = stringResource(R.string.message_error_contact),
                 modifier = Modifier.padding(paddingValues)
             )
-            Resource.Loading -> {}
+            Resource.Loading -> LoadingScreenEmail(Modifier.padding(paddingValues))
             is Resource.Success -> {
                 if (listEmails.data.isEmpty()) {
                     AnimationScreen(
