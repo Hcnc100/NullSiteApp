@@ -9,7 +9,7 @@ This only one of three components for admin:
   <a href="https://github.com/Hcnc100/NullPointerPage" target="_blank">NullSitePage</a>
 </p>
 <p>
-  <a href="https://github.com/Hcnc100/NullSiteApp" target="_blank">NullSiteCloudFunctions</a>
+  <a href="https://github.com/Hcnc100/NullSiteFunctions" target="_blank">NullSiteCloudFunctions</a>
 </p>
 
 ## NullSiteApp
@@ -67,7 +67,7 @@ NullSitePage</a>, using firebase for using realtime and notify when anywhere sen
 ### Import
 
 For enable notification when send new email in contact for your website, see
-the <a href="https://github.com/Hcnc100/NullSiteApp" target="_blank">NullSite CloudFunctions</a>
+the <a href="https://github.com/Hcnc100/NullSiteFunctions" target="_blank">NullSiteCloudFunctions</a>
 
 ### Note 1:
 
