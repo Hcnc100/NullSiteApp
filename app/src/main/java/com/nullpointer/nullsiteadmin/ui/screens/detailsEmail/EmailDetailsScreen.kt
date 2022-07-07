@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.utils.sendEmail
+import com.nullpointer.nullsiteadmin.core.utils.shareViewModel
 import com.nullpointer.nullsiteadmin.core.utils.toFormat
 import com.nullpointer.nullsiteadmin.models.EmailContact
 import com.nullpointer.nullsiteadmin.presentation.EmailsViewModel
@@ -40,7 +41,7 @@ import com.ramcosta.composedestinations.annotation.FULL_ROUTE_PLACEHOLDER
 fun EmailDetailsScreen(
     email: EmailContact,
     rootDestinations: ActionRootDestinations,
-    emailsViewModel: EmailsViewModel = hiltViewModel(LocalContext.current as ComponentActivity),
+    emailsViewModel: EmailsViewModel = shareViewModel(),
     emailsDetailsState: SimpleScreenState = rememberSimpleScreenState()
 ) {
     Scaffold(

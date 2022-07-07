@@ -34,7 +34,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 fun EditProjectScreen(
     actionRootDestinations: ActionRootDestinations,
     editProjectState: SimpleScreenState = rememberSimpleScreenState(),
-    editProjectVM: EditProjectViewModel = hiltViewModel(),
+    editProjectVM: EditProjectViewModel = shareViewModel(),
     projectVM: ProjectViewModel = shareViewModel()
 ) {
 

@@ -15,6 +15,7 @@ import com.nullpointer.nullsiteadmin.services.imageProfile.UploadImageServicesCo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,7 +31,7 @@ class EditInfoViewModel @Inject constructor(
 
     private var personalInfo: PersonalInfo? by SavableProperty(state, KEY_PROJECT_SAVED, null)
     private val _messageError = Channel<Int>()
-    val messageError = _messageError.consumeAsFlow()
+    val messageError = _messageError.receiveAsFlow()
 
 
     val name = PropertySavableString(

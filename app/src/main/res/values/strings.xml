@@ -95,7 +95,7 @@
     <string name="text_select_option">Selecciona una opción</string>
     <string name="option_img_camera">Cámara</string>
     <string name="description_img_camera">Toma una foto</string>
-    <string name="option_img_gallery">Gallery</string>
+    <string name="option_img_gallery">Galería</string>
     <string name="description_img_gallery">Select a photo from the gallery</string>
     <string name="error_compress_img">Error al seleccionar la imagen</string>
 

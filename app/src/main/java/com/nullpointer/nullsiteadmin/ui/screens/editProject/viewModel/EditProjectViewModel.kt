@@ -10,6 +10,8 @@ import com.nullpointer.nullsiteadmin.models.PropertySavableString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -63,7 +65,7 @@ class EditProjectViewModel @Inject constructor(
 
 
     private val _messageError = Channel<Int>()
-    val messageError = _messageError.consumeAsFlow()
+    val messageError = _messageError.receiveAsFlow()
 
     val isDataValid: Boolean
         get() = !nameProject.hasError &&

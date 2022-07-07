@@ -33,7 +33,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Destination
 @Composable
 fun EmailScreen(
-    emailsVM: EmailsViewModel= shareViewModel(),
+    emailsVM: EmailsViewModel = shareViewModel(),
     emailScreenState: SimpleScreenState = rememberSimpleScreenState(),
     actionRootDestinations: ActionRootDestinations
 ) {
