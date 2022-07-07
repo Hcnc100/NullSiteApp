@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/circle_background.xml" value="0.118" />
+        <entry key="app/src/main/res/drawable/ic_person.xml" value="0.1055" />
         <entry key="app/src/main/res/drawable/ic_safe.xml" value="0.118" />
         <entry key="app/src/main/res/drawable/splash_background.xml" value="0.118" />
         <entry key="app/src/main/res/xml/provider_paths.xml" value="0.1" />

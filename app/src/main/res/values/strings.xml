@@ -124,6 +124,7 @@
     <string name="description_reply_email">Contestar el email actual</string>
     <string name="title_email_details">Detalles del Email</string>
     <string name="message_deleter_email_success">Email eliminado con éxito</string>
+    <string name="description_img_profile_placeholder" translatable="false">Imagen profile placeholder</string>
 
 
 </resources>
