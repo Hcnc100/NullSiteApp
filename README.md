@@ -66,8 +66,9 @@ NullSitePage</a>, using firebase for using realtime and notify when anywhere sen
 
 ### Import
 
-For enable notification when send new email in contact for your website, see
-the <a href="https://github.com/Hcnc100/NullSiteFunctions" target="_blank">NullSiteCloudFunctions</a>
+For enable notification in your app when send new email in contact for your website, see
+the <a href="https://github.com/Hcnc100/NullSiteFunctions" target="_blank">NullSiteCloudFunctions</a> and 
+<a href="https://github.com/Hcnc100/NullSiteApp" target="_blank">NullSiteApp</a>
 
 ### Note 1:
 
