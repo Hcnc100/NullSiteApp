@@ -24,7 +24,7 @@ class AuthDataSourceImpl : AuthDataSource {
         token: String?,
         uuidUser: String?
     ) {
-        val idDocument = token ?: auth.currentUser?.uid!!
+        val idDocument = uuidUser ?: auth.currentUser?.uid!!
         val refNodeUser = refCollectionTokens.document(idDocument)
         val docUser = refNodeUser.get().await()
         val finishToken = token ?: Firebase.messaging.token.await()
