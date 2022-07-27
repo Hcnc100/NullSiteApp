@@ -15,12 +15,9 @@ import com.nullpointer.nullsiteadmin.services.imageProfile.UploadImageServicesCo
 import com.nullpointer.nullsiteadmin.services.imageProfile.UploadImageServicesControl.START_COMMAND
 import com.nullpointer.nullsiteadmin.services.imageProfile.UploadImageServicesControl.STOP_COMMAND
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -50,27 +47,35 @@ class UploadImageServices : LifecycleService() {
     }
 
     private fun actionStartCommand(intent: Intent) {
-        try {
-            // * notify to user that operation has been started
-            showToastMessage(R.string.message_init_upload)
-            // * get extra parameters
-            val uriInfo: Uri = intent.getParcelableExtra(KEY_URI_PROFILE)!!
-            val personalInfo = intent.getParcelableExtra<PersonalInfo>(KEY_INFO_PROFILE)!!
-            // * init async task
-            jobUploadTask = lifecycleScope.launch {
+        jobUploadTask = lifecycleScope.launch {
+            try {
+                // * notify to user that operation has been started
+                showToastMessage(R.string.message_init_upload)
+                // * get extra parameters
+                val uriInfo: Uri = intent.getParcelableExtra(KEY_URI_PROFILE)!!
+                val personalInfo = intent.getParcelableExtra<PersonalInfo>(KEY_INFO_PROFILE)!!
+                // * init async task
+
                 startUploadImage(uriInfo) { newUrlImg ->
                     // * this action is call when the upload is finished
                     // ? update the info user thi the new url img
-                    withContext(Dispatchers.IO){
+                    withContext(Dispatchers.IO) {
                         infoUserRepository.updatePersonalInfo(
                             personalInfo.copy(urlImg = newUrlImg)
                         )
                     }
                 }
+
+            } catch (e: Exception) {
+                when (e) {
+                    is CancellationException -> throw e
+                    else -> {
+                        Timber.e("Error to upload info profile $e")
+                        showToastMessage(R.string.error_upload_info)
+                    }
+                }
+                killServices()
             }
-        } catch (e: Exception) {
-            Timber.e("Error to upload info profile $e")
-            showToastMessage(R.string.error_upload_info)
         }
     }
 
