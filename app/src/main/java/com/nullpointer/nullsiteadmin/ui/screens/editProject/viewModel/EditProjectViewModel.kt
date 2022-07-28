@@ -9,9 +9,7 @@ import com.nullpointer.nullsiteadmin.models.Project
 import com.nullpointer.nullsiteadmin.models.PropertySavableString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.receiveAsFlow
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
