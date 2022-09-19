@@ -11,16 +11,19 @@ import androidx.compose.ui.platform.LocalFocusManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class)
-class EditInfoState constructor(
-    scaffoldState: ScaffoldState,
-    context: Context,
-    focusManager: FocusManager,
-    val scope: CoroutineScope,
-     val modalState: ModalBottomSheetState,
-) : SimpleScreenState(scaffoldState, context, focusManager) {
 
-    val isModalVisible get() = modalState.isVisible
+@OptIn(ExperimentalMaterialApi::class)
+class EditInfoProfileState(
+    context: Context,
+    val scope: CoroutineScope,
+    scaffoldState: ScaffoldState,
+    val modalState: ModalBottomSheetState,
+    private val focusManager: FocusManager,
+) : SimpleScreenState(context, scaffoldState) {
+
+    @OptIn(ExperimentalMaterialApi::class)
+    val isModalVisible
+        get() = modalState.isVisible
 
     fun hideModal() {
         scope.launch { modalState.hide() }
@@ -30,19 +33,27 @@ class EditInfoState constructor(
         hiddenKeyBoard()
         scope.launch { modalState.show() }
     }
+
+    fun hiddenKeyBoard() = focusManager.clearFocus()
 }
 
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
- fun rememberEditInfoState(
-    scaffoldState: ScaffoldState = rememberScaffoldState(),
-    modalState: ModalBottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden),
-    coroutineScope: CoroutineScope = rememberCoroutineScope(),
+fun rememberEditInfoProfileState(
     context: Context = LocalContext.current,
-    focusManager: FocusManager = LocalFocusManager.current
-) = remember(scaffoldState, coroutineScope,modalState) {
-    EditInfoState(
-        scaffoldState, context, focusManager, coroutineScope, modalState
+    focusManager: FocusManager = LocalFocusManager.current,
+    scaffoldState: ScaffoldState = rememberScaffoldState(),
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
+    modalState: ModalBottomSheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden
+    )
+) = remember(scaffoldState, coroutineScope, modalState) {
+    EditInfoProfileState(
+        context = context,
+        scope = coroutineScope,
+        modalState = modalState,
+        focusManager = focusManager,
+        scaffoldState = scaffoldState
     )
 }

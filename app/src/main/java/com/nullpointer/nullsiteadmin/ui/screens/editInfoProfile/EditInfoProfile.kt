@@ -23,8 +23,8 @@ import com.nullpointer.nullsiteadmin.presentation.InfoUserViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
 import com.nullpointer.nullsiteadmin.ui.screens.editInfoProfile.viewModel.EditInfoViewModel
-import com.nullpointer.nullsiteadmin.ui.screens.states.EditInfoState
-import com.nullpointer.nullsiteadmin.ui.screens.states.rememberEditInfoState
+import com.nullpointer.nullsiteadmin.ui.screens.states.EditInfoProfileState
+import com.nullpointer.nullsiteadmin.ui.screens.states.rememberEditInfoProfileState
 import com.nullpointer.nullsiteadmin.ui.share.EditableTextSavable
 import com.nullpointer.nullsiteadmin.ui.share.SelectImgButtonSheet
 import com.nullpointer.nullsiteadmin.ui.share.ToolbarBack
@@ -36,10 +36,10 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Destination
 @Composable
 fun EditInfoProfile(
+    actionRootDestinations: ActionRootDestinations,
     editInfoVM: EditInfoViewModel = shareViewModel(),
     infoViewModel: InfoUserViewModel = shareViewModel(),
-    stateEditInfo: EditInfoState = rememberEditInfoState(),
-    actionRootDestinations: ActionRootDestinations
+    stateEditInfo: EditInfoProfileState = rememberEditInfoProfileState()
 ) {
 
     LaunchedEffect(key1 = Unit) {

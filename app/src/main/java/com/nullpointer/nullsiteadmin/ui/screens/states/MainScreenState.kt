@@ -5,9 +5,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.nullpointer.nullsiteadmin.ui.navigator.MainDestinations
@@ -15,12 +13,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class MainScreenState(
-    scaffoldState: ScaffoldState,
     context: Context,
-    focusManager: FocusManager,
     val scope: CoroutineScope,
+    scaffoldState: ScaffoldState,
     val navController: NavHostController
-) : SimpleScreenState(scaffoldState, context, focusManager) {
+) : SimpleScreenState(context, scaffoldState) {
 
     var titleNav by mutableStateOf("")
         private set
@@ -30,6 +27,7 @@ class MainScreenState(
             titleNav = MainDestinations.getLabel(destination.route)
         }
     }
+
     fun openDrawer() {
         scope.launch {
             scaffoldState.drawerState.open()
@@ -46,11 +44,15 @@ class MainScreenState(
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
  fun rememberMainScreenState(
-    scaffoldState: ScaffoldState = rememberScaffoldState(),
-    navController: NavHostController = rememberAnimatedNavController(),
-    coroutineScope: CoroutineScope = rememberCoroutineScope(),
     context: Context = LocalContext.current,
-    focusManager: FocusManager = LocalFocusManager.current
+    scaffoldState: ScaffoldState = rememberScaffoldState(),
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
+    navController: NavHostController = rememberAnimatedNavController(),
 ) = remember(scaffoldState, navController, coroutineScope) {
-    MainScreenState(scaffoldState, context, focusManager, coroutineScope, navController)
+    MainScreenState(
+        context = context,
+        scope = coroutineScope,
+        navController = navController,
+        scaffoldState = scaffoldState
+    )
 }
