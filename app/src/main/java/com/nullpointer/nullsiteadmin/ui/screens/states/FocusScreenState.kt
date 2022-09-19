@@ -9,10 +9,10 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 
-class EditProjectState(
+open class FocusScreenState(
     context: Context,
     scaffoldState: ScaffoldState,
-    private val focusManager: FocusManager,
+    private val focusManager: FocusManager
 ) : SimpleScreenState(context, scaffoldState) {
 
     fun hiddenKeyBoard() = focusManager.clearFocus()
@@ -20,12 +20,12 @@ class EditProjectState(
 
 
 @Composable
-fun rememberEditProjectState(
+fun rememberFocusScreenState(
     context: Context = LocalContext.current,
     focusManager: FocusManager = LocalFocusManager.current,
-    scaffoldState: ScaffoldState = rememberScaffoldState(),
+    scaffoldState: ScaffoldState = rememberScaffoldState()
 ) = remember(scaffoldState) {
-    EditProjectState(
+    FocusScreenState(
         context = context,
         focusManager = focusManager,
         scaffoldState = scaffoldState

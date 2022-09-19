@@ -16,10 +16,10 @@ import kotlinx.coroutines.launch
 class EditInfoProfileState(
     context: Context,
     val scope: CoroutineScope,
+    focusManager: FocusManager,
     scaffoldState: ScaffoldState,
     val modalState: ModalBottomSheetState,
-    private val focusManager: FocusManager,
-) : SimpleScreenState(context, scaffoldState) {
+) : FocusScreenState(context, scaffoldState, focusManager) {
 
     @OptIn(ExperimentalMaterialApi::class)
     val isModalVisible
@@ -33,8 +33,6 @@ class EditInfoProfileState(
         hiddenKeyBoard()
         scope.launch { modalState.show() }
     }
-
-    fun hiddenKeyBoard() = focusManager.clearFocus()
 }
 
 

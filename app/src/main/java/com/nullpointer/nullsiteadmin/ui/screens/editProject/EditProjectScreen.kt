@@ -21,8 +21,8 @@ import com.nullpointer.nullsiteadmin.presentation.ProjectViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
 import com.nullpointer.nullsiteadmin.ui.screens.editProject.viewModel.EditProjectViewModel
-import com.nullpointer.nullsiteadmin.ui.screens.states.EditProjectState
-import com.nullpointer.nullsiteadmin.ui.screens.states.rememberEditProjectState
+import com.nullpointer.nullsiteadmin.ui.screens.states.FocusScreenState
+import com.nullpointer.nullsiteadmin.ui.screens.states.rememberFocusScreenState
 import com.nullpointer.nullsiteadmin.ui.share.EditableTextSavable
 import com.nullpointer.nullsiteadmin.ui.share.ToolbarBack
 import com.ramcosta.composedestinations.annotation.Destination
@@ -34,7 +34,7 @@ fun EditProjectScreen(
     actionRootDestinations: ActionRootDestinations,
     projectVM: ProjectViewModel = shareViewModel(),
     editProjectVM: EditProjectViewModel = shareViewModel(),
-    editProjectState: EditProjectState = rememberEditProjectState()
+    editProjectState: FocusScreenState = rememberFocusScreenState()
 ) {
 
     LaunchedEffect(key1 = Unit, editProjectState) {
