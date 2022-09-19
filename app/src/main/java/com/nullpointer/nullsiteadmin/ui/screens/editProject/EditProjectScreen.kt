@@ -15,8 +15,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.nullpointer.nullsiteadmin.R
+import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
 import com.nullpointer.nullsiteadmin.core.utils.shareViewModel
-import com.nullpointer.nullsiteadmin.models.PropertySavableString
 import com.nullpointer.nullsiteadmin.presentation.ProjectViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
@@ -56,7 +56,7 @@ fun EditProjectScreen(
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ImageProject(urlImgProject = editProjectVM.urlImgProject.value)
+            ImageProject(urlImgProject = editProjectVM.urlImgProject.currentValue)
             ListInfoProject(
                 urlImgProject = editProjectVM.urlImgProject,
                 nameProject = editProjectVM.nameProject,

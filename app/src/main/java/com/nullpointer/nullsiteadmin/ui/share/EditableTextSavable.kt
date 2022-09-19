@@ -14,7 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import com.nullpointer.nullsiteadmin.models.PropertySavableString
+import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
 
 @Composable
 fun EditableTextSavable(
@@ -28,7 +28,7 @@ fun EditableTextSavable(
             enabled = isEnabled,
             label = { Text(stringResource(id = valueProperty.label)) },
             placeholder = { Text(stringResource(id = valueProperty.hint)) },
-            value = valueProperty.value,
+            value = valueProperty.currentValue,
             onValueChange = valueProperty::changeValue,
             isError = valueProperty.hasError,
             modifier = Modifier.fillMaxWidth(),

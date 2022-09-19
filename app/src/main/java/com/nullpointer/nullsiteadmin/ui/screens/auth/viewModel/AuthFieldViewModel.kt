@@ -3,7 +3,7 @@ package com.nullpointer.nullsiteadmin.ui.screens.auth.viewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.nullpointer.nullsiteadmin.R
-import com.nullpointer.nullsiteadmin.models.PropertySavableString
+import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -15,31 +15,35 @@ class AuthFieldViewModel @Inject constructor(
     companion object {
         private const val MAX_LENGTH_EMAIL = 50
         private const val MAX_LENGTH_PASSWORD = 50
+        private const val TAG_EMAIL_SIGN_IN = "TAG_EMAIL_SIGN_IN"
+        private const val TAG_PASSWORD_SIGN_IN = "TAG_PASSWORD_SIGN_IN"
     }
 
     val emailAdmin = PropertySavableString(
-        state = state,
+        savedState = state,
         label = R.string.label_email,
         hint = R.string.hint_email,
         emptyError = R.string.error_empty_email,
         lengthError = R.string.error_length_email,
-        maxLength = MAX_LENGTH_EMAIL
+        maxLength = MAX_LENGTH_EMAIL,
+        tagSavable = TAG_EMAIL_SIGN_IN
     )
 
     val passwordAdmin = PropertySavableString(
-        state = state,
+        savedState = state,
         label = R.string.label_password,
         hint = R.string.hint_password,
         emptyError = R.string.error_empty_passwod,
         lengthError = R.string.error_length_password,
-        maxLength = MAX_LENGTH_PASSWORD
+        maxLength = MAX_LENGTH_PASSWORD,
+        tagSavable = TAG_PASSWORD_SIGN_IN
     )
 
     private val isDataValid get() = !emailAdmin.hasError && !passwordAdmin.hasError
 
     fun getDataAuth(): Pair<String, String>? {
         return if (isDataValid) {
-            Pair(emailAdmin.value, passwordAdmin.value)
+            Pair(emailAdmin.currentValue, passwordAdmin.currentValue)
         } else {
             null
         }
