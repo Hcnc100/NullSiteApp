@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
@@ -13,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -23,9 +25,10 @@ import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
 import com.nullpointer.nullsiteadmin.presentation.AuthViewModel
 import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
 import com.nullpointer.nullsiteadmin.ui.screens.auth.viewModel.AuthFieldViewModel
-import com.nullpointer.nullsiteadmin.ui.screens.states.SimpleScreenState
-import com.nullpointer.nullsiteadmin.ui.screens.states.rememberSimpleScreenState
+import com.nullpointer.nullsiteadmin.ui.screens.states.FocusScreenState
+import com.nullpointer.nullsiteadmin.ui.screens.states.rememberFocusScreenState
 import com.nullpointer.nullsiteadmin.ui.share.EditableTextSavable
+import com.nullpointer.nullsiteadmin.ui.share.PasswordTextSavable
 import com.ramcosta.composedestinations.annotation.Destination
 
 @RootNavGraph(start = true)
@@ -34,7 +37,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 fun AuthScreen(
     authViewModel: AuthViewModel,
     authFieldVM: AuthFieldViewModel = hiltViewModel(),
-    authScreenState: SimpleScreenState = rememberSimpleScreenState()
+    authScreenState: FocusScreenState = rememberFocusScreenState()
 ) {
     LaunchedEffect(key1 = Unit) {
         authViewModel.messageErrorAuth.collect(authScreenState::showSnackMessage)
@@ -48,12 +51,20 @@ fun AuthScreen(
                 email = authFieldVM.emailAdmin,
                 password = authFieldVM.passwordAdmin,
                 modifier = Modifier.width(300.dp),
-                isEnabled = !authViewModel.isAuthenticating
+                isEnabled = !authViewModel.isAuthenticating,
+                moveNextField = authScreenState::moveNextFocus,
+                actionSignIn = {
+                    authScreenState.hiddenKeyBoard()
+                    authFieldVM.getDataAuth().let {
+                        authViewModel.authWithEmailAndPassword(it)
+                    }
+                }
             )
             ButtonAuth(
                 isAuthenticating = authViewModel.isAuthenticating,
                 modifier = Modifier.padding(vertical = 20.dp)
             ) {
+                authScreenState.hiddenKeyBoard()
                 authFieldVM.getDataAuth().let {
                     authViewModel.authWithEmailAndPassword(it)
                 }
@@ -97,15 +108,16 @@ private fun ButtonAuth(
             )
         }
     }
-
 }
 
 @Composable
 private fun FieldLogin(
-    email: PropertySavableString,
-    password: PropertySavableString,
     isEnabled: Boolean,
+    actionSignIn: () -> Unit,
+    moveNextField: () -> Unit,
+    email: PropertySavableString,
     modifier: Modifier = Modifier,
+    password: PropertySavableString
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         ContainerFieldAuth {
@@ -114,20 +126,24 @@ private fun FieldLogin(
                 valueProperty = email,
                 modifier = Modifier.padding(10.dp),
                 keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Next,
                     keyboardType = KeyboardType.Email,
                     capitalization = KeyboardCapitalization.None
-                )
+                ),
+                keyboardActions = KeyboardActions(onNext = { moveNextField() })
             )
         }
         Spacer(modifier = Modifier.height(15.dp))
         ContainerFieldAuth {
-            EditableTextSavable(
+            PasswordTextSavable(
                 isEnabled = isEnabled,
                 valueProperty = password,
                 modifier = Modifier.padding(10.dp),
                 keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Password
-                )
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(onDone = { actionSignIn() })
             )
         }
     }
@@ -135,15 +151,14 @@ private fun FieldLogin(
 
 @Composable
 private fun ContainerFieldAuth(
-    content: @Composable () -> Unit
+    content: @Composable BoxScope.() -> Unit
 ) {
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(10.dp))
-            .background(MaterialTheme.colors.background)
-    ) {
-        content()
-    }
+            .background(MaterialTheme.colors.background),
+        content = content
+    )
 }
 
 @Composable

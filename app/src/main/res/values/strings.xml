@@ -126,5 +126,8 @@
     <string name="message_deleter_email_success">Email eliminado con éxito</string>
     <string name="description_img_profile_placeholder" translatable="false">Imagen profile placeholder</string>
 
+    <string name="description_show_password">Muesta la contraseña</string>
+    <string name="description_hide_password">Oculta la contraseña</string>
+
 
 </resources>

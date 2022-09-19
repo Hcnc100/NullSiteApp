@@ -93,4 +93,6 @@
     <string name="description_reply_email">Reply to the current email</string>
     <string name="title_email_details">Email Details</string>
     <string name="message_deleter_email_success">Email deleted successfully</string>
+    <string name="description_show_password">Show the password</string>
+    <string name="description_hide_password">Hide the password</string>
 </resources>
