@@ -4,15 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.states.Resource
+import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepository
 import com.nullpointer.nullsiteadmin.models.PersonalInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -40,19 +39,15 @@ class InfoUserViewModel @Inject constructor(
 
     fun updatePersonalInfo(
         personalInfo: PersonalInfo
-    ) = viewModelScope.launch(Dispatchers.IO) {
-        try {
+    ) = launchSafeIO(
+        blockIO = {
             infoUserRepository.updatePersonalInfo(personalInfo)
             delay(300)
             _messageError.trySend(R.string.message_data_upload)
-        } catch (e: Exception) {
-            when (e) {
-                is CancellationException -> throw e
-                else ->{
-                    Timber.e("Error to update info personal $e")
-                    _messageError.trySend(R.string.error_data_user_upload)
-                }
-            }
+        },
+        blockException = {
+            Timber.e("Error to update info personal $it")
+            _messageError.trySend(R.string.error_data_user_upload)
         }
-    }
+    )
 }
