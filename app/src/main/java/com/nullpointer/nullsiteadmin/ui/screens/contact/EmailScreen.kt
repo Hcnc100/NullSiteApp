@@ -3,6 +3,7 @@ package com.nullpointer.nullsiteadmin.ui.screens.contact
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -39,62 +40,64 @@ fun EmailScreen(
     LaunchedEffect(key1 = Unit) {
         emailsVM.errorEmail.collect(emailScreenState::showSnackMessage)
     }
+
     Scaffold(
         scaffoldState = emailScreenState.scaffoldState
     ) { paddingValues ->
-        when (val listEmails = emailsState) {
-            Resource.Failure -> AnimationScreen(
-                animation = R.raw.error,
-                textEmpty = stringResource(R.string.message_error_contact),
-                modifier = Modifier.padding(paddingValues)
-            )
-            Resource.Loading -> LoadingScreenEmail(Modifier.padding(paddingValues))
-            is Resource.Success -> {
-                if (listEmails.data.isEmpty()) {
-                    AnimationScreen(
-                        animation = R.raw.empty1,
-                        textEmpty = stringResource(R.string.message_empty_contact),
-                        modifier = Modifier.padding(paddingValues)
-                    )
-                } else {
-                    ListEmails(
-                        listEmails = listEmails.data,
-                        actionDetails = {
-                            val route=EmailDetailsScreenDestination(it).route
-                            actionRootDestinations.changeRoot(
-                                "https://www.nullsiteadmin.com/$route".toUri()
-                            )
-                        },
-                        modifier = Modifier.padding(paddingValues)
-                    )
-                }
-            }
-        }
+        ListEmails(
+            modifier = Modifier.padding(paddingValues),
+            listEmails = emailsState,
+            actionDetails = {
+                val route = EmailDetailsScreenDestination(it).route
+                actionRootDestinations.changeRoot(
+                    "https://www.nullsiteadmin.com/$route".toUri()
+                )
+            })
     }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ListEmails(
-    listEmails: List<EmailContact>,
+    listEmails: Resource<List<EmailContact>>,
     actionDetails: (EmailContact) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(modifier = modifier) {
-        item {
-            Text(
-                text = stringResource(R.string.text_number_emails,listEmails.size),
-                modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)
-            )
-        }
-        items(
-            count = listEmails.size,
-            key = { listEmails[it].id }) { index ->
-            EmailItem(
-                email = listEmails[index],
-                modifier = Modifier.animateItemPlacement(),
-                actionDetails = actionDetails
-            )
+    when (listEmails) {
+        Resource.Loading -> LoadingScreenEmail(modifier = modifier)
+        Resource.Failure -> AnimationScreen(
+            animation = R.raw.error,
+            textEmpty = stringResource(R.string.message_error_contact),
+            modifier = modifier
+        )
+        is Resource.Success -> {
+            if (listEmails.data.isEmpty()) {
+                AnimationScreen(
+                    animation = R.raw.empty1,
+                    textEmpty = stringResource(R.string.message_empty_contact),
+                    modifier = modifier
+                )
+            } else {
+                LazyColumn(modifier = modifier) {
+                    item {
+                        Text(
+                            text = stringResource(
+                                R.string.text_number_emails,
+                                listEmails.data.size
+                            ),
+                            modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)
+                        )
+                    }
+                    items(listEmails.data, key = { it.id }) { email ->
+                        EmailItem(
+                            email = email,
+                            modifier = Modifier.animateItemPlacement(),
+                            actionDetails = actionDetails
+                        )
+                    }
+                }
+            }
         }
     }
 }
+
