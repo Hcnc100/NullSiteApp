@@ -1,5 +1,6 @@
 package com.nullpointer.nullsiteadmin.inject
 
+import com.nullpointer.nullsiteadmin.data.local.SettingsDataSource
 import com.nullpointer.nullsiteadmin.data.remote.auth.AuthDataSource
 import com.nullpointer.nullsiteadmin.data.remote.auth.AuthDataSourceImpl
 import com.nullpointer.nullsiteadmin.domain.auth.AuthRepoImpl
@@ -21,6 +22,7 @@ object AuthModule {
     @Provides
     @Singleton
     fun provideAuthRepository(
-        authDataSource: AuthDataSource
-    ): AuthRepoImpl = AuthRepoImpl(authDataSource)
+        authDataSource: AuthDataSource,
+        settingsDataSource: SettingsDataSource
+    ): AuthRepoImpl = AuthRepoImpl(authDataSource, settingsDataSource)
 }

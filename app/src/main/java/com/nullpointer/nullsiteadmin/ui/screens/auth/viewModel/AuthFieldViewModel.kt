@@ -49,12 +49,12 @@ class AuthFieldViewModel @Inject constructor(
 
     fun getDataAuth(): UserCredentials? {
         return if (isDataValid) {
-            _messageCredentials.trySend(R.string.error_data_invalid)
             UserCredentials(
                 email = emailAdmin.currentValue,
                 password = passwordAdmin.currentValue
             )
         } else {
+            _messageCredentials.trySend(R.string.error_data_invalid)
             null
         }
     }
