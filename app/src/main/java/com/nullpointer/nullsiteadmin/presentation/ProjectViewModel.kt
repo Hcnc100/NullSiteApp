@@ -4,15 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.states.Resource
+import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.project.ProjectRepository
 import com.nullpointer.nullsiteadmin.models.Project
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -40,20 +39,15 @@ class ProjectViewModel @Inject constructor(
 
     fun editProject(
         project: Project
-    ) = viewModelScope.launch(Dispatchers.IO) {
-        try {
+    ) = launchSafeIO(
+        blockIO = {
             projectRepository.editProject(project)
             delay(300)
             _messageErrorProject.trySend(R.string.message_upload_project)
-        } catch (e: Exception) {
-            Timber.e("Failed to edit project $e")
-            when (e) {
-                is CancellationException -> throw e
-                else -> {
-                    _messageErrorProject.trySend(R.string.message_error_upload_project)
-                    Timber.e("Failed upload project $e")
-                }
-            }
+        },
+        blockException = {
+            _messageErrorProject.trySend(R.string.message_error_upload_project)
+            Timber.e("Failed upload project $it")
         }
-    }
+    )
 }
