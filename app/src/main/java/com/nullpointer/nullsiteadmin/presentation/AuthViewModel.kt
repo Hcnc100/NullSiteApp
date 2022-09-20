@@ -11,11 +11,9 @@ import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.auth.AuthRepository
 import com.nullpointer.nullsiteadmin.models.UserCredentials
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -54,35 +52,29 @@ class AuthViewModel @Inject constructor(
 
     fun authWithEmailAndPassword(
         userCredentials: UserCredentials
-    ) = viewModelScope.launch(Dispatchers.IO) {
-        try {
-            isAuthenticating = true
+    ) = launchSafeIO(
+        blockBefore = { isAuthenticating = true },
+        blockAfter = { isAuthenticating = false },
+        blockIO = {
             authRepository.authUserWithEmailAndPassword(
                 email = userCredentials.email,
                 password = userCredentials.password
             )
-        } catch (e: Exception) {
-            when (e) {
-                is CancellationException -> throw e
-                else -> {
-                    _messageErrorAuth.trySend(R.string.error_authenticated)
-                    Timber.e("Error auth $e")
-                }
-            }
-        } finally {
-            isAuthenticating = false
+        },
+        blockException = {
+            _messageErrorAuth.trySend(R.string.error_authenticated)
+            Timber.e("Error auth $it")
         }
-    }
+    )
 
-    fun logOut() {
-        viewModelScope.launch(Dispatchers.IO) {
-            authRepository.logout()
-        }
+    fun logOut() = launchSafeIO {
+        authRepository.logout()
     }
 
     private fun verifyTokenMessaging() = launchSafeIO(
         blockIO = { authRepository.verifyTokenMessaging() },
         blockException = {
             Timber.e("Error yto update owner token $it")
-        })
+        }
+    )
 }

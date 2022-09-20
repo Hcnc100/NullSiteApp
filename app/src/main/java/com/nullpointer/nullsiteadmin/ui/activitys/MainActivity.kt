@@ -73,7 +73,10 @@ class MainActivity : ComponentActivity() {
         navController: NavController
     ): ActionRootDestinations {
         return object : ActionRootDestinations {
-            override fun logout() = authViewModel.logOut()
+            override fun logout() {
+                authViewModel.logOut()
+            }
+
             override fun backDestination() = navController.popBackStack()
             override fun changeRoot(route: Uri) = navController.navigate(route)
             override fun changeRoot(direction: Direction) = navController.navigate(direction)
