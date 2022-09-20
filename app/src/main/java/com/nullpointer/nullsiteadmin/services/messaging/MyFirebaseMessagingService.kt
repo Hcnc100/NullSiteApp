@@ -26,13 +26,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     @Inject
-    lateinit var authRepoImpl: AuthRepository
+    lateinit var authRepository: AuthRepository
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         CoroutineScope(job).launch(Dispatchers.IO) {
             try {
-                authRepoImpl.updateTokenUser(token = token)
+                authRepository.updateTokenUser(token = token)
             } catch (e: Exception) {
                 when (e) {
                     is CancellationException -> throw e

@@ -5,7 +5,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -41,6 +42,16 @@ fun EmailDetailsScreen(
     emailsViewModel: EmailsViewModel = shareViewModel(),
     emailsDetailsState: SimpleScreenState = rememberSimpleScreenState()
 ) {
+
+    var isOpen by rememberSaveable { mutableStateOf(email.isOpen) }
+
+    LaunchedEffect(key1 = isOpen) {
+        if (!isOpen) {
+            emailsViewModel.markAsOpen(email)
+            isOpen = false
+        }
+    }
+
     Scaffold(
         topBar = {
             ToolbarEmailDetails(actionBack = rootDestinations::backDestination) {
