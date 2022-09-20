@@ -48,6 +48,7 @@ fun EmailScreen(
             modifier = Modifier.padding(paddingValues),
             listEmails = emailsState,
             actionDetails = {
+                if (!it.isOpen) emailsVM.markAsOpen(it)
                 val route = EmailDetailsScreenDestination(it).route
                 actionRootDestinations.changeRoot(
                     "https://www.nullsiteadmin.com/$route".toUri()

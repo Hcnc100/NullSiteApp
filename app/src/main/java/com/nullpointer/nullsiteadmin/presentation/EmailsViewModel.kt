@@ -4,15 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.states.Resource
+import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.email.EmailsRepository
 import com.nullpointer.nullsiteadmin.models.EmailContact
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -41,19 +40,23 @@ class EmailsViewModel @Inject constructor(
 
     fun deleterEmail(
         idEmail: String
-    ) = viewModelScope.launch(Dispatchers.IO) {
-        try {
+    ) = launchSafeIO(
+        blockIO = {
             emailsRepository.deleterEmail(idEmail)
             delay(300)
             _errorEmail.trySend(R.string.message_deleter_email_success)
-        } catch (e: Exception) {
-            when (e) {
-                is CancellationException -> throw e
-                else ->{
-                    Timber.e("Error to delete email $idEmail : $e")
-                    _errorEmail.trySend(R.string.error_deleter_email)
-                }
-            }
+        },
+        blockException = {
+            Timber.e("Error to delete email $idEmail : $it")
+            _errorEmail.trySend(R.string.error_deleter_email)
         }
-    }
+    )
+
+    fun markAsOpen(email: EmailContact) = launchSafeIO(
+        blockIO = { emailsRepository.markAsOpen(email.id) },
+        blockException = {
+            Timber.e("Error mark as open $email : $it")
+            _errorEmail.trySend(R.string.error_unkown)
+        }
+    )
 }

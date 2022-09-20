@@ -5,5 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface EmailDataSource {
     fun getAllEmails():Flow<List<EmailContact>>
-    suspend fun deleterEmail(idEmail:String)
+    suspend fun deleterEmail(idEmail: String)
+    suspend fun markAsOpen(idEmail: String)
 }

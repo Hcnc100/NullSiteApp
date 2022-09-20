@@ -11,4 +11,7 @@ class EmailsRepoImpl(
 
     override suspend fun deleterEmail(idEmail: String) =
         emailDataSource.deleterEmail(idEmail)
+
+    override suspend fun markAsOpen(idEmail: String) =
+        emailDataSource.markAsOpen(idEmail)
 }

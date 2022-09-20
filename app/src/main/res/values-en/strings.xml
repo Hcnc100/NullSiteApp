@@ -62,7 +62,7 @@
     <string name="description_icon_draw_menu">Navigation destination icon</string>
     <string name="text_auth_button">Authenticate</string>
     <string name="description_logo_app">App main icon</string>
-    <string name="error_unkown_auth">Unknown error</string>
+    <string name="error_unkown">Unknown error</string>
     <string name="error_data_invalid">Invalid data</string>
     <string name="error_authenticated">Check your credentials</string>
     <string name="text_select_option">Select an option</string>
@@ -95,4 +95,7 @@
     <string name="message_deleter_email_success">Email deleted successfully</string>
     <string name="description_show_password">Show the password</string>
     <string name="description_hide_password">Hide the password</string>
+
+    <string name="description_email_open">El email ya fue leido</string>
+    <string name="description_email_pending">El email no a sido leido</string>
 </resources>

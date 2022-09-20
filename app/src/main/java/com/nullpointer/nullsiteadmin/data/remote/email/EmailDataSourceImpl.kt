@@ -35,13 +35,17 @@ class EmailDataSourceImpl : EmailDataSource {
                     }
                     trySend(listEmails)
                 } catch (e: Exception) {
-                channel.close(e)
+                    channel.close(e)
+                }
             }
-        }
         awaitClose { listener.remove() }
     }
 
     override suspend fun deleterEmail(idEmail: String) {
         collectionEmail.document(idEmail).delete().await()
+    }
+
+    override suspend fun markAsOpen(idEmail: String) {
+        collectionEmail.document(idEmail).update(mapOf("isOpen" to true)).await()
     }
 }

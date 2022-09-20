@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface EmailsRepository {
     val listEmails: Flow<List<EmailContact>>
     suspend fun deleterEmail(idEmail: String)
+    suspend fun markAsOpen(idEmail: String)
 }

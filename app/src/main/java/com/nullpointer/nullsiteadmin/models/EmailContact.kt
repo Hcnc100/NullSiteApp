@@ -12,5 +12,6 @@ data class EmailContact(
     val email: String = "",
     val subject: String = "",
     val timestamp: Date? = null,
+    @field:JvmField
     val isOpen: Boolean = false
 ) : Parcelable

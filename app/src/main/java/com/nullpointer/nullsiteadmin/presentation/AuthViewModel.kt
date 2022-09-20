@@ -33,7 +33,7 @@ class AuthViewModel @Inject constructor(
         Dispatchers.IO
     ).catch {
         Timber.e("Error to load info auth $it")
-        _messageErrorAuth.trySend(R.string.error_unkown_auth)
+        _messageErrorAuth.trySend(R.string.error_unkown)
         emit(Resource.Failure)
     }.stateIn(
         viewModelScope,
