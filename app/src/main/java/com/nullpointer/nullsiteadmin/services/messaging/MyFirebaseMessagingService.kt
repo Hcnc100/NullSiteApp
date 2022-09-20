@@ -2,6 +2,7 @@ package com.nullpointer.nullsiteadmin.services.messaging
 
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.nullpointer.nullsiteadmin.domain.auth.AuthRepository
 import com.nullpointer.nullsiteadmin.models.EmailContact
@@ -20,26 +21,25 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         NotifyMessagingHelper(this)
     }
     private val gson by lazy {
-        GsonBuilder().registerTypeAdapter(
-            EmailContact::class.java, EmailDeserializer()
-        ).create()
+        createGsonBuilder()
     }
+
 
     @Inject
     lateinit var authRepository: AuthRepository
 
+    override fun onCreate() {
+        super.onCreate()
+        safeLaunchTokenOperation {
+            authRepository.verifyTokenMessaging()
+        }
+    }
+
+
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        CoroutineScope(job).launch(Dispatchers.IO) {
-            try {
-                authRepository.updateTokenUser(token = token)
-            } catch (e: Exception) {
-                when (e) {
-                    is CancellationException -> throw e
-                    is NullPointerException -> Timber.e("Error upload, user is maybe null")
-                    else -> Timber.e("Error update token $e")
-                }
-            }
+        safeLaunchTokenOperation {
+            authRepository.updateTokenUser(token = token)
         }
     }
 
@@ -54,5 +54,28 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             }
         }
     }
+
+    private fun createGsonBuilder(): Gson {
+        return GsonBuilder().registerTypeAdapter(
+            EmailContact::class.java, EmailDeserializer()
+        ).create()
+    }
+
+    private fun safeLaunchTokenOperation(
+        callToken: suspend () -> Unit
+    ) {
+        CoroutineScope(job).launch(Dispatchers.IO) {
+            try {
+                callToken()
+            } catch (e: Exception) {
+                when (e) {
+                    is CancellationException -> throw e
+                    is NullPointerException -> Timber.e("Error upload, user is maybe null")
+                    else -> Timber.e("Unknown error token services $e")
+                }
+            }
+        }
+    }
+
 
 }
