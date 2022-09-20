@@ -35,6 +35,7 @@ fun EmailScreen(
     actionRootDestinations: ActionRootDestinations
 ) {
     val emailsState by emailsVM.listEmails.collectAsState()
+
     LaunchedEffect(key1 = Unit) {
         emailsVM.errorEmail.collect(emailScreenState::showSnackMessage)
     }
