@@ -9,6 +9,7 @@ import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.auth.AuthRepository
+import com.nullpointer.nullsiteadmin.models.UserCredentials
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
@@ -52,16 +53,17 @@ class AuthViewModel @Inject constructor(
     }
 
     fun authWithEmailAndPassword(
-        dataUser: Pair<String, String>?
+        userCredentials: UserCredentials
     ) = viewModelScope.launch(Dispatchers.IO) {
         try {
             isAuthenticating = true
-            val (email, password) = dataUser!!
-            authRepository.authUserWithEmailAndPassword(email, password)
+            authRepository.authUserWithEmailAndPassword(
+                email = userCredentials.email,
+                password = userCredentials.password
+            )
         } catch (e: Exception) {
             when (e) {
                 is CancellationException -> throw e
-                is NullPointerException -> _messageErrorAuth.trySend(R.string.error_data_invalid)
                 else -> {
                     _messageErrorAuth.trySend(R.string.error_authenticated)
                     Timber.e("Error auth $e")
@@ -78,9 +80,9 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun verifyTokenMessaging() = launchSafeIO(blockIO = {
-        authRepository.verifyTokenMessaging()
-    }, blockException = {
-        Timber.e("Error yto update owner token $it")
-    })
+    private fun verifyTokenMessaging() = launchSafeIO(
+        blockIO = { authRepository.verifyTokenMessaging() },
+        blockException = {
+            Timber.e("Error yto update owner token $it")
+        })
 }

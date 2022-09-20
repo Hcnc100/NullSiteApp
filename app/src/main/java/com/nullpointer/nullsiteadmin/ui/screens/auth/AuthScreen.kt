@@ -30,6 +30,7 @@ import com.nullpointer.nullsiteadmin.ui.screens.states.rememberFocusScreenState
 import com.nullpointer.nullsiteadmin.ui.share.EditableTextSavable
 import com.nullpointer.nullsiteadmin.ui.share.PasswordTextSavable
 import com.ramcosta.composedestinations.annotation.Destination
+import kotlinx.coroutines.flow.merge
 
 @RootNavGraph(start = true)
 @Destination
@@ -40,7 +41,10 @@ fun AuthScreen(
     authScreenState: FocusScreenState = rememberFocusScreenState()
 ) {
     LaunchedEffect(key1 = Unit) {
-        authViewModel.messageErrorAuth.collect(authScreenState::showSnackMessage)
+        merge(
+            authFieldVM.messageCredentials,
+            authViewModel.messageErrorAuth
+        ).collect(authScreenState::showSnackMessage)
     }
     Scaffold(
         scaffoldState = authScreenState.scaffoldState,
@@ -48,7 +52,7 @@ fun AuthScreen(
         floatingActionButton = {
             ButtonAuth(isAuthenticating = authViewModel.isAuthenticating) {
                 authScreenState.hiddenKeyBoard()
-                authFieldVM.getDataAuth().let {
+                authFieldVM.getDataAuth()?.let {
                     authViewModel.authWithEmailAndPassword(it)
                 }
             }
@@ -67,7 +71,7 @@ fun AuthScreen(
                 moveNextField = authScreenState::moveNextFocus,
                 actionSignIn = {
                     authScreenState.hiddenKeyBoard()
-                    authFieldVM.getDataAuth().let {
+                    authFieldVM.getDataAuth()?.let {
                         authViewModel.authWithEmailAndPassword(it)
                     }
                 }

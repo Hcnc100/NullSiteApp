@@ -4,7 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
+import com.nullpointer.nullsiteadmin.models.UserCredentials
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -41,9 +44,16 @@ class AuthFieldViewModel @Inject constructor(
 
     private val isDataValid get() = !emailAdmin.hasError && !passwordAdmin.hasError
 
-    fun getDataAuth(): Pair<String, String>? {
+    private val _messageCredentials = Channel<Int>()
+    val messageCredentials get() = _messageCredentials.receiveAsFlow()
+
+    fun getDataAuth(): UserCredentials? {
         return if (isDataValid) {
-            Pair(emailAdmin.currentValue, passwordAdmin.currentValue)
+            _messageCredentials.trySend(R.string.error_data_invalid)
+            UserCredentials(
+                email = emailAdmin.currentValue,
+                password = passwordAdmin.currentValue
+            )
         } else {
             null
         }
