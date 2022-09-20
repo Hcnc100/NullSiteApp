@@ -32,8 +32,8 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Composable
 fun EmailScreen(
     emailsVM: EmailsViewModel = shareViewModel(),
-    emailScreenState: SimpleScreenState = rememberSimpleScreenState(),
-    actionRootDestinations: ActionRootDestinations
+    actionRootDestinations: ActionRootDestinations,
+    emailScreenState: SimpleScreenState = rememberSimpleScreenState()
 ) {
     val emailsState by emailsVM.listEmails.collectAsState()
 
@@ -59,9 +59,9 @@ fun EmailScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ListEmails(
-    listEmails: Resource<List<EmailContact>>,
+    modifier: Modifier = Modifier,
     actionDetails: (EmailContact) -> Unit,
-    modifier: Modifier = Modifier
+    listEmails: Resource<List<EmailContact>>
 ) {
     when (listEmails) {
         Resource.Loading -> LoadingScreenEmail(modifier = modifier)
