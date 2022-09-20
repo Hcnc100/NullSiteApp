@@ -42,15 +42,27 @@ fun AuthScreen(
     LaunchedEffect(key1 = Unit) {
         authViewModel.messageErrorAuth.collect(authScreenState::showSnackMessage)
     }
-    Scaffold(scaffoldState = authScreenState.scaffoldState) { paddingValues ->
+    Scaffold(
+        scaffoldState = authScreenState.scaffoldState,
+        floatingActionButtonPosition = FabPosition.Center,
+        floatingActionButton = {
+            ButtonAuth(isAuthenticating = authViewModel.isAuthenticating) {
+                authScreenState.hiddenKeyBoard()
+                authFieldVM.getDataAuth().let {
+                    authViewModel.authWithEmailAndPassword(it)
+                }
+            }
+        }
+    ) { paddingValues ->
         ContainerAuthScreen(
             modifier = Modifier.padding(paddingValues)
         ) {
-            LogoApp(modifier = Modifier.padding(20.dp))
+            LogoApp(modifier = Modifier.padding(vertical = 70.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             FieldLogin(
                 email = authFieldVM.emailAdmin,
-                password = authFieldVM.passwordAdmin,
                 modifier = Modifier.width(300.dp),
+                password = authFieldVM.passwordAdmin,
                 isEnabled = !authViewModel.isAuthenticating,
                 moveNextField = authScreenState::moveNextFocus,
                 actionSignIn = {
@@ -60,15 +72,6 @@ fun AuthScreen(
                     }
                 }
             )
-            ButtonAuth(
-                isAuthenticating = authViewModel.isAuthenticating,
-                modifier = Modifier.padding(vertical = 20.dp)
-            ) {
-                authScreenState.hiddenKeyBoard()
-                authFieldVM.getDataAuth().let {
-                    authViewModel.authWithEmailAndPassword(it)
-                }
-            }
         }
     }
 }
@@ -77,7 +80,7 @@ fun AuthScreen(
 @Composable
 private fun ContainerAuthScreen(
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit,
+    content: @Composable ColumnScope.() -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -85,11 +88,8 @@ private fun ContainerAuthScreen(
             .background(MaterialTheme.colors.primary)
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceEvenly
-    ) {
-        content()
-    }
-
+        content = content
+    )
 }
 
 @Composable
@@ -168,6 +168,9 @@ private fun LogoApp(
     AsyncImage(
         model = R.drawable.ic_safe,
         contentDescription = stringResource(R.string.description_logo_app),
-        modifier = modifier.size(130.dp)
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentSize()
+            .size(130.dp)
     )
 }
