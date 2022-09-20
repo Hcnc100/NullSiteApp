@@ -18,6 +18,7 @@ class AuthDataSourceImpl : AuthDataSource {
     }
 
     private val auth = Firebase.auth
+    private val messaging = Firebase.messaging
     private val refCollectionTokens = Firebase.firestore.collection(COLLECTION_TOKEN)
 
     override suspend fun updateTokenUser(
@@ -63,6 +64,20 @@ class AuthDataSourceImpl : AuthDataSource {
         awaitClose {
             Timber.d("Remove listener auth")
             auth.removeAuthStateListener(listener)
+        }
+    }
+
+    override suspend fun verifyTokenMessaging() {
+        val idUser = auth.currentUser?.uid
+        if (idUser != null) {
+            val documentUser = refCollectionTokens.document(idUser).get().await()
+            if (documentUser.exists()) {
+                val oldToken = documentUser.getString("token")
+                val newToken = messaging.token.await()
+                if (oldToken != newToken) {
+                    updateTokenUser(newToken, idUser)
+                }
+            }
         }
     }
 }

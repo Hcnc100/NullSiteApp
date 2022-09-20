@@ -4,7 +4,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface AuthDataSource {
     suspend fun authWithEmailAndPassword(email: String, pass: String)
-    suspend fun updateTokenUser(token: String? = null, uuidUser: String?=null)
+    suspend fun updateTokenUser(token: String? = null, uuidUser: String? = null)
+    suspend fun verifyTokenMessaging()
     suspend fun logout()
     fun isAuthUser(): Flow<Boolean>
 }

@@ -24,7 +24,6 @@ class EmailsViewModel @Inject constructor(
     val errorEmail = _errorEmail.receiveAsFlow()
 
     val listEmails = flow<Resource<List<EmailContact>>> {
-        delay(5_000)
         emailsRepository.listEmails.collect {
             emit(Resource.Success(it))
         }

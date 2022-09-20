@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.states.Resource
+import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.auth.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
@@ -46,6 +47,9 @@ class AuthViewModel @Inject constructor(
     var isAuthenticating by mutableStateOf(false)
         private set
 
+    init {
+        verifyTokenMessaging()
+    }
 
     fun authWithEmailAndPassword(
         dataUser: Pair<String, String>?
@@ -68,9 +72,15 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun logOut(){
+    fun logOut() {
         viewModelScope.launch(Dispatchers.IO) {
             authRepository.logout()
         }
     }
+
+    fun verifyTokenMessaging() = launchSafeIO(blockIO = {
+        authRepository.verifyTokenMessaging()
+    }, blockException = {
+        Timber.e("Error yto update owner token $it")
+    })
 }
