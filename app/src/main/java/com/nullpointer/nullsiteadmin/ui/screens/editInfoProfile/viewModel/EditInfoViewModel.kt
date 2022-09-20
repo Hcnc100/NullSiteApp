@@ -87,10 +87,10 @@ class EditInfoViewModel @Inject constructor(
     fun initInfoProfile(personalInfo: PersonalInfo) {
         this.personalInfo = personalInfo
         personalInfo.let {
-            name.changeValue(it.name)
-            profession.changeValue(it.profession)
-            description.changeValue(it.description)
-            imageProfile.changeValue(personalInfo.urlImg.toUri())
+            name.changeValue(newValue = it.name, isInit = true)
+            profession.changeValue(newValue = it.profession, isInit = true)
+            description.changeValue(newValue = it.description, isInit = true)
+            imageProfile.changeValue(newValue = personalInfo.urlImg.toUri(), isInit = true)
         }
     }
 

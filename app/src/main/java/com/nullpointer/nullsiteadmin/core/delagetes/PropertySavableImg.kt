@@ -31,23 +31,27 @@ class PropertySavableImg(
 
     val isNotEmpty get() = value != Uri.EMPTY
 
-    fun changeValue(newValue: Uri) {
-        jobCompress?.cancel()
-        jobCompress = scope.launch {
-            try {
-                isCompress = true
-                value = withContext(Dispatchers.IO) { actionCompress(newValue) }
-            } catch (e: Exception) {
-                when (e) {
-                    is CancellationException -> throw e
-                    else -> {
-                        Timber.e("Job compress exception $e")
-                        value = defaultValue
-                        actionSendErrorCompress()
+    fun changeValue(newValue: Uri, isInit: Boolean = false) {
+        if (isInit) {
+            value = newValue
+        } else {
+            jobCompress?.cancel()
+            jobCompress = scope.launch {
+                try {
+                    isCompress = true
+                    value = withContext(Dispatchers.IO) { actionCompress(newValue) }
+                } catch (e: Exception) {
+                    when (e) {
+                        is CancellationException -> throw e
+                        else -> {
+                            Timber.e("Job compress exception $e")
+                            value = defaultValue
+                            actionSendErrorCompress()
+                        }
                     }
+                } finally {
+                    isCompress = false
                 }
-            } finally {
-                isCompress = false
             }
         }
     }
