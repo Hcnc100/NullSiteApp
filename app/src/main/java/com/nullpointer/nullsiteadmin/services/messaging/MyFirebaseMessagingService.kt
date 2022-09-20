@@ -5,8 +5,8 @@ import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.nullpointer.nullsiteadmin.domain.auth.AuthRepository
-import com.nullpointer.nullsiteadmin.models.EmailContact
-import com.nullpointer.nullsiteadmin.models.EmailDeserializer
+import com.nullpointer.nullsiteadmin.models.email.EmailContact
+import com.nullpointer.nullsiteadmin.models.email.EmailDeserializer
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import timber.log.Timber
@@ -76,6 +76,5 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             }
         }
     }
-
 
 }

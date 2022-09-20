@@ -12,7 +12,7 @@ import androidx.core.net.toUri
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.utils.correctFlag
 import com.nullpointer.nullsiteadmin.core.utils.getNotifyServices
-import com.nullpointer.nullsiteadmin.models.EmailContact
+import com.nullpointer.nullsiteadmin.models.email.EmailContact
 import com.nullpointer.nullsiteadmin.ui.activitys.MainActivity
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EmailDetailsScreenDestination
 

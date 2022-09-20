@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.models
+package com.nullpointer.nullsiteadmin.models.email
 
 import com.ramcosta.composedestinations.navargs.DestinationsNavTypeSerializer
 import com.ramcosta.composedestinations.navargs.NavTypeSerializer

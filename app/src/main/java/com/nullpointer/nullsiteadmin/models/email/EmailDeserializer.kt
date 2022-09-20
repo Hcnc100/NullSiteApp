@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.models
+package com.nullpointer.nullsiteadmin.models.email
 
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer

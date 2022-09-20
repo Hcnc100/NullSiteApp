@@ -16,7 +16,7 @@ import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.utils.sendEmail
 import com.nullpointer.nullsiteadmin.core.utils.shareViewModel
 import com.nullpointer.nullsiteadmin.core.utils.toFormat
-import com.nullpointer.nullsiteadmin.models.EmailContact
+import com.nullpointer.nullsiteadmin.models.email.EmailContact
 import com.nullpointer.nullsiteadmin.presentation.EmailsViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph

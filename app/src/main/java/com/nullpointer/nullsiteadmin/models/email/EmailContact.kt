@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.models
+package com.nullpointer.nullsiteadmin.models.email
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

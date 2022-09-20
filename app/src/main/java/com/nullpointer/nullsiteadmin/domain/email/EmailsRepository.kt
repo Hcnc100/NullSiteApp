@@ -1,6 +1,6 @@
 package com.nullpointer.nullsiteadmin.domain.email
 
-import com.nullpointer.nullsiteadmin.models.EmailContact
+import com.nullpointer.nullsiteadmin.models.email.EmailContact
 import kotlinx.coroutines.flow.Flow
 
 interface EmailsRepository {
