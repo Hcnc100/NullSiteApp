@@ -15,5 +15,7 @@ data class Project(
     val description: String = "",
     val urlImg: String = "",
     val urlRepo: String = "",
-    val lastUpdate: Date? = null
+    val createdAt: Date? = null,
+    val lastUpdate: Date? = null,
+    val isVisible: Boolean = false
 ) : Parcelable
