@@ -30,6 +30,7 @@ object EmailModule {
     @Singleton
     @Provides
     fun provideEmailRepository(
-        emailDataSource: EmailRemoteDataSource
-    ): EmailsRepoImpl = EmailsRepoImpl(emailDataSource)
+        emailRemoteDataSource: EmailRemoteDataSource,
+        emailLocalDataSource: EmailLocalDataSource
+    ): EmailsRepoImpl = EmailsRepoImpl(emailRemoteDataSource, emailLocalDataSource)
 }

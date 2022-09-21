@@ -23,6 +23,10 @@ class EmailsViewModel @Inject constructor(
     private val _errorEmail = Channel<Int>()
     val errorEmail = _errorEmail.receiveAsFlow()
 
+    init {
+        requestLastEmail(false)
+    }
+
     val listEmails = flow<Resource<List<EmailContact>>> {
         emailsRepository.listEmails.collect {
             emit(Resource.Success(it))
@@ -49,6 +53,13 @@ class EmailsViewModel @Inject constructor(
             Timber.e("Error to delete email $idEmail : $it")
             _errorEmail.trySend(R.string.error_deleter_email)
         }
+    )
+
+    fun requestLastEmail(
+        forceRefresh: Boolean = true
+    ) = launchSafeIO(
+        blockException = { Timber.e("Error request last email $it") },
+        blockIO = { emailsRepository.requestLastEmail(forceRefresh) }
     )
 
     fun markAsOpen(email: EmailContact) = launchSafeIO(

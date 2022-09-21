@@ -10,17 +10,26 @@ interface EmailDAO {
     @Query("SELECT * FROM emails ORDER by timestamp DESC")
     fun getListEmails(): Flow<List<EmailContact>>
 
-    @Delete
-    suspend fun deleterEmail(emailContact: EmailContact)
+    @Query("SELECT * FROM emails WHERE id = :idEmail LIMIT 1")
+    suspend fun getEmailById(idEmail: String): EmailContact?
 
-    @Delete
-    suspend fun deleterListEmails(listEmails: List<EmailContact>)
+    @Query("SELECT * FROM emails ORDER by timestamp DESC LIMIT 1")
+    suspend fun getMoreRecentEmail(): EmailContact?
+
+    @Query("SELECT * FROM emails ORDER by timestamp ASC LIMIT 1")
+    suspend fun getLastEmail(): EmailContact?
+
+    @Query("DELETE FROM emails WHERE id = :idEmail")
+    suspend fun deleterEmailById(idEmail: String)
+
+    @Query("DELETE FROM emails WHERE id in (:listIdEmails)")
+    suspend fun deleterListEmails(listIdEmails: List<String>)
 
     @Query("DELETE FROM emails")
     suspend fun deleterAllEmails()
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertEmail(emailContact: EmailContact)
+    @Update
+    suspend fun updateEmail(emailContact: EmailContact)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertListEmails(listEmails: List<EmailContact>)

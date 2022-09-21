@@ -5,6 +5,8 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import com.nullpointer.nullsiteadmin.core.utils.getLastObjects
+import com.nullpointer.nullsiteadmin.core.utils.getNewObjects
 import com.nullpointer.nullsiteadmin.models.email.EmailContact
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -34,6 +36,35 @@ class EmailRemoteDataSourceImpl : EmailRemoteDataSource {
                 }
             }
         awaitClose { listener.remove() }
+    }
+
+
+    override suspend fun getNewEmails(
+        includeStart: Boolean,
+        startWithId: String?,
+        numberResult: Long
+    ): List<EmailContact> {
+        return collectionEmail.getNewObjects(
+            nResults = numberResult,
+            startWithId = startWithId,
+            transform = ::fromDocument,
+            includeStart = includeStart,
+            fieldTimestamp = TIMESTAMP_FIELD
+        )
+    }
+
+    override suspend fun getLastEmails(
+        includeEnd: Boolean,
+        endWithId: String?,
+        numberResult: Long
+    ): List<EmailContact> {
+        return collectionEmail.getLastObjects(
+            endWithId = endWithId,
+            nResults = numberResult,
+            includeEnd = includeEnd,
+            transform = ::fromDocument,
+            fieldTimestamp = TIMESTAMP_FIELD
+        )
     }
 
     override suspend fun deleterEmail(idEmail: String) {

@@ -21,9 +21,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.compose.AsyncImagePainter
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.Query
 import com.valentinilk.shimmer.Shimmer
 import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.*
+import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -98,5 +102,66 @@ fun ViewModel.launchSafeIO(
         } finally {
             blockAfter(isForCancelled)
         }
+    }
+
+}
+
+suspend fun <T> CollectionReference.getNewObjects(
+    includeStart: Boolean,
+    fieldTimestamp: String,
+    startWithId: String? = null,
+    nResults: Long = Long.MAX_VALUE,
+    transform: (document: DocumentSnapshot) -> T?,
+): List<T> {
+    // * base query
+    var query = orderBy(fieldTimestamp, Query.Direction.DESCENDING)
+    if (startWithId != null) {
+        val refDocument = document(startWithId).get().await()
+        if (refDocument.exists()) {
+            query = if (includeStart)
+                query.startAt(refDocument) else query.startAfter(refDocument)
+        }
+    }
+    // * limit result or for default all
+    if (nResults != Long.MAX_VALUE) query = query.limit(nResults)
+    return query.get().await().documents.mapNotNull { transform(it) }
+}
+
+suspend fun <T> CollectionReference.getLastObjects(
+    includeEnd: Boolean,
+    fieldTimestamp: String,
+    endWithId: String? = null,
+    nResults: Long = Long.MAX_VALUE,
+    transform: (document: DocumentSnapshot) -> T?,
+    fieldQuery: Boolean = true
+): List<T> {
+    // * base query
+    val baseRequest = orderBy(fieldTimestamp, Query.Direction.DESCENDING)
+    var query = baseRequest
+    if (endWithId != null) {
+        val refDocument = document(endWithId).get().await()
+        if (refDocument.exists()) {
+            query = if (includeEnd)
+                query.endAt(refDocument) else query.endBefore(refDocument)
+        }
+    }
+    // * limit result or for default all
+    if (nResults != Long.MAX_VALUE) query = query.limit(nResults)
+
+    val previewDocuments = query.get().await().documents
+
+    return if (fieldQuery && previewDocuments.isNotEmpty() && previewDocuments.size < nResults) {
+        val newQuery = getNewObjects(
+            includeStart = false,
+            fieldTimestamp,
+            startWithId = previewDocuments.first().id,
+            nResults = nResults - previewDocuments.size,
+            transform = transform
+        )
+
+        previewDocuments.mapNotNull { transform(it) } + newQuery
+
+    } else {
+        previewDocuments.mapNotNull { transform(it) }
     }
 }

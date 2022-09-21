@@ -6,8 +6,13 @@ import kotlinx.coroutines.flow.Flow
 interface EmailLocalDataSource {
     val listEmail: Flow<List<EmailContact>>
 
-    suspend fun updateAllEmails(listEmails: List<EmailContact>)
-    suspend fun deleteListEmails(listEmails: List<EmailContact>)
-    suspend fun deleteEmail(email: EmailContact)
+    suspend fun updateAllEmails(listIdEmails: List<EmailContact>)
+    suspend fun insertListEmails(listEmails: List<EmailContact>)
+    suspend fun deleteListEmails(listIdEmails: List<String>)
+    suspend fun getEmailById(idEmail: String): EmailContact?
+    suspend fun getMoreRecentEmail(): EmailContact?
+    suspend fun updateEmail(email: EmailContact)
+    suspend fun getLastEmail(): EmailContact?
+    suspend fun deleteEmail(idEmail: String)
     suspend fun deleterAllEmails()
 }
