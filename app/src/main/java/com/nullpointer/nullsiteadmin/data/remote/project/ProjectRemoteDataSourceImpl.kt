@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
-class ProjectDataSourceImpl : ProjectDataSource {
+class ProjectDataSourceImpl : ProjectRemoteDataSource {
     companion object {
         private const val COLLECTION_PROJECTS = "last-projects"
     }

@@ -2,7 +2,7 @@ package com.nullpointer.nullsiteadmin.inject
 
 import android.content.Context
 import androidx.room.Room
-import com.nullpointer.nullsiteadmin.data.local.room.EmailDao
+import com.nullpointer.nullsiteadmin.data.local.room.EmailDAO
 import com.nullpointer.nullsiteadmin.data.local.room.NullSiteDatabase
 import dagger.Module
 import dagger.Provides
@@ -30,7 +30,7 @@ object DatabaseModule {
     @Provides
     fun provideEmailDAO(
         nullSiteDatabase: NullSiteDatabase
-    ): EmailDao = nullSiteDatabase.getEmailDao()
+    ): EmailDAO = nullSiteDatabase.getEmailDao()
 
 
 }

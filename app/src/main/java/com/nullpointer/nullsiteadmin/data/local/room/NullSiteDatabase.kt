@@ -18,5 +18,6 @@ abstract class NullSiteDatabase : RoomDatabase() {
         const val DATABASE_NAME = "nullsite.db"
     }
 
-    abstract fun getEmailDao(): EmailDao
+    abstract fun getEmailDao(): EmailDAO
+    abstract fun getProjectDao(): ProjectDAO
 }

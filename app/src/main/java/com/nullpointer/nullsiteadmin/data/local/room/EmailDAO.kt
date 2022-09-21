@@ -5,9 +5,9 @@ import com.nullpointer.nullsiteadmin.models.email.EmailContact
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface EmailDao {
+interface EmailDAO {
 
-    @Query("SELECT * FROM emails")
+    @Query("SELECT * FROM emails ORDER by timestamp DESC")
     fun getListEmails(): Flow<List<EmailContact>>
 
     @Delete

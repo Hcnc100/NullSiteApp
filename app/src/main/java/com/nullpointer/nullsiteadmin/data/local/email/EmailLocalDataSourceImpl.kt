@@ -1,11 +1,11 @@
 package com.nullpointer.nullsiteadmin.data.local.email
 
-import com.nullpointer.nullsiteadmin.data.local.room.EmailDao
+import com.nullpointer.nullsiteadmin.data.local.room.EmailDAO
 import com.nullpointer.nullsiteadmin.models.email.EmailContact
 import kotlinx.coroutines.flow.Flow
 
 class EmailLocalDataSourceImpl(
-    private val emailDao: EmailDao
+    private val emailDao: EmailDAO
 ) : EmailLocalDataSource {
     override val listEmail: Flow<List<EmailContact>> = emailDao.getListEmails()
 

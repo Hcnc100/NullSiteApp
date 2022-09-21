@@ -2,7 +2,7 @@ package com.nullpointer.nullsiteadmin.inject
 
 import com.nullpointer.nullsiteadmin.data.local.email.EmailLocalDataSource
 import com.nullpointer.nullsiteadmin.data.local.email.EmailLocalDataSourceImpl
-import com.nullpointer.nullsiteadmin.data.local.room.EmailDao
+import com.nullpointer.nullsiteadmin.data.local.room.EmailDAO
 import com.nullpointer.nullsiteadmin.data.remote.email.EmailRemoteDataSource
 import com.nullpointer.nullsiteadmin.data.remote.email.EmailRemoteDataSourceImpl
 import com.nullpointer.nullsiteadmin.domain.email.EmailsRepoImpl
@@ -19,7 +19,7 @@ object EmailModule {
     @Singleton
     @Provides
     fun provideEmailLocalDataSource(
-        emailDao: EmailDao
+        emailDao: EmailDAO
     ): EmailLocalDataSource = EmailLocalDataSourceImpl(emailDao)
 
     @Provides
