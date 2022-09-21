@@ -1,11 +1,11 @@
 package com.nullpointer.nullsiteadmin.domain.email
 
-import com.nullpointer.nullsiteadmin.data.remote.email.EmailDataSource
+import com.nullpointer.nullsiteadmin.data.remote.email.EmailRemoteDataSource
 import com.nullpointer.nullsiteadmin.models.email.EmailContact
 import kotlinx.coroutines.flow.Flow
 
 class EmailsRepoImpl(
-    private val emailDataSource: EmailDataSource
+    private val emailDataSource: EmailRemoteDataSource
 ) : EmailsRepository {
     override val listEmails: Flow<List<EmailContact>> = emailDataSource.getAllEmails()
 

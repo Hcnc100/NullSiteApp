@@ -1,6 +1,6 @@
 package com.nullpointer.nullsiteadmin.domain.settings
 
-import com.nullpointer.nullsiteadmin.data.local.SettingsDataSource
+import com.nullpointer.nullsiteadmin.data.local.settings.SettingsDataSource
 import com.nullpointer.nullsiteadmin.models.UserAuth
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

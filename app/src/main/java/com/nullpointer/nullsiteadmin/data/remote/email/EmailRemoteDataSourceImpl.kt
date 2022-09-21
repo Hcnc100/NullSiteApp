@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 
-class EmailDataSourceImpl : EmailDataSource {
+class EmailRemoteDataSourceImpl : EmailRemoteDataSource {
     companion object {
         private const val EMAil_COLLECTION = "emails"
         private const val TIMESTAMP_FIELD = "timestamp"

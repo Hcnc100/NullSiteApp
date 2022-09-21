@@ -1,6 +1,6 @@
 package com.nullpointer.nullsiteadmin.inject
 
-import com.nullpointer.nullsiteadmin.data.local.SettingsDataSource
+import com.nullpointer.nullsiteadmin.data.local.settings.SettingsDataSource
 import com.nullpointer.nullsiteadmin.data.remote.auth.AuthDataSource
 import com.nullpointer.nullsiteadmin.data.remote.auth.AuthDataSourceImpl
 import com.nullpointer.nullsiteadmin.domain.auth.AuthRepoImpl

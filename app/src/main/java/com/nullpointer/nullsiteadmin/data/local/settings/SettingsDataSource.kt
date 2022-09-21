@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.data.local
+package com.nullpointer.nullsiteadmin.data.local.settings
 
 import com.nullpointer.nullsiteadmin.models.UserAuth
 import kotlinx.coroutines.flow.Flow

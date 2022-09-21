@@ -1,7 +1,10 @@
 package com.nullpointer.nullsiteadmin.inject
 
-import com.nullpointer.nullsiteadmin.data.remote.email.EmailDataSource
-import com.nullpointer.nullsiteadmin.data.remote.email.EmailDataSourceImpl
+import com.nullpointer.nullsiteadmin.data.local.email.EmailLocalDataSource
+import com.nullpointer.nullsiteadmin.data.local.email.EmailLocalDataSourceImpl
+import com.nullpointer.nullsiteadmin.data.local.room.EmailDao
+import com.nullpointer.nullsiteadmin.data.remote.email.EmailRemoteDataSource
+import com.nullpointer.nullsiteadmin.data.remote.email.EmailRemoteDataSourceImpl
 import com.nullpointer.nullsiteadmin.domain.email.EmailsRepoImpl
 import dagger.Module
 import dagger.Provides
@@ -13,14 +16,20 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object EmailModule {
 
+    @Singleton
+    @Provides
+    fun provideEmailLocalDataSource(
+        emailDao: EmailDao
+    ): EmailLocalDataSource = EmailLocalDataSourceImpl(emailDao)
+
     @Provides
     @Singleton
-    fun provideEmailDataSource(): EmailDataSource =
-        EmailDataSourceImpl()
+    fun provideEmailRemoteDataSource(): EmailRemoteDataSource =
+        EmailRemoteDataSourceImpl()
 
     @Singleton
     @Provides
     fun provideEmailRepository(
-        emailDataSource: EmailDataSource
+        emailDataSource: EmailRemoteDataSource
     ): EmailsRepoImpl = EmailsRepoImpl(emailDataSource)
 }

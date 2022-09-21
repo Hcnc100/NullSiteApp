@@ -1,6 +1,6 @@
 package com.nullpointer.nullsiteadmin.domain.auth
 
-import com.nullpointer.nullsiteadmin.data.local.SettingsDataSource
+import com.nullpointer.nullsiteadmin.data.local.settings.SettingsDataSource
 import com.nullpointer.nullsiteadmin.data.remote.auth.AuthDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
