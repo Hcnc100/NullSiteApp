@@ -21,6 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.compose.AsyncImagePainter
+import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
@@ -164,4 +165,8 @@ suspend fun <T> CollectionReference.getLastObjects(
     } else {
         previewDocuments.mapNotNull { transform(it) }
     }
+}
+
+suspend fun List<Task<Void>>.awaitAll() {
+    this.forEach { it.await() }
 }

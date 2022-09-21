@@ -5,6 +5,7 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import com.nullpointer.nullsiteadmin.core.utils.awaitAll
 import com.nullpointer.nullsiteadmin.core.utils.getLastObjects
 import com.nullpointer.nullsiteadmin.core.utils.getNewObjects
 import com.nullpointer.nullsiteadmin.models.email.EmailContact
@@ -73,6 +74,13 @@ class EmailRemoteDataSourceImpl : EmailRemoteDataSource {
 
     override suspend fun markAsOpen(idEmail: String) {
         collectionEmail.document(idEmail).update(mapOf(IS_OPEN_FILED to true)).await()
+    }
+
+    override suspend fun deleterListEmails(listIds: List<String>) {
+        val listOperations = listIds.map {
+            collectionEmail.document(it).delete()
+        }
+        listOperations.awaitAll()
     }
 
     private fun fromDocument(document: DocumentSnapshot): EmailContact? {

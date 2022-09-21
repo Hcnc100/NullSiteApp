@@ -9,4 +9,5 @@ interface EmailsRepository {
     suspend fun deleterEmail(idEmail: String)
     suspend fun requestLastEmail(forceRefresh: Boolean): Int
     suspend fun concatenateEmails(): Int
+
 }
