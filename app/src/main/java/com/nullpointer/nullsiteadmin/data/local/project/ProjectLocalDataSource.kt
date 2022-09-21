@@ -8,4 +8,10 @@ interface ProjectLocalDataSource {
 
     suspend fun updateProject(project: Project)
     suspend fun insertProject(project: Project)
+    suspend fun insertListProjects(listProject: List<Project>)
+    suspend fun getMoreRecentProject(): Project?
+    suspend fun getLastProject(): Project?
+    suspend fun updateAllProjects(listProject: List<Project>)
+    suspend fun deleteProjectById(idProject: String)
+    suspend fun deleteListProjectById(listIdsProject: List<String>)
 }

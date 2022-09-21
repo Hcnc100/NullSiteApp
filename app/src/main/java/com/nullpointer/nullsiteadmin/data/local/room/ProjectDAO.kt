@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ProjectDAO {
 
-    @Query("SELECT * FROM projects ORDER BY lastUpdate DESC")
+    @Query("SELECT * FROM projects ORDER BY createdAt DESC")
     fun getListProjects(): Flow<List<Project>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -25,10 +25,18 @@ interface ProjectDAO {
     @Query("DELETE  FROM projects WHERE id IN (:listIds)")
     suspend fun deleterListProjectById(listIds: List<String>)
 
-    @Query("SELECT * FROM projects ORDER BY lastUpdate DESC LIMIT 1")
+    @Query("SELECT * FROM projects ORDER BY createdAt DESC LIMIT 1")
     suspend fun getMoreRecentProject(): Project?
 
-    @Query("SELECT * FROM projects ORDER BY lastUpdate ASC LIMIT 1")
+    @Query("SELECT * FROM projects ORDER BY createdAt ASC LIMIT 1")
     suspend fun getLastProject(): Project?
 
+    @Query("DELETE FROM projects")
+    suspend fun deleterAllProjects()
+
+    @Transaction
+    suspend fun updateAllProjects(listProjects: List<Project>) {
+        deleterAllProjects()
+        insertListProjects(listProjects)
+    }
 }

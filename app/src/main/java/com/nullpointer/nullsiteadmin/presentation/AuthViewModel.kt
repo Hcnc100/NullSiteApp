@@ -74,7 +74,7 @@ class AuthViewModel @Inject constructor(
     private fun verifyTokenMessaging() = launchSafeIO(
         blockIO = { authRepository.verifyTokenMessaging() },
         blockException = {
-            Timber.e("Error yto update owner token $it")
+            Timber.e("Error to update owner token $it")
         }
     )
 }

@@ -107,7 +107,7 @@ fun ViewModel.launchSafeIO(
 
 }
 
-suspend fun <T> CollectionReference.getNewObjects(
+suspend fun <T> CollectionReference.concatenateObjects(
     includeStart: Boolean,
     fieldTimestamp: String,
     startWithId: String? = null,
@@ -128,7 +128,7 @@ suspend fun <T> CollectionReference.getNewObjects(
     return query.get().await().documents.mapNotNull { transform(it) }
 }
 
-suspend fun <T> CollectionReference.getLastObjects(
+suspend fun <T> CollectionReference.newObjects(
     includeEnd: Boolean,
     fieldTimestamp: String,
     endWithId: String? = null,
@@ -152,7 +152,7 @@ suspend fun <T> CollectionReference.getLastObjects(
     val previewDocuments = query.get().await().documents
 
     return if (fieldQuery && previewDocuments.isNotEmpty() && previewDocuments.size < nResults) {
-        val newQuery = getNewObjects(
+        val newQuery = concatenateObjects(
             includeStart = false,
             fieldTimestamp,
             startWithId = previewDocuments.first().id,
@@ -169,4 +169,13 @@ suspend fun <T> CollectionReference.getLastObjects(
 
 suspend fun List<Task<Void>>.awaitAll() {
     this.forEach { it.await() }
+}
+
+fun DocumentSnapshot.getTimeEstimate(
+    timestampField: String
+): Date? {
+    return getTimestamp(
+        /* field = */ timestampField,
+        /* serverTimestampBehavior = */ DocumentSnapshot.ServerTimestampBehavior.ESTIMATE
+    )?.toDate()
 }

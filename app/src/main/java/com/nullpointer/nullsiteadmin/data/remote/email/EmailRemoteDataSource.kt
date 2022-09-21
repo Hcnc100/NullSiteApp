@@ -8,11 +8,11 @@ interface EmailRemoteDataSource {
     suspend fun deleterEmail(idEmail: String)
     suspend fun markAsOpen(idEmail: String)
     suspend fun deleterListEmails(listIds: List<String>)
-    suspend fun getNewEmails(
-        includeStart: Boolean, startWithId: String? = null, numberResult: Long
+    suspend fun getConcatenateEmails(
+        includeEmail: Boolean, emailId: String? = null, numberResult: Long
     ): List<EmailContact>
 
-    suspend fun getLastEmails(
-        includeEnd: Boolean, endWithId: String? = null, numberResult: Long
+    suspend fun getNewEmails(
+        includeEmail: Boolean, numberResult: Long, emailId: String?
     ): List<EmailContact>
 }

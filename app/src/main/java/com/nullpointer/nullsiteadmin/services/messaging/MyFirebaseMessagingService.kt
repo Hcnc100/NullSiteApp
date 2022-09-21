@@ -68,7 +68,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             } catch (e: Exception) {
                 when (e) {
                     is CancellationException -> throw e
-                    else -> Timber.e("$message: $e ->$message")
+                    else -> Timber.e("$message: $e")
                 }
             }
         }

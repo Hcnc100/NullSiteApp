@@ -23,6 +23,10 @@ class ProjectViewModel @Inject constructor(
     private val _messageErrorProject = Channel<Int>()
     val messageErrorProject = _messageErrorProject.receiveAsFlow()
 
+    init {
+        requestNewProjects(false)
+    }
+
     val listProject = flow<Resource<List<Project>>> {
         projectRepository.listProjects.collect {
             emit(Resource.Success(it))
@@ -48,6 +52,16 @@ class ProjectViewModel @Inject constructor(
         blockException = {
             _messageErrorProject.trySend(R.string.message_error_upload_project)
             Timber.e("Failed upload project $it")
+        }
+    )
+
+    fun requestNewProjects(forceRefresh: Boolean = true) = launchSafeIO(
+        blockIO = {
+            val size = projectRepository.requestLastProject(forceRefresh)
+            Timber.d("new project size: $size")
+        },
+        blockException = {
+            Timber.e("Error request last projects $it")
         }
     )
 }

@@ -38,7 +38,8 @@ object ProjectModule {
     @Singleton
     @Provides
     fun provideProjectRepository(
-        projectDataSource: ProjectRemoteDataSource
-    ): ProjectRepoImpl = ProjectRepoImpl(projectDataSource)
+        projectRemoteDataSource: ProjectRemoteDataSource,
+        projectLocalDataSource: ProjectLocalDataSource
+    ): ProjectRepoImpl = ProjectRepoImpl(projectLocalDataSource, projectRemoteDataSource)
 
 }

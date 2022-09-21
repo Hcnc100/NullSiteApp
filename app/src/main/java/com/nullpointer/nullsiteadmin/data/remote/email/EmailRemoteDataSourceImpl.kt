@@ -6,8 +6,9 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.nullpointer.nullsiteadmin.core.utils.awaitAll
-import com.nullpointer.nullsiteadmin.core.utils.getLastObjects
-import com.nullpointer.nullsiteadmin.core.utils.getNewObjects
+import com.nullpointer.nullsiteadmin.core.utils.concatenateObjects
+import com.nullpointer.nullsiteadmin.core.utils.getTimeEstimate
+import com.nullpointer.nullsiteadmin.core.utils.newObjects
 import com.nullpointer.nullsiteadmin.models.email.EmailContact
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -40,29 +41,29 @@ class EmailRemoteDataSourceImpl : EmailRemoteDataSource {
     }
 
 
-    override suspend fun getNewEmails(
-        includeStart: Boolean,
-        startWithId: String?,
+    override suspend fun getConcatenateEmails(
+        includeEmail: Boolean,
+        emailId: String?,
         numberResult: Long
     ): List<EmailContact> {
-        return collectionEmail.getNewObjects(
+        return collectionEmail.concatenateObjects(
             nResults = numberResult,
-            startWithId = startWithId,
+            startWithId = emailId,
             transform = ::fromDocument,
-            includeStart = includeStart,
+            includeStart = includeEmail,
             fieldTimestamp = TIMESTAMP_FIELD
         )
     }
 
-    override suspend fun getLastEmails(
-        includeEnd: Boolean,
-        endWithId: String?,
-        numberResult: Long
+    override suspend fun getNewEmails(
+        includeEmail: Boolean,
+        numberResult: Long,
+        emailId: String?
     ): List<EmailContact> {
-        return collectionEmail.getLastObjects(
-            endWithId = endWithId,
+        return collectionEmail.newObjects(
+            endWithId = emailId,
             nResults = numberResult,
-            includeEnd = includeEnd,
+            includeEnd = includeEmail,
             transform = ::fromDocument,
             fieldTimestamp = TIMESTAMP_FIELD
         )
@@ -86,10 +87,7 @@ class EmailRemoteDataSourceImpl : EmailRemoteDataSource {
     private fun fromDocument(document: DocumentSnapshot): EmailContact? {
         return try {
             document.toObject<EmailContact>()?.copy(
-                timestamp = document.getTimestamp(
-                    TIMESTAMP_FIELD,
-                    DocumentSnapshot.ServerTimestampBehavior.ESTIMATE
-                )?.toDate(),
+                timestamp = document.getTimeEstimate(TIMESTAMP_FIELD),
                 id = document.id
             )
         } catch (e: Exception) {
