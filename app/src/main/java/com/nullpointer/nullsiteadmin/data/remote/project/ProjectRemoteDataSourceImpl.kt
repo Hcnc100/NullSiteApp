@@ -6,9 +6,9 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.nullpointer.nullsiteadmin.core.utils.awaitAll
-import com.nullpointer.nullsiteadmin.core.utils.concatenateObjects
+import com.nullpointer.nullsiteadmin.core.utils.getConcatenateObjects
+import com.nullpointer.nullsiteadmin.core.utils.getNewObjects
 import com.nullpointer.nullsiteadmin.core.utils.getTimeEstimate
-import com.nullpointer.nullsiteadmin.core.utils.newObjects
 import com.nullpointer.nullsiteadmin.models.Project
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -64,7 +64,7 @@ class ProjectDataSourceImpl : ProjectRemoteDataSource {
         startWithId: String?,
         numberResult: Long
     ): List<Project> {
-        return refProjects.newObjects(
+        return refProjects.getNewObjects(
             includeEnd = false,
             fieldTimestamp = TIMESTAMP_CREATE,
             endWithId = startWithId,
@@ -78,7 +78,7 @@ class ProjectDataSourceImpl : ProjectRemoteDataSource {
         startWithId: String?,
         numberResult: Long
     ): List<Project> {
-        return refProjects.concatenateObjects(
+        return refProjects.getConcatenateObjects(
             includeStart = true,
             fieldTimestamp = TIMESTAMP_CREATE,
             startWithId = startWithId,

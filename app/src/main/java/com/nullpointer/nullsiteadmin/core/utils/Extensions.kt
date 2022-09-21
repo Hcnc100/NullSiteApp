@@ -107,7 +107,7 @@ fun ViewModel.launchSafeIO(
 
 }
 
-suspend fun <T> CollectionReference.concatenateObjects(
+suspend fun <T> CollectionReference.getConcatenateObjects(
     includeStart: Boolean,
     fieldTimestamp: String,
     startWithId: String? = null,
@@ -128,13 +128,13 @@ suspend fun <T> CollectionReference.concatenateObjects(
     return query.get().await().documents.mapNotNull { transform(it) }
 }
 
-suspend fun <T> CollectionReference.newObjects(
+suspend fun <T> CollectionReference.getNewObjects(
     includeEnd: Boolean,
     fieldTimestamp: String,
     endWithId: String? = null,
+    fieldQuery: Boolean = true,
     nResults: Long = Long.MAX_VALUE,
-    transform: (document: DocumentSnapshot) -> T?,
-    fieldQuery: Boolean = true
+    transform: (document: DocumentSnapshot) -> T?
 ): List<T> {
     // * base query
     val baseRequest = orderBy(fieldTimestamp, Query.Direction.DESCENDING)
@@ -152,7 +152,7 @@ suspend fun <T> CollectionReference.newObjects(
     val previewDocuments = query.get().await().documents
 
     return if (fieldQuery && previewDocuments.isNotEmpty() && previewDocuments.size < nResults) {
-        val newQuery = concatenateObjects(
+        val newQuery = getConcatenateObjects(
             includeStart = false,
             fieldTimestamp,
             startWithId = previewDocuments.first().id,

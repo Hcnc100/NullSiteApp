@@ -6,9 +6,9 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.nullpointer.nullsiteadmin.core.utils.awaitAll
-import com.nullpointer.nullsiteadmin.core.utils.concatenateObjects
+import com.nullpointer.nullsiteadmin.core.utils.getConcatenateObjects
+import com.nullpointer.nullsiteadmin.core.utils.getNewObjects
 import com.nullpointer.nullsiteadmin.core.utils.getTimeEstimate
-import com.nullpointer.nullsiteadmin.core.utils.newObjects
 import com.nullpointer.nullsiteadmin.models.email.EmailContact
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -46,7 +46,7 @@ class EmailRemoteDataSourceImpl : EmailRemoteDataSource {
         emailId: String?,
         numberResult: Long
     ): List<EmailContact> {
-        return collectionEmail.concatenateObjects(
+        return collectionEmail.getConcatenateObjects(
             nResults = numberResult,
             startWithId = emailId,
             transform = ::fromDocument,
@@ -60,7 +60,7 @@ class EmailRemoteDataSourceImpl : EmailRemoteDataSource {
         numberResult: Long,
         emailId: String?
     ): List<EmailContact> {
-        return collectionEmail.newObjects(
+        return collectionEmail.getNewObjects(
             endWithId = emailId,
             nResults = numberResult,
             includeEnd = includeEmail,
