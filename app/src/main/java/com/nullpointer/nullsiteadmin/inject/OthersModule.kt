@@ -4,7 +4,6 @@ import android.content.Context
 import com.nullpointer.nullsiteadmin.data.local.settings.SettingsDataSource
 import com.nullpointer.nullsiteadmin.data.local.settings.SettingsDataSourceImpl
 import com.nullpointer.nullsiteadmin.domain.compress.CompressImgRepoImpl
-import com.nullpointer.nullsiteadmin.domain.compress.CompressImgRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,7 +24,7 @@ object OthersModule {
     @Provides
     fun provideCompress(
         @ApplicationContext context: Context
-    ): CompressImgRepository = CompressImgRepoImpl(context)
+    ): CompressImgRepoImpl = CompressImgRepoImpl(context)
 
 
 }
