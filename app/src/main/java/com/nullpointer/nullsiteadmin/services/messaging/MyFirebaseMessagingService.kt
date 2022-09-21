@@ -5,6 +5,7 @@ import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.nullpointer.nullsiteadmin.domain.auth.AuthRepository
+import com.nullpointer.nullsiteadmin.domain.email.EmailsRepository
 import com.nullpointer.nullsiteadmin.models.email.EmailContact
 import com.nullpointer.nullsiteadmin.models.email.EmailDeserializer
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,6 +29,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     @Inject
     lateinit var authRepository: AuthRepository
 
+    @Inject
+    lateinit var emailRepository: EmailsRepository
+
     override fun onCreate() {
         super.onCreate()
         safeLaunchTokenOperation {
@@ -49,6 +53,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             try {
                 val email = gson.fromJson(message.data["notify"], EmailContact::class.java)
                 notifyHelper.showNotifyForMessage(email)
+                emailRepository.requestLastEmail(true)
             } catch (e: Exception) {
                 Timber.e("Error to notify $e")
             }

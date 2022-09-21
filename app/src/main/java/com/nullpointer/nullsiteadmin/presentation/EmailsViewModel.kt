@@ -59,7 +59,10 @@ class EmailsViewModel @Inject constructor(
         forceRefresh: Boolean = true
     ) = launchSafeIO(
         blockException = { Timber.e("Error request last email $it") },
-        blockIO = { emailsRepository.requestLastEmail(forceRefresh) }
+        blockIO = {
+            val sizeRequest = emailsRepository.requestLastEmail(forceRefresh)
+            Timber.d("News emails receiver $sizeRequest")
+        }
     )
 
     fun markAsOpen(email: EmailContact) = launchSafeIO(
