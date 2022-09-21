@@ -18,12 +18,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     private val job = SupervisorJob()
 
-    private val notifyHelper by lazy {
-        NotifyMessagingHelper(this)
-    }
-    private val gson by lazy {
-        createGsonBuilder()
-    }
+    private val notifyHelper by lazy { NotifyMessagingHelper(this) }
+    private val gson by lazy { createGsonBuilder() }
 
 
     @Inject
@@ -34,7 +30,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onCreate() {
         super.onCreate()
-        safeLaunchTokenOperation {
+        safeLaunchTokenOperation(message = "Error update token in services") {
             authRepository.verifyTokenMessaging()
         }
     }
@@ -42,21 +38,17 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        safeLaunchTokenOperation {
+        safeLaunchTokenOperation("Error update token when update token") {
             authRepository.updateTokenUser(token = token)
         }
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
-        CoroutineScope(job).launch(Dispatchers.IO) {
-            try {
-                val email = gson.fromJson(message.data["notify"], EmailContact::class.java)
-                notifyHelper.showNotifyForMessage(email)
-                emailRepository.requestLastEmail(true)
-            } catch (e: Exception) {
-                Timber.e("Error to notify $e")
-            }
+        safeLaunchTokenOperation("Error when process new message $message") {
+            val email = gson.fromJson(message.data["notify"], EmailContact::class.java)
+            notifyHelper.showNotifyForMessage(email)
+            emailRepository.requestLastEmail(true)
         }
     }
 
@@ -67,6 +59,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun safeLaunchTokenOperation(
+        message: String,
         callToken: suspend () -> Unit
     ) {
         CoroutineScope(job).launch(Dispatchers.IO) {
@@ -75,11 +68,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             } catch (e: Exception) {
                 when (e) {
                     is CancellationException -> throw e
-                    is NullPointerException -> Timber.e("Error upload, user is maybe null")
-                    else -> Timber.e("Unknown error token services $e")
+                    else -> Timber.e("$message: $e ->$message")
                 }
             }
         }
     }
-
 }
