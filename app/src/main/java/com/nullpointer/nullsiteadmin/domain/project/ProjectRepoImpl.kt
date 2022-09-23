@@ -18,13 +18,15 @@ class ProjectRepoImpl(
     override val listProjects: Flow<List<Project>> = projectLocalDataSource.listProject
 
     override suspend fun editProject(project: Project) {
-        projectRemoteDataSource.editProject(project)
-        projectLocalDataSource.updateProject(project)
+        val projectUpdate = projectRemoteDataSource.editProject(project)
+        projectUpdate?.let { projectLocalDataSource.updateProject(project) }
+
     }
 
     override suspend fun insertProject(project: Project) {
-        projectRemoteDataSource.insertProject(project)
-        projectLocalDataSource.insertProject(project)
+        val projectUpdate = projectRemoteDataSource.insertProject(project)
+        projectUpdate?.let { projectLocalDataSource.insertProject(project) }
+
     }
 
     override suspend fun deleterListProjectById(listIdProject: List<String>) {

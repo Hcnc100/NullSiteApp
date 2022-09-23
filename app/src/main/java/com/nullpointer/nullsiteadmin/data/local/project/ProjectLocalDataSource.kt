@@ -14,4 +14,5 @@ interface ProjectLocalDataSource {
     suspend fun updateAllProjects(listProject: List<Project>)
     suspend fun deleteProjectById(idProject: String)
     suspend fun deleteListProjectById(listIdsProject: List<String>)
+    suspend fun deleterAllProjects()
 }

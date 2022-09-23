@@ -32,4 +32,7 @@ class ProjectLocalDataSourceImpl(
 
     override suspend fun deleteProjectById(idProject: String) =
         projectDAO.deleterProjectById(idProject)
+
+    override suspend fun deleterAllProjects() =
+        projectDAO.deleterAllProjects()
 }

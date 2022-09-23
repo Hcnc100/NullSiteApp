@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.first
 
 class AuthRepoImpl(
     private val authDataSource: AuthDataSource,
-    private val settingsDataSource: SettingsDataSource
+    private val settingsDataSource: SettingsDataSource,
 ) : AuthRepository {
 
 
@@ -25,15 +25,15 @@ class AuthRepoImpl(
 
     override suspend fun logout() {
         authDataSource.logout()
-        settingsDataSource.clearData()
     }
 
-    override suspend fun verifyTokenMessaging() {
+    override suspend fun verifyTokenMessaging(): Boolean {
         val localToken = settingsDataSource.getUserAuth().first().tokenMsg
         val currentToken = authDataSource.getUserToken()
         if (localToken != currentToken) {
             authDataSource.addingTokenUser(currentToken)
             settingsDataSource.updateTokenMsg(currentToken)
         }
+        return localToken != currentToken
     }
 }

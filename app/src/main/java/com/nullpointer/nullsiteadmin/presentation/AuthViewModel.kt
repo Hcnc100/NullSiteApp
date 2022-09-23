@@ -9,6 +9,8 @@ import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.auth.AuthRepository
+import com.nullpointer.nullsiteadmin.domain.deleter.DeleterInfoRepository
+import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepository
 import com.nullpointer.nullsiteadmin.models.UserCredentials
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +21,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val infoUserRepository: InfoUserRepository,
+    private val deleterInfoRepository: DeleterInfoRepository
 ) : ViewModel() {
 
     private val _messageErrorAuth = Channel<Int>()
@@ -60,6 +64,7 @@ class AuthViewModel @Inject constructor(
                 email = userCredentials.email,
                 password = userCredentials.password
             )
+            infoUserRepository.requestLastPersonalInfo(true)
         },
         blockException = {
             _messageErrorAuth.trySend(R.string.error_authenticated)
@@ -69,10 +74,14 @@ class AuthViewModel @Inject constructor(
 
     fun logOut() = launchSafeIO {
         authRepository.logout()
+        deleterInfoRepository.deleterAllInformation()
     }
 
     private fun verifyTokenMessaging() = launchSafeIO(
-        blockIO = { authRepository.verifyTokenMessaging() },
+        blockIO = {
+            val isTokenUpdated = authRepository.verifyTokenMessaging()
+            if (isTokenUpdated) Timber.d("Se actualizo el token")
+        },
         blockException = {
             Timber.e("Error to update owner token $it")
         }

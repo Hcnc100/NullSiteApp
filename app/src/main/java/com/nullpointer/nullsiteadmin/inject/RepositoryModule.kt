@@ -4,6 +4,8 @@ import com.nullpointer.nullsiteadmin.domain.auth.AuthRepoImpl
 import com.nullpointer.nullsiteadmin.domain.auth.AuthRepository
 import com.nullpointer.nullsiteadmin.domain.compress.CompressImgRepoImpl
 import com.nullpointer.nullsiteadmin.domain.compress.CompressImgRepository
+import com.nullpointer.nullsiteadmin.domain.deleter.DeleterInfoRepository
+import com.nullpointer.nullsiteadmin.domain.deleter.DeleterInfoRepositoryImpl
 import com.nullpointer.nullsiteadmin.domain.email.EmailsRepoImpl
 import com.nullpointer.nullsiteadmin.domain.email.EmailsRepository
 import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepoImpl
@@ -57,4 +59,10 @@ abstract class RepositoryModule {
     abstract fun provideCompressRepository(
         compressRepoImpl: CompressImgRepoImpl
     ): CompressImgRepository
+
+    @Binds
+    @Singleton
+    abstract fun provideDeleterInfo(
+        deleterInfoRepoImpl: DeleterInfoRepositoryImpl
+    ): DeleterInfoRepository
 }

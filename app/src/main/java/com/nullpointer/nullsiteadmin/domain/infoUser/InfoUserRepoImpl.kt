@@ -5,6 +5,7 @@ import com.nullpointer.nullsiteadmin.data.remote.infoUser.InfoUserRemoteDataSour
 import com.nullpointer.nullsiteadmin.models.PersonalInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import timber.log.Timber
 
 class InfoUserRepoImpl(
     private val infoUserLocalDataSource: InfoUserLocalDataSource,
@@ -19,11 +20,17 @@ class InfoUserRepoImpl(
     }
 
 
-    override suspend fun requestLastPersonalInfo() {
-        val lastPersonalInfo = infoUserLocalDataSource.getPersonalInfo().first()
+    override suspend fun requestLastPersonalInfo(forceRefresh: Boolean): Boolean {
+        val lastPersonalInfo = if (forceRefresh)
+            null else infoUserLocalDataSource.getPersonalInfo().first()
         val newPersonalInfo = infoUserRemoteDataSource.getMoreRecentPersonalInfo(
-            timestamp = lastPersonalInfo.lastUpdate
+            timestamp = lastPersonalInfo?.lastUpdate
         )
-        newPersonalInfo?.let { infoUserLocalDataSource.updatePersonalInfo(it) }
+
+        newPersonalInfo?.let {
+            Timber.d("New personal info: $it")
+            infoUserLocalDataSource.updatePersonalInfo(it)
+        }
+        return newPersonalInfo != null
     }
 }

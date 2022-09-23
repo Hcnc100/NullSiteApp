@@ -7,5 +7,5 @@ interface AuthRepository {
     suspend fun updateTokenUser(token: String)
     suspend fun authUserWithEmailAndPassword(email: String, password: String)
     suspend fun logout()
-    suspend fun verifyTokenMessaging()
+    suspend fun verifyTokenMessaging(): Boolean
 }

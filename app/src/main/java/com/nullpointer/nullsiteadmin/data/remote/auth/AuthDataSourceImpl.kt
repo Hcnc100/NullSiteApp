@@ -7,6 +7,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
 import com.nullpointer.nullsiteadmin.models.UserAuth
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 
 class AuthDataSourceImpl : AuthDataSource {
 
@@ -85,7 +86,26 @@ class AuthDataSourceImpl : AuthDataSource {
         )
     }
 
+    private suspend fun deleteTokenAuth() {
+        try {
+            val idDocument = auth.currentUser!!.uid
+            val token = Firebase.messaging.token.await()
+            val refToken = refCollectionTokens.document(idDocument)
+            refToken.update(
+                /* field = */
+                "$FIELD_ARRAY_TOKENS.$token",
+                /* value = */
+                FieldValue.delete(),
+            ).await()
+        } catch (e: Exception) {
+            Timber.e("Error deleter token $e")
+        }
+    }
 
-    override suspend fun logout() = auth.signOut()
+    override suspend fun logout() {
+        deleteTokenAuth()
+        auth.signOut()
+    }
+
     override suspend fun getUserToken(): String = messaging.token.await()
 }

@@ -7,5 +7,5 @@ interface InfoUserRepository {
 
     val myPersonalInfo: Flow<PersonalInfo>
     suspend fun updatePersonalInfo(personalInfo: PersonalInfo)
-    suspend fun requestLastPersonalInfo()
+    suspend fun requestLastPersonalInfo(forceRefresh: Boolean): Boolean
 }

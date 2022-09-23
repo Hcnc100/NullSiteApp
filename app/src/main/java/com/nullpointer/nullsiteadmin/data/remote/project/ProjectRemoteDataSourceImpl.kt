@@ -1,22 +1,15 @@
 package com.nullpointer.nullsiteadmin.data.remote.project
 
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import com.nullpointer.nullsiteadmin.core.utils.awaitAll
-import com.nullpointer.nullsiteadmin.core.utils.getConcatenateObjects
-import com.nullpointer.nullsiteadmin.core.utils.getNewObjects
-import com.nullpointer.nullsiteadmin.core.utils.getTimeEstimate
+import com.nullpointer.nullsiteadmin.core.utils.*
 import com.nullpointer.nullsiteadmin.models.Project
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 
-class ProjectDataSourceImpl : ProjectRemoteDataSource {
+class ProjectRemoteDataSourceImpl : ProjectRemoteDataSource {
     companion object {
         private const val COLLECTION_PROJECTS = "last-projects"
         private const val TIMESTAMP_CREATE = "createdAt"
@@ -25,27 +18,18 @@ class ProjectDataSourceImpl : ProjectRemoteDataSource {
 
     private val refProjects = Firebase.firestore.collection(COLLECTION_PROJECTS)
 
-    override fun getListProject(): Flow<List<Project>> = callbackFlow {
-        val listener = refProjects.addSnapshotListener { value, error ->
-            error?.let { channel.close(it) }
-            try {
-                val list = value!!.documents.mapNotNull(::fromDocument)
-                trySend(list)
-            } catch (e: Exception) {
-                channel.close(e)
-            }
-        }
-        awaitClose { listener.remove() }
+
+    override suspend fun insertProject(project: Project): Project? {
+        val projectMap = project.serializeToMap(TIMESTAMP_UPDATE, TIMESTAMP_CREATE)
+        val document = refProjects.add(projectMap).await()
+        return fromDocument(document.get().await())
     }
 
-
-    override suspend fun insertProject(project: Project): String {
-        val document = refProjects.add(project).await()
-        return document.id
-    }
-
-    override suspend fun editProject(project: Project) {
-        refProjects.document(project.id).update(project.toMap()).await()
+    override suspend fun editProject(project: Project): Project? {
+        val projectMap = project.serializeToMap(TIMESTAMP_UPDATE)
+        val refCurrentProject = refProjects.document(project.id)
+        refCurrentProject.update(projectMap).await()
+        return fromDocument(refCurrentProject.get().await())
     }
 
     override suspend fun deleterProject(idProject: String) {
@@ -66,7 +50,7 @@ class ProjectDataSourceImpl : ProjectRemoteDataSource {
     ): List<Project> {
         return refProjects.getNewObjects(
             includeEnd = false,
-            fieldTimestamp = TIMESTAMP_CREATE,
+            fieldTimestamp = TIMESTAMP_UPDATE,
             endWithId = startWithId,
             nResults = numberResult,
             transform = ::fromDocument,
@@ -98,18 +82,6 @@ class ProjectDataSourceImpl : ProjectRemoteDataSource {
             Timber.e("Error cast ${document.id} to email")
             null
         }
-    }
-
-
-    private fun Project.toMap(): Map<String, Any> {
-        return mapOf(
-            "name" to name,
-            "description" to description,
-            "urlRepo" to urlRepo,
-            "urlImg" to urlImg,
-            "lastUpdate" to FieldValue.serverTimestamp(),
-            "isVisible" to isVisible
-        )
     }
 }
 

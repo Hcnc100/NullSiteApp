@@ -58,7 +58,7 @@ class ProjectViewModel @Inject constructor(
     fun requestNewProjects(forceRefresh: Boolean = true) = launchSafeIO(
         blockIO = {
             val size = projectRepository.requestLastProject(forceRefresh)
-            Timber.d("new project size: $size")
+            Timber.d("new projects size: $size")
         },
         blockException = {
             Timber.e("Error request last projects $it")
