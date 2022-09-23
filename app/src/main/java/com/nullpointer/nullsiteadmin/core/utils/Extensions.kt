@@ -128,6 +128,24 @@ suspend fun <T> CollectionReference.getConcatenateObjects(
     return query.get().await().documents.mapNotNull { transform(it) }
 }
 
+suspend fun <T> CollectionReference.getNewObject(
+    timestamp: Date?,
+    fieldTimestamp: String,
+    transform: (document: DocumentSnapshot) -> T?
+): T? {
+    val baseRequest = orderBy(fieldTimestamp, Query.Direction.DESCENDING)
+    var query = baseRequest
+    if (timestamp != null) {
+        query = baseRequest.whereGreaterThan(fieldTimestamp, timestamp)
+    }
+    val response = query.limit(1).get().await().documents
+    return if (response.isEmpty()) {
+        null
+    } else {
+        transform(response.first())
+    }
+}
+
 suspend fun <T> CollectionReference.getNewObjects(
     includeEnd: Boolean,
     fieldTimestamp: String,

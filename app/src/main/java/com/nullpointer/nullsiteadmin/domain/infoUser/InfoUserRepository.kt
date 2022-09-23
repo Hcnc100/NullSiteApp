@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface InfoUserRepository {
 
-    val myPersonalInfo:Flow<PersonalInfo>
-
-    suspend fun updatePersonalInfo(personalInfo:PersonalInfo)
+    val myPersonalInfo: Flow<PersonalInfo>
+    suspend fun updatePersonalInfo(personalInfo: PersonalInfo)
+    suspend fun requestLastPersonalInfo()
 }

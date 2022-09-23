@@ -23,6 +23,16 @@ class InfoUserViewModel @Inject constructor(
     private val _messageError = Channel<Int>()
     val messageError = _messageError.receiveAsFlow()
 
+    init {
+        requestMoreRecentInformation()
+    }
+
+
+    fun requestMoreRecentInformation() = launchSafeIO(
+        blockException = { Timber.d("Error update info $it") },
+        blockIO = { infoUserRepository.requestLastPersonalInfo() }
+    )
+
     val infoUser = flow<Resource<PersonalInfo>> {
         infoUserRepository.myPersonalInfo.collect {
             emit(Resource.Success(it))

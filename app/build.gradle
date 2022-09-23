@@ -4,6 +4,7 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
+//    id 'kotlinx-serialization' version '1.4.10'
     id "com.google.devtools.ksp" version "1.7.0-1.0.6"
     id 'com.google.gms.google-services'
 }
@@ -141,4 +142,6 @@ dependencies {
 
     // * gson
     implementation 'com.google.code.gson:gson:2.8.9'
+//    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
+
 }

@@ -33,7 +33,7 @@ object OthersModule {
             corruptionHandler = ReplaceFileCorruptionHandler(
                 produceNewData = { emptyPreferences() }
             ),
-            produceFile = { appContext.preferencesDataStoreFile(NAME_SETTINGS) }
+            produceFile = { appContext.preferencesDataStoreFile(NAME_SETTINGS) },
         )
     }
 

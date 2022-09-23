@@ -9,10 +9,12 @@ class AuthRepoImpl(
     private val authDataSource: AuthDataSource,
     private val settingsDataSource: SettingsDataSource
 ) : AuthRepository {
+
+
     override val isUserAuth: Flow<Boolean> = settingsDataSource.isAuthUser()
 
     override suspend fun updateTokenUser(token: String) {
-        authDataSource.updateTokenUser(token)
+        authDataSource.addingTokenUser(token)
         settingsDataSource.updateTokenMsg(token)
     }
 
@@ -30,7 +32,7 @@ class AuthRepoImpl(
         val localToken = settingsDataSource.getUserAuth().first().tokenMsg
         val currentToken = authDataSource.getUserToken()
         if (localToken != currentToken) {
-            authDataSource.updateTokenUser(currentToken)
+            authDataSource.addingTokenUser(currentToken)
             settingsDataSource.updateTokenMsg(currentToken)
         }
     }
