@@ -14,20 +14,27 @@ class ProjectRemoteDataSourceImpl : ProjectRemoteDataSource {
         private const val COLLECTION_PROJECTS = "last-projects"
         private const val TIMESTAMP_CREATE = "createdAt"
         private const val TIMESTAMP_UPDATE = "lastUpdate"
+        private const val ID_PROJECT = "idProject"
     }
 
     private val refProjects = Firebase.firestore.collection(COLLECTION_PROJECTS)
 
 
     override suspend fun insertProject(project: Project): Project? {
-        val projectMap = project.serializeToMap(TIMESTAMP_UPDATE, TIMESTAMP_CREATE)
+        val projectMap = project.toMap(
+            listTimestampFields = listOf(TIMESTAMP_UPDATE, TIMESTAMP_CREATE),
+            listIgnoredFields = listOf(ID_PROJECT)
+        )
         val document = refProjects.add(projectMap).await()
         return fromDocument(document.get().await())
     }
 
     override suspend fun editProject(project: Project): Project? {
-        val projectMap = project.serializeToMap(TIMESTAMP_UPDATE)
-        val refCurrentProject = refProjects.document(project.id)
+        val projectMap = project.toMap(
+            listTimestampFields = listOf(TIMESTAMP_UPDATE),
+            listIgnoredFields = listOf(ID_PROJECT)
+        )
+        val refCurrentProject = refProjects.document(project.idProject)
         refCurrentProject.update(projectMap).await()
         return fromDocument(refCurrentProject.get().await())
     }
@@ -76,7 +83,7 @@ class ProjectRemoteDataSourceImpl : ProjectRemoteDataSource {
             document.toObject<Project>()?.copy(
                 lastUpdate = document.getTimeEstimate(TIMESTAMP_UPDATE),
                 createdAt = document.getTimeEstimate(TIMESTAMP_CREATE),
-                id = document.id
+                idProject = document.id
             )
         } catch (e: Exception) {
             Timber.e("Error cast ${document.id} to email")

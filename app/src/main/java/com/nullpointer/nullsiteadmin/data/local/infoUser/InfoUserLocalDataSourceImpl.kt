@@ -33,7 +33,7 @@ class InfoUserLocalDataSourceImpl(
 
     override fun getPersonalInfo(): Flow<PersonalInfo> = dataStore.data.map { pref ->
         PersonalInfo(
-            id = pref[idUser] ?: "",
+            idPersonal = pref[idUser] ?: "",
             name = pref[keyNameUser] ?: "",
             urlImg = pref[urlProfileUser] ?: "",
             profession = pref[professionUser] ?: "",
@@ -46,8 +46,8 @@ class InfoUserLocalDataSourceImpl(
         newPersonalInfo: PersonalInfo
     ) {
         dataStore.edit { pref ->
-            pref[idUser] = newPersonalInfo.id
             pref[keyNameUser] = newPersonalInfo.name
+            pref[idUser] = newPersonalInfo.idPersonal
             pref[urlProfileUser] = newPersonalInfo.urlImg
             pref[professionUser] = newPersonalInfo.profession
             pref[descriptionUser] = newPersonalInfo.description

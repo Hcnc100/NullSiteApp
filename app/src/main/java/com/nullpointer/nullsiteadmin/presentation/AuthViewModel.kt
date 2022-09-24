@@ -64,7 +64,7 @@ class AuthViewModel @Inject constructor(
                 email = userCredentials.email,
                 password = userCredentials.password
             )
-            infoUserRepository.requestLastPersonalInfo(true)
+            infoUserRepository.requestLastPersonalInfo(false)
         },
         blockException = {
             _messageErrorAuth.trySend(R.string.error_authenticated)

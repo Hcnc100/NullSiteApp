@@ -172,8 +172,8 @@ suspend fun <T> CollectionReference.getNewObjects(
     return if (fieldQuery && previewDocuments.isNotEmpty() && previewDocuments.size < nResults) {
         val newQuery = getConcatenateObjects(
             includeStart = false,
-            fieldTimestamp,
-            startWithId = previewDocuments.first().id,
+            fieldTimestamp = fieldTimestamp,
+            startWithId = previewDocuments.last().id,
             nResults = nResults - previewDocuments.size,
             transform = transform
         )

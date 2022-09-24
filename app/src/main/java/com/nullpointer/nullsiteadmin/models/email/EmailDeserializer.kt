@@ -21,7 +21,7 @@ class EmailDeserializer : JsonDeserializer<EmailContact?> {
             message = jsonObject["message"].asString,
             subject = jsonObject["subject"].asString,
             email = jsonObject["email"].asString,
-            id = jsonObject["id"].asString,
+            idEmail = jsonObject["id"].asString,
             timestamp = Date(jsonObject["timestamp"].asLong),
         )
     }

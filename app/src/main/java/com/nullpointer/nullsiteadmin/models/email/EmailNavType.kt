@@ -8,13 +8,13 @@ import java.util.*
 class EmailNavType : DestinationsNavTypeSerializer<EmailContact> {
 
     override fun toRouteString(value: EmailContact): String {
-        return "${value.id};${value.name};${value.email};${value.subject};${value.message};${value.timestamp?.time}"
+        return "${value.idEmail};${value.name};${value.email};${value.subject};${value.message};${value.timestamp?.time}"
     }
 
     override fun fromRouteString(routeStr: String): EmailContact {
         val things = routeStr.split(";")
         return EmailContact(
-            id = things[0],
+            idEmail = things[0],
             name = things[1],
             email = things[2],
             subject = things[3],

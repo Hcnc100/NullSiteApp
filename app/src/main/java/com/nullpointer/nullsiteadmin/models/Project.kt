@@ -13,7 +13,7 @@ import java.util.*
 data class Project(
     @get:Exclude
     @PrimaryKey
-    val id: String = "",
+    val idProject: String = "",
     val name: String = "",
     val description: String = "",
     val urlImg: String = "",

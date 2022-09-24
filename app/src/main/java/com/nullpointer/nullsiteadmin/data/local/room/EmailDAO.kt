@@ -10,7 +10,7 @@ interface EmailDAO {
     @Query("SELECT * FROM emails ORDER by timestamp DESC")
     fun getListEmails(): Flow<List<EmailContact>>
 
-    @Query("SELECT * FROM emails WHERE id = :idEmail LIMIT 1")
+    @Query("SELECT * FROM emails WHERE idEmail = :idEmail LIMIT 1")
     suspend fun getEmailById(idEmail: String): EmailContact?
 
     @Query("SELECT * FROM emails ORDER by timestamp DESC LIMIT 1")
@@ -19,10 +19,10 @@ interface EmailDAO {
     @Query("SELECT * FROM emails ORDER by timestamp ASC LIMIT 1")
     suspend fun getLastEmail(): EmailContact?
 
-    @Query("DELETE FROM emails WHERE id = :idEmail")
+    @Query("DELETE FROM emails WHERE idEmail = :idEmail")
     suspend fun deleterEmailById(idEmail: String)
 
-    @Query("DELETE FROM emails WHERE id in (:listIdEmails)")
+    @Query("DELETE FROM emails WHERE idEmail in (:listIdEmails)")
     suspend fun deleterListEmails(listIdEmails: List<String>)
 
     @Query("DELETE FROM emails")

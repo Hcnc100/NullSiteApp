@@ -10,7 +10,7 @@ import java.util.*
 @Entity(tableName = "emails")
 data class EmailContact(
     @PrimaryKey
-    val id: String = "",
+    val idEmail: String = "",
     val name: String = "",
     val message: String = "",
     val email: String = "",

@@ -73,7 +73,7 @@ private fun ListProjects(
     LazyColumn(modifier = modifier) {
         items(
             count = listProject.size,
-            key = { listProject[it].id }
+            key = { listProject[it].idProject }
         ) { index ->
             ProjectItem(
                 project = listProject[index],

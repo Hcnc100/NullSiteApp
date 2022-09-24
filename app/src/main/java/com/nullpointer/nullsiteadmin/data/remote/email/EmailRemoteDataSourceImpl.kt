@@ -88,7 +88,7 @@ class EmailRemoteDataSourceImpl : EmailRemoteDataSource {
         return try {
             document.toObject<EmailContact>()?.copy(
                 timestamp = document.getTimeEstimate(TIMESTAMP_FIELD),
-                id = document.id
+                idEmail = document.id
             )
         } catch (e: Exception) {
             Timber.e("Error cast ${document.id} to email")

@@ -88,7 +88,7 @@ private fun ListEmails(
                             modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)
                         )
                     }
-                    items(listEmails.data, key = { it.id }) { email ->
+                    items(listEmails.data, key = { it.idEmail }) { email ->
                         EmailItem(
                             email = email,
                             modifier = Modifier.animateItemPlacement(),

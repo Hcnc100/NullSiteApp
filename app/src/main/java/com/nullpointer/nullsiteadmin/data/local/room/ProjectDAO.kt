@@ -19,10 +19,10 @@ interface ProjectDAO {
     @Update
     suspend fun updateProject(project: Project)
 
-    @Query("DELETE FROM projects WHERE id = :idProject")
+    @Query("DELETE FROM projects WHERE idProject = :idProject")
     suspend fun deleterProjectById(idProject: String)
 
-    @Query("DELETE  FROM projects WHERE id IN (:listIds)")
+    @Query("DELETE  FROM projects WHERE idProject IN (:listIds)")
     suspend fun deleterListProjectById(listIds: List<String>)
 
     @Query("SELECT * FROM projects ORDER BY lastUpdate DESC LIMIT 1")

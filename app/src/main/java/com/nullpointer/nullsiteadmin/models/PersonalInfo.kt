@@ -9,7 +9,7 @@ import java.util.*
 @Parcelize
 data class PersonalInfo(
     @get:Exclude
-    val id: String = "",
+    val idPersonal: String = "",
     val name: String = "",
     val profession: String = "",
     val description: String = "",

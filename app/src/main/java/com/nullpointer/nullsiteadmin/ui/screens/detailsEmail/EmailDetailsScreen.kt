@@ -55,7 +55,7 @@ fun EmailDetailsScreen(
     Scaffold(
         topBar = {
             ToolbarEmailDetails(actionBack = rootDestinations::backDestination) {
-                emailsViewModel.deleterEmail(email.id)
+                emailsViewModel.deleterEmail(email.idEmail)
                 rootDestinations.backDestination()
             }
         },

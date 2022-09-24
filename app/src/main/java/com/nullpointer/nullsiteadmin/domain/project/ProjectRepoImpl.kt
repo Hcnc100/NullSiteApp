@@ -41,7 +41,7 @@ class ProjectRepoImpl(
 
     override suspend fun requestLastProject(forceRefresh: Boolean): Int {
         val project = projectLocalDataSource.getMoreRecentProject()
-        val idProject = if (forceRefresh) null else project?.id
+        val idProject = if (forceRefresh) null else project?.idProject
         val newProjects = projectRemoteDataSource.getMoreRecentProject(
             includeStart = false,
             startWithId = idProject,
@@ -56,7 +56,7 @@ class ProjectRepoImpl(
         return if (project != null) {
             val newProjects = projectRemoteDataSource.getConcatenatePost(
                 includeStart = false,
-                startWithId = project.id,
+                startWithId = project.idProject,
                 SIZE_CONCATENATE_PROJECT
             )
             if (newProjects.isNotEmpty()) projectLocalDataSource.insertListProjects(newProjects)
