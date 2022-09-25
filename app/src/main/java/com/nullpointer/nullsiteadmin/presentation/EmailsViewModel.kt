@@ -115,8 +115,10 @@ class EmailsViewModel @Inject constructor(
         blockException = { Timber.e("Error request last email $it") },
         blockIO = {
             val sizeRequest = emailsRepository.requestLastEmail(forceRefresh)
-            isEnabledConcatenateEmail = true
             Timber.d("News emails receiver $sizeRequest")
+            withContext(Dispatchers.Main) {
+                isEnabledConcatenateEmail = true
+            }
         }
     )
 

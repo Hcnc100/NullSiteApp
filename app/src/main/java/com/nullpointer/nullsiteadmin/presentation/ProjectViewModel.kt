@@ -26,6 +26,7 @@ class ProjectViewModel @Inject constructor(
 
     companion object {
         private const val KEY_IS_CONCATENATE = "KEY_IS_CONCATENATE"
+        private const val KEY_IS_REQUEST_PROJECT = "KEY_IS_REQUEST_PROJECT"
         private const val KEY_CONCATENATE_ENABLE = "KEY_CONCATENATE_ENABLE"
     }
 
@@ -34,14 +35,18 @@ class ProjectViewModel @Inject constructor(
 
     var isConcatenateProjects by SavableComposeState(
         defaultValue = false,
-        key = KEY_IS_CONCATENATE,
-        savedStateHandle = savedStateHandle
+        key = KEY_IS_CONCATENATE, savedStateHandle = savedStateHandle
     )
         private set
 
     var isEnabledConcatenateProjects by SavableComposeState(
-        defaultValue = true,
-        key = KEY_CONCATENATE_ENABLE,
+        defaultValue = true, key = KEY_CONCATENATE_ENABLE, savedStateHandle = savedStateHandle
+    )
+        private set
+
+    var isRequestProject by SavableComposeState(
+        defaultValue = false,
+        key = KEY_IS_REQUEST_PROJECT,
         savedStateHandle = savedStateHandle
     )
         private set
@@ -64,7 +69,9 @@ class ProjectViewModel @Inject constructor(
         Resource.Loading
     )
 
-    fun concatenateProject() = launchSafeIO(
+    fun concatenateProject(
+        actionSuccessConcatenate: () -> Unit
+    ) = launchSafeIO(
         isEnabled = isEnabledConcatenateProjects,
         blockBefore = { isConcatenateProjects = true },
         blockAfter = { isConcatenateProjects = false },
@@ -73,6 +80,7 @@ class ProjectViewModel @Inject constructor(
             Timber.d("Size of concatenate project: $sizeConcatProject")
             withContext(Dispatchers.Main) {
                 isEnabledConcatenateProjects = sizeConcatProject != 0
+                actionSuccessConcatenate()
             }
         },
         blockException = {
@@ -95,12 +103,17 @@ class ProjectViewModel @Inject constructor(
     )
 
     fun requestNewProjects(forceRefresh: Boolean = true) = launchSafeIO(
+        isEnabled = !isRequestProject,
+        blockBefore = { isRequestProject = true },
+        blockAfter = { isRequestProject = false },
         blockIO = {
             val size = projectRepository.requestLastProject(forceRefresh)
             Timber.d("new projects size: $size")
+            withContext(Dispatchers.Main) {
+                isEnabledConcatenateProjects = true
+            }
         },
         blockException = {
             Timber.e("Error request last projects $it")
-        }
-    )
+        })
 }
