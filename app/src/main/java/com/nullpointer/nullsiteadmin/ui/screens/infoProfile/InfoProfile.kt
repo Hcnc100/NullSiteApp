@@ -4,7 +4,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -27,8 +30,8 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Composable
 fun InfoProfile(
     actionRootDestinations: ActionRootDestinations,
-    infoViewModel: InfoUserViewModel = shareViewModel(),
     editInfoVM: EditInfoViewModel = shareViewModel(),
+    infoViewModel: InfoUserViewModel = shareViewModel(),
     infoProfileState: SimpleScreenState = rememberSimpleScreenState(),
 ) {
 

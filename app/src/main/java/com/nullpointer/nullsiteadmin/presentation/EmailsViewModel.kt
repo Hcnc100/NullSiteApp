@@ -26,6 +26,7 @@ class EmailsViewModel @Inject constructor(
 
     companion object {
         private const val KEY_IS_CONCATENATE = "KEY_IS_CONCATENATE"
+        private const val KEY_IS_REQUEST_EMAIL = "KEY_IS_REQUEST_EMAIL"
         private const val KEY_EMAIL_CONCATENATE = "KEY_EMAIL_CONCATENATE"
     }
 
@@ -42,6 +43,13 @@ class EmailsViewModel @Inject constructor(
     var isConcatenateEmail by SavableComposeState(
         defaultValue = false,
         key = KEY_IS_CONCATENATE,
+        savedStateHandle = savedStateHandle
+    )
+        private set
+
+    var isRequestEmail by SavableComposeState(
+        defaultValue = false,
+        key = KEY_IS_REQUEST_EMAIL,
         savedStateHandle = savedStateHandle
     )
         private set
@@ -64,7 +72,9 @@ class EmailsViewModel @Inject constructor(
         Resource.Loading
     )
 
-    fun concatenateEmails() = launchSafeIO(
+    fun concatenateEmails(
+        actionSuccessConcatenate: () -> Unit
+    ) = launchSafeIO(
         isEnabled = isEnabledConcatenateEmail,
         blockBefore = { isConcatenateEmail = true },
         blockAfter = { isConcatenateEmail = false },
@@ -73,6 +83,7 @@ class EmailsViewModel @Inject constructor(
             Timber.d("Number of emails concatenate $numberEmailsRequest")
             withContext(Dispatchers.Main) {
                 isEnabledConcatenateEmail = numberEmailsRequest != 0
+                actionSuccessConcatenate()
             }
         },
         blockException = {
@@ -98,9 +109,13 @@ class EmailsViewModel @Inject constructor(
     fun requestLastEmail(
         forceRefresh: Boolean = true
     ) = launchSafeIO(
+        isEnabled = !isRequestEmail,
+        blockBefore = { isRequestEmail = true },
+        blockAfter = { isRequestEmail = false },
         blockException = { Timber.e("Error request last email $it") },
         blockIO = {
             val sizeRequest = emailsRepository.requestLastEmail(forceRefresh)
+            isEnabledConcatenateEmail = true
             Timber.d("News emails receiver $sizeRequest")
         }
     )
