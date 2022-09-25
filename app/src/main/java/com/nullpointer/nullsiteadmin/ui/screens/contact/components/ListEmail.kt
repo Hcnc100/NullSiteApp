@@ -52,7 +52,7 @@ fun ListLoadingEmail(
     val shimmer = rememberShimmer(shimmerBounds = ShimmerBounds.View)
     LazyColumn(modifier = modifier) {
         item(10) {
-            ItemLoading(shimmer = shimmer)
+            EmailItemLoading(shimmer = shimmer)
         }
     }
 }

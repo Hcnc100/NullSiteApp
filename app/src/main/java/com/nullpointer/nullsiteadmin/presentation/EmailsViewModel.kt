@@ -32,14 +32,14 @@ class EmailsViewModel @Inject constructor(
     private val _errorEmail = Channel<Int>()
     val errorEmail = _errorEmail.receiveAsFlow()
 
-    var enabledConcatenate by SavableComposeState(
+    var isEnabledConcatenateEmail by SavableComposeState(
         defaultValue = true,
         key = KEY_EMAIL_CONCATENATE,
         savedStateHandle = savedStateHandle
     )
         private set
 
-    var isConcatenate by SavableComposeState(
+    var isConcatenateEmail by SavableComposeState(
         defaultValue = false,
         key = KEY_IS_CONCATENATE,
         savedStateHandle = savedStateHandle
@@ -65,14 +65,14 @@ class EmailsViewModel @Inject constructor(
     )
 
     fun concatenateEmails() = launchSafeIO(
-        isEnabled = enabledConcatenate,
-        blockBefore = { isConcatenate = true },
-        blockAfter = { isConcatenate = false },
+        isEnabled = isEnabledConcatenateEmail,
+        blockBefore = { isConcatenateEmail = true },
+        blockAfter = { isConcatenateEmail = false },
         blockIO = {
             val numberEmailsRequest = emailsRepository.concatenateEmails()
             Timber.d("Number of emails concatenate $numberEmailsRequest")
             withContext(Dispatchers.Main) {
-                enabledConcatenate = numberEmailsRequest != 0
+                isEnabledConcatenateEmail = numberEmailsRequest != 0
             }
         },
         blockException = {

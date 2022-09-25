@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.ui.screens.project
+package com.nullpointer.nullsiteadmin.ui.screens.project.componets
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape

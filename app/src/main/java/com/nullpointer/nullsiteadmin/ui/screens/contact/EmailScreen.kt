@@ -42,7 +42,7 @@ fun EmailScreen(
     ) { paddingValues ->
         ListEmails(
             listEmails = emailsState,
-            isConcatenate = emailsVM.isConcatenate,
+            isConcatenate = emailsVM.isConcatenateEmail,
             modifier = Modifier.padding(paddingValues),
             concatenateEmails = emailsVM::concatenateEmails,
             actionDetails = {

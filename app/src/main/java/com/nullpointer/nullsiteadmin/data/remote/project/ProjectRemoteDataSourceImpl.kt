@@ -56,11 +56,11 @@ class ProjectRemoteDataSourceImpl : ProjectRemoteDataSource {
         numberResult: Long
     ): List<Project> {
         return refProjects.getNewObjects(
-            includeEnd = false,
-            fieldTimestamp = TIMESTAMP_UPDATE,
-            endWithId = startWithId,
             nResults = numberResult,
+            endWithId = startWithId,
+            includeEnd = includeStart,
             transform = ::fromDocument,
+            fieldTimestamp = TIMESTAMP_UPDATE,
         )
     }
 
@@ -70,11 +70,11 @@ class ProjectRemoteDataSourceImpl : ProjectRemoteDataSource {
         numberResult: Long
     ): List<Project> {
         return refProjects.getConcatenateObjects(
-            includeStart = true,
-            fieldTimestamp = TIMESTAMP_CREATE,
-            startWithId = startWithId,
+            includeStart = includeStart,
             nResults = numberResult,
+            startWithId = startWithId,
             transform = ::fromDocument,
+            fieldTimestamp = TIMESTAMP_UPDATE,
         )
     }
 

@@ -14,7 +14,7 @@ import com.valentinilk.shimmer.Shimmer
 
 
 @Composable
-fun ItemLoading(
+fun EmailItemLoading(
     shimmer: Shimmer,
     modifier: Modifier = Modifier
 ) {
