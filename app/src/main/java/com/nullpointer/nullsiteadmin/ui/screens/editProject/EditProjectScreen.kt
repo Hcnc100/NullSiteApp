@@ -2,6 +2,8 @@ package com.nullpointer.nullsiteadmin.ui.screens.editProject
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Scaffold
@@ -12,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.nullpointer.nullsiteadmin.R
@@ -37,7 +40,7 @@ fun EditProjectScreen(
     editProjectState: FocusScreenState = rememberFocusScreenState()
 ) {
 
-    LaunchedEffect(key1 = Unit, editProjectState) {
+    LaunchedEffect(key1 = Unit) {
         editProjectVM.messageError.collect(editProjectState::showSnackMessage)
     }
 
@@ -62,7 +65,8 @@ fun EditProjectScreen(
                 nameProject = editProjectVM.nameProject,
                 urlRepositoryProject = editProjectVM.urlRepositoryProject,
                 descriptionProject = editProjectVM.descriptionProject,
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(10.dp),
+                hiddenKeyBoard = editProjectState::hiddenKeyBoard
             )
             ButtonUpdateProject(isEnable = editProjectVM.isDataValid) {
                 editProjectVM.getUpdatedProject()?.let {
@@ -109,18 +113,38 @@ private fun ImageProject(
 
 @Composable
 private fun ListInfoProject(
-    urlImgProject: PropertySavableString,
+    hiddenKeyBoard: () -> Unit,
+    modifier: Modifier = Modifier,
     nameProject: PropertySavableString,
-    urlRepositoryProject: PropertySavableString,
+    urlImgProject: PropertySavableString,
     descriptionProject: PropertySavableString,
-    modifier: Modifier = Modifier
+    urlRepositoryProject: PropertySavableString
 ) {
     Column(modifier = modifier) {
-        EditableTextSavable(valueProperty = urlImgProject)
+        EditableTextSavable(
+            valueProperty = urlImgProject,
+            singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(onDone = { hiddenKeyBoard() })
+        )
         Spacer(modifier = Modifier.height(10.dp))
-        EditableTextSavable(valueProperty = nameProject)
+        EditableTextSavable(valueProperty = nameProject,
+            singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(onDone = { hiddenKeyBoard() })
+        )
         Spacer(modifier = Modifier.height(10.dp))
-        EditableTextSavable(valueProperty = urlRepositoryProject)
+        EditableTextSavable(valueProperty = urlRepositoryProject,
+            singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(onDone = { hiddenKeyBoard() })
+        )
         Spacer(modifier = Modifier.height(10.dp))
         EditableTextSavable(valueProperty = descriptionProject)
     }
