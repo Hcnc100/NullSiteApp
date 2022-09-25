@@ -27,8 +27,8 @@ import com.nullpointer.nullsiteadmin.models.email.EmailContact
 @Composable
 fun EmailItem(
     email: EmailContact,
-    actionDetails: (EmailContact) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    actionDetails: (EmailContact) -> Unit
 ) {
 
     val colorBackground by animateColorAsState(

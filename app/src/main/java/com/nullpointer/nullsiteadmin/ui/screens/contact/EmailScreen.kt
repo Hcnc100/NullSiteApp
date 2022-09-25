@@ -2,6 +2,7 @@ package com.nullpointer.nullsiteadmin.ui.screens.contact
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -14,10 +15,10 @@ import com.nullpointer.nullsiteadmin.models.email.EmailContact
 import com.nullpointer.nullsiteadmin.presentation.EmailsViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.HomeNavGraph
-import com.nullpointer.nullsiteadmin.ui.screens.contact.components.ListEmptyEmail
-import com.nullpointer.nullsiteadmin.ui.screens.contact.components.ListErrorEmail
-import com.nullpointer.nullsiteadmin.ui.screens.contact.components.ListLoadingEmail
-import com.nullpointer.nullsiteadmin.ui.screens.contact.components.ListSuccessEmails
+import com.nullpointer.nullsiteadmin.ui.screens.contact.components.lists.ListEmptyEmail
+import com.nullpointer.nullsiteadmin.ui.screens.contact.components.lists.ListErrorEmail
+import com.nullpointer.nullsiteadmin.ui.screens.contact.components.lists.ListLoadingEmail
+import com.nullpointer.nullsiteadmin.ui.screens.contact.components.lists.ListSuccessEmails
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EmailDetailsScreenDestination
 import com.nullpointer.nullsiteadmin.ui.screens.states.SimpleScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberSimpleScreenState
@@ -27,55 +28,56 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Destination
 @Composable
 fun EmailScreen(
-    emailsVM: EmailsViewModel = shareViewModel(),
     actionRootDestinations: ActionRootDestinations,
+    emailsViewModel: EmailsViewModel = shareViewModel(),
     emailScreenState: SimpleScreenState = rememberSimpleScreenState()
 ) {
-    val emailsState by emailsVM.listEmails.collectAsState()
+    val stateListEmails by emailsViewModel.listEmails.collectAsState()
 
     LaunchedEffect(key1 = Unit) {
-        emailsVM.errorEmail.collect(emailScreenState::showSnackMessage)
+        emailsViewModel.errorEmail.collect(emailScreenState::showSnackMessage)
     }
 
-    Scaffold(
-        scaffoldState = emailScreenState.scaffoldState
-    ) { paddingValues ->
-        ListEmails(
-            listEmails = emailsState,
-            isConcatenate = emailsVM.isConcatenateEmail,
-            modifier = Modifier.padding(paddingValues),
-            concatenateEmails = emailsVM::concatenateEmails,
-            actionDetails = {
-                val route = EmailDetailsScreenDestination(it).route
-                actionRootDestinations.changeRoot(
-                    "https://www.nullsiteadmin.com/$route".toUri()
-                )
-            })
-    }
+    EmailScreen(
+        listEmails = stateListEmails,
+        scaffoldState = emailScreenState.scaffoldState,
+        isConcatenate = emailsViewModel.isConcatenateEmail,
+        concatenateEmails = emailsViewModel::concatenateEmails,
+        actionDetails = {
+            val route = EmailDetailsScreenDestination(it).route
+            actionRootDestinations.changeRoot(
+                "https://www.nullsiteadmin.com/$route".toUri()
+            )
+        }
+    )
 }
 
 @Composable
-private fun ListEmails(
+private fun EmailScreen(
     isConcatenate: Boolean,
-    modifier: Modifier = Modifier,
+    scaffoldState: ScaffoldState,
     concatenateEmails: () -> Unit,
     actionDetails: (EmailContact) -> Unit,
     listEmails: Resource<List<EmailContact>>
 ) {
-    when (listEmails) {
-        Resource.Loading -> ListLoadingEmail(modifier = modifier)
-        Resource.Failure -> ListErrorEmail(modifier = modifier)
-        is Resource.Success -> {
-            if (listEmails.data.isEmpty()) {
-                ListEmptyEmail(modifier = modifier)
-            } else {
-                ListSuccessEmails(
-                    modifier = modifier,
-                    listEmails = listEmails.data,
-                    actionDetails = actionDetails,
-                    isConcatenate = isConcatenate,
-                    concatenateEmails = concatenateEmails
-                )
+    Scaffold(
+        scaffoldState = scaffoldState
+    ) {
+        when (listEmails) {
+            Resource.Loading -> ListLoadingEmail(modifier = Modifier.padding(it))
+            Resource.Failure -> ListErrorEmail(modifier = Modifier.padding(it))
+            is Resource.Success -> {
+                if (listEmails.data.isEmpty()) {
+                    ListEmptyEmail(modifier = Modifier.padding(it))
+                } else {
+                    ListSuccessEmails(
+                        modifier = Modifier.padding(it),
+                        listEmails = listEmails.data,
+                        actionDetails = actionDetails,
+                        isConcatenate = isConcatenate,
+                        concatenateEmails = concatenateEmails
+                    )
+                }
             }
         }
     }

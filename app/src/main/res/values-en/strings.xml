@@ -99,4 +99,6 @@
     <string name="description_email_open">The email has already been read</string>
     <string name="description_email_pending">The email has not been read</string>
     <string name="title_edit_info_personal">Edit personal information</string>
+    <string name="message_empty_project">There are no projects to show</string>
+
 </resources>

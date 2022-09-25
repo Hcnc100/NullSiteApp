@@ -1,8 +1,6 @@
-package com.nullpointer.nullsiteadmin.ui.screens.contact.components
+package com.nullpointer.nullsiteadmin.ui.screens.contact.components.lists
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -10,15 +8,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.models.email.EmailContact
 import com.nullpointer.nullsiteadmin.ui.screens.animation.AnimationScreen
-import com.nullpointer.nullsiteadmin.ui.share.CircularProgressAnimation
-import com.nullpointer.nullsiteadmin.ui.share.OnBottomReached
+import com.nullpointer.nullsiteadmin.ui.screens.contact.components.EmailItem
+import com.nullpointer.nullsiteadmin.ui.screens.contact.components.items.EmailItemLoading
+import com.nullpointer.nullsiteadmin.ui.share.LazyListConcatenate
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
 
@@ -28,9 +26,9 @@ fun ListEmptyEmail(
     modifier: Modifier = Modifier
 ) {
     AnimationScreen(
+        modifier = modifier,
         animation = R.raw.empty1,
-        textEmpty = stringResource(R.string.message_empty_contact),
-        modifier = modifier
+        textEmpty = stringResource(R.string.message_empty_contact)
     )
 }
 
@@ -39,9 +37,9 @@ fun ListErrorEmail(
     modifier: Modifier = Modifier
 ) {
     AnimationScreen(
+        modifier = modifier,
         animation = R.raw.error,
-        textEmpty = stringResource(R.string.message_error_contact),
-        modifier = modifier
+        textEmpty = stringResource(R.string.message_error_contact)
     )
 }
 
@@ -51,7 +49,10 @@ fun ListLoadingEmail(
 ) {
     val shimmer = rememberShimmer(shimmerBounds = ShimmerBounds.View)
     LazyColumn(modifier = modifier) {
-        item(10) {
+        items(
+            count = 10,
+            key = { it }
+        ) {
             EmailItemLoading(shimmer = shimmer)
         }
     }
@@ -67,33 +68,27 @@ fun ListSuccessEmails(
     actionDetails: (EmailContact) -> Unit,
     lazyListState: LazyListState = rememberLazyListState()
 ) {
-    Box(modifier = modifier.fillMaxSize()) {
-        LazyColumn(
-            state = lazyListState
-        ) {
-            item {
-                Text(
-                    text = stringResource(R.string.text_number_emails, listEmails.size),
-                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)
-                )
-            }
-            items(
-                listEmails,
-                key = { it.idEmail }
-            ) { email ->
-                EmailItem(
-                    email = email,
-                    modifier = Modifier.animateItemPlacement(),
-                    actionDetails = actionDetails
-                )
-            }
+    LazyListConcatenate(
+        modifier = modifier,
+        isConcatenate = isConcatenate,
+        lazyListState = lazyListState,
+        actionConcatenate = concatenateEmails,
+    ) {
+        item(key = "number-emails") {
+            Text(
+                text = stringResource(R.string.text_number_emails, listEmails.size),
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)
+            )
         }
-        CircularProgressAnimation(
-            isVisible = isConcatenate,
-            modifier = Modifier
-                .padding(15.dp)
-                .align(Alignment.BottomCenter)
-        )
+        items(
+            items = listEmails,
+            key = { it.idEmail }
+        ) { email ->
+            EmailItem(
+                email = email,
+                actionDetails = actionDetails,
+                modifier = Modifier.animateItemPlacement()
+            )
+        }
     }
-    lazyListState.OnBottomReached(onLoadMore = concatenateEmails)
 }

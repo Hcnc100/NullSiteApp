@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.ui.screens.contact.components
+package com.nullpointer.nullsiteadmin.ui.screens.contact.components.items
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -64,6 +64,6 @@ private fun FakeText(
             .width(width.dp)
             .clip(RoundedCornerShape(4.dp))
             .height(15.dp)
-                then (modifier),
+            .then(modifier),
     )
 }

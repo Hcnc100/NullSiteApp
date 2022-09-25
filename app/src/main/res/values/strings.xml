@@ -54,6 +54,7 @@
     <!-- screen project -->
     <string name="message_error_project">Error al cargar el proyecto</string>
     <string name="description_icon_edit">Icono de editar</string>
+    <string name="message_empty_project">No hay proyectos que mostrar</string>
 
     <!-- screen info profile -->
     <string name="message_error_load_info_user">Hubo un error al cargar los datos</string>
