@@ -96,6 +96,7 @@
     <string name="description_show_password">Show the password</string>
     <string name="description_hide_password">Hide the password</string>
 
-    <string name="description_email_open">El email ya fue leido</string>
-    <string name="description_email_pending">El email no a sido leido</string>
+    <string name="description_email_open">The email has already been read</string>
+    <string name="description_email_pending">The email has not been read</string>
+    <string name="title_edit_info_personal">Edit personal information</string>
 </resources>

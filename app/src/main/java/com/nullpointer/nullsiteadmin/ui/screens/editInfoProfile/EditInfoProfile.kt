@@ -4,6 +4,8 @@ import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -14,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.nullpointer.nullsiteadmin.R
@@ -64,7 +67,7 @@ fun EditInfoProfile(
             scaffoldState = stateEditInfo.scaffoldState,
             topBar = {
                 ToolbarBack(
-                    title = "Edit Personl Info",
+                    title = stringResource(R.string.title_edit_info_personal),
                     actionBack = actionRootDestinations::backDestination
                 )
             }) { padding ->
@@ -83,7 +86,8 @@ fun EditInfoProfile(
                     nameAdmin = editInfoVM.name,
                     professionAdmin = editInfoVM.profession,
                     descriptionAdmin = editInfoVM.description,
-                    modifier = Modifier.padding(10.dp)
+                    modifier = Modifier.padding(10.dp),
+                    hiddenKeyBoard = stateEditInfo::hiddenKeyBoard
                 )
                 ButtonUpdateInfoProfile(
                     isEnable = editInfoVM.isDataValid,
@@ -117,15 +121,30 @@ private fun ButtonUpdateInfoProfile(
 
 @Composable
 private fun EditableInformation(
+    hiddenKeyBoard: () -> Unit,
+    modifier: Modifier = Modifier,
     nameAdmin: PropertySavableString,
     professionAdmin: PropertySavableString,
-    descriptionAdmin: PropertySavableString,
-    modifier: Modifier = Modifier
+    descriptionAdmin: PropertySavableString
 ) {
     Column(modifier = modifier) {
-        EditableTextSavable(valueProperty = nameAdmin)
+        EditableTextSavable(
+            valueProperty = nameAdmin,
+            singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(onDone = { hiddenKeyBoard() })
+        )
         Spacer(modifier = Modifier.height(10.dp))
-        EditableTextSavable(valueProperty = professionAdmin)
+        EditableTextSavable(
+            valueProperty = professionAdmin,
+            singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(onDone = { hiddenKeyBoard() })
+        )
         Spacer(modifier = Modifier.height(10.dp))
         EditableTextSavable(valueProperty = descriptionAdmin)
     }
