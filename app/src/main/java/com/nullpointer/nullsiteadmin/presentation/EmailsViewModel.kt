@@ -1,8 +1,10 @@
 package com.nullpointer.nullsiteadmin.presentation
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nullpointer.nullsiteadmin.R
+import com.nullpointer.nullsiteadmin.core.delagetes.SavableComposeState
 import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.email.EmailsRepository
@@ -12,16 +14,37 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class EmailsViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val emailsRepository: EmailsRepository
 ) : ViewModel() {
 
+    companion object {
+        private const val KEY_IS_CONCATENATE = "KEY_IS_CONCATENATE"
+        private const val KEY_EMAIL_CONCATENATE = "KEY_EMAIL_CONCATENATE"
+    }
+
     private val _errorEmail = Channel<Int>()
     val errorEmail = _errorEmail.receiveAsFlow()
+
+    var enabledConcatenate by SavableComposeState(
+        defaultValue = true,
+        key = KEY_EMAIL_CONCATENATE,
+        savedStateHandle = savedStateHandle
+    )
+        private set
+
+    var isConcatenate by SavableComposeState(
+        defaultValue = false,
+        key = KEY_IS_CONCATENATE,
+        savedStateHandle = savedStateHandle
+    )
+        private set
 
     init {
         requestLastEmail(false)
@@ -40,6 +63,23 @@ class EmailsViewModel @Inject constructor(
         SharingStarted.WhileSubscribed(5_000),
         Resource.Loading
     )
+
+    fun concatenateEmails() = launchSafeIO(
+        isEnabled = enabledConcatenate,
+        blockBefore = { isConcatenate = true },
+        blockAfter = { isConcatenate = false },
+        blockIO = {
+            val numberEmailsRequest = emailsRepository.concatenateEmails()
+            Timber.d("Number of emails concatenate $numberEmailsRequest")
+            withContext(Dispatchers.Main) {
+                enabledConcatenate = numberEmailsRequest != 0
+            }
+        },
+        blockException = {
+            Timber.e("Error to concatenate emails $it")
+        }
+    )
+
 
     fun deleterEmail(
         idEmail: String

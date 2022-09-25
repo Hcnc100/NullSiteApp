@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.ui.screens.contact
+package com.nullpointer.nullsiteadmin.ui.screens.contact.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.clickable
