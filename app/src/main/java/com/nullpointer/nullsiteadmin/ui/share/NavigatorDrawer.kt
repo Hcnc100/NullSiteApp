@@ -88,7 +88,7 @@ private fun ButtonLogOut(
             Icon(
                 painterResource(id = R.drawable.ic_logout),
                 contentDescription = stringResource(R.string.description_close_session)
-                            )
+            )
             Spacer(modifier = Modifier.width(10.dp))
             Text(text = stringResource(R.string.text_log_out))
         }
@@ -123,7 +123,7 @@ private fun ListDestinationDrawer(
                     tint = getColorSelected(
                         isSelected = currentDestination == it.destinations,
                         colorSelected = MaterialTheme.colors.primary,
-                        normalColor = Color.White
+                        normalColor = MaterialTheme.colors.onBackground
                     )
                 )
                 Spacer(modifier = Modifier.width(10.dp))
