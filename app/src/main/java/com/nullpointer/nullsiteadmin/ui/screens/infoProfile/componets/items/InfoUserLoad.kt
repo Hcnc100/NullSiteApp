@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.nullpointer.nullsiteadmin.core.utils.myShimmer
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
+import com.valentinilk.shimmer.shimmer
 
 @Composable
 fun LoadingInfoUser(
@@ -35,10 +36,10 @@ fun LoadingInfoUser(
         )
         repeat(2) {
             Spacer(modifier = Modifier.height(20.dp))
-            FakeTextInfo()
+            FakeTextInfo(modifier = Modifier.shimmer(shimmer))
         }
         Spacer(modifier = Modifier.height(20.dp))
-        FakeDescription()
+        FakeDescription(modifier = Modifier.shimmer(shimmer))
     }
 }
 

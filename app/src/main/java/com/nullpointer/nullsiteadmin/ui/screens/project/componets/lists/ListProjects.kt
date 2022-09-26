@@ -48,7 +48,7 @@ fun ListEmptyProject(
     AnimationScreen(
         modifier = modifier,
         animation = R.raw.empty1,
-        textEmpty = stringResource(R.string.message_error_project)
+        textEmpty = stringResource(R.string.message_empty_project)
     )
 }
 

@@ -3,7 +3,10 @@ package com.nullpointer.nullsiteadmin.ui.screens.animation
 import androidx.annotation.RawRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -20,7 +23,11 @@ fun AnimationScreen(
     textEmpty: String,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
         LottieContainer(
             modifier = Modifier
                 .weight(.8f)

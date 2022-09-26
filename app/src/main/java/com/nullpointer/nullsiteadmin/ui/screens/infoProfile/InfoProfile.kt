@@ -19,6 +19,10 @@ import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.HomeNavGraph
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EditInfoProfileDestination
 import com.nullpointer.nullsiteadmin.ui.screens.editInfoProfile.viewModel.EditInfoViewModel
+import com.nullpointer.nullsiteadmin.ui.screens.infoProfile.componets.subScreens.InfoPersonalLoading
+import com.nullpointer.nullsiteadmin.ui.screens.infoProfile.componets.subScreens.InfoProfileEmpty
+import com.nullpointer.nullsiteadmin.ui.screens.infoProfile.componets.subScreens.InfoProfileError
+import com.nullpointer.nullsiteadmin.ui.screens.infoProfile.componets.subScreens.InfoProfileSuccess
 import com.nullpointer.nullsiteadmin.ui.screens.states.SwipeScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberSwipeScreenState
 import com.nullpointer.nullsiteadmin.ui.share.ScaffoldSwipeRefresh
