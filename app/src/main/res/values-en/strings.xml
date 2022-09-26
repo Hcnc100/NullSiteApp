@@ -104,5 +104,6 @@
     <string name="error_network">Verifique su conexicion a intenet</string>
     <string name="error_time_out">El servidor no response reintente</string>
     <string name="error_unknown">Error desconocido</string>
+    <string name="error_user_not_found">Usurio no encontrado</string>
 
 </resources>

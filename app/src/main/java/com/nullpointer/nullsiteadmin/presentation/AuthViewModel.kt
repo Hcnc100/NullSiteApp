@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.states.Resource
+import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.auth.AuthRepository
 import com.nullpointer.nullsiteadmin.domain.deleter.DeleterInfoRepository
@@ -67,8 +68,11 @@ class AuthViewModel @Inject constructor(
             infoUserRepository.requestLastPersonalInfo(false)
         },
         blockException = {
-            _messageErrorAuth.trySend(R.string.error_authenticated)
-            Timber.e("Error auth $it")
+            ExceptionManager.sendMessageErrorToException(
+                exception = it,
+                message = "Error auth",
+                channel = _messageErrorAuth
+            )
         }
     )
 
@@ -83,7 +87,7 @@ class AuthViewModel @Inject constructor(
             if (isTokenUpdated) Timber.d("Se actualizo el token")
         },
         blockException = {
-            Timber.e("Error to update owner token $it")
+            ExceptionManager.getMessageForException(it, "Error update token user")
         }
     )
 }
