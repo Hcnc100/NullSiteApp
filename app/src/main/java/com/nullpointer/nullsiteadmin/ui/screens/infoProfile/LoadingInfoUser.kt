@@ -5,18 +5,20 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.valentinilk.shimmer.shimmer
+import com.nullpointer.nullsiteadmin.core.utils.myShimmer
+import com.valentinilk.shimmer.ShimmerBounds
+import com.valentinilk.shimmer.rememberShimmer
 
 @Composable
 fun LoadingInfoUser(
     modifier: Modifier = Modifier,
 ) {
+    val shimmer = rememberShimmer(shimmerBounds = ShimmerBounds.View)
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -24,34 +26,44 @@ fun LoadingInfoUser(
             .padding(15.dp)
             .verticalScroll(rememberScrollState())
     ) {
-        Card(
-            shape = CircleShape,
-            backgroundColor = Color.Gray,
+        Box(
             modifier = Modifier
                 .padding(20.dp)
                 .size(150.dp)
-                .shimmer()
-        ) {}
+                .clip(CircleShape)
+                .myShimmer(shimmer)
+        )
         repeat(2) {
             Spacer(modifier = Modifier.height(20.dp))
-            Card(
-                shape = RoundedCornerShape(10.dp),
-                backgroundColor = Color.Gray,
-                modifier = Modifier
-                    .height(50.dp)
-                    .fillMaxWidth()
-                    .shimmer()
-            ) {}
+            FakeTextInfo()
         }
         Spacer(modifier = Modifier.height(20.dp))
-        Card(
-            shape = RoundedCornerShape(10.dp),
-            backgroundColor = Color.Gray,
-            modifier = Modifier
-                .height(200.dp)
-                .fillMaxWidth()
-                .shimmer()
-        ) {}
-
+        FakeDescription()
     }
+}
+
+@Composable
+private fun FakeTextInfo(
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = Modifier
+            .height(50.dp)
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(10.dp))
+            .then(modifier)
+    )
+}
+
+@Composable
+private fun FakeDescription(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = Modifier
+            .height(200.dp)
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(10.dp))
+            .then(modifier)
+    )
 }

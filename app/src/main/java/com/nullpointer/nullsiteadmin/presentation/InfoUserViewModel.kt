@@ -1,8 +1,10 @@
 package com.nullpointer.nullsiteadmin.presentation
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nullpointer.nullsiteadmin.R
+import com.nullpointer.nullsiteadmin.core.delagetes.SavableComposeState
 import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepository
@@ -17,24 +19,24 @@ import javax.inject.Inject
 
 @HiltViewModel
 class InfoUserViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val infoUserRepository: InfoUserRepository
 ) : ViewModel() {
+
+    companion object {
+        private const val KEY_IS_REQUEST_INFO_USER = "KEY_IS_REQUEST_INFO_USER"
+    }
 
     private val _messageError = Channel<Int>()
     val messageError = _messageError.receiveAsFlow()
 
-    init {
-        requestLastInformation(false)
-    }
-
-
-    fun requestLastInformation(forceRefresh: Boolean) = launchSafeIO(
-        blockException = { Timber.d("Error update info $it") },
-        blockIO = {
-            val isUpdate = infoUserRepository.requestLastPersonalInfo(forceRefresh)
-            if (isUpdate) Timber.d("Updated info user admin")
-        }
+    var isRequestInfoUser by SavableComposeState(
+        defaultValue = false,
+        key = KEY_IS_REQUEST_INFO_USER,
+        savedStateHandle = savedStateHandle
     )
+        private set
+
 
     val infoUser = flow<Resource<PersonalInfo>> {
         infoUserRepository.myPersonalInfo.collect {
@@ -48,6 +50,29 @@ class InfoUserViewModel @Inject constructor(
         viewModelScope,
         SharingStarted.WhileSubscribed(5_000),
         Resource.Loading
+    )
+
+    val infoUserIsEmpty = infoUser.map {
+        if (it is Resource.Success) {
+            it.data.idPersonal.isNotEmpty()
+        } else {
+            false
+        }
+    }
+
+    init {
+        requestLastInformation(false)
+    }
+
+    fun requestLastInformation(forceRefresh: Boolean = true) = launchSafeIO(
+        isEnabled = !isRequestInfoUser,
+        blockBefore = { isRequestInfoUser = true },
+        blockAfter = { isRequestInfoUser = false },
+        blockException = { Timber.d("Error update info $it") },
+        blockIO = {
+            val isUpdate = infoUserRepository.requestLastPersonalInfo(forceRefresh)
+            if (isUpdate) Timber.d("Updated info user admin")
+        }
     )
 
     fun updatePersonalInfo(
