@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.delagetes.SavableComposeState
 import com.nullpointer.nullsiteadmin.core.states.Resource
+import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.project.ProjectRepository
 import com.nullpointer.nullsiteadmin.models.Project
@@ -84,7 +85,11 @@ class ProjectViewModel @Inject constructor(
             }
         },
         blockException = {
-            Timber.d("Error concatenating projects $it")
+            ExceptionManager.sendMessageErrorToException(
+                exception = it,
+                channel = _messageErrorProject,
+                message = "Failed to concatenate projects"
+            )
         }
     )
 
@@ -97,8 +102,12 @@ class ProjectViewModel @Inject constructor(
             _messageErrorProject.trySend(R.string.message_upload_project)
         },
         blockException = {
-            _messageErrorProject.trySend(R.string.message_error_upload_project)
-            Timber.e("Failed upload project $it")
+            delay(300)
+            ExceptionManager.sendMessageErrorToException(
+                exception = it,
+                channel = _messageErrorProject,
+                message = "Failed upload project"
+            )
         }
     )
 
@@ -114,6 +123,10 @@ class ProjectViewModel @Inject constructor(
             }
         },
         blockException = {
-            Timber.e("Error request last projects $it")
+            ExceptionManager.sendMessageErrorToException(
+                exception = it,
+                channel = _messageErrorProject,
+                message = "Error request last projects"
+            )
         })
 }
