@@ -68,8 +68,8 @@
     <string name="text_select_option">Select an option</string>
     <string name="option_img_camera">Camera</string>
     <string name="description_img_camera">Take a photo</string>
-    <string name="option_img_gallery">Galería</string>
-    <string name="description_img_gallery">Seleccione una foto de la galería</string>
+    <string name="option_img_gallery">Gallery</string>
+    <string name="description_img_gallery">Select a photo from the gallery</string>
     <string name="error_compress_img">Error selecting image</string>
     <string name="error_upload_info">Error uploading changes</string>
     <string name="message_change_upload">Changes saved</string>
@@ -100,10 +100,10 @@
     <string name="description_email_pending">The email has not been read</string>
     <string name="title_edit_info_personal">Edit personal information</string>
     <string name="message_empty_project">There are no projects to show</string>
-    <string name="message_empty_info_user">La informacion del usuario esta vacia</string>
-    <string name="error_network">Verifique su conexicion a intenet</string>
-    <string name="error_time_out">El servidor no response reintente</string>
-    <string name="error_unknown">Error desconocido</string>
-    <string name="error_user_not_found">Usurio no encontrado</string>
+    <string name="message_empty_info_user">User information is empty</string>
+    <string name="error_network">Check your internet connection</string>
+    <string name="error_time_out">The server did not respond, please try</string>
+    <string name="error_unknown">Unknown error</string>
+    <string name="error_user_not_found">User not found</string>
 
 </resources>

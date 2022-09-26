@@ -97,7 +97,7 @@
     <string name="option_img_camera">Cámara</string>
     <string name="description_img_camera">Toma una foto</string>
     <string name="option_img_gallery">Galería</string>
-    <string name="description_img_gallery">Select a photo from the gallery</string>
+    <string name="description_img_gallery">Seleccione una foto de la galería</string>
     <string name="error_compress_img">Error al seleccionar la imagen</string>
 
     <!-- services upload -->
@@ -134,9 +134,9 @@
 
     <string name="title_edit_info_personal">Editar información personal</string>
     <string name="message_empty_info_user">La información del usuario está vacía</string>
-    <string name="error_network">Verifique su conexicion a intenet</string>
-    <string name="error_time_out">El servidor no response reintente</string>
+    <string name="error_network">Verifique su conexión a internet</string>
+    <string name="error_time_out">El servidor no response, reintente</string>
     <string name="error_unknown">Error desconocido</string>
-    <string name="error_user_not_found">Usurio no encontrado</string>
+    <string name="error_user_not_found">Usuario no encontrado</string>
 
 </resources>
