@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.delagetes.SavableComposeState
 import com.nullpointer.nullsiteadmin.core.states.Resource
+import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager.sendMessageErrorToException
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.email.EmailsRepository
 import com.nullpointer.nullsiteadmin.models.email.EmailContact
@@ -87,7 +88,11 @@ class EmailsViewModel @Inject constructor(
             }
         },
         blockException = {
-            Timber.e("Error to concatenate emails $it")
+            sendMessageErrorToException(
+                exception = it,
+                channel = _errorEmail,
+                message = "Error to concatenate emails"
+            )
         }
     )
 
@@ -101,8 +106,12 @@ class EmailsViewModel @Inject constructor(
             _errorEmail.trySend(R.string.message_deleter_email_success)
         },
         blockException = {
-            Timber.e("Error to delete email $idEmail : $it")
-            _errorEmail.trySend(R.string.error_deleter_email)
+            delay(300)
+            sendMessageErrorToException(
+                exception = it,
+                channel = _errorEmail,
+                message = "Error deleter email $idEmail"
+            )
         }
     )
 
@@ -112,17 +121,24 @@ class EmailsViewModel @Inject constructor(
         isEnabled = !isRequestEmail,
         blockBefore = { isRequestEmail = true },
         blockAfter = { isRequestEmail = false },
-        blockException = { Timber.e("Error request last email $it") },
         blockIO = {
             val sizeRequest = emailsRepository.requestLastEmail(forceRefresh)
             Timber.d("News emails receiver $sizeRequest")
             withContext(Dispatchers.Main) {
                 isEnabledConcatenateEmail = true
             }
+        },
+        blockException = {
+            sendMessageErrorToException(
+                exception = it,
+                channel = _errorEmail,
+                message = "Error request emails"
+            )
         }
     )
 
     fun markAsOpen(email: EmailContact) = launchSafeIO(
+        isEnabled = email.isOpen == false,
         blockIO = { emailsRepository.markAsOpen(email.idEmail) },
         blockException = {
             Timber.e("Error mark as open $email : $it")

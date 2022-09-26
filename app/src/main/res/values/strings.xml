@@ -134,5 +134,8 @@
 
     <string name="title_edit_info_personal">Editar información personal</string>
     <string name="message_empty_info_user">La información del usuario está vacía</string>
+    <string name="error_network">Verifique su conexicion a intenet</string>
+    <string name="error_time_out">El servidor no response reintente</string>
+    <string name="error_unknown">Error desconocido</string>
 
 </resources>

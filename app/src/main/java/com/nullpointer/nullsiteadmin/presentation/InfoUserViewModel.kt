@@ -54,7 +54,7 @@ class InfoUserViewModel @Inject constructor(
 
     val infoUserIsEmpty = infoUser.map {
         if (it is Resource.Success) {
-            it.data.idPersonal.isNotEmpty()
+            it.data.idPersonal.isEmpty()
         } else {
             false
         }

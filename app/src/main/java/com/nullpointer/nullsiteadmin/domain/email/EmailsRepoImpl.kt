@@ -1,5 +1,6 @@
 package com.nullpointer.nullsiteadmin.domain.email
 
+import com.nullpointer.nullsiteadmin.core.utils.callApiTimeOut
 import com.nullpointer.nullsiteadmin.data.local.email.EmailLocalDataSource
 import com.nullpointer.nullsiteadmin.data.remote.email.EmailRemoteDataSource
 import com.nullpointer.nullsiteadmin.models.email.EmailContact
@@ -18,12 +19,12 @@ class EmailsRepoImpl(
     override val listEmails: Flow<List<EmailContact>> = emailLocalDataSource.listEmail
 
     override suspend fun deleterEmail(idEmail: String) {
-        emailRemoteDataSource.deleterEmail(idEmail)
+        callApiTimeOut { emailRemoteDataSource.deleterEmail(idEmail) }
         emailLocalDataSource.deleteEmail(idEmail)
     }
 
     override suspend fun markAsOpen(idEmail: String) {
-        emailRemoteDataSource.markAsOpen(idEmail)
+        callApiTimeOut { emailRemoteDataSource.markAsOpen(idEmail) }
         emailLocalDataSource.getEmailById(idEmail)?.let {
             emailLocalDataSource.updateEmail(it.copy(isOpen = true))
         }
@@ -32,11 +33,13 @@ class EmailsRepoImpl(
     override suspend fun requestLastEmail(forceRefresh: Boolean): Int {
         val email = emailLocalDataSource.getMoreRecentEmail()
         val idEmail = if (forceRefresh) null else email?.idEmail
-        val newEmails = emailRemoteDataSource.getNewEmails(
-            numberResult = SIZE_REQUEST_EMAIL,
-            includeEmail = false,
-            emailId = idEmail
-        )
+        val newEmails = callApiTimeOut {
+            emailRemoteDataSource.getNewEmails(
+                numberResult = SIZE_REQUEST_EMAIL,
+                includeEmail = false,
+                emailId = idEmail
+            )
+        }
         if (newEmails.isNotEmpty()) emailLocalDataSource.updateAllEmails(newEmails)
         return newEmails.size
     }
@@ -44,11 +47,13 @@ class EmailsRepoImpl(
     override suspend fun concatenateEmails(): Int {
         val lastEmail = emailLocalDataSource.getLastEmail()
         return if (lastEmail != null) {
-            val newEmails = emailRemoteDataSource.getConcatenateEmails(
-                emailId = lastEmail.idEmail,
-                includeEmail = false,
-                numberResult = SIZE_CONCATENATE_EMAIL
-            )
+            val newEmails = callApiTimeOut {
+                emailRemoteDataSource.getConcatenateEmails(
+                    emailId = lastEmail.idEmail,
+                    includeEmail = false,
+                    numberResult = SIZE_CONCATENATE_EMAIL
+                )
+            }
             if (newEmails.isNotEmpty()) emailLocalDataSource.insertListEmails(newEmails)
             return newEmails.size
         } else {

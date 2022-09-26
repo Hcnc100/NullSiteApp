@@ -101,5 +101,8 @@
     <string name="title_edit_info_personal">Edit personal information</string>
     <string name="message_empty_project">There are no projects to show</string>
     <string name="message_empty_info_user">La informacion del usuario esta vacia</string>
+    <string name="error_network">Verifique su conexicion a intenet</string>
+    <string name="error_time_out">El servidor no response reintente</string>
+    <string name="error_unknown">Error desconocido</string>
 
 </resources>

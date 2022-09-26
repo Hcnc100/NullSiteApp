@@ -25,6 +25,8 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
+import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager.NO_INTERNET_CONNECTION
+import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager.SERVER_TIME_OUT
 import com.valentinilk.shimmer.Shimmer
 import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.*
@@ -200,4 +202,14 @@ fun DocumentSnapshot.getTimeEstimate(
         /* field = */ timestampField,
         /* serverTimestampBehavior = */ DocumentSnapshot.ServerTimestampBehavior.ESTIMATE
     )?.toDate()
+}
+
+suspend fun <T> callApiTimeOut(
+    timeOut: Long = 3000,
+    callApi: suspend () -> T
+): T {
+    if (!InternetCheck.isNetworkAvailable()) throw Exception(NO_INTERNET_CONNECTION)
+    return withTimeoutOrNull(timeOut) {
+        callApi()
+    } ?: throw Exception(SERVER_TIME_OUT)
 }

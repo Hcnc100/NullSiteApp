@@ -37,7 +37,7 @@ fun InfoProfile(
 ) {
 
     val stateInfoProfile by infoViewModel.infoUser.collectAsState()
-    val isDataEmpty by infoViewModel.infoUserIsEmpty.collectAsState(initial = false)
+    val isDataEmpty by infoViewModel.infoUserIsEmpty.collectAsState(initial = true)
 
     LaunchedEffect(key1 = Unit) {
         infoViewModel.messageError.collect(infoProfileState::showSnackMessage)

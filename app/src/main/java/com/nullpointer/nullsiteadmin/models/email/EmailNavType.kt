@@ -8,7 +8,7 @@ import java.util.*
 class EmailNavType : DestinationsNavTypeSerializer<EmailContact> {
 
     override fun toRouteString(value: EmailContact): String {
-        return "${value.idEmail};${value.name};${value.email};${value.subject};${value.message};${value.timestamp?.time}"
+        return "${value.idEmail};${value.name};${value.email};${value.subject};${value.message};${value.timestamp?.time};${value.isOpen}"
     }
 
     override fun fromRouteString(routeStr: String): EmailContact {
@@ -19,7 +19,8 @@ class EmailNavType : DestinationsNavTypeSerializer<EmailContact> {
             email = things[2],
             subject = things[3],
             message = things[4],
-            timestamp = Date(things[5].toLong())
+            timestamp = Date(things[5].toLong()),
+            isOpen = things[6].toBoolean()
         )
     }
 }
