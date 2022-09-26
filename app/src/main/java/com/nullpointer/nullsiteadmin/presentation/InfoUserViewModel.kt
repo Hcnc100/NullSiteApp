@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.delagetes.SavableComposeState
 import com.nullpointer.nullsiteadmin.core.states.Resource
+import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepository
 import com.nullpointer.nullsiteadmin.models.PersonalInfo
@@ -68,7 +69,13 @@ class InfoUserViewModel @Inject constructor(
         isEnabled = !isRequestInfoUser,
         blockBefore = { isRequestInfoUser = true },
         blockAfter = { isRequestInfoUser = false },
-        blockException = { Timber.d("Error update info $it") },
+        blockException = {
+            ExceptionManager.sendMessageErrorToException(
+                exception = it,
+                message = "Error update info",
+                channel = _messageError
+            )
+        },
         blockIO = {
             val isUpdate = infoUserRepository.requestLastPersonalInfo(forceRefresh)
             if (isUpdate) Timber.d("Updated info user admin")
@@ -84,8 +91,12 @@ class InfoUserViewModel @Inject constructor(
             _messageError.trySend(R.string.message_data_upload)
         },
         blockException = {
-            Timber.e("Error to update info personal $it")
-            _messageError.trySend(R.string.error_data_user_upload)
+            delay(300)
+            ExceptionManager.sendMessageErrorToException(
+                exception = it,
+                message = "Error to update info personal $it",
+                channel = _messageError
+            )
         }
     )
 }

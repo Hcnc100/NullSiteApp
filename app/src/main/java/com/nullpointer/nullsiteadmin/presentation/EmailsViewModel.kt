@@ -138,11 +138,8 @@ class EmailsViewModel @Inject constructor(
     )
 
     fun markAsOpen(email: EmailContact) = launchSafeIO(
-        isEnabled = email.isOpen == false,
+        isEnabled = !email.isOpen,
         blockIO = { emailsRepository.markAsOpen(email.idEmail) },
-        blockException = {
-            Timber.e("Error mark as open $email : $it")
-            _errorEmail.trySend(R.string.error_unkown)
-        }
+        blockException = { Timber.e("Error mark as open $email : $it") }
     )
 }
