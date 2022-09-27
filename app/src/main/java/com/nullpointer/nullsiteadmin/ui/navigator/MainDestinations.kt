@@ -27,12 +27,18 @@ enum class MainDestinations(
         icon = R.drawable.ic_comment,
         destinations = EmailScreenDestination
     ),
+    SettingsScreen(
+        label = "Settings",
+        icon = R.drawable.ic_settings,
+        destinations = SettingsScreenDestination
+    ),
 
     PreviewScreen(
         label = "Preview",
         icon = R.drawable.ic_web,
         destinations = PreviewScreenDestination
     );
+
 
     companion object {
         fun isHomeRoute(route: String?): Boolean {

@@ -10,6 +10,7 @@ import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.auth.AuthRepository
+import com.nullpointer.nullsiteadmin.domain.biometric.BiometricRepository
 import com.nullpointer.nullsiteadmin.domain.deleter.DeleterInfoRepository
 import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepository
 import com.nullpointer.nullsiteadmin.models.UserCredentials
@@ -17,6 +18,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -24,11 +26,27 @@ import javax.inject.Inject
 class AuthViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val infoUserRepository: InfoUserRepository,
+    private val biometricRepository: BiometricRepository,
     private val deleterInfoRepository: DeleterInfoRepository
 ) : ViewModel() {
 
+    var isAuthPassed by mutableStateOf<Resource<Boolean>>(Resource.Loading)
+        private set
+
     private val _messageErrorAuth = Channel<Int>()
     val messageErrorAuth = _messageErrorAuth.receiveAsFlow()
+
+    val isBiometricEnabled = biometricRepository
+        .isBiometricEnabled
+        .catch {
+            Timber.e("Error get is Biometric enabled $it")
+            emit(false)
+        }
+        .flowOn(Dispatchers.IO).stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5_000),
+            false
+        )
 
     val isUserAuth = flow<Resource<Boolean>> {
         authRepository.isUserAuth.collect {
@@ -50,6 +68,8 @@ class AuthViewModel @Inject constructor(
     // * the function auth finish and restore state of "isAuthenticating"
     var isAuthenticating by mutableStateOf(false)
         private set
+
+    val isBiometricAvailable by mutableStateOf(biometricRepository.checkBiometricSupport())
 
     init {
         verifyTokenMessaging()
@@ -90,4 +110,30 @@ class AuthViewModel @Inject constructor(
             ExceptionManager.getMessageForException(it, "Error update token user")
         }
     )
+
+    fun changeBiometricEnabled(enabled: Boolean) = launchSafeIO {
+        biometricRepository.changeIsBiometricEnabled(enabled)
+    }
+
+    fun launchBiometric(
+        callbackCancel: () -> Unit
+    ) = viewModelScope.launch {
+        if (biometricRepository.checkBiometricSupport()) {
+            val isBiometricEnabled = biometricRepository.isBiometricEnabled.first()
+            if (isBiometricEnabled) {
+                biometricRepository.launchBiometric(
+                    callbackResult = {
+                        isAuthPassed = Resource.Success(it)
+                    },
+                    callbackCancel = callbackCancel
+                )
+            } else {
+                isAuthPassed = Resource.Success(true)
+            }
+        } else {
+            isAuthPassed = Resource.Success(true)
+        }
+
+    }
+
 }

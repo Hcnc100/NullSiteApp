@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
+import com.nullpointer.nullsiteadmin.presentation.AuthViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
 import com.nullpointer.nullsiteadmin.ui.screens.NavGraphs
@@ -29,8 +30,9 @@ import com.ramcosta.composedestinations.navigation.dependency
 )
 @Composable
  fun MainScreen(
-    mainScreenState: MainScreenState = rememberMainScreenState(),
-    actionRootDestinations: ActionRootDestinations
+    authViewModel: AuthViewModel,
+    actionRootDestinations: ActionRootDestinations,
+    mainScreenState: MainScreenState = rememberMainScreenState()
 ) {
     Scaffold(
         scaffoldState = mainScreenState.scaffoldState,
@@ -42,7 +44,7 @@ import com.ramcosta.composedestinations.navigation.dependency
         },
         drawerContent = {
             NavigatorDrawer(
-                closeSession = actionRootDestinations::logout,
+                closeSession = authViewModel::logOut,
                 closeDrawer = mainScreenState::closeDrawer,
                 navController = mainScreenState.navController
             )
@@ -62,6 +64,7 @@ import com.ramcosta.composedestinations.navigation.dependency
             modifier = Modifier.padding(paddingValues),
             dependenciesContainerBuilder = {
                 dependency(actionRootDestinations)
+                dependency(authViewModel)
             }
         )
     }

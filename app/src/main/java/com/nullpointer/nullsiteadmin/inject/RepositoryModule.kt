@@ -2,6 +2,8 @@ package com.nullpointer.nullsiteadmin.inject
 
 import com.nullpointer.nullsiteadmin.domain.auth.AuthRepoImpl
 import com.nullpointer.nullsiteadmin.domain.auth.AuthRepository
+import com.nullpointer.nullsiteadmin.domain.biometric.BiometricRepoImpl
+import com.nullpointer.nullsiteadmin.domain.biometric.BiometricRepository
 import com.nullpointer.nullsiteadmin.domain.compress.CompressImgRepoImpl
 import com.nullpointer.nullsiteadmin.domain.compress.CompressImgRepository
 import com.nullpointer.nullsiteadmin.domain.deleter.DeleterInfoRepository
@@ -62,7 +64,13 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun provideDeleterInfo(
+    abstract fun provideDeleterRepository(
         deleterInfoRepoImpl: DeleterInfoRepositoryImpl
     ): DeleterInfoRepository
+
+    @Binds
+    @Singleton
+    abstract fun provideBiometricRepository(
+        biometricRepoImpl: BiometricRepoImpl
+    ): BiometricRepository
 }

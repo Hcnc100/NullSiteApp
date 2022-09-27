@@ -48,6 +48,8 @@ class AuthFieldViewModel @Inject constructor(
     val messageCredentials get() = _messageCredentials.receiveAsFlow()
 
     fun getDataAuth(): UserCredentials? {
+        emailAdmin.reValueField()
+        passwordAdmin.reValueField()
         return if (isDataValid) {
             UserCredentials(
                 email = emailAdmin.currentValue,
