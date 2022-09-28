@@ -1,7 +1,9 @@
 package com.nullpointer.nullsiteadmin.data.local.biometric
 
+import com.nullpointer.nullsiteadmin.actions.BiometricResult
+
 interface BiometricDataSource {
     fun checkBiometricSupport(): Boolean
-    fun enableBiometric(callbackResult: (Boolean) -> Unit)
-    fun launchBiometricInit(callbackResult: (Boolean) -> Unit, callbackCancel: () -> Unit)
+    fun enableBiometric(callbackResult: (BiometricResult) -> Unit)
+    fun launchBiometricInit(callbackResult: (BiometricResult) -> Unit)
 }

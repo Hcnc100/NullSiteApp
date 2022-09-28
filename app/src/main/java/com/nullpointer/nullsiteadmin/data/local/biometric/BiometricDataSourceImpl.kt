@@ -5,34 +5,36 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.hardware.biometrics.BiometricPrompt
+import android.hardware.biometrics.BiometricPrompt.BIOMETRIC_ERROR_LOCKOUT
+import android.hardware.biometrics.BiometricPrompt.BIOMETRIC_ERROR_LOCKOUT_PERMANENT
 import android.os.Build
 import android.os.CancellationSignal
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import com.nullpointer.nullsiteadmin.R
+import com.nullpointer.nullsiteadmin.actions.BiometricResult
 import timber.log.Timber
 
 class BiometricDataSourceImpl(
     private val context: Context
 ) : BiometricDataSource {
 
-    private val Context.keyguardManager
+    private val keyguardManager
         get() = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
 
 
     override fun launchBiometricInit(
-        callbackResult: (Boolean) -> Unit,
-        callbackCancel: () -> Unit
+        callbackResult: (BiometricResult) -> Unit
     ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val biometricPrompt = createBiometricPrompt(
-                title = "Escanea tu huella para continuar",
-                negativeText = "Cancelar",
-                callbackCancel = callbackCancel
+                title = context.getString(R.string.text_title_unlock_app),
+                negativeText = context.getString(R.string.text_title_cancel)
             )
             biometricPrompt.authenticate(
-                createCancellationSignal(callbackCancel),
+                createCancellationSignal(),
                 context.mainExecutor,
-                createBiometricCallBack(callbackResult, callbackCancel)
+                createBiometricCallBack(callbackResult)
             )
         } else {
             throw RuntimeException("Not supported device")
@@ -42,7 +44,7 @@ class BiometricDataSourceImpl(
 
     override fun checkBiometricSupport(): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            if (!context.keyguardManager.isDeviceSecure) {
+            if (!keyguardManager.isDeviceSecure) {
                 Timber.e("The device is not secure")
                 return false
             }
@@ -60,11 +62,13 @@ class BiometricDataSourceImpl(
         }
     }
 
-    override fun enableBiometric(callbackResult: (Boolean) -> Unit) {
+    override fun enableBiometric(
+        callbackResult: (BiometricResult) -> Unit
+    ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val biometricPrompt = createBiometricPrompt(
-                title = "Escanea tu huella para comtinuar",
-                negativeText = "Cancelar",
+                title = context.getString(R.string.title_text_enable_lock_app),
+                negativeText = context.getString(R.string.text_title_cancel),
             )
             biometricPrompt.authenticate(
                 createCancellationSignal(),
@@ -86,27 +90,21 @@ class BiometricDataSourceImpl(
 
 
     private fun createBiometricCallBack(
-        callbackResult: (Boolean) -> Unit = {},
-        callbackCancel: (() -> Unit) = {},
+        callbackResult: (BiometricResult) -> Unit = {}
     ) = @RequiresApi(Build.VERSION_CODES.P)
     object : BiometricPrompt.AuthenticationCallback() {
         override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) {
-            callbackResult(false)
-            Timber.d("error")
-            callbackCancel()
+            Timber.d("Error biometric: $errorCode $errString")
+            when (errorCode) {
+                BIOMETRIC_ERROR_LOCKOUT -> callbackResult(BiometricResult.LOCKED_TIME_OUT)
+                BIOMETRIC_ERROR_LOCKOUT_PERMANENT -> callbackResult(BiometricResult.DISABLE_ALWAYS)
+            }
             super.onAuthenticationError(errorCode, errString)
         }
 
         override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult?) {
-            callbackResult(true)
-            Timber.d("success")
+            callbackResult(BiometricResult.PASSED)
             super.onAuthenticationSucceeded(result)
-        }
-
-        override fun onAuthenticationFailed() {
-            callbackResult(false)
-            Timber.d("failed")
-            super.onAuthenticationFailed()
         }
     }
 

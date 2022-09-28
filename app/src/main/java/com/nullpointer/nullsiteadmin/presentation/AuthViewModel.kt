@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nullpointer.nullsiteadmin.R
+import com.nullpointer.nullsiteadmin.actions.BiometricState
 import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
@@ -30,11 +31,23 @@ class AuthViewModel @Inject constructor(
     private val deleterInfoRepository: DeleterInfoRepository
 ) : ViewModel() {
 
+    val stateLocked = biometricRepository.biometricState.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        BiometricState.Locked
+    )
     var isAuthPassed by mutableStateOf<Resource<Boolean>>(Resource.Loading)
         private set
 
     private val _messageErrorAuth = Channel<Int>()
     val messageErrorAuth = _messageErrorAuth.receiveAsFlow()
+
+
+    val timeOutLocked = biometricRepository.timeOutLocked.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        Long.MAX_VALUE
+    )
 
     val isBiometricEnabled = biometricRepository
         .isBiometricEnabled
@@ -48,10 +61,8 @@ class AuthViewModel @Inject constructor(
             false
         )
 
-    val isUserAuth = flow<Resource<Boolean>> {
-        authRepository.isUserAuth.collect {
-            emit(Resource.Success(it))
-        }
+    val isUserAuth = authRepository.isUserAuth.transform<Boolean, Resource<Boolean>> { isAuth ->
+        emit(Resource.Success(isAuth))
     }.flowOn(
         Dispatchers.IO
     ).catch {
@@ -115,25 +126,29 @@ class AuthViewModel @Inject constructor(
         biometricRepository.changeIsBiometricEnabled(enabled)
     }
 
-    fun launchBiometric(
-        callbackCancel: () -> Unit
-    ) = viewModelScope.launch {
-        if (biometricRepository.checkBiometricSupport()) {
+    fun initVerifyBiometrics() = viewModelScope.launch {
+        isAuthPassed = if (biometricRepository.checkBiometricSupport()) {
             val isBiometricEnabled = biometricRepository.isBiometricEnabled.first()
             if (isBiometricEnabled) {
-                biometricRepository.launchBiometric(
-                    callbackResult = {
-                        isAuthPassed = Resource.Success(it)
-                    },
-                    callbackCancel = callbackCancel
-                )
+                Resource.Success(false)
             } else {
-                isAuthPassed = Resource.Success(true)
+                Resource.Success(true)
             }
+        } else {
+            Resource.Success(true)
+        }
+    }
+
+    fun launchBiometric() = viewModelScope.launch {
+        val timeOut = biometricRepository.timeOutLocked.first()
+        if (biometricRepository.checkBiometricSupport()) {
+            if (timeOut == 0L)
+                biometricRepository.launchBiometric {
+                    isAuthPassed = Resource.Success(true)
+                }
         } else {
             isAuthPassed = Resource.Success(true)
         }
 
     }
-
 }

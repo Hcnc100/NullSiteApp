@@ -106,4 +106,14 @@
     <string name="error_unknown">Unknown error</string>
     <string name="error_user_not_found">User not found</string>
 
+    <string name="title_lock_screen">Null App Locked</string>
+    <string name="text_lauch_biometric">Launch biometric reader</string>
+    <string name="text_biometric_disable">Too many failed attempts, sensor disabled</string>
+    <string name="text_time_out_lock">Too many attempts, please try again in %l</string>
+    <string name="text_button_unlock">Unlock</string>
+
+
+    <string name="text_title_unlock_app">Scan your fingerprint to unlock the app</string>
+    <string name="text_title_cancel">Cancel</string>
+    <string name="title_text_enable_lock_app">Scan your fingerprint to enable lock</string>
 </resources>
