@@ -13,10 +13,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nullpointer.nullsiteadmin.R
+import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.core.utils.sendEmail
 import com.nullpointer.nullsiteadmin.core.utils.shareViewModel
 import com.nullpointer.nullsiteadmin.core.utils.toFormat
 import com.nullpointer.nullsiteadmin.models.email.EmailContact
+import com.nullpointer.nullsiteadmin.presentation.AuthViewModel
 import com.nullpointer.nullsiteadmin.presentation.EmailsViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
@@ -38,44 +40,52 @@ import com.ramcosta.composedestinations.annotation.FULL_ROUTE_PLACEHOLDER
 @Composable
 fun EmailDetailsScreen(
     email: EmailContact,
+    authViewModel: AuthViewModel,
     rootDestinations: ActionRootDestinations,
     emailsViewModel: EmailsViewModel = shareViewModel(),
     emailsDetailsState: SimpleScreenState = rememberSimpleScreenState()
 ) {
 
-    LaunchedEffect(key1 = Unit) {
-        emailsViewModel.markAsOpen(email)
+    (authViewModel.isAuthPassed as? Resource.Success)?.let {
+        if (it.data) {
+            LaunchedEffect(key1 = Unit) {
+                emailsViewModel.markAsOpen(email)
+            }
+            Scaffold(
+                topBar = {
+                    ToolbarEmailDetails(actionBack = rootDestinations::backDestination) {
+                        emailsViewModel.deleterEmail(email.idEmail)
+                        rootDestinations.backDestination()
+                    }
+                },
+                floatingActionButton = {
+                    ButtonReplyEmail {
+                        emailsDetailsState.context.sendEmail(email = email.email)
+                    }
+                }
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(it)
+                        .padding(10.dp)
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    ContainerAnimateEmail()
+                    ContainerHeaderEmail(emailFrom = email.email, nameFrom = email.name)
+                    Spacer(modifier = Modifier.height(10.dp))
+                    BodyEmail(
+                        timestamp = email.timestamp.toFormat(emailsDetailsState.context),
+                        subject = email.subject,
+                        body = email.message
+                    )
+                }
+            }
+        } else {
+            rootDestinations.backDestination()
+        }
     }
 
-    Scaffold(
-        topBar = {
-            ToolbarEmailDetails(actionBack = rootDestinations::backDestination) {
-                emailsViewModel.deleterEmail(email.idEmail)
-                rootDestinations.backDestination()
-            }
-        },
-        floatingActionButton = {
-            ButtonReplyEmail {
-                emailsDetailsState.context.sendEmail(email = email.email)
-            }
-        }
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(it)
-                .padding(10.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
-            ContainerAnimateEmail()
-            ContainerHeaderEmail(emailFrom = email.email, nameFrom = email.name)
-            Spacer(modifier = Modifier.height(10.dp))
-            BodyEmail(
-                timestamp = email.timestamp.toFormat(emailsDetailsState.context),
-                subject = email.subject,
-                body = email.message
-            )
-        }
-    }
+
 }
 
 @Composable
