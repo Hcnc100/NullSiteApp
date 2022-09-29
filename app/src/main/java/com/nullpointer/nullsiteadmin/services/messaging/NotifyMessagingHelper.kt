@@ -19,6 +19,7 @@ import com.nullpointer.nullsiteadmin.ui.screens.destinations.EmailDetailsScreenD
 class NotifyMessagingHelper(private val context: Context) {
     companion object {
         private const val ID_CHANNEL_MESSAGE = "ID_CHANNEL_MESSAGE_12345"
+        private const val ID_GROUP_MESSAGE = "ID_GROUP_NULL_ADMIN_APP"
     }
 
     private val notifyManager = context.getNotifyServices()
@@ -65,8 +66,9 @@ class NotifyMessagingHelper(private val context: Context) {
             ID_CHANNEL_MESSAGE
         ).setAutoCancel(true)
             .setOngoing(false)
-            .setSmallIcon(R.drawable.ic_safe)
-            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setSmallIcon(R.drawable.ic_email_recv)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setGroup(ID_GROUP_MESSAGE)
     }
 
     fun showNotifyForMessage(email: EmailContact) {
@@ -79,7 +81,7 @@ class NotifyMessagingHelper(private val context: Context) {
                 )
                 .setContentIntent(getPendingIntentCompose(email))
         }
-        notifyManager.notify(0, baseNotify.build())
+        notifyManager.notify(email.idEmail.hashCode(), baseNotify.build())
     }
 }
 
