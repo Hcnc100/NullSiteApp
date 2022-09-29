@@ -1,5 +1,6 @@
 package com.nullpointer.nullsiteadmin.ui.screens.detailsEmail
 
+import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,6 +14,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nullpointer.nullsiteadmin.R
+import com.nullpointer.nullsiteadmin.actions.EmailsScreenActions
+import com.nullpointer.nullsiteadmin.actions.EmailsScreenActions.*
 import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.core.utils.sendEmail
 import com.nullpointer.nullsiteadmin.core.utils.shareViewModel
@@ -45,47 +48,74 @@ fun EmailDetailsScreen(
     emailsViewModel: EmailsViewModel = shareViewModel(),
     emailsDetailsState: SimpleScreenState = rememberSimpleScreenState()
 ) {
-
-    (authViewModel.isAuthPassed as? Resource.Success)?.let {
-        if (it.data) {
+    (authViewModel.isAuthPassed as? Resource.Success)?.let { isAuthPassed ->
+        if (!isAuthPassed.data) {
+            // ! if the auth no passed back
+            LaunchedEffect(key1 = Unit) {
+                rootDestinations.backDestination()
+            }
+        } else {
+            // ! if the auth passed, show content email
             LaunchedEffect(key1 = Unit) {
                 emailsViewModel.markAsOpen(email)
             }
-            Scaffold(
-                topBar = {
-                    ToolbarEmailDetails(actionBack = rootDestinations::backDestination) {
-                        emailsViewModel.deleterEmail(email.idEmail)
-                        rootDestinations.backDestination()
-                    }
-                },
-                floatingActionButton = {
-                    ButtonReplyEmail {
-                        emailsDetailsState.context.sendEmail(email = email.email)
+            EmailsDetailsScreen(
+                email = email,
+                context = emailsDetailsState.context,
+                actionBack = rootDestinations::backDestination,
+                scaffoldState = emailsDetailsState.scaffoldState,
+                emailScreenAction = { action, email ->
+                    when (action) {
+                        MARK_AS_OPEN -> emailsViewModel.markAsOpen(email)
+                        DELETER -> emailsViewModel.deleterEmail(email.idEmail)
+                        REPLY -> emailsDetailsState.context.sendEmail(email.email)
                     }
                 }
-            ) {
-                Column(
-                    modifier = Modifier
-                        .padding(it)
-                        .padding(10.dp)
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    ContainerAnimateEmail()
-                    ContainerHeaderEmail(emailFrom = email.email, nameFrom = email.name)
-                    Spacer(modifier = Modifier.height(10.dp))
-                    BodyEmail(
-                        timestamp = email.timestamp.toFormat(emailsDetailsState.context),
-                        subject = email.subject,
-                        body = email.message
-                    )
-                }
-            }
-        } else {
-            rootDestinations.backDestination()
+            )
         }
     }
 
+}
 
+@Composable
+private fun EmailsDetailsScreen(
+    context: Context,
+    email: EmailContact,
+    actionBack: () -> Unit,
+    scaffoldState: ScaffoldState,
+    emailScreenAction: (EmailsScreenActions, EmailContact) -> Unit
+) {
+    Scaffold(
+        scaffoldState = scaffoldState,
+        topBar = {
+            ToolbarEmailDetails(
+                actionBack = actionBack,
+                actionDeleter = {
+                    emailScreenAction(DELETER, email)
+                    actionBack()
+                }
+            )
+        },
+        floatingActionButton = {
+            ButtonReplyEmail { emailScreenAction(REPLY, email) }
+        }
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(it)
+                .padding(10.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+            ContainerAnimateEmail()
+            ContainerHeaderEmail(emailFrom = email.email, nameFrom = email.name)
+            Spacer(modifier = Modifier.height(10.dp))
+            BodyEmail(
+                body = email.message,
+                subject = email.subject,
+                timestamp = email.timestamp.toFormat(context)
+            )
+        }
+    }
 }
 
 @Composable
