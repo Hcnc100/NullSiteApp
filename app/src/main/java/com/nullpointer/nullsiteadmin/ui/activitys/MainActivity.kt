@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -49,9 +48,6 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    LaunchedEffect(key1 = Unit) {
-                        authViewModel.initVerifyBiometrics()
-                    }
                     val isAuthUserState by authViewModel.isUserAuth.collectAsState()
                     val rootScreenState = rememberRootScreenState()
 
@@ -72,7 +68,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun MainActivityScreen(
+    private fun MainActivityScreen(
         isAuthUser: Boolean,
         isBiometricPassed: Boolean,
         navHostEngine: NavHostEngine,

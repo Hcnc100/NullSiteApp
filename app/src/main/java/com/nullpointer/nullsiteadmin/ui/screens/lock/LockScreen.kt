@@ -29,11 +29,9 @@ fun LockScreen(
     val enableBiometrics by remember(timeOut, stateLocked) {
         derivedStateOf { stateLocked == Locked && timeOut == 0L }
     }
-
     LaunchedEffect(key1 = Unit) {
         authViewModel.launchBiometric()
     }
-
     LockScreen(
         timeOutLocked = timeOut,
         stateLocked = stateLocked,
@@ -50,8 +48,6 @@ private fun LockScreen(
     isEnableLaunchBiometrics: Boolean
 ) {
     Scaffold(
-//        backgroundColor = MaterialTheme.colors.primary,
-//        contentColor = Color.White,
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
             ButtonLaunchBiometric(

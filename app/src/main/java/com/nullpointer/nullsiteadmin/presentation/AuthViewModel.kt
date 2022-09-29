@@ -84,6 +84,7 @@ class AuthViewModel @Inject constructor(
 
     init {
         verifyTokenMessaging()
+        initVerifyBiometrics()
     }
 
     fun authWithEmailAndPassword(
