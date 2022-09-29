@@ -209,7 +209,11 @@ suspend fun <T> callApiTimeOut(
     callApi: suspend () -> T
 ): T {
     if (!InternetCheck.isNetworkAvailable()) throw Exception(NO_INTERNET_CONNECTION)
-    return withTimeoutOrNull(timeOut) {
-        callApi()
-    } ?: throw Exception(SERVER_TIME_OUT)
+    return try {
+        withTimeout(timeOut) {
+            callApi()
+        }
+    } catch (e: TimeoutCancellationException) {
+        throw Exception(SERVER_TIME_OUT)
+    }
 }
