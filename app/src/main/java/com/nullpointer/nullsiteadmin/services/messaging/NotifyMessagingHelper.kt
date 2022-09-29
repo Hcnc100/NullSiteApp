@@ -23,7 +23,6 @@ class NotifyMessagingHelper(private val context: Context) {
     }
 
     private val notifyManager = context.getNotifyServices()
-    private val baseNotify by lazy { createBaseNotify() }
 
     init {
         createNotificationChannel()
@@ -72,14 +71,14 @@ class NotifyMessagingHelper(private val context: Context) {
     }
 
     fun showNotifyForMessage(email: EmailContact) {
-        val baseNotify = baseNotify.apply {
+        val baseNotify = createBaseNotify().apply {
+            setContentIntent(getPendingIntentCompose(email))
             setContentTitle(context.getString(R.string.title_notify_new_email))
-                .setContentText(context.getString(R.string.text_to_email, email.email))
-                .setStyle(
-                    NotificationCompat.BigTextStyle()
-                        .bigText(email.toFullMessage())
-                )
-                .setContentIntent(getPendingIntentCompose(email))
+            setContentText(context.getString(R.string.text_to_email, email.email))
+            setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText(email.toFullMessage())
+            )
         }
         notifyManager.notify(email.idEmail.hashCode(), baseNotify.build())
     }
