@@ -24,54 +24,56 @@ class AuthDataSourceImpl : AuthDataSource {
 
 
     override suspend fun addingTokenUser(newToken: String?, uuidUser: String?, oldToken: String) {
-
-        val idDocument = uuidUser ?: auth.currentUser!!.uid
         val finishToken = newToken ?: Firebase.messaging.token.await()
 
-        val refToken = refCollectionTokens.document(idDocument)
+        (uuidUser ?: auth.currentUser?.uid)?.let { idDocument ->
+            val refToken = refCollectionTokens.document(idDocument)
 
-        database.runTransaction { transaction ->
-            val currentToken = transaction.get(refToken)
-            // && (currentToken.get(FIELD_ARRAY_TOKENS) as? List<*>) == null
-            if (currentToken.exists()) {
+            database.runTransaction { transaction ->
+                val currentToken = transaction.get(refToken)
+                // && (currentToken.get(FIELD_ARRAY_TOKENS) as? List<*>) == null
+                if (currentToken.exists()) {
 
-                (currentToken.get(FIELD_ARRAY_TOKENS) as? HashMap<*, *>)?.let {
-                    if (!it.containsKey(finishToken)) {
-                        transaction.update(
-                            /* documentRef = */
-                            refToken,
-                            /* field = */
-                            "$FIELD_ARRAY_TOKENS.$finishToken",
-                            /* value = */
-                            mapOf(FIELD_CREATE_USER to FieldValue.serverTimestamp()),
-                        )
+                    (currentToken.get(FIELD_ARRAY_TOKENS) as? HashMap<*, *>)?.let {
+                        if (!it.containsKey(finishToken)) {
+                            transaction.update(
+                                /* documentRef = */
+                                refToken,
+                                /* field = */
+                                "$FIELD_ARRAY_TOKENS.$finishToken",
+                                /* value = */
+                                mapOf(FIELD_CREATE_USER to FieldValue.serverTimestamp()),
+                            )
+                        }
+
+                        if (it.containsKey(oldToken)) {
+                            transaction.update(
+                                /* documentRef = */
+                                refToken,
+                                /* field = */
+                                "$FIELD_ARRAY_TOKENS.$oldToken",
+                                /* value = */
+                                FieldValue.delete(),
+                            )
+                        }
                     }
 
-                    if (it.containsKey(oldToken)) {
-                        transaction.update(
-                            /* documentRef = */
-                            refToken,
-                            /* field = */
-                            "$FIELD_ARRAY_TOKENS.$oldToken",
-                            /* value = */
-                            FieldValue.delete(),
-                        )
-                    }
+                } else {
+                    transaction.set(
+                        /* documentRef = */
+                        refToken,
+                        /* data = */
+                        hashMapOf(
+                            FIELD_ARRAY_TOKENS to mapOf(
+                                finishToken to mapOf(FIELD_CREATE_USER to FieldValue.serverTimestamp())
+                            )
+                        ),
+                    )
                 }
+            }.await()
+        }
 
-            } else {
-                transaction.set(
-                    /* documentRef = */
-                    refToken,
-                    /* data = */
-                    hashMapOf(
-                        FIELD_ARRAY_TOKENS to mapOf(
-                            finishToken to mapOf(FIELD_CREATE_USER to FieldValue.serverTimestamp())
-                        )
-                    ),
-                )
-            }
-        }.await()
+
     }
 
     override suspend fun authWithEmailAndPassword(email: String, pass: String): UserAuth {
