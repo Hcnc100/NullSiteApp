@@ -48,7 +48,7 @@ fun EmailDetailsScreen(
     emailsViewModel: EmailsViewModel = shareViewModel(),
     emailsDetailsState: SimpleScreenState = rememberSimpleScreenState()
 ) {
-    (authViewModel.isAuthPassed as? Resource.Success)?.let { isAuthPassed ->
+    (authViewModel.isAuthBiometricPassed as? Resource.Success)?.let { isAuthPassed ->
         if (!isAuthPassed.data) {
             // ! if the auth no passed back
             LaunchedEffect(key1 = Unit) {

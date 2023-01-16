@@ -8,7 +8,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.transform
-import kotlinx.coroutines.runBlocking
 
 class BiometricRepoImpl(
     private val settingsDataSource: SettingsDataSource,
@@ -37,27 +36,23 @@ class BiometricRepoImpl(
 
     override suspend fun changeIsBiometricEnabled(newValue: Boolean) {
         if (newValue) {
-            biometricDataSource.enableBiometric { success ->
-                runBlocking {
-                    if (success == PASSED)
-                        settingsDataSource.changeBiometricEnabled(true)
-                }
-            }
+            val result = biometricDataSource.enableFingerBiometric()
+            if (result == PASSED) settingsDataSource.changeBiometricEnabled(true)
         } else {
             settingsDataSource.changeBiometricEnabled(false)
         }
     }
 
-    override suspend fun launchBiometric(callbackSuccess: () -> Unit) {
-        biometricDataSource.launchBiometricInit {
-            when (it) {
-                PASSED -> callbackSuccess()
-                DISABLE_ALWAYS -> _biometricState.value = BiometricState.DisabledTimeOut
-                LOCKED_TIME_OUT -> {
-                    runBlocking {
-                        settingsDataSource.changeTimeOutLocked(System.currentTimeMillis() + 30 * 1000)
-                    }
-                }
+    override suspend fun launchBiometric(): Boolean {
+        return when (biometricDataSource.launchFingerBiometric()) {
+            PASSED -> true
+            DISABLE_ALWAYS -> {
+                _biometricState.value = BiometricState.DisabledTimeOut
+                false
+            }
+            LOCKED_TIME_OUT -> {
+                settingsDataSource.changeTimeOutLocked(System.currentTimeMillis() + 30 * 1000)
+                false
             }
         }
     }

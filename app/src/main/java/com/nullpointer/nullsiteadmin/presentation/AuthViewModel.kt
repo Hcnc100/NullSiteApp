@@ -19,7 +19,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -36,7 +35,7 @@ class AuthViewModel @Inject constructor(
         SharingStarted.WhileSubscribed(5_000),
         BiometricState.Locked
     )
-    var isAuthPassed by mutableStateOf<Resource<Boolean>>(Resource.Loading)
+    var isAuthBiometricPassed by mutableStateOf<Resource<Boolean>>(Resource.Loading)
         private set
 
     private val _messageErrorAuth = Channel<Int>()
@@ -127,8 +126,8 @@ class AuthViewModel @Inject constructor(
         biometricRepository.changeIsBiometricEnabled(enabled)
     }
 
-    fun initVerifyBiometrics() = viewModelScope.launch {
-        isAuthPassed = if (biometricRepository.checkBiometricSupport()) {
+    private fun initVerifyBiometrics() = launchSafeIO {
+        isAuthBiometricPassed = if (biometricRepository.checkBiometricSupport()) {
             val isBiometricEnabled = biometricRepository.isBiometricEnabled.first()
             if (isBiometricEnabled) {
                 Resource.Success(false)
@@ -140,15 +139,15 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun launchBiometric() = viewModelScope.launch {
+    fun launchBiometric() = launchSafeIO {
         val timeOut = biometricRepository.timeOutLocked.first()
         if (biometricRepository.checkBiometricSupport()) {
-            if (timeOut == 0L)
-                biometricRepository.launchBiometric {
-                    isAuthPassed = Resource.Success(true)
-                }
+            if (timeOut == 0L) {
+                val isBiometricPassed = biometricRepository.launchBiometric()
+                isAuthBiometricPassed = Resource.Success(isBiometricPassed)
+            }
         } else {
-            isAuthPassed = Resource.Success(true)
+            isAuthBiometricPassed = Resource.Success(true)
         }
 
     }

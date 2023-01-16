@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.actions.BiometricState
@@ -76,9 +77,18 @@ private fun LockScreen(
             )
 
             when (stateLocked) {
-                Locked -> Text(text = stringResource(R.string.text_lauch_biometric))
-                DisabledTimeOut -> Text(text = stringResource(R.string.text_biometric_disable))
-                LockedTimeOut -> Text(stringResource(R.string.text_time_out_lock, timeOutLocked))
+                Locked -> Text(
+                    text = stringResource(R.string.text_lauch_biometric),
+                    textAlign = TextAlign.Center
+                )
+                DisabledTimeOut -> Text(
+                    text = stringResource(R.string.text_biometric_disable),
+                    textAlign = TextAlign.Center
+                )
+                LockedTimeOut -> Text(
+                    stringResource(R.string.text_time_out_lock, timeOutLocked),
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }

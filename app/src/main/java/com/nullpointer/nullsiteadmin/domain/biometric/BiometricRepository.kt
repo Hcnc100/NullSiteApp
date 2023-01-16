@@ -8,7 +8,7 @@ interface BiometricRepository {
     val timeOutLocked: Flow<Long>
     val biometricState: Flow<BiometricState>
     fun checkBiometricSupport(): Boolean
-    suspend fun launchBiometric(callbackSuccess: () -> Unit)
+    suspend fun launchBiometric(): Boolean
     suspend fun changeIsBiometricEnabled(newValue: Boolean)
     suspend fun changeTimeOut(newValue: Long)
 }

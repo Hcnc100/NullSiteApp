@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
                     val rootScreenState = rememberRootScreenState()
 
                     (isAuthUserState as? Resource.Success)?.let { dataAuth ->
-                        (authViewModel.isAuthPassed as? Resource.Success)?.let { dataBiometric ->
+                        (authViewModel.isAuthBiometricPassed as? Resource.Success)?.let { dataBiometric ->
                             MainActivityScreen(
                                 isAuthUser = dataAuth.data,
                                 isBiometricPassed = dataBiometric.data,

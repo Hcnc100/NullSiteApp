@@ -1,6 +1,5 @@
 package com.nullpointer.nullsiteadmin.data.local.biometric
 
-import android.app.KeyguardManager
 import android.content.Context
 import android.content.DialogInterface
 import android.content.pm.PackageManager
@@ -13,29 +12,62 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.actions.BiometricResult
+import com.nullpointer.nullsiteadmin.core.utils.extensions.keyguardManager
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.suspendCancellableCoroutine
 import timber.log.Timber
 
 class BiometricDataSourceImpl(
     private val context: Context
 ) : BiometricDataSource {
+    override suspend fun enableFingerBiometric(): BiometricResult {
+        return launchBiometric(
+            messageBiometric = context.getString(R.string.title_text_enable_lock_app),
+            messageCancel = context.getString(R.string.text_title_cancel)
+        )
+    }
 
-    private val keyguardManager
-        get() = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+    override suspend fun launchFingerBiometric(): BiometricResult {
+        return launchBiometric(
+            messageBiometric = context.getString(R.string.text_title_unlock_app),
+            messageCancel = context.getString(R.string.text_title_cancel)
+        )
+    }
 
 
-    override fun launchBiometricInit(
-        callbackResult: (BiometricResult) -> Unit
-    ) {
+    @OptIn(ExperimentalCoroutinesApi::class)
+    suspend fun launchBiometric(
+        messageBiometric: String,
+        messageCancel: String
+    ): BiometricResult {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            val biometricPrompt = createBiometricPrompt(
-                title = context.getString(R.string.text_title_unlock_app),
-                negativeText = context.getString(R.string.text_title_cancel)
-            )
-            biometricPrompt.authenticate(
-                createCancellationSignal(),
-                context.mainExecutor,
-                createBiometricCallBack(callbackResult)
-            )
+            return suspendCancellableCoroutine { continuation ->
+                val callback = object : BiometricPrompt.AuthenticationCallback() {
+                    override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) {
+                        super.onAuthenticationError(errorCode, errString)
+                        Timber.d("Error biometric: $errorCode $errString")
+                        when (errorCode) {
+                            BIOMETRIC_ERROR_LOCKOUT -> continuation.resume(BiometricResult.LOCKED_TIME_OUT) {}
+                            BIOMETRIC_ERROR_LOCKOUT_PERMANENT -> continuation.resume(BiometricResult.DISABLE_ALWAYS) {}
+                        }
+                    }
+
+                    override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                        super.onAuthenticationSucceeded(result)
+                        Timber.d("Auth success")
+                        continuation.resume(BiometricResult.PASSED) {}
+                    }
+                }
+                val promptInfo = createBiometricPrompt(
+                    title = messageBiometric,
+                    negativeText = messageCancel,
+                )
+                promptInfo.authenticate(
+                    createCancellationSignal(),
+                    context.mainExecutor,
+                    callback
+                )
+            }
         } else {
             throw RuntimeException("Not supported device")
         }
@@ -44,7 +76,7 @@ class BiometricDataSourceImpl(
 
     override fun checkBiometricSupport(): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            if (!keyguardManager.isDeviceSecure) {
+            if (!context.keyguardManager.isDeviceSecure) {
                 Timber.e("The device is not secure")
                 return false
             }
@@ -62,23 +94,6 @@ class BiometricDataSourceImpl(
         }
     }
 
-    override fun enableBiometric(
-        callbackResult: (BiometricResult) -> Unit
-    ) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            val biometricPrompt = createBiometricPrompt(
-                title = context.getString(R.string.title_text_enable_lock_app),
-                negativeText = context.getString(R.string.text_title_cancel),
-            )
-            biometricPrompt.authenticate(
-                createCancellationSignal(),
-                context.mainExecutor,
-                createBiometricCallBack(callbackResult)
-            )
-        } else {
-            throw RuntimeException("Not supported device")
-        }
-    }
 
     private fun createCancellationSignal(
         callbackCancel: (() -> Unit) = {}
@@ -89,45 +104,22 @@ class BiometricDataSourceImpl(
     }
 
 
-    private fun createBiometricCallBack(
-        callbackResult: (BiometricResult) -> Unit = {}
-    ) = @RequiresApi(Build.VERSION_CODES.P)
-    object : BiometricPrompt.AuthenticationCallback() {
-        override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) {
-            Timber.d("Error biometric: $errorCode $errString")
-            when (errorCode) {
-                BIOMETRIC_ERROR_LOCKOUT -> callbackResult(BiometricResult.LOCKED_TIME_OUT)
-                BIOMETRIC_ERROR_LOCKOUT_PERMANENT -> callbackResult(BiometricResult.DISABLE_ALWAYS)
-            }
-            super.onAuthenticationError(errorCode, errString)
-        }
-
-        override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult?) {
-            callbackResult(BiometricResult.PASSED)
-            super.onAuthenticationSucceeded(result)
-        }
-    }
-
+    @RequiresApi(Build.VERSION_CODES.P)
     private fun createBiometricPrompt(
         title: String,
         negativeText: String,
         callbackCancel: (() -> Unit)? = null
     ): BiometricPrompt {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            BiometricPrompt.Builder(context)
-                .setTitle(title).apply {
-                    setNegativeButton(
-                        /* text = */ negativeText,
-                        /* executor = */ context.mainExecutor
-                    ) { dialog: DialogInterface?, _: Int ->
-                        dialog?.cancel()
-                        callbackCancel?.invoke()
-                    }
-                }
-                .build()
-        } else {
-            throw RuntimeException("This implementation is only supported on Android API level 21 or above")
-        }
+        return BiometricPrompt.Builder(context).apply {
+            setTitle(title)
+            setNegativeButton(
+                /* text = */ negativeText,
+                /* executor = */ context.mainExecutor
+            ) { dialog: DialogInterface?, _: Int ->
+                dialog?.cancel()
+                callbackCancel?.invoke()
+            }
+        }.build()
     }
 
 }
