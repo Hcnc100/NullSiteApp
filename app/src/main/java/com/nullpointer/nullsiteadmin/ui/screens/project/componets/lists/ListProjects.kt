@@ -11,8 +11,8 @@ import androidx.compose.ui.res.stringResource
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.models.Project
 import com.nullpointer.nullsiteadmin.ui.screens.animation.AnimationScreen
-import com.nullpointer.nullsiteadmin.ui.screens.project.componets.ProjectItem
 import com.nullpointer.nullsiteadmin.ui.screens.project.componets.ProjectItemLoading
+import com.nullpointer.nullsiteadmin.ui.screens.project.componets.items.ProjectItem
 import com.nullpointer.nullsiteadmin.ui.share.LazyListConcatenate
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer

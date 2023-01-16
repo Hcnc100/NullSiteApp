@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.ui.screens.project.componets
+package com.nullpointer.nullsiteadmin.ui.screens.project.componets.items
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,18 +25,16 @@ fun ProjectItem(
         shape = RoundedCornerShape(10.dp)
     ) {
         Column(
-            modifier = Modifier.padding(10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier
+                .padding(10.dp)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(15.dp)
         ) {
             Text(text = project.name, style = MaterialTheme.typography.h6)
-            Spacer(modifier = Modifier.height(10.dp))
             ImageProject(urlImg = project.urlImg)
-            Spacer(modifier = Modifier.height(20.dp))
             Text(text = project.description, style = MaterialTheme.typography.body1)
-            Spacer(modifier = Modifier.height(20.dp))
-            ButtonEditProject {
-                actionEditProject(project)
-            }
+            ButtonEditProject { actionEditProject(project) }
         }
     }
 }

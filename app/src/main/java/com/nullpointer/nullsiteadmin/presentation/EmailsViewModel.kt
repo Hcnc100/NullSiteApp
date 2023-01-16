@@ -82,6 +82,7 @@ class EmailsViewModel @Inject constructor(
         blockIO = {
             val numberEmailsRequest = emailsRepository.concatenateEmails()
             Timber.d("Number of emails concatenate $numberEmailsRequest")
+            delay(200)
             withContext(Dispatchers.Main) {
                 isEnabledConcatenateEmail = numberEmailsRequest != 0
                 actionSuccessConcatenate()
@@ -124,6 +125,7 @@ class EmailsViewModel @Inject constructor(
         blockIO = {
             val sizeRequest = emailsRepository.requestLastEmail(forceRefresh)
             Timber.d("News emails receiver $sizeRequest")
+            delay(200)
             withContext(Dispatchers.Main) {
                 isEnabledConcatenateEmail = true
             }
