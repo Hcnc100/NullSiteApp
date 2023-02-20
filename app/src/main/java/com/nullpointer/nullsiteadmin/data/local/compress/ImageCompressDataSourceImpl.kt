@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.domain.compress
+package com.nullpointer.nullsiteadmin.data.local.compress
 
 import android.content.Context
 import android.net.Uri
@@ -8,9 +8,9 @@ import me.shouheng.compress.Compress
 import me.shouheng.compress.concrete
 import me.shouheng.compress.strategy.config.ScaleMode
 
-class CompressImgRepoImpl(
+class ImageCompressDataSourceImpl(
     private val context: Context
-) : CompressImgRepository {
+) : ImageCompressDataSource {
     override suspend fun compressImg(newImg: Uri): Uri {
         val imageCompress = Compress.with(context, newImg)
             .setQuality(80)

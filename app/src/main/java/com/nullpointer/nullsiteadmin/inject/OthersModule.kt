@@ -12,7 +12,6 @@ import com.nullpointer.nullsiteadmin.data.local.infoUser.InfoUserLocalDataSource
 import com.nullpointer.nullsiteadmin.data.local.project.ProjectLocalDataSource
 import com.nullpointer.nullsiteadmin.data.local.settings.SettingsDataSource
 import com.nullpointer.nullsiteadmin.data.local.settings.SettingsDataSourceImpl
-import com.nullpointer.nullsiteadmin.domain.compress.CompressImgRepoImpl
 import com.nullpointer.nullsiteadmin.domain.deleter.DeleterInfoRepositoryImpl
 import dagger.Module
 import dagger.Provides
@@ -47,11 +46,6 @@ object OthersModule {
         dataStore: DataStore<Preferences>
     ): SettingsDataSource = SettingsDataSourceImpl(dataStore)
 
-    @Singleton
-    @Provides
-    fun provideCompress(
-        @ApplicationContext context: Context
-    ): CompressImgRepoImpl = CompressImgRepoImpl(context)
 
     @Singleton
     @Provides

@@ -4,8 +4,6 @@ import com.nullpointer.nullsiteadmin.domain.auth.AuthRepoImpl
 import com.nullpointer.nullsiteadmin.domain.auth.AuthRepository
 import com.nullpointer.nullsiteadmin.domain.biometric.BiometricRepoImpl
 import com.nullpointer.nullsiteadmin.domain.biometric.BiometricRepository
-import com.nullpointer.nullsiteadmin.domain.compress.CompressImgRepoImpl
-import com.nullpointer.nullsiteadmin.domain.compress.CompressImgRepository
 import com.nullpointer.nullsiteadmin.domain.deleter.DeleterInfoRepository
 import com.nullpointer.nullsiteadmin.domain.deleter.DeleterInfoRepositoryImpl
 import com.nullpointer.nullsiteadmin.domain.email.EmailsRepoImpl
@@ -14,8 +12,8 @@ import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepoImpl
 import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepository
 import com.nullpointer.nullsiteadmin.domain.project.ProjectRepoImpl
 import com.nullpointer.nullsiteadmin.domain.project.ProjectRepository
-import com.nullpointer.nullsiteadmin.domain.storage.RepoImageProfileImpl
-import com.nullpointer.nullsiteadmin.domain.storage.RepositoryImageProfile
+import com.nullpointer.nullsiteadmin.domain.storage.ImageRepository
+import com.nullpointer.nullsiteadmin.domain.storage.ImageRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -53,14 +51,9 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun provideImageProfileRepository(
-        repoImageProfileImpl: RepoImageProfileImpl
-    ): RepositoryImageProfile
+        repoImageProfileImpl: ImageRepositoryImpl
+    ): ImageRepository
 
-    @Binds
-    @Singleton
-    abstract fun provideCompressRepository(
-        compressRepoImpl: CompressImgRepoImpl
-    ): CompressImgRepository
 
     @Binds
     @Singleton

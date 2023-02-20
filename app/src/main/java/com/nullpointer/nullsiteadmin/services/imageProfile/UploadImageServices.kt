@@ -12,9 +12,8 @@ import com.nullpointer.nullsiteadmin.data.local.services.ServicesManager.Compani
 import com.nullpointer.nullsiteadmin.data.local.services.ServicesManager.Companion.KEY_URI_PROFILE
 import com.nullpointer.nullsiteadmin.data.local.services.ServicesManager.Companion.START_COMMAND
 import com.nullpointer.nullsiteadmin.data.local.services.ServicesManager.Companion.STOP_COMMAND
-import com.nullpointer.nullsiteadmin.domain.compress.CompressImgRepository
 import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepository
-import com.nullpointer.nullsiteadmin.domain.storage.RepositoryImageProfile
+import com.nullpointer.nullsiteadmin.domain.storage.ImageRepository
 import com.nullpointer.nullsiteadmin.models.PersonalInfo
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -30,13 +29,10 @@ import javax.inject.Inject
 class UploadImageServices : LifecycleService() {
 
     @Inject
-    lateinit var repoImageProfileImpl: RepositoryImageProfile
+    lateinit var imageRepositoryImpl: ImageRepository
 
     @Inject
     lateinit var infoUserRepository: InfoUserRepository
-
-    @Inject
-    lateinit var compressImgRepository: CompressImgRepository
 
     private var jobUploadTask: Job? = null
 
@@ -75,9 +71,7 @@ class UploadImageServices : LifecycleService() {
 
                 notifyHelper.startServicesForeground(this@UploadImageServices)
 
-
-                val imageCompress = compressImgRepository.compressImg(uriInfo)
-                val newUrlImg = startUploadImage(personalInfo.idPersonal, imageCompress)!!
+                val newUrlImg = startUploadImage(personalInfo.idPersonal, uriInfo)!!
                 val personUpdated = personalInfo.copy(urlImg = newUrlImg)
 
                 infoUserRepository.updatePersonalInfo(personUpdated)
@@ -91,7 +85,7 @@ class UploadImageServices : LifecycleService() {
     ): String? {
         var urlImage: String? = null
 
-        repoImageProfileImpl.uploadImageProfile(uriImage, idUser).catch { exception ->
+        imageRepositoryImpl.uploadImageProfile(uriImage, idUser).catch { exception ->
             Timber.e("Error upload img flow $exception")
         }.flowOn(Dispatchers.IO).collect { task ->
             when (task) {

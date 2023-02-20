@@ -12,8 +12,8 @@ import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableImg
 import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
 import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
-import com.nullpointer.nullsiteadmin.domain.compress.CompressImgRepository
 import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepository
+import com.nullpointer.nullsiteadmin.domain.storage.ImageRepository
 import com.nullpointer.nullsiteadmin.models.PersonalInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +28,7 @@ import javax.inject.Inject
 class EditInfoViewModel @Inject constructor(
     state: SavedStateHandle,
     private val infoUserRepository: InfoUserRepository,
-    private val compressImgRepository: CompressImgRepository
+    private val imageRepository: ImageRepository
 ) : ViewModel() {
     companion object {
         private const val MAX_LENGTH_NAME = 50
@@ -77,7 +77,7 @@ class EditInfoViewModel @Inject constructor(
         scope = viewModelScope,
         tagSavable = TAG_IMG_ADMIN,
         actionSendErrorCompress = { _messageError.trySend(R.string.error_compress_img) },
-        actionCompress = compressImgRepository::compressImg
+        actionCompress = imageRepository::compressImg
     )
 
     val isDataValid: Boolean
