@@ -5,16 +5,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
-import kotlinx.coroutines.*
-import timber.log.Timber
 
 class PropertySavableImg(
     tagSavable: String,
     state: SavedStateHandle,
-    private val scope: CoroutineScope,
-    private var defaultValue: Uri = Uri.EMPTY,
-    private val actionSendErrorCompress: () -> Unit,
-    private val actionCompress: suspend (Uri) -> Uri
+    private var defaultValue: Uri = Uri.EMPTY
 ) {
 
     private val idSaved = "SAVED_PROPERTY_IMG_$tagSavable"
@@ -25,41 +20,21 @@ class PropertySavableImg(
     var isCompress by mutableStateOf(false)
         private set
 
-    private var jobCompress: Job? = null
-
     val hasChanged get() = value != defaultValue
 
     val isNotEmpty get() = value != Uri.EMPTY
 
     fun changeValue(newValue: Uri, isInit: Boolean = false) {
-        if (isInit) {
-            defaultValue = newValue
-            value = newValue
-        } else {
-            jobCompress?.cancel()
-            jobCompress = scope.launch {
-                try {
-                    isCompress = true
-                    value = withContext(Dispatchers.IO) { actionCompress(newValue) }
-                } catch (e: Exception) {
-                    when (e) {
-                        is CancellationException -> throw e
-                        else -> {
-                            Timber.e("Job compress exception $e")
-                            value = defaultValue
-                            actionSendErrorCompress()
-                        }
-                    }
-                } finally {
-                    isCompress = false
-                }
-            }
-        }
+        if (isInit) defaultValue = newValue
+        value = newValue
+    }
+
+    fun changeImageCompress(isCompress: Boolean) {
+        this.isCompress = isCompress
     }
 
     fun clearValue() {
         isCompress = false
         value = defaultValue
-        jobCompress?.cancel()
     }
 }

@@ -1,12 +1,12 @@
 package com.nullpointer.nullsiteadmin.ui.screens.editInfoProfile.viewModel
 
+import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableImg
 import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
@@ -74,10 +74,7 @@ class EditInfoViewModel @Inject constructor(
 
     val imageProfile = PropertySavableImg(
         state = state,
-        scope = viewModelScope,
-        tagSavable = TAG_IMG_ADMIN,
-        actionSendErrorCompress = { _messageError.trySend(R.string.error_compress_img) },
-        actionCompress = imageRepository::compressImg
+        tagSavable = TAG_IMG_ADMIN
     )
 
     val isDataValid: Boolean
@@ -90,6 +87,24 @@ class EditInfoViewModel @Inject constructor(
 
     var isUpdatedData by mutableStateOf(false)
         private set
+
+
+    fun changeImageSelected(
+        currentImage: Uri,
+        actionSuccessCompress: (Uri) -> Unit
+    ) = launchSafeIO(
+        blockBefore = { imageProfile.changeImageCompress(true) },
+        blockAfter = { imageProfile.changeImageCompress(false) },
+        blockIO = {
+            val imageCompress = imageRepository.compressImg(currentImage)
+            withContext(Dispatchers.Main) {
+                actionSuccessCompress(imageCompress)
+            }
+        },
+        blockException = {
+            _messageError.trySend(R.string.error_compress_img)
+        }
+    )
 
 
     fun initInfoProfile(personalInfo: PersonalInfo) {
@@ -140,12 +155,4 @@ class EditInfoViewModel @Inject constructor(
         }
     )
 
-
-    override fun onCleared() {
-        super.onCleared()
-        name.clearValue()
-        description.clearValue()
-        profession.clearValue()
-        imageProfile.clearValue()
-    }
 }

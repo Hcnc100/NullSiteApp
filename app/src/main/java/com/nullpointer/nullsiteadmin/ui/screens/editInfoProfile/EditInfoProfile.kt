@@ -34,6 +34,7 @@ import com.nullpointer.nullsiteadmin.ui.share.EditableTextSavable
 import com.nullpointer.nullsiteadmin.ui.share.SelectImgButtonSheet
 import com.nullpointer.nullsiteadmin.ui.share.ToolbarBack
 import com.ramcosta.composedestinations.annotation.Destination
+import timber.log.Timber
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -44,7 +45,10 @@ fun EditInfoProfile(
     personalInfo: PersonalInfo,
     actionRootDestinations: ActionRootDestinations,
     editInfoVM: EditInfoViewModel = hiltViewModel(),
-    stateEditInfo: EditInfoProfileState = rememberEditInfoProfileState()
+    stateEditInfo: EditInfoProfileState = rememberEditInfoProfileState(
+        actionCropFailure = { Timber.e("Error al cortar la imagen $it") },
+        actionCropSuccess = { editInfoVM.imageProfile.changeValue(it) }
+    )
 ) {
 
     LaunchedEffect(key1 = personalInfo) {
@@ -67,7 +71,7 @@ fun EditInfoProfile(
                 actionBeforeSelect = { uri ->
                     stateEditInfo.hideModal()
                     uri?.let {
-                        editInfoVM.imageProfile.changeValue(it)
+                        editInfoVM.changeImageSelected(it, stateEditInfo::launchCropImage)
                     }
                 }
             )
