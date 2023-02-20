@@ -1,6 +1,8 @@
 package com.nullpointer.nullsiteadmin.ui.screens.editInfoProfile.viewModel
 
-import android.content.Context
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -8,33 +10,36 @@ import androidx.lifecycle.viewModelScope
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableImg
 import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
-import com.nullpointer.nullsiteadmin.core.delagetes.SavableProperty
+import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager
+import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.compress.CompressImgRepository
+import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepository
 import com.nullpointer.nullsiteadmin.models.PersonalInfo
-import com.nullpointer.nullsiteadmin.services.imageProfile.UploadImageServicesControl
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class EditInfoViewModel @Inject constructor(
-    private val compressImgRepository: CompressImgRepository,
-    state: SavedStateHandle
+    state: SavedStateHandle,
+    private val infoUserRepository: InfoUserRepository,
+    private val compressImgRepository: CompressImgRepository
 ) : ViewModel() {
     companion object {
         private const val MAX_LENGTH_NAME = 50
         private const val MAX_LENGTH_DESCRIPTION = 250
         private const val MAX_LENGTH_PROFESSION = 50
-        private const val KEY_PROJECT_SAVED = "KEY_PROJECT_SAVED"
-
         private const val TAG_IMG_ADMIN = "TAG_IMG_ADMIN"
         private const val TAG_NAME_ADMIN = "TAG_NAME_ADMIN"
         private const val TAG_PROFESSION_ADMIN = "TAG_PROFESSION_ADMIN"
         private const val TAG_DESCRIPTION_ADMIN = "TAG_DESCRIPTION_ADMIN"
     }
 
-    private var personalInfo: PersonalInfo? by SavableProperty(state, KEY_PROJECT_SAVED, null)
     private val _messageError = Channel<Int>()
     val messageError = _messageError.receiveAsFlow()
 
@@ -78,14 +83,16 @@ class EditInfoViewModel @Inject constructor(
     val isDataValid: Boolean
         get() = !name.hasError && !profession.hasError && !description.hasError
 
-    val hasAnyChange: Boolean
-        get() = name.currentValue != personalInfo?.name ||
-                profession.currentValue != personalInfo?.profession ||
-                description.currentValue != personalInfo?.description || imageProfile.value != personalInfo?.urlImg?.toUri()
+    private val hasAnyChange: Boolean
+        get() = name.hasChanged ||
+                profession.hasChanged ||
+                description.hasChanged || imageProfile.hasChanged
+
+    var isUpdatedData by mutableStateOf(false)
+        private set
 
 
     fun initInfoProfile(personalInfo: PersonalInfo) {
-        this.personalInfo = personalInfo
         personalInfo.let {
             name.changeValue(newValue = it.name, isInit = true)
             profession.changeValue(newValue = it.profession, isInit = true)
@@ -94,24 +101,44 @@ class EditInfoViewModel @Inject constructor(
         }
     }
 
-    fun getUpdatedPersonalInfo(context: Context):PersonalInfo?{
-         return if (hasAnyChange) {
-             val finishInfo=personalInfo!!.copy(
-                 name = name.currentValue,
-                 profession = profession.currentValue,
-                 description = description.currentValue
-             )
-             if(imageProfile.value!= personalInfo!!.urlImg.toUri()){
-                 UploadImageServicesControl.init(context,finishInfo,imageProfile.value)
-                 null
-             }else{
-                 finishInfo
-             }
-        } else {
-            _messageError.trySend(R.string.error_no_data_change)
-            null
+    fun updatePersonalInfo(
+        personalInfo: PersonalInfo,
+        actionComplete: () -> Unit
+    ) = launchSafeIO(
+        blockBefore = { isUpdatedData = true },
+        blockAfter = { isUpdatedData = false },
+        blockIO = {
+            when {
+                !isDataValid -> _messageError.trySend(R.string.error_invalid_data)
+                !hasAnyChange -> _messageError.trySend(R.string.error_no_data_change)
+                else -> {
+                    val newInfo = personalInfo.copy(
+                        name = name.currentValue,
+                        profession = profession.currentValue,
+                        description = description.currentValue
+                    )
+                    val newUri = if (imageProfile.hasChanged) imageProfile.value else null
+                    Timber.d("$newUri")
+                    infoUserRepository.updatePersonalInfo(personalInfo = newInfo, uriImage = newUri)
+                    if (!imageProfile.hasChanged) {
+                        _messageError.trySend(R.string.message_data_upload)
+                    }
+                    delay(1000)
+                    withContext(Dispatchers.Main) {
+                        actionComplete()
+                    }
+                }
+            }
+        },
+        blockException = {
+            delay(300)
+            ExceptionManager.sendMessageErrorToException(
+                exception = it,
+                message = "Error to update info personal $it",
+                channel = _messageError
+            )
         }
-    }
+    )
 
 
     override fun onCleared() {

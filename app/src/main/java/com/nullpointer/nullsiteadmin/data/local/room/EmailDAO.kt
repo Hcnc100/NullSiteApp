@@ -31,9 +31,10 @@ interface EmailDAO {
     @Update
     suspend fun updateEmail(emailContact: EmailContact)
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertListEmails(listEmails: List<EmailContact>)
 
+    @Transaction
     suspend fun updateAllEmails(listEmails: List<EmailContact>) {
         deleterAllEmails()
         insertListEmails(listEmails)

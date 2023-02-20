@@ -6,18 +6,23 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.states.StorageTaskResult
+import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.core.utils.showToastMessage
+import com.nullpointer.nullsiteadmin.data.local.services.ServicesManager.Companion.KEY_INFO_PROFILE
+import com.nullpointer.nullsiteadmin.data.local.services.ServicesManager.Companion.KEY_URI_PROFILE
+import com.nullpointer.nullsiteadmin.data.local.services.ServicesManager.Companion.START_COMMAND
+import com.nullpointer.nullsiteadmin.data.local.services.ServicesManager.Companion.STOP_COMMAND
+import com.nullpointer.nullsiteadmin.domain.compress.CompressImgRepository
 import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepository
 import com.nullpointer.nullsiteadmin.domain.storage.RepositoryImageProfile
 import com.nullpointer.nullsiteadmin.models.PersonalInfo
-import com.nullpointer.nullsiteadmin.services.imageProfile.UploadImageServicesControl.KEY_INFO_PROFILE
-import com.nullpointer.nullsiteadmin.services.imageProfile.UploadImageServicesControl.KEY_URI_PROFILE
-import com.nullpointer.nullsiteadmin.services.imageProfile.UploadImageServicesControl.START_COMMAND
-import com.nullpointer.nullsiteadmin.services.imageProfile.UploadImageServicesControl.STOP_COMMAND
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -29,6 +34,9 @@ class UploadImageServices : LifecycleService() {
 
     @Inject
     lateinit var infoUserRepository: InfoUserRepository
+
+    @Inject
+    lateinit var compressImgRepository: CompressImgRepository
 
     private var jobUploadTask: Job? = null
 
@@ -47,77 +55,63 @@ class UploadImageServices : LifecycleService() {
     }
 
     private fun actionStartCommand(intent: Intent) {
-        jobUploadTask = lifecycleScope.launch {
-            try {
-                // * notify to user that operation has been started
-                showToastMessage(R.string.message_init_upload)
-                // * get extra parameters
-                val uriInfo: Uri = intent.getParcelableExtra(KEY_URI_PROFILE)!!
-                val personalInfo = intent.getParcelableExtra<PersonalInfo>(KEY_INFO_PROFILE)!!
-                // * init async task
-
-                startUploadImage(uriInfo) { newUrlImg ->
-                    // * this action is call when the upload is finished
-                    // ? update the info user thi the new url img
-                    withContext(Dispatchers.IO) {
-                        infoUserRepository.updatePersonalInfo(
-                            personalInfo.copy(urlImg = newUrlImg)
-                        )
-                    }
-                }
-
-            } catch (e: Exception) {
-                when (e) {
-                    is CancellationException -> throw e
-                    else -> {
-                        Timber.e("Error to upload info profile $e")
-                        showToastMessage(R.string.error_upload_info)
-                    }
-                }
+        jobUploadTask?.cancel()
+        jobUploadTask = lifecycleScope.launchSafeIO(
+            blockException = {
+                Timber.e("Error to upload info profile $it")
+                showToastMessage(R.string.error_upload_info)
+            },
+            blockAfter = {
+                showToastMessage(R.string.message_change_upload)
                 killServices()
+            },
+            blockBefore = {
+                showToastMessage(R.string.message_init_upload)
+            },
+            blockIO = {
+                val uriInfo: Uri = intent.getParcelableExtra(KEY_URI_PROFILE)!!
+                val personalEncode = intent.getStringExtra(KEY_INFO_PROFILE)!!
+                val personalInfo: PersonalInfo = Json.decodeFromString(personalEncode)
+
+                notifyHelper.startServicesForeground(this@UploadImageServices)
+
+
+                val imageCompress = compressImgRepository.compressImg(uriInfo)
+                val newUrlImg = startUploadImage(personalInfo.idPersonal, imageCompress)!!
+                val personUpdated = personalInfo.copy(urlImg = newUrlImg)
+
+                infoUserRepository.updatePersonalInfo(personUpdated)
             }
-        }
+        )
     }
 
     private suspend fun startUploadImage(
+        idUser: String,
         uriImage: Uri,
-        actionBeforeUpload: suspend (uri: String) -> Unit,
-    ) {
+    ): String? {
+        var urlImage: String? = null
 
-        notifyHelper.startServicesForeground(this)
-
-        repoImageProfileImpl.uploadImageProfile(uriImage).catch { exception ->
-            // ! if has Error send error and killer service
+        repoImageProfileImpl.uploadImageProfile(uriImage, idUser).catch { exception ->
             Timber.e("Error upload img flow $exception")
-            showToastMessage(R.string.error_upload_info)
-            killServices()
-        }.flowOn(
-            Dispatchers.IO
-        ).collect { task ->
+        }.flowOn(Dispatchers.IO).collect { task ->
             when (task) {
                 is StorageTaskResult.Complete.Failed -> {
-                    // ! if has Error send error and killer service
                     Timber.e("Error upload img flow ${task.error}")
-                    showToastMessage(R.string.error_upload_info)
-                    killServices()
                 }
                 is StorageTaskResult.Complete.Success -> {
-                    // * when the upload is complete, update the notification
-                    // * and upload the personal info
                     notifyHelper.updateNotifyFinishUpdate()
-                    actionBeforeUpload(task.urlFile)
-                    showToastMessage(R.string.message_change_upload)
+                    urlImage = task.urlFile
                     Timber.d("Upload image complete")
-                    killServices()
                 }
                 is StorageTaskResult.InProgress -> {
-                    // ? when the upload is in progress, update the notification
                     notifyHelper.updateNotifyProgressUpload(task.percent.toInt())
                     Timber.d("Percent upload ${task.percent}")
                 }
                 else -> Unit
             }
         }
+
+        return urlImage
     }
 
     private fun killServices() {
@@ -127,7 +121,6 @@ class UploadImageServices : LifecycleService() {
 
     private fun actionStopCommand() {
         // * notify to user that operation has been stop
-        showToastMessage(R.string.message_cancel_upload)
         jobUploadTask?.cancel()
         killServices()
     }

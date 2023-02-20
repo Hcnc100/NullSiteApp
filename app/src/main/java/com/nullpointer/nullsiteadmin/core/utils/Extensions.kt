@@ -34,13 +34,14 @@ import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.*
 
-val Context.correctFlag:Int get() {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-    } else {
-        PendingIntent.FLAG_UPDATE_CURRENT
+val Context.correctFlag: Int
+    get() {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        } else {
+            PendingIntent.FLAG_UPDATE_CURRENT
+        }
     }
-}
 
 fun Date?.toFormat(context: Context): String {
     val pattern = "EEEE dd/MM/yyyy HH:mm:ss".let {
@@ -93,6 +94,36 @@ fun ViewModel.launchSafeIO(
     return if (isEnabled) {
         var isForCancelled = false
         viewModelScope.launch {
+            try {
+                blockBefore()
+                withContext(Dispatchers.IO) { blockIO() }
+            } catch (e: Exception) {
+                when (e) {
+                    is CancellationException -> {
+                        isForCancelled = true
+                        throw e
+                    }
+                    else -> blockException(e)
+                }
+            } finally {
+                blockAfter(isForCancelled)
+            }
+        }
+    } else {
+        null
+    }
+}
+
+fun CoroutineScope.launchSafeIO(
+    isEnabled: Boolean = true,
+    blockBefore: suspend CoroutineScope.() -> Unit = {},
+    blockAfter: suspend CoroutineScope.(Boolean) -> Unit = {},
+    blockException: suspend CoroutineScope.(Exception) -> Unit = {},
+    blockIO: suspend CoroutineScope.() -> Unit,
+): Job? {
+    return if (isEnabled) {
+        var isForCancelled = false
+        launch {
             try {
                 blockBefore()
                 withContext(Dispatchers.IO) { blockIO() }

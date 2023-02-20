@@ -1,7 +1,6 @@
 package com.nullpointer.nullsiteadmin.data.remote.storage
 
 import android.net.Uri
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
@@ -18,10 +17,9 @@ class StorageDataSourceImpl : StorageDataSource {
     }
 
     private val refImgProfile = Firebase.storage.getReference(REF_IMG_PROFILE)
-    private val uuid get() = Firebase.auth.currentUser?.uid ?: "unknown"
 
-    override fun uploadImageProfile(uriImg: Uri) = callbackFlow {
-        refImgProfile.child(uuid).putFile(uriImg).addOnSuccessListener { task ->
+    override fun uploadImageProfile(uriImg: Uri, idUser: String) = callbackFlow {
+        refImgProfile.child(idUser).putFile(uriImg).addOnSuccessListener { task ->
             task.storage.downloadUrl.addOnSuccessListener {
                 trySend(StorageTaskResult.Complete.Success(it.toString()))
                 close()

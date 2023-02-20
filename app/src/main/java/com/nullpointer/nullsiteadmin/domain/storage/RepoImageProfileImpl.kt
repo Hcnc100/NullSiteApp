@@ -4,8 +4,8 @@ import android.net.Uri
 import com.nullpointer.nullsiteadmin.data.remote.storage.StorageDataSource
 
 class RepoImageProfileImpl(
-    private val storageDataSource: StorageDataSource
+    private val storageDataSource: StorageDataSource,
 ):RepositoryImageProfile {
-    override fun uploadImageProfile(uri: Uri) =
-        storageDataSource.uploadImageProfile(uri)
+    override fun uploadImageProfile(uri: Uri, idUser: String) =
+        storageDataSource.uploadImageProfile(uri, idUser)
 }

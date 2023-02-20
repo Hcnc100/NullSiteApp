@@ -5,5 +5,5 @@ import com.nullpointer.nullsiteadmin.core.states.StorageTaskResult
 import kotlinx.coroutines.flow.Flow
 
 interface RepositoryImageProfile {
-    fun uploadImageProfile(uri: Uri):Flow<StorageTaskResult>
+    fun uploadImageProfile(uri: Uri, idUser: String): Flow<StorageTaskResult>
 }

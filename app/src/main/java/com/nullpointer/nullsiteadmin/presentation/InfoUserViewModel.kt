@@ -13,7 +13,6 @@ import com.nullpointer.nullsiteadmin.models.PersonalInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -79,24 +78,6 @@ class InfoUserViewModel @Inject constructor(
         blockIO = {
             val isUpdate = infoUserRepository.requestLastPersonalInfo(forceRefresh)
             if (isUpdate) Timber.d("Updated info user admin")
-        }
-    )
-
-    fun updatePersonalInfo(
-        personalInfo: PersonalInfo
-    ) = launchSafeIO(
-        blockIO = {
-            infoUserRepository.updatePersonalInfo(personalInfo)
-            delay(300)
-            _messageError.trySend(R.string.message_data_upload)
-        },
-        blockException = {
-            delay(300)
-            ExceptionManager.sendMessageErrorToException(
-                exception = it,
-                message = "Error to update info personal $it",
-                channel = _messageError
-            )
         }
     )
 }

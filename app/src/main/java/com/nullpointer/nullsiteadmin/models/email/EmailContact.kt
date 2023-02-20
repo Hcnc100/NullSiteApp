@@ -1,12 +1,12 @@
 package com.nullpointer.nullsiteadmin.models.email
 
-import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlinx.parcelize.Parcelize
+import com.nullpointer.nullsiteadmin.models.DateSerializer
+import kotlinx.serialization.Serializable
 import java.util.*
 
-@Parcelize
+@Serializable
 @Entity(tableName = "emails")
 data class EmailContact(
     @PrimaryKey
@@ -15,7 +15,8 @@ data class EmailContact(
     val message: String = "",
     val email: String = "",
     val subject: String = "",
+    @Serializable(with = DateSerializer::class)
     val timestamp: Date? = null,
     @field:JvmField
     val isOpen: Boolean = false
-) : Parcelable
+)

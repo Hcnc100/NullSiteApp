@@ -12,7 +12,7 @@ class PropertySavableImg(
     tagSavable: String,
     state: SavedStateHandle,
     private val scope: CoroutineScope,
-    private val defaultValue: Uri = Uri.EMPTY,
+    private var defaultValue: Uri = Uri.EMPTY,
     private val actionSendErrorCompress: () -> Unit,
     private val actionCompress: suspend (Uri) -> Uri
 ) {
@@ -33,6 +33,7 @@ class PropertySavableImg(
 
     fun changeValue(newValue: Uri, isInit: Boolean = false) {
         if (isInit) {
+            defaultValue = newValue
             value = newValue
         } else {
             jobCompress?.cancel()

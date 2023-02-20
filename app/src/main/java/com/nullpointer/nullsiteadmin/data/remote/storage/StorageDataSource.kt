@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface StorageDataSource {
 
-    fun uploadImageProfile(uriImg:Uri):Flow<StorageTaskResult>
+     fun uploadImageProfile(uriImg: Uri, idUser: String): Flow<StorageTaskResult>
 }

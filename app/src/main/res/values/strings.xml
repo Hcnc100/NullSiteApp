@@ -148,5 +148,6 @@
     <string name="text_title_unlock_app">Escanea tu huella para desbloquear la app</string>
     <string name="text_title_cancel">Cancelar</string>
     <string name="title_text_enable_lock_app">Escanea tu huella para habilitar el bloqueo</string>
+    <string name="error_invalid_data">Verifique sus datos</string>
 
 </resources>
