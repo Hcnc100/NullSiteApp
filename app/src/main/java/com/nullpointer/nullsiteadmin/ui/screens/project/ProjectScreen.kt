@@ -5,15 +5,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.nullpointer.nullsiteadmin.core.states.Resource
-import com.nullpointer.nullsiteadmin.core.utils.shareViewModel
 import com.nullpointer.nullsiteadmin.models.Project
 import com.nullpointer.nullsiteadmin.presentation.ProjectViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.HomeNavGraph
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EditProjectScreenDestination
-import com.nullpointer.nullsiteadmin.ui.screens.editProject.viewModel.EditProjectViewModel
 import com.nullpointer.nullsiteadmin.ui.screens.project.componets.lists.ListEmptyProject
 import com.nullpointer.nullsiteadmin.ui.screens.project.componets.lists.ListErrorProject
 import com.nullpointer.nullsiteadmin.ui.screens.project.componets.lists.ListLoadProject
@@ -28,8 +27,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Composable
 fun ProjectScreen(
     actionRootDestinations: ActionRootDestinations,
-    projectVM: ProjectViewModel = shareViewModel(),
-    editProjectVM: EditProjectViewModel = shareViewModel(),
+    projectVM: ProjectViewModel = hiltViewModel(),
     projectScreenState: LazySwipeScreenState = rememberLazySwipeScreenState(
         sizeScroll = 250F, isRefreshing = projectVM.isRequestProject
     )
@@ -48,8 +46,7 @@ fun ProjectScreen(
         swipeRefreshState = projectScreenState.swipeRefreshState,
         actionConcatenateProject = { projectVM.concatenateProject(projectScreenState::scrollToMore) },
         actionEditProject = { project ->
-            editProjectVM.initVM(project)
-            actionRootDestinations.changeRoot(EditProjectScreenDestination)
+            actionRootDestinations.changeRoot(EditProjectScreenDestination(project))
         })
 }
 

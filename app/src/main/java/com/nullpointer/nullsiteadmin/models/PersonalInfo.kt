@@ -3,6 +3,7 @@ package com.nullpointer.nullsiteadmin.models
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.ServerTimestamp
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import java.util.*
 
 @Serializable
@@ -14,6 +15,6 @@ data class PersonalInfo(
     @get:Exclude
     val idPersonal: String = "",
     @ServerTimestamp
-    @Serializable(with = DateSerializer::class)
+    @Transient
     val lastUpdate: Date? = null,
 )

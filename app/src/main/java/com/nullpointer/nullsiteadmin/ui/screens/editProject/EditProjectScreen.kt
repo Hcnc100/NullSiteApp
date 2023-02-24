@@ -16,16 +16,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
-import com.nullpointer.nullsiteadmin.core.utils.shareViewModel
-import com.nullpointer.nullsiteadmin.presentation.ProjectViewModel
+import com.nullpointer.nullsiteadmin.models.Project
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
 import com.nullpointer.nullsiteadmin.ui.screens.editProject.viewModel.EditProjectViewModel
 import com.nullpointer.nullsiteadmin.ui.screens.states.FocusScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberFocusScreenState
+import com.nullpointer.nullsiteadmin.ui.share.BlockProcessing
 import com.nullpointer.nullsiteadmin.ui.share.EditableTextSavable
 import com.nullpointer.nullsiteadmin.ui.share.ToolbarBack
 import com.ramcosta.composedestinations.annotation.Destination
@@ -34,11 +35,15 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Destination
 @Composable
 fun EditProjectScreen(
+    projectEdit: Project,
     actionRootDestinations: ActionRootDestinations,
-    projectVM: ProjectViewModel = shareViewModel(),
-    editProjectVM: EditProjectViewModel = shareViewModel(),
+    editProjectVM: EditProjectViewModel = hiltViewModel(),
     editProjectState: FocusScreenState = rememberFocusScreenState()
 ) {
+
+    LaunchedEffect(key1 = Unit) {
+        editProjectVM.initVM(projectEdit)
+    }
 
     LaunchedEffect(key1 = Unit) {
         editProjectVM.messageError.collect(editProjectState::showSnackMessage)
@@ -66,19 +71,20 @@ fun EditProjectScreen(
                 urlRepositoryProject = editProjectVM.urlRepositoryProject,
                 descriptionProject = editProjectVM.descriptionProject,
                 modifier = Modifier.padding(10.dp),
-                hiddenKeyBoard = editProjectState::hiddenKeyBoard
+                hiddenKeyBoard = editProjectState::hiddenKeyBoard,
+                isEnable = !editProjectVM.isUpdatedProject
             )
             ButtonUpdateProject(isEnable = editProjectVM.isDataValid) {
-                editProjectVM.getUpdatedProject()?.let {
-                    editProjectState.hiddenKeyBoard()
-                    projectVM.editProject(it)
-                    actionRootDestinations.backDestination()
-                }
+                editProjectState.hiddenKeyBoard()
+                editProjectVM.updatedProject(
+                    currentProject = projectEdit,
+                    actionSuccess = actionRootDestinations::backDestination
+                )
             }
         }
+        if (editProjectVM.isUpdatedProject) BlockProcessing()
     }
 }
-
 
 
 @Composable
@@ -118,34 +124,43 @@ private fun ListInfoProject(
     nameProject: PropertySavableString,
     urlImgProject: PropertySavableString,
     descriptionProject: PropertySavableString,
-    urlRepositoryProject: PropertySavableString
+    urlRepositoryProject: PropertySavableString,
+    isEnable: Boolean
 ) {
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
         EditableTextSavable(
             valueProperty = urlImgProject,
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done
             ),
-            keyboardActions = KeyboardActions(onDone = { hiddenKeyBoard() })
+            keyboardActions = KeyboardActions(onDone = { hiddenKeyBoard() }),
+            isEnabled = isEnable
         )
-        Spacer(modifier = Modifier.height(10.dp))
-        EditableTextSavable(valueProperty = nameProject,
+        EditableTextSavable(
+            valueProperty = nameProject,
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done
             ),
-            keyboardActions = KeyboardActions(onDone = { hiddenKeyBoard() })
+            keyboardActions = KeyboardActions(onDone = { hiddenKeyBoard() }),
+            isEnabled = isEnable
         )
-        Spacer(modifier = Modifier.height(10.dp))
-        EditableTextSavable(valueProperty = urlRepositoryProject,
+        EditableTextSavable(
+            valueProperty = urlRepositoryProject,
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done
             ),
-            keyboardActions = KeyboardActions(onDone = { hiddenKeyBoard() })
+            keyboardActions = KeyboardActions(onDone = { hiddenKeyBoard() }),
+            isEnabled = isEnable
         )
-        Spacer(modifier = Modifier.height(10.dp))
-        EditableTextSavable(valueProperty = descriptionProject)
+        EditableTextSavable(
+            valueProperty = descriptionProject,
+            isEnabled = isEnable
+        )
     }
 }

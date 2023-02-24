@@ -1,7 +1,6 @@
 package com.nullpointer.nullsiteadmin.ui.screens.editInfoProfile
 
 import android.net.Uri
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -14,7 +13,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -30,6 +28,7 @@ import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
 import com.nullpointer.nullsiteadmin.ui.screens.editInfoProfile.viewModel.EditInfoViewModel
 import com.nullpointer.nullsiteadmin.ui.screens.states.EditInfoProfileState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberEditInfoProfileState
+import com.nullpointer.nullsiteadmin.ui.share.BlockProcessing
 import com.nullpointer.nullsiteadmin.ui.share.EditableTextSavable
 import com.nullpointer.nullsiteadmin.ui.share.SelectImgButtonSheet
 import com.nullpointer.nullsiteadmin.ui.share.ToolbarBack
@@ -100,7 +99,8 @@ fun EditInfoProfile(
                     professionAdmin = editInfoVM.profession,
                     descriptionAdmin = editInfoVM.description,
                     modifier = Modifier.padding(10.dp),
-                    hiddenKeyBoard = stateEditInfo::hiddenKeyBoard
+                    hiddenKeyBoard = stateEditInfo::hiddenKeyBoard,
+                    isEnable = !isUpdatedData
                 )
                 ButtonUpdateInfoProfile(
                     isEnable = editInfoVM.isDataValid,
@@ -113,16 +113,7 @@ fun EditInfoProfile(
                 }
             }
 
-            if (isUpdatedData) {
-                Box(
-                    modifier = Modifier
-                        .background(Color.Gray.copy(alpha = 0.3f))
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
-            }
+            if (isUpdatedData) BlockProcessing()
         }
     }
 }
@@ -148,21 +139,24 @@ private fun EditableInformation(
     modifier: Modifier = Modifier,
     nameAdmin: PropertySavableString,
     professionAdmin: PropertySavableString,
-    descriptionAdmin: PropertySavableString
+    descriptionAdmin: PropertySavableString,
+    isEnable: Boolean
 ) {
     Column(modifier = modifier) {
         EditableTextSavable(
             valueProperty = nameAdmin,
             singleLine = true,
+            isEnabled = isEnable,
+            keyboardActions = KeyboardActions(onDone = { hiddenKeyBoard() }),
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done
-            ),
-            keyboardActions = KeyboardActions(onDone = { hiddenKeyBoard() })
+            )
         )
         Spacer(modifier = Modifier.height(10.dp))
         EditableTextSavable(
             valueProperty = professionAdmin,
             singleLine = true,
+            isEnabled = isEnable,
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done
             ),

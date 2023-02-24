@@ -1,23 +1,30 @@
 package com.nullpointer.nullsiteadmin.ui.screens.editProject.viewModel
 
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
-import com.nullpointer.nullsiteadmin.core.delagetes.SavableProperty
+import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
+import com.nullpointer.nullsiteadmin.domain.project.ProjectRepository
 import com.nullpointer.nullsiteadmin.models.Project
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class EditProjectViewModel @Inject constructor(
-    state: SavedStateHandle
+    state: SavedStateHandle,
+    private val projectRepository: ProjectRepository
 ) : ViewModel() {
     companion object {
-        private const val KEY_PROJECT_SAVED = "KEY_PROJECT_SAVED"
         private const val MAX_LENGTH_NAME = 50
         private const val MAX_LENGTH_URL = 100
         private const val MAX_LENGTH_DESCRIPTION = 200
@@ -27,8 +34,6 @@ class EditProjectViewModel @Inject constructor(
         private const val TAG_URL_REPO_PROJECT = "TAG_URL_REPO_PROJECT"
         private const val TAG_DESCRIPTION_PROJECT = "TAG_DESCRIPTION_PROJECT"
     }
-
-    private var initProject by SavableProperty<Project?>(state, KEY_PROJECT_SAVED, null)
 
     val nameProject = PropertySavableString(
         savedState = state,
@@ -74,6 +79,11 @@ class EditProjectViewModel @Inject constructor(
     private val _messageError = Channel<Int>()
     val messageError = _messageError.receiveAsFlow()
 
+
+    var isUpdatedProject by mutableStateOf(false)
+        private set
+
+
     val isDataValid: Boolean
         get() = !nameProject.hasError &&
                 !descriptionProject.hasError &&
@@ -81,13 +91,12 @@ class EditProjectViewModel @Inject constructor(
                 !urlImgProject.hasError
 
     private val hasAnyChange
-        get() = initProject?.name != nameProject.currentValue ||
-                initProject?.description != descriptionProject.currentValue ||
-                initProject?.urlImg != urlImgProject.currentValue ||
-                initProject?.urlRepo != urlRepositoryProject.currentValue
+        get() = nameProject.hasChanged ||
+                descriptionProject.hasChanged ||
+                urlImgProject.hasChanged ||
+                urlRepositoryProject.hasChanged
 
     fun initVM(project: Project) {
-        initProject = project
         project.let {
             nameProject.changeValue(newValue = it.name, isInit = true)
             urlImgProject.changeValue(newValue = it.urlImg, isInit = true)
@@ -97,17 +106,34 @@ class EditProjectViewModel @Inject constructor(
     }
 
 
-    fun getUpdatedProject(): Project? {
-        return if (hasAnyChange) {
-            initProject?.copy(
-                name = nameProject.currentValue,
-                urlImg = urlImgProject.currentValue,
-                urlRepo = urlRepositoryProject.currentValue,
-                description = descriptionProject.currentValue
-            )
-        } else {
-            _messageError.trySend(R.string.error_no_data_change)
-            null
+    fun updatedProject(
+        currentProject: Project,
+        actionSuccess: () -> Unit
+    ) = launchSafeIO(
+        blockBefore = { isUpdatedProject = true },
+        blockAfter = { isUpdatedProject = false }
+    ) {
+        when {
+            !isDataValid ->
+                _messageError.trySend(R.string.error_invalid_data)
+
+            !hasAnyChange ->
+                _messageError.trySend(R.string.error_no_data_change)
+
+            else -> {
+                val updateProject = currentProject.copy(
+                    name = nameProject.currentValue,
+                    urlImg = urlImgProject.currentValue,
+                    urlRepo = urlRepositoryProject.currentValue,
+                    description = descriptionProject.currentValue
+                )
+                projectRepository.editProject(updateProject)
+                _messageError.trySend(R.string.message_data_upload)
+                delay(2000)
+                withContext(Dispatchers.Main) {
+                    actionSuccess()
+                }
+            }
         }
 
     }

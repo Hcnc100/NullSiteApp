@@ -13,7 +13,6 @@ import com.nullpointer.nullsiteadmin.models.Project
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -89,24 +88,6 @@ class ProjectViewModel @Inject constructor(
                 exception = it,
                 channel = _messageErrorProject,
                 message = "Failed to concatenate projects"
-            )
-        }
-    )
-
-    fun editProject(
-        project: Project
-    ) = launchSafeIO(
-        blockIO = {
-            projectRepository.editProject(project)
-            delay(300)
-            _messageErrorProject.trySend(R.string.message_upload_project)
-        },
-        blockException = {
-            delay(300)
-            ExceptionManager.sendMessageErrorToException(
-                exception = it,
-                channel = _messageErrorProject,
-                message = "Failed upload project"
             )
         }
     )

@@ -32,7 +32,7 @@ class ProjectRemoteDataSourceImpl : ProjectRemoteDataSource {
     override suspend fun editProject(project: Project): Project? {
         val projectMap = project.toMap(
             listTimestampFields = listOf(TIMESTAMP_UPDATE),
-            listIgnoredFields = listOf(ID_PROJECT)
+            listIgnoredFields = listOf(ID_PROJECT, TIMESTAMP_CREATE)
         )
         val refCurrentProject = refProjects.document(project.idProject)
         refCurrentProject.update(projectMap).await()
@@ -86,7 +86,7 @@ class ProjectRemoteDataSourceImpl : ProjectRemoteDataSource {
                 idProject = document.id
             )
         } catch (e: Exception) {
-            Timber.e("Error cast ${document.id} to email")
+            Timber.e("Error cast ${document.id} to email $e")
             null
         }
     }

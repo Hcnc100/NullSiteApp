@@ -2,8 +2,8 @@ package com.nullpointer.nullsiteadmin.models.email
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.nullpointer.nullsiteadmin.models.DateSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import java.util.*
 
 @Serializable
@@ -15,7 +15,7 @@ data class EmailContact(
     val message: String = "",
     val email: String = "",
     val subject: String = "",
-    @Serializable(with = DateSerializer::class)
+    @Transient
     val timestamp: Date? = null,
     @field:JvmField
     val isOpen: Boolean = false
