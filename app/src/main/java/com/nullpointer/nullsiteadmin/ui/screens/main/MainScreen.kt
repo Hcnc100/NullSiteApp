@@ -3,57 +3,79 @@ package com.nullpointer.nullsiteadmin.ui.screens.main
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.presentation.AuthViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
-import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
 import com.nullpointer.nullsiteadmin.ui.screens.NavGraphs
-import com.nullpointer.nullsiteadmin.ui.screens.destinations.InfoProfileDestination
+import com.nullpointer.nullsiteadmin.ui.screens.destinations.AuthScreenDestination
+import com.nullpointer.nullsiteadmin.ui.screens.destinations.HomeScreenDestination
+import com.nullpointer.nullsiteadmin.ui.screens.destinations.LockScreenDestination
 import com.nullpointer.nullsiteadmin.ui.screens.states.MainScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberMainScreenState
-import com.nullpointer.nullsiteadmin.ui.share.NavigatorDrawer
-import com.nullpointer.nullsiteadmin.ui.share.ToolbarMenu
 import com.ramcosta.composedestinations.DestinationsNavHost
-import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.dependency
-import com.ramcosta.composedestinations.rememberNavHostEngine
 
-@RootNavGraph
-@Destination
+
 @Composable
- fun MainScreen(
-    authViewModel: AuthViewModel,
-    actionRootDestinations: ActionRootDestinations,
-    mainScreenState: MainScreenState = rememberMainScreenState()
+fun MainScreen(
+    authViewModel: AuthViewModel = hiltViewModel(),
+    rootScreenState: MainScreenState = rememberMainScreenState(),
+    actionChangeLoading: () -> Unit
 ) {
-    Scaffold(
-        scaffoldState = mainScreenState.scaffoldState,
-        topBar = {
-            ToolbarMenu(
-                title = mainScreenState.titleNav,
-                actionClickMenu = mainScreenState::openDrawer
-            )
-        },
-        drawerContent = {
-            NavigatorDrawer(
-                closeSession = authViewModel::logOut,
-                closeDrawer = mainScreenState::closeDrawer,
-                navController = mainScreenState.navController
-            )
-        },
-    ) { paddingValues ->
+    val isAuthUserState by authViewModel.isUserAuth.collectAsState()
 
-        DestinationsNavHost(
-            startRoute = InfoProfileDestination,
-            navGraph = NavGraphs.home,
-            navController = mainScreenState.navController,
-            engine = rememberNavHostEngine(),
-            modifier = Modifier.padding(paddingValues),
-            dependenciesContainerBuilder = {
-                dependency(actionRootDestinations)
-                dependency(authViewModel)
-            }
-        )
-    }
+    MainScreen(
+        authViewModel = authViewModel,
+        isAuthUserState = isAuthUserState,
+        actionChangeLoading = actionChangeLoading,
+        navHostController = rootScreenState.navController,
+        isAuthBiometricPassed = authViewModel.isAuthBiometricPassed,
+        actionRootDestinations = rootScreenState.actionRootDestinations
+    )
 }
 
+
+@Composable
+fun MainScreen(
+    authViewModel: AuthViewModel,
+    isAuthUserState: Resource<Boolean>,
+    navHostController: NavHostController,
+    actionChangeLoading: () -> Unit,
+    isAuthBiometricPassed: Resource<Boolean>,
+    actionRootDestinations: ActionRootDestinations
+) {
+    Scaffold { padding ->
+        (isAuthUserState as? Resource.Success)?.let { dataAuth ->
+            (isAuthBiometricPassed as? Resource.Success)?.let { dataBiometric ->
+                val isAuthUser = dataAuth.data
+                val isBiometricPassed = dataBiometric.data
+                when {
+                    isAuthUser && isBiometricPassed -> HomeScreenDestination
+                    isAuthUser && !isBiometricPassed -> LockScreenDestination
+                    else -> AuthScreenDestination
+                }.let { startRoute ->
+                    LaunchedEffect(key1 = Unit) {
+                        actionChangeLoading()
+                    }
+                    DestinationsNavHost(
+                        startRoute = startRoute,
+                        navGraph = NavGraphs.root,
+                        navController = navHostController,
+                        modifier = Modifier.padding(padding),
+                        dependenciesContainerBuilder = {
+                            dependency(authViewModel)
+                            dependency(actionRootDestinations)
+                        },
+                    )
+                }
+            }
+        }
+    }
+
+}
