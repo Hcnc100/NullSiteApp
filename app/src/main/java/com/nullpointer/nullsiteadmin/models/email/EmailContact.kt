@@ -2,6 +2,7 @@ package com.nullpointer.nullsiteadmin.models.email
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.firebase.firestore.Exclude
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import java.util.*
@@ -17,6 +18,8 @@ data class EmailContact(
     val subject: String = "",
     @Transient
     val timestamp: Date? = null,
+    @get:Exclude
+    val timestampLong: Long = 0,
     @field:JvmField
     val isOpen: Boolean = false
 )

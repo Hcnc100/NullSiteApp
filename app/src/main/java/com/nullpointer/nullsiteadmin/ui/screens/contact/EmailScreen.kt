@@ -11,7 +11,6 @@ import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.core.utils.shareViewModel
 import com.nullpointer.nullsiteadmin.models.email.EmailContact
-import com.nullpointer.nullsiteadmin.presentation.AuthViewModel
 import com.nullpointer.nullsiteadmin.presentation.EmailsViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.HomeNavGraph
@@ -29,7 +28,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Destination
 @Composable
 fun EmailScreen(
-    authViewModel: AuthViewModel,
+
     actionRootDestinations: ActionRootDestinations,
     emailsViewModel: EmailsViewModel = shareViewModel(),
     emailScreenState: LazySwipeScreenState = rememberLazySwipeScreenState(

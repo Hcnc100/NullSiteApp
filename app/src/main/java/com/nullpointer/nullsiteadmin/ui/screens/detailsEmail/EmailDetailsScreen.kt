@@ -112,7 +112,7 @@ private fun EmailsDetailsScreen(
             BodyEmail(
                 body = email.message,
                 subject = email.subject,
-                timestamp = email.timestamp.toFormat(context)
+                timestamp = email.timestampLong.toFormat(context)
             )
         }
     }

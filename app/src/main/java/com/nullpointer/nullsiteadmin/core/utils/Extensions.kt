@@ -52,6 +52,15 @@ fun Date?.toFormat(context: Context): String {
     return format.format(dateTimeNow)
 }
 
+fun Long?.toFormat(context: Context): String {
+    val pattern = "EEEE dd/MM/yyyy HH:mm:ss".let {
+        if (is24HourFormat(context)) it else it.plus(" aa")
+    }
+    val format = SimpleDateFormat(pattern, Locale.getDefault())
+    val dateTimeNow = Date(this ?: 0L)
+    return format.format(dateTimeNow)
+}
+
 fun Context.getNotifyServices(): NotificationManager {
     return getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 }

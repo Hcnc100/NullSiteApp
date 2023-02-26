@@ -9,7 +9,7 @@ import com.nullpointer.nullsiteadmin.models.email.EmailContact
 
 @Database(
     entities = [EmailContact::class, Project::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

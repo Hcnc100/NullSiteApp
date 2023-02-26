@@ -24,7 +24,7 @@ object DatabaseModule {
         context,
         NullSiteDatabase::class.java,
         NullSiteDatabase.DATABASE_NAME
-    ).build()
+    ).fallbackToDestructiveMigration().build()
 
     @Singleton
     @Provides

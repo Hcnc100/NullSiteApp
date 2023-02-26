@@ -86,8 +86,10 @@ class EmailRemoteDataSourceImpl : EmailRemoteDataSource {
 
     private fun fromDocument(document: DocumentSnapshot): EmailContact? {
         return try {
+            val timestamp = document.getTimeEstimate(TIMESTAMP_FIELD)
             document.toObject<EmailContact>()?.copy(
-                timestamp = document.getTimeEstimate(TIMESTAMP_FIELD),
+                timestamp = timestamp,
+                timestampLong = timestamp?.time ?: 0,
                 idEmail = document.id
             )
         } catch (e: Exception) {
