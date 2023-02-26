@@ -5,31 +5,30 @@ plugins {
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
     id 'org.jetbrains.kotlin.plugin.serialization'
-    id "com.google.devtools.ksp" version "1.7.0-1.0.6"
+    id "com.google.devtools.ksp" version "1.8.0-1.0.9"
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
-}
-kotlin {
-    sourceSets {
-        debug {
-            kotlin.srcDir("build/generated/ksp/debug/kotlin")
-        }
-        release {
-            kotlin.srcDir("build/generated/ksp/release/kotlin")
-        }
-    }
 }
 
 
 android {
+
+    applicationVariants.all { variant ->
+        kotlin.sourceSets {
+            getByName(variant.name) {
+                kotlin.srcDir("build/generated/ksp/${variant.name}/kotlin")
+            }
+        }
+    }
+
     compileSdk 33
 
     defaultConfig {
         applicationId "com.nullpointer.nullsiteadmin"
         minSdk 21
         targetSdk 33
-        versionCode 3
-        versionName "3.0"
+        versionCode 4
+        versionName "1.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
