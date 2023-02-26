@@ -23,6 +23,9 @@ import coil.compose.AsyncImage
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
 import com.nullpointer.nullsiteadmin.presentation.AuthViewModel
+import com.nullpointer.nullsiteadmin.states.AuthState
+import com.nullpointer.nullsiteadmin.states.AuthState.LOGIN
+import com.nullpointer.nullsiteadmin.states.AuthState.MOVE_NEXT
 import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
 import com.nullpointer.nullsiteadmin.ui.screens.auth.viewModel.AuthFieldViewModel
 import com.nullpointer.nullsiteadmin.ui.screens.states.FocusScreenState
@@ -46,54 +49,100 @@ fun AuthScreen(
             authViewModel.messageErrorAuth
         ).collect(authScreenState::showSnackMessage)
     }
-    Scaffold(
+
+    AuthScreen(
+        email = authFieldVM.emailAdmin,
+        password = authFieldVM.passwordAdmin,
         scaffoldState = authScreenState.scaffoldState,
-        floatingActionButtonPosition = FabPosition.Center,
-        floatingActionButton = {
-            ButtonAuth(isAuthenticating = authViewModel.isAuthenticating) {
-                authScreenState.hiddenKeyBoard()
-                authFieldVM.getDataAuth()?.let {
-                    authViewModel.authWithEmailAndPassword(it)
+        isAuthenticating = authViewModel.isAuthenticating,
+        actionAuth = { action ->
+            when (action) {
+                MOVE_NEXT -> authScreenState.moveNextFocus()
+                LOGIN -> {
+                    authFieldVM.getDataAuth()?.let { userCredentials ->
+                        authScreenState.hiddenKeyBoard()
+                        authViewModel.authWithEmailAndPassword(userCredentials)
+                    }
                 }
             }
         }
-    ) { paddingValues ->
-        ContainerAuthScreen(
-            modifier = Modifier.padding(paddingValues)
-        ) {
-            LogoApp(modifier = Modifier.padding(vertical = 70.dp))
-            Spacer(modifier = Modifier.height(20.dp))
-            FieldLogin(
-                email = authFieldVM.emailAdmin,
-                modifier = Modifier.width(300.dp),
-                password = authFieldVM.passwordAdmin,
-                isEnabled = !authViewModel.isAuthenticating,
-                moveNextField = authScreenState::moveNextFocus,
-                actionSignIn = {
-                    authScreenState.hiddenKeyBoard()
-                    authFieldVM.getDataAuth()?.let {
-                        authViewModel.authWithEmailAndPassword(it)
-                    }
-                }
-            )
-        }
-    }
+    )
 }
 
 
 @Composable
-private fun ContainerAuthScreen(
-    modifier: Modifier = Modifier,
-    content: @Composable ColumnScope.() -> Unit,
+fun AuthScreen(
+    scaffoldState: ScaffoldState,
+    isAuthenticating: Boolean,
+    email: PropertySavableString,
+    password: PropertySavableString,
+    actionAuth: (AuthState) -> Unit
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.primary)
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        content = content
-    )
+    Scaffold(
+        scaffoldState = scaffoldState,
+        backgroundColor = MaterialTheme.colors.primary
+    ) {
+        BoxWithConstraints(
+            modifier = Modifier.padding(it)
+        ) {
+            val height = maxHeight
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxWidth()
+                    .height(height),
+                verticalArrangement = Arrangement.SpaceEvenly
+            ) {
+                AsyncImage(
+                    model = R.drawable.ic_safe,
+                    contentDescription = stringResource(R.string.description_logo_app),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentSize()
+                        .size(130.dp)
+                )
+
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp)
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    ContainerFieldAuth {
+                        EditableTextSavable(
+                            isEnabled = !isAuthenticating,
+                            valueProperty = email,
+                            modifier = Modifier.padding(10.dp),
+                            keyboardOptions = KeyboardOptions.Default.copy(
+                                imeAction = ImeAction.Next,
+                                keyboardType = KeyboardType.Email,
+                                capitalization = KeyboardCapitalization.None
+                            ),
+                            keyboardActions = KeyboardActions(onNext = { actionAuth(MOVE_NEXT) })
+                        )
+                    }
+                    ContainerFieldAuth {
+                        PasswordTextSavable(
+                            isEnabled = !isAuthenticating,
+                            valueProperty = password,
+                            modifier = Modifier.padding(10.dp),
+                            keyboardOptions = KeyboardOptions.Default.copy(
+                                keyboardType = KeyboardType.Password,
+                                imeAction = ImeAction.Done
+                            ),
+                            keyboardActions = KeyboardActions(onDone = { actionAuth(LOGIN) })
+                        )
+                    }
+
+                    ButtonAuth(
+                        isAuthenticating = isAuthenticating,
+                        actionClick = { actionAuth(LOGIN) }
+                    )
+                }
+            }
+        }
+    }
 }
 
 @Composable
@@ -115,45 +164,6 @@ private fun ButtonAuth(
 }
 
 @Composable
-private fun FieldLogin(
-    isEnabled: Boolean,
-    actionSignIn: () -> Unit,
-    moveNextField: () -> Unit,
-    email: PropertySavableString,
-    modifier: Modifier = Modifier,
-    password: PropertySavableString
-) {
-    Column(modifier = modifier.fillMaxWidth()) {
-        ContainerFieldAuth {
-            EditableTextSavable(
-                isEnabled = isEnabled,
-                valueProperty = email,
-                modifier = Modifier.padding(10.dp),
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Next,
-                    keyboardType = KeyboardType.Email,
-                    capitalization = KeyboardCapitalization.None
-                ),
-                keyboardActions = KeyboardActions(onNext = { moveNextField() })
-            )
-        }
-        Spacer(modifier = Modifier.height(15.dp))
-        ContainerFieldAuth {
-            PasswordTextSavable(
-                isEnabled = isEnabled,
-                valueProperty = password,
-                modifier = Modifier.padding(10.dp),
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(onDone = { actionSignIn() })
-            )
-        }
-    }
-}
-
-@Composable
 private fun ContainerFieldAuth(
     content: @Composable BoxScope.() -> Unit
 ) {
@@ -162,19 +172,5 @@ private fun ContainerFieldAuth(
             .clip(RoundedCornerShape(10.dp))
             .background(MaterialTheme.colors.background),
         content = content
-    )
-}
-
-@Composable
-private fun LogoApp(
-    modifier: Modifier = Modifier
-) {
-    AsyncImage(
-        model = R.drawable.ic_safe,
-        contentDescription = stringResource(R.string.description_logo_app),
-        modifier = modifier
-            .fillMaxWidth()
-            .wrapContentSize()
-            .size(130.dp)
     )
 }
