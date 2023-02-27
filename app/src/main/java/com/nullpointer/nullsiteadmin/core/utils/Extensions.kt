@@ -53,8 +53,10 @@ fun Date?.toFormat(context: Context): String {
 }
 
 fun Long?.toFormat(context: Context): String {
-    val pattern = "EEEE dd/MM/yyyy HH:mm:ss".let {
-        if (is24HourFormat(context)) it else it.plus(" aa")
+    val pattern = if (is24HourFormat(context)) {
+        "EEEE dd/MM/yyyy HH:mm:ss"
+    } else {
+        "EEEE dd/MM/yyyy hh:mm:ss aa"
     }
     val format = SimpleDateFormat(pattern, Locale.getDefault())
     val dateTimeNow = Date(this ?: 0L)

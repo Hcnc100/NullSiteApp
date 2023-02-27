@@ -25,8 +25,8 @@ import com.ramcosta.composedestinations.navigation.dependency
 @Composable
 fun MainScreen(
     authViewModel: AuthViewModel = hiltViewModel(),
-    rootScreenState: MainScreenState = rememberMainScreenState(),
-    actionChangeLoading: () -> Unit
+    actionChangeLoading: () -> Unit,
+    rootScreenState: MainScreenState = rememberMainScreenState()
 ) {
     val isAuthUserState by authViewModel.isUserAuth.collectAsState()
 
@@ -47,17 +47,17 @@ fun MainScreen(
     isAuthUserState: Resource<Boolean>,
     navHostController: NavHostController,
     actionChangeLoading: () -> Unit,
-    isAuthBiometricPassed: Resource<Boolean>,
-    actionRootDestinations: ActionRootDestinations
+    isAuthBiometricPassed: Boolean?,
+    actionRootDestinations: ActionRootDestinations,
 ) {
+
     Scaffold { padding ->
         (isAuthUserState as? Resource.Success)?.let { dataAuth ->
-            (isAuthBiometricPassed as? Resource.Success)?.let { dataBiometric ->
+            (isAuthBiometricPassed)?.let { dataBiometric ->
                 val isAuthUser = dataAuth.data
-                val isBiometricPassed = dataBiometric.data
                 when {
-                    isAuthUser && isBiometricPassed -> HomeScreenDestination
-                    isAuthUser && !isBiometricPassed -> LockScreenDestination
+                    isAuthUser && dataBiometric -> HomeScreenDestination
+                    isAuthUser && !dataBiometric -> LockScreenDestination
                     else -> AuthScreenDestination
                 }.let { startRoute ->
                     LaunchedEffect(key1 = Unit) {

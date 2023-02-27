@@ -19,6 +19,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -35,7 +36,7 @@ class AuthViewModel @Inject constructor(
         SharingStarted.WhileSubscribed(5_000),
         BiometricState.Locked
     )
-    var isAuthBiometricPassed by mutableStateOf<Resource<Boolean>>(Resource.Loading)
+    var isAuthBiometricPassed by mutableStateOf<Boolean?>(null)
         private set
 
     private val _messageErrorAuth = Channel<Int>()
@@ -127,28 +128,28 @@ class AuthViewModel @Inject constructor(
     }
 
     private fun initVerifyBiometrics() = launchSafeIO {
-        isAuthBiometricPassed = if (biometricRepository.checkBiometricSupport()) {
-            val isBiometricEnabled = biometricRepository.isBiometricEnabled.first()
-            if (isBiometricEnabled) {
-                Resource.Success(false)
-            } else {
-                Resource.Success(true)
+        when {
+            !biometricRepository.checkBiometricSupport() -> true
+            else -> !biometricRepository.isBiometricEnabled.first()
+        }.let {
+            withContext(Dispatchers.Main) {
+                isAuthBiometricPassed = it
             }
-        } else {
-            Resource.Success(true)
         }
+
     }
 
     fun launchBiometric() = launchSafeIO {
         val timeOut = biometricRepository.timeOutLocked.first()
-        if (biometricRepository.checkBiometricSupport()) {
-            if (timeOut == 0L) {
-                val isBiometricPassed = biometricRepository.launchBiometric()
-                isAuthBiometricPassed = Resource.Success(isBiometricPassed)
+        val supportBiometric = biometricRepository.checkBiometricSupport()
+        when {
+            !supportBiometric -> true
+            timeOut == 0L -> biometricRepository.launchBiometric()
+            else -> null
+        }?.let {
+            withContext(Dispatchers.Main) {
+                isAuthBiometricPassed = it
             }
-        } else {
-            isAuthBiometricPassed = Resource.Success(true)
         }
-
     }
 }

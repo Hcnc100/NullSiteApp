@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.core.net.toUri
 import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.core.utils.shareViewModel
@@ -28,7 +27,6 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Destination
 @Composable
 fun EmailScreen(
-
     actionRootDestinations: ActionRootDestinations,
     emailsViewModel: EmailsViewModel = shareViewModel(),
     emailScreenState: LazySwipeScreenState = rememberLazySwipeScreenState(
@@ -50,10 +48,7 @@ fun EmailScreen(
         actionRefreshEmails = emailsViewModel::requestLastEmail,
         concatenateEmails = { emailsViewModel.concatenateEmails(emailScreenState::scrollToMore) },
         actionDetails = {
-            val route = EmailDetailsScreenDestination(it).route
-            actionRootDestinations.changeRoot(
-                "https://www.nullsiteadmin.com/$route".toUri()
-            )
+            actionRootDestinations.changeRoot(EmailDetailsScreenDestination(it))
         })
 
 }

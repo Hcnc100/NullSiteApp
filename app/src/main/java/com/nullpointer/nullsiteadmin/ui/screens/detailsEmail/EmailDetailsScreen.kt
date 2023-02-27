@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.actions.EmailsScreenActions
 import com.nullpointer.nullsiteadmin.actions.EmailsScreenActions.*
-import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.core.utils.sendEmail
 import com.nullpointer.nullsiteadmin.core.utils.shareViewModel
 import com.nullpointer.nullsiteadmin.core.utils.toFormat
@@ -48,8 +47,9 @@ fun EmailDetailsScreen(
     emailsViewModel: EmailsViewModel = shareViewModel(),
     emailsDetailsState: SimpleScreenState = rememberSimpleScreenState()
 ) {
-    (authViewModel.isAuthBiometricPassed as? Resource.Success)?.let { isAuthPassed ->
-        if (!isAuthPassed.data) {
+
+    (authViewModel.isAuthBiometricPassed)?.let { isAuthPassed ->
+        if (!isAuthPassed) {
             // ! if the auth no passed back
             LaunchedEffect(key1 = Unit) {
                 rootDestinations.backDestination()

@@ -27,9 +27,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    MainScreen {
-                        if (loading) loading = false
-                    }
+                    MainScreen(
+                        actionChangeLoading = {
+                            if (loading) loading = false
+                        }
+                    )
                 }
             }
         }
