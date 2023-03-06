@@ -124,7 +124,13 @@ class AuthViewModel @Inject constructor(
     )
 
     fun changeBiometricEnabled(enabled: Boolean) = launchSafeIO {
-        biometricRepository.changeIsBiometricEnabled(enabled)
+        if (isBiometricAvailable) {
+            biometricRepository.changeIsBiometricEnabled(enabled)
+        } else {
+            _messageErrorAuth.trySend(R.string.biometric_no_avariable)
+        }
+
+
     }
 
     private fun initVerifyBiometrics() = launchSafeIO {

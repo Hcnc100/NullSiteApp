@@ -13,6 +13,7 @@ open class SimpleScreenState(
     val scaffoldState: ScaffoldState,
 ) {
     suspend fun showSnackMessage(@StringRes stringRes: Int) {
+        scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
         scaffoldState.snackbarHostState.showSnackbar(
             context.getString(stringRes)
         )

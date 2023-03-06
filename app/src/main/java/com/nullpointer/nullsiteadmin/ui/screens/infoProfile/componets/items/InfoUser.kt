@@ -107,7 +107,7 @@ private fun PhotoProfile(
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_person),
-                            contentDescription = stringResource(R.string.description_img_profile_placeholder),
+                            contentDescription = null,
                             tint = if (isSystemInDarkTheme()) Color.White else Color.Black,
                             modifier = Modifier.size(150.dp)
                         )

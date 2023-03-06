@@ -1,70 +1,92 @@
 package com.nullpointer.nullsiteadmin.ui.screens.settings
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Switch
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.presentation.AuthViewModel
 import com.nullpointer.nullsiteadmin.ui.navigator.HomeNavGraph
+import com.nullpointer.nullsiteadmin.ui.screens.states.SimpleScreenState
+import com.nullpointer.nullsiteadmin.ui.screens.states.rememberSimpleScreenState
 import com.ramcosta.composedestinations.annotation.Destination
 
 @HomeNavGraph
 @Destination
 @Composable
 fun SettingsScreen(
-    authViewModel: AuthViewModel
+    authViewModel: AuthViewModel,
+    settingsScreenState: SimpleScreenState = rememberSimpleScreenState()
 ) {
     val isBiometricEnabled by authViewModel.isBiometricEnabled.collectAsState()
-    Scaffold {
-        Column(modifier = Modifier.padding(it)) {
-            SwitchBiometric(
-                isBiometricEnabled = isBiometricEnabled,
-                isBiometricAvailable = authViewModel.isBiometricAvailable,
-                changeBiometricEnabled = authViewModel::changeBiometricEnabled
-            )
-        }
+
+    LaunchedEffect(key1 = Unit) {
+        authViewModel.messageErrorAuth.collect(settingsScreenState::showSnackMessage)
     }
+
+    SettingsScreen(
+        isBiometricEnabled = isBiometricEnabled,
+        scaffoldState = settingsScreenState.scaffoldState,
+        isBiometricAvailable = authViewModel.isBiometricAvailable,
+        changeBiometricEnabled = authViewModel::changeBiometricEnabled
+    )
+
 }
 
 @Composable
-private fun SwitchBiometric(
+fun SettingsScreen(
     isBiometricEnabled: Boolean,
+    scaffoldState: ScaffoldState,
     isBiometricAvailable: Boolean,
-    modifier: Modifier = Modifier,
     changeBiometricEnabled: (Boolean) -> Unit
 ) {
-    Column(modifier = modifier.padding(10.dp)) {
-        Row(modifier = Modifier.fillMaxWidth()) {
-            Column(modifier = Modifier.weight(.8f)) {
-                Text("Bloqueo por huella dactilar", style = MaterialTheme.typography.body2)
-                Spacer(modifier = Modifier.width(10.dp))
+    Scaffold(
+        scaffoldState = scaffoldState,
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(10.dp)
+                .padding(it),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text(
+                stringResource(R.string.title_biometric),
+                style = MaterialTheme.typography.h6.copy(fontSize = 16.sp)
+            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                modifier = Modifier
+                    .clickable { changeBiometricEnabled(!isBiometricEnabled) }
+                    .fillMaxWidth()
+            ) {
                 Text(
-                    text = "Si habilitas esta opvion para entrar a la app se requerira de tu hella dactilar",
-                    style = MaterialTheme.typography.caption
+                    text = stringResource(R.string.description_enable_biometric),
+                    style = MaterialTheme.typography.body1,
+                    modifier = Modifier.weight(1f)
+                )
+                Switch(
+                    modifier = Modifier.weight(.2F),
+                    checked = isBiometricEnabled,
+                    onCheckedChange = {},
                 )
             }
-            Spacer(modifier = Modifier.width(10.dp))
-            Switch(
-                modifier = Modifier.weight(.2F),
-                checked = isBiometricEnabled,
-                onCheckedChange = changeBiometricEnabled,
-                enabled = isBiometricAvailable
-            )
+            if (!isBiometricAvailable) {
+                Spacer(modifier = Modifier.height(10.dp))
+                Text(
+                    text = stringResource(id = R.string.biometric_no_avariable),
+                    style = MaterialTheme.typography.caption.copy(
+                        color = MaterialTheme.colors.error
+                    )
+                )
+            }
 
-        }
-        if (!isBiometricAvailable) {
-            Spacer(modifier = Modifier.height(10.dp))
-            Text(
-                text = "El bloqueo por huella dacticar no esta disponible",
-                style = MaterialTheme.typography.caption
-            )
         }
     }
-
 }
