@@ -20,9 +20,10 @@ fun ProjectItem(
     actionEditProject: (Project) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Card(
-        modifier = modifier.padding(8.dp),
-        shape = RoundedCornerShape(10.dp)
+    Surface(
+        modifier = modifier,
+        shape = RoundedCornerShape(10.dp),
+        elevation = 10.dp,
     ) {
         Column(
             modifier = Modifier

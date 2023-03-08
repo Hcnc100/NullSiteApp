@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.ui.screens.project.componets
+package com.nullpointer.nullsiteadmin.ui.screens.project.componets.items
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,9 +17,7 @@ fun ProjectItemLoading(
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = Modifier
-            .padding(8.dp)
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(10.dp)
     ) {
         Column(

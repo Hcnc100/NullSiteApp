@@ -55,19 +55,18 @@ class ProjectViewModel @Inject constructor(
         requestNewProjects(false)
     }
 
-    val listProject = flow<Resource<List<Project>>> {
-        projectRepository.listProjects.collect {
+    val listProject =
+        projectRepository.listProjects.transform<List<Project>, Resource<List<Project>>> {
             emit(Resource.Success(it))
-        }
-    }.flowOn(Dispatchers.IO).catch {
-        Timber.e("Failed to list projects $it")
-        _messageErrorProject.trySend(R.string.error_load_project)
-        emit(Resource.Failure)
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5_000),
-        Resource.Loading
-    )
+        }.flowOn(Dispatchers.IO).catch {
+            Timber.e("Failed to list projects $it")
+            _messageErrorProject.trySend(R.string.error_load_project)
+            emit(Resource.Failure)
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5_000),
+            Resource.Loading
+        )
 
     fun concatenateProject(
         actionSuccessConcatenate: () -> Unit
