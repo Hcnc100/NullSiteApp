@@ -19,9 +19,7 @@ fun EmailItemLoading(
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier
-            .padding(10.dp)
-            .fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(10.dp)
     ) {
         Row(

@@ -59,19 +59,18 @@ class EmailsViewModel @Inject constructor(
         requestLastEmail(false)
     }
 
-    val listEmails = flow<Resource<List<EmailContact>>> {
-        emailsRepository.listEmails.collect {
+    val listEmails =
+        emailsRepository.listEmails.transform<List<EmailContact>, Resource<List<EmailContact>>> {
             emit(Resource.Success(it))
-        }
-    }.flowOn(Dispatchers.IO).catch {
-        Timber.e("Error to load emails $it")
-        _errorEmail.trySend(R.string.error_load_list_email)
-        emit(Resource.Failure)
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5_000),
-        Resource.Loading
-    )
+        }.flowOn(Dispatchers.IO).catch {
+            Timber.e("Error to load emails $it")
+            _errorEmail.trySend(R.string.error_load_list_email)
+            emit(Resource.Failure)
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5_000),
+            Resource.Loading
+        )
 
     fun concatenateEmails(
         actionSuccessConcatenate: () -> Unit

@@ -1,9 +1,7 @@
 package com.nullpointer.nullsiteadmin.ui.share
 
 import androidx.compose.animation.*
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
@@ -42,12 +40,16 @@ fun LazyListConcatenate(
     modifier: Modifier = Modifier,
     lazyListState: LazyListState,
     actionConcatenate: () -> Unit,
-    content: LazyListScope.() -> Unit
+    paddingValues: PaddingValues = PaddingValues(0.dp),
+    verticalArrangement: Arrangement.Vertical = Arrangement.Top,
+    content: LazyListScope.() -> Unit,
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         LazyColumn(
             state = lazyListState,
-            content = content
+            content = content,
+            contentPadding = paddingValues,
+            verticalArrangement = verticalArrangement,
         )
         CircularProgressAnimation(
             isVisible = isConcatenate,

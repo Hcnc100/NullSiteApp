@@ -1,12 +1,12 @@
 package com.nullpointer.nullsiteadmin.ui.screens.contact.components.lists
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.models.email.EmailContact
 import com.nullpointer.nullsiteadmin.ui.screens.animation.AnimationScreen
-import com.nullpointer.nullsiteadmin.ui.screens.contact.components.EmailItem
+import com.nullpointer.nullsiteadmin.ui.screens.contact.components.items.EmailItem
 import com.nullpointer.nullsiteadmin.ui.screens.contact.components.items.EmailItemLoading
 import com.nullpointer.nullsiteadmin.ui.share.LazyListConcatenate
 import com.valentinilk.shimmer.ShimmerBounds
@@ -48,7 +48,11 @@ fun ListLoadingEmail(
     modifier: Modifier = Modifier
 ) {
     val shimmer = rememberShimmer(shimmerBounds = ShimmerBounds.View)
-    LazyColumn(modifier = modifier) {
+    LazyColumn(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        contentPadding = PaddingValues(10.dp)
+    ) {
         items(
             count = 10,
             key = { it }
@@ -73,20 +77,16 @@ fun ListSuccessEmails(
         isConcatenate = isConcatenate,
         lazyListState = lazyListState,
         actionConcatenate = concatenateEmails,
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        paddingValues = PaddingValues(10.dp)
     ) {
-        item(key = "number-emails") {
-            Text(
-                text = stringResource(R.string.text_number_emails, listEmails.size),
-                modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)
-            )
-        }
         items(
             items = listEmails,
-            key = { it.idEmail }
+            key = { it.idEmail },
         ) { email ->
             EmailItem(
                 email = email,
-                actionDetails = actionDetails,
+                actionDetails = { actionDetails(email) },
                 modifier = Modifier.animateItemPlacement()
             )
         }

@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.ui.screens.contact.components
+package com.nullpointer.nullsiteadmin.ui.screens.contact.components.items
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.clickable
@@ -13,7 +13,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -28,11 +27,11 @@ import com.nullpointer.nullsiteadmin.models.email.EmailContact
 fun EmailItem(
     email: EmailContact,
     modifier: Modifier = Modifier,
-    actionDetails: (EmailContact) -> Unit
+    actionDetails: () -> Unit
 ) {
 
     val colorBackground by animateColorAsState(
-        if (email.isOpen) Color.Transparent else MaterialTheme.colors.primary
+        if (email.isOpen) MaterialTheme.colors.surface else MaterialTheme.colors.primary
     )
 
     val (iconEmail, descriptionEmail) = remember(email.isOpen) {
@@ -48,14 +47,12 @@ fun EmailItem(
     Surface(
         color = colorBackground,
         shape = RoundedCornerShape(4.dp),
-        modifier = modifier
-            .padding(vertical = 4.dp, horizontal = 10.dp)
-            .clickable {
-                actionDetails(email)
-            }
+        modifier = modifier,
+        elevation = 10.dp
     ) {
         Row(
             modifier = Modifier
+                .clickable { actionDetails() }
                 .padding(10.dp)
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
