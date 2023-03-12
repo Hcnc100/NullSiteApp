@@ -12,8 +12,8 @@ class EmailsRepoImpl(
 ) : EmailsRepository {
 
     companion object {
-        private const val SIZE_REQUEST_EMAIL = 10L
-        private const val SIZE_CONCATENATE_EMAIL = 5L
+        private const val SIZE_REQUEST_EMAIL = 20L
+        private const val SIZE_CONCATENATE_EMAIL = 15L
     }
 
     override val listEmails: Flow<List<EmailContact>> = emailLocalDataSource.listEmail
