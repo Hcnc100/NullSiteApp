@@ -74,7 +74,7 @@ fun SettingsScreen(
                 Switch(
                     modifier = Modifier.weight(.2F),
                     checked = isBiometricEnabled,
-                    onCheckedChange = {},
+                    onCheckedChange = { changeBiometricEnabled(!isBiometricEnabled) },
                 )
             }
             if (!isBiometricAvailable) {
