@@ -1,0 +1,162 @@
+plugins {
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("dagger.hilt.android.plugin")
+    id("kotlin-kapt")
+    id("kotlin-parcelize")
+    id("org.jetbrains.kotlin.plugin.serialization")
+    id("com.google.devtools.ksp")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
+}
+
+
+android {
+    namespace = "com.nullpointer.nullsiteadmin"
+    compileSdk= 34
+
+    defaultConfig {
+        applicationId = "com.nullpointer.nullsiteadmin"
+        minSdk =21
+        targetSdk = 34
+        versionCode = 10
+        versionName = "1.3.1"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary = true
+        }
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            proguardFiles (
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+        isCoreLibraryDesugaringEnabled = true
+    }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.4.3"
+    }
+    packagingOptions {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+
+
+    applicationVariants.all {
+        addJavaSourceFoldersToModel(
+            File(buildDir, "generated/ksp/$name/kotlin")
+        )
+    }
+}
+
+dependencies {
+
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.compose.ui:ui:1.5.4")
+    implementation("androidx.compose.material:material:1.5.4")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.5.4")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+    implementation("androidx.activity:activity-compose:1.8.2")
+    implementation("androidx.lifecycle:lifecycle-service:2.7.0")
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.5.4")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.5.4")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.5.4")
+
+// * coil
+    implementation("io.coil-kt:coil-compose:2.2.2")
+
+// *lottie compose
+    implementation("com.airbnb.android:lottie-compose:5.1.1")
+
+// * timber
+    implementation("com.orhanobut:logger:2.2.0")
+    implementation("com.jakewharton.timber:timber:5.0.1")
+
+// * hilt
+    val daggerHiltVersion = "2.48"
+    implementation("com.google.dagger:hilt-android:$daggerHiltVersion")
+    kapt("com.google.dagger:hilt-compiler:$daggerHiltVersion")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+// ? hilt test
+    testImplementation("com.google.dagger:hilt-android-testing:$daggerHiltVersion")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:$daggerHiltVersion")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:$daggerHiltVersion")
+
+// * room
+    val roomVersion = "2.5.0"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    testImplementation("androidx.room:room-testing:$roomVersion")
+
+// * save state
+    implementation("androidx.savedstate:savedstate-ktx:1.2.1")
+
+// * image compressor
+    implementation("com.github.Shouheng88:compressor:1.6.0")
+
+// * splash screen
+    implementation("androidx.core:core-splashscreen:1.0.1")
+
+// * shimmer effect
+    implementation("com.valentinilk.shimmer:compose-shimmer:1.0.3")
+
+// * navigation
+    val destinationsVersion = "1.8.42-beta"
+    implementation("io.github.raamcosta.compose-destinations:core:$destinationsVersion")
+    ksp("io.github.raamcosta.compose-destinations:ksp:$destinationsVersion")
+
+// * data store
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+// * Firebase
+    // Import the BoM for the Firebase platform
+    implementation(platform("com.google.firebase:firebase-bom:32.1.0"))
+    implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-storage-ktx")
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-messaging-ktx")
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.1")
+    implementation("com.google.firebase:firebase-crashlytics-ktx")
+    implementation("com.google.firebase:firebase-analytics-ktx")
+
+// * web view
+    implementation("com.google.accompanist:accompanist-webview:0.25.0")
+
+// * gson
+    implementation("com.google.code.gson:gson:2.10.1")
+
+// * swipe refresh
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.25.1")
+
+    implementation("androidx.biometric:biometric:1.1.0")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+
+    implementation("com.vanniktech:android-image-cropper:4.3.3")
+
+    // * Desugaring
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+
+}
