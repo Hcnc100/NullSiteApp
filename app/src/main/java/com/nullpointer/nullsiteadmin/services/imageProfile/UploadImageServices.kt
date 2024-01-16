@@ -14,7 +14,7 @@ import com.nullpointer.nullsiteadmin.data.local.services.ServicesManager.Compani
 import com.nullpointer.nullsiteadmin.data.local.services.ServicesManager.Companion.STOP_COMMAND
 import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepository
 import com.nullpointer.nullsiteadmin.domain.storage.ImageRepository
-import com.nullpointer.nullsiteadmin.models.PersonalInfo
+import com.nullpointer.nullsiteadmin.models.data.PersonalInfoData
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -67,14 +67,14 @@ class UploadImageServices : LifecycleService() {
             blockIO = {
                 val uriInfo: Uri = intent.getParcelableExtra(KEY_URI_PROFILE)!!
                 val personalEncode = intent.getStringExtra(KEY_INFO_PROFILE)!!
-                val personalInfo: PersonalInfo = Json.decodeFromString(personalEncode)
+                val personalInfoData: PersonalInfoData = Json.decodeFromString(personalEncode)
 
                 notifyHelper.startServicesForeground(this@UploadImageServices)
 
-                val newUrlImg = startUploadImage(personalInfo.idPersonal, uriInfo)!!
-                val personUpdated = personalInfo.copy(urlImg = newUrlImg)
+//                val newUrlImg = startUploadImage(personalInfoData.idPersonal, uriInfo)!!
+//                val personUpdated = personalInfoData.copy(urlImg = newUrlImg)
 
-                infoUserRepository.updatePersonalInfo(personUpdated)
+//                infoUserRepository.updatePersonalInfo(personUpdated)
             }
         )
     }

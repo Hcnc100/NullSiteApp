@@ -22,7 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
-import com.nullpointer.nullsiteadmin.models.PersonalInfo
+import com.nullpointer.nullsiteadmin.models.data.PersonalInfoData
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
 import com.nullpointer.nullsiteadmin.ui.screens.editInfoProfile.viewModel.EditInfoViewModel
@@ -41,7 +41,7 @@ import timber.log.Timber
 @Destination
 @Composable
 fun EditInfoProfile(
-    personalInfo: PersonalInfo,
+    personalInfoData: PersonalInfoData?,
     actionRootDestinations: ActionRootDestinations,
     editInfoVM: EditInfoViewModel = hiltViewModel(),
     stateEditInfo: EditInfoProfileState = rememberEditInfoProfileState(
@@ -50,8 +50,8 @@ fun EditInfoProfile(
     )
 ) {
 
-    LaunchedEffect(key1 = personalInfo) {
-        editInfoVM.initInfoProfile(personalInfo)
+    LaunchedEffect(key1 = personalInfoData) {
+        editInfoVM.initInfoProfile(personalInfoData)
     }
 
     LaunchedEffect(key1 = Unit) {
@@ -107,9 +107,10 @@ fun EditInfoProfile(
                     modifier = Modifier.padding(10.dp)
                 ) {
                     stateEditInfo.hiddenKeyBoard()
-                    editInfoVM.updatePersonalInfo(personalInfo) {
-                        actionRootDestinations.backDestination()
-                    }
+                    // TODO fix this
+//                    editInfoVM.updatePersonalInfo(personalInfoData) {
+//                        actionRootDestinations.backDestination()
+//                    }
                 }
             }
 

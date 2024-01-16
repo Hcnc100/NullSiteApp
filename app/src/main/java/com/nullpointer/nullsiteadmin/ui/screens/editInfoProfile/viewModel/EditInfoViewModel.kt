@@ -14,7 +14,7 @@ import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepository
 import com.nullpointer.nullsiteadmin.domain.storage.ImageRepository
-import com.nullpointer.nullsiteadmin.models.PersonalInfo
+import com.nullpointer.nullsiteadmin.models.data.PersonalInfoData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -107,17 +107,17 @@ class EditInfoViewModel @Inject constructor(
     )
 
 
-    fun initInfoProfile(personalInfo: PersonalInfo) {
-        personalInfo.let {
+    fun initInfoProfile(personalInfoData: PersonalInfoData?) {
+        personalInfoData?.let {
             name.changeValue(newValue = it.name, isInit = true)
             profession.changeValue(newValue = it.profession, isInit = true)
             description.changeValue(newValue = it.description, isInit = true)
-            imageProfile.changeValue(newValue = personalInfo.urlImg.toUri(), isInit = true)
+            imageProfile.changeValue(newValue = personalInfoData.urlImg.toUri(), isInit = true)
         }
     }
 
     fun updatePersonalInfo(
-        personalInfo: PersonalInfo,
+        personalInfoData: PersonalInfoData,
         actionComplete: () -> Unit
     ) = launchSafeIO(
         blockBefore = { isUpdatedData = true },
@@ -127,21 +127,21 @@ class EditInfoViewModel @Inject constructor(
                 !isDataValid -> _messageError.trySend(R.string.error_invalid_data)
                 !hasAnyChange -> _messageError.trySend(R.string.error_no_data_change)
                 else -> {
-                    val newInfo = personalInfo.copy(
-                        name = name.currentValue,
-                        profession = profession.currentValue,
-                        description = description.currentValue
-                    )
-                    val newUri = if (imageProfile.hasChanged) imageProfile.value else null
-                    Timber.d("$newUri")
-                    infoUserRepository.updatePersonalInfo(personalInfo = newInfo, uriImage = newUri)
-                    if (!imageProfile.hasChanged) {
-                        _messageError.trySend(R.string.message_data_upload)
-                    }
-                    delay(1000)
-                    withContext(Dispatchers.Main) {
-                        actionComplete()
-                    }
+//                    val newInfo = personalInfoData.copy(
+//                        name = name.currentValue,
+//                        profession = profession.currentValue,
+//                        description = description.currentValue
+//                    )
+//                    val newUri = if (imageProfile.hasChanged) imageProfile.value else null
+//                    Timber.d("$newUri")
+//                    infoUserRepository.updatePersonalInfo(personalInfoData = newInfo, uriImage = newUri)
+//                    if (!imageProfile.hasChanged) {
+//                        _messageError.trySend(R.string.message_data_upload)
+//                    }
+//                    delay(1000)
+//                    withContext(Dispatchers.Main) {
+//                        actionComplete()
+//                    }
                 }
             }
         },

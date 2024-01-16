@@ -5,6 +5,7 @@ import com.nullpointer.nullsiteadmin.data.local.compress.ImageCompressDataSource
 import com.nullpointer.nullsiteadmin.data.local.compress.ImageCompressDataSourceImpl
 import com.nullpointer.nullsiteadmin.data.remote.storage.StorageDataSource
 import com.nullpointer.nullsiteadmin.data.remote.storage.StorageDataSourceImpl
+import com.nullpointer.nullsiteadmin.domain.storage.ImageRepository
 import com.nullpointer.nullsiteadmin.domain.storage.ImageRepositoryImpl
 import dagger.Module
 import dagger.Provides
@@ -33,7 +34,7 @@ object StorageServices {
     fun provideImgProfileRepo(
         storageDataSource: StorageDataSource,
         imageCompressDataSource: ImageCompressDataSource
-    ): ImageRepositoryImpl = ImageRepositoryImpl(
+    ): ImageRepository = ImageRepositoryImpl(
         storageDataSource = storageDataSource,
         imageCompressDataSource = imageCompressDataSource
     )

@@ -5,6 +5,7 @@ import com.nullpointer.nullsiteadmin.data.local.biometric.BiometricDataSource
 import com.nullpointer.nullsiteadmin.data.local.biometric.BiometricDataSourceImpl
 import com.nullpointer.nullsiteadmin.data.local.settings.SettingsDataSource
 import com.nullpointer.nullsiteadmin.domain.biometric.BiometricRepoImpl
+import com.nullpointer.nullsiteadmin.domain.biometric.BiometricRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,5 +28,8 @@ object BiometricModule {
     fun providesBiometricRepository(
         biometricDataSource: BiometricDataSource,
         settingsDataSource: SettingsDataSource
-    ): BiometricRepoImpl = BiometricRepoImpl(settingsDataSource, biometricDataSource)
+    ): BiometricRepository = BiometricRepoImpl(
+        settingsDataSource = settingsDataSource,
+        biometricDataSource = biometricDataSource
+    )
 }

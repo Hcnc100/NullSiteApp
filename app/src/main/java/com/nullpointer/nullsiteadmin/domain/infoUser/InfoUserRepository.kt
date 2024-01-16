@@ -1,14 +1,15 @@
 package com.nullpointer.nullsiteadmin.domain.infoUser
 
 import android.net.Uri
-import com.nullpointer.nullsiteadmin.models.PersonalInfo
+import com.nullpointer.nullsiteadmin.models.data.PersonalInfoData
+import com.nullpointer.nullsiteadmin.models.wrapper.InfoProfileWrapper
 import kotlinx.coroutines.flow.Flow
 
 interface InfoUserRepository {
 
-    val myPersonalInfo: Flow<PersonalInfo>
-    suspend fun updatePersonalInfo(personalInfo: PersonalInfo)
+    val myPersonalInfoData: Flow<PersonalInfoData?>
+    suspend fun updatePersonalInfo( infoProfileWrapper: InfoProfileWrapper)
 
-    suspend fun updatePersonalInfo(personalInfo: PersonalInfo, uriImage: Uri?)
-    suspend fun requestLastPersonalInfo(forceRefresh: Boolean): Boolean
+    suspend fun getPersonalInfo()
+
 }

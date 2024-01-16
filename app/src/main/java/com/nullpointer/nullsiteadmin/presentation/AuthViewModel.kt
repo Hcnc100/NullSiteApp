@@ -13,8 +13,8 @@ import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.auth.AuthRepository
 import com.nullpointer.nullsiteadmin.domain.biometric.BiometricRepository
 import com.nullpointer.nullsiteadmin.domain.deleter.DeleterInfoRepository
-import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepository
-import com.nullpointer.nullsiteadmin.models.UserCredentials
+
+import com.nullpointer.nullsiteadmin.models.wrapper.CredentialsWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -26,7 +26,6 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val infoUserRepository: InfoUserRepository,
     private val biometricRepository: BiometricRepository,
     private val deleterInfoRepository: DeleterInfoRepository
 ) : ViewModel() {
@@ -83,21 +82,16 @@ class AuthViewModel @Inject constructor(
     val isBiometricAvailable by mutableStateOf(biometricRepository.checkBiometricSupport())
 
     init {
-        verifyTokenMessaging()
         initVerifyBiometrics()
     }
 
-    fun authWithEmailAndPassword(
-        userCredentials: UserCredentials
+    fun login(
+        userCredentialsWrapper: CredentialsWrapper
     ) = launchSafeIO(
         blockBefore = { isAuthenticating = true },
         blockAfter = { isAuthenticating = false },
         blockIO = {
-            authRepository.authUserWithEmailAndPassword(
-                email = userCredentials.email,
-                password = userCredentials.password
-            )
-            infoUserRepository.requestLastPersonalInfo(false)
+            authRepository.login(credentialsWrapper = userCredentialsWrapper)
         },
         blockException = {
             ExceptionManager.sendMessageErrorToException(
@@ -113,15 +107,7 @@ class AuthViewModel @Inject constructor(
         deleterInfoRepository.deleterAllInformation()
     }
 
-    private fun verifyTokenMessaging() = launchSafeIO(
-        blockIO = {
-            val isTokenUpdated = authRepository.verifyTokenMessaging()
-            if (isTokenUpdated) Timber.d("Se actualizo el token")
-        },
-        blockException = {
-            ExceptionManager.getMessageForException(it, "Error update token user")
-        }
-    )
+
 
     fun changeBiometricEnabled(enabled: Boolean) = launchSafeIO {
         if (isBiometricAvailable) {

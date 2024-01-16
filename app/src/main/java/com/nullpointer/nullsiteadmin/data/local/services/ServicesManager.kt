@@ -3,7 +3,7 @@ package com.nullpointer.nullsiteadmin.data.local.services
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import com.nullpointer.nullsiteadmin.models.PersonalInfo
+import com.nullpointer.nullsiteadmin.models.data.PersonalInfoData
 import com.nullpointer.nullsiteadmin.services.imageProfile.UploadImageServices
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -21,11 +21,11 @@ class ServicesManager(
 
 
     fun uploadImageServices(
-        personalInfo: PersonalInfo,
+        personalInfoData: PersonalInfoData,
         uriImg: Uri
     ) {
         Intent(context, UploadImageServices::class.java).apply {
-            putExtra(KEY_INFO_PROFILE, Json.encodeToString(personalInfo))
+            putExtra(KEY_INFO_PROFILE, Json.encodeToString(personalInfoData))
             putExtra(KEY_URI_PROFILE, uriImg)
             action = START_COMMAND
         }.also {

@@ -9,7 +9,7 @@ import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepository
-import com.nullpointer.nullsiteadmin.models.PersonalInfo
+import com.nullpointer.nullsiteadmin.models.data.PersonalInfoData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -38,8 +38,8 @@ class InfoUserViewModel @Inject constructor(
         private set
 
 
-    val infoUser = flow<Resource<PersonalInfo>> {
-        infoUserRepository.myPersonalInfo.collect {
+    val infoUser = flow<Resource<PersonalInfoData?>> {
+        infoUserRepository.myPersonalInfoData.collect {
             emit(Resource.Success(it))
         }
     }.flowOn(Dispatchers.IO).catch {
@@ -52,13 +52,6 @@ class InfoUserViewModel @Inject constructor(
         Resource.Loading
     )
 
-    val infoUserIsEmpty = infoUser.map {
-        if (it is Resource.Success) {
-            it.data.idPersonal.isEmpty()
-        } else {
-            false
-        }
-    }
 
     init {
         requestLastInformation(false)
@@ -76,8 +69,7 @@ class InfoUserViewModel @Inject constructor(
             )
         },
         blockIO = {
-            val isUpdate = infoUserRepository.requestLastPersonalInfo(forceRefresh)
-            if (isUpdate) Timber.d("Updated info user admin")
+        infoUserRepository.getPersonalInfo()
         }
     )
 }

@@ -23,12 +23,12 @@ import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.nullpointer.nullsiteadmin.R
-import com.nullpointer.nullsiteadmin.models.PersonalInfo
+import com.nullpointer.nullsiteadmin.models.data.PersonalInfoData
 
 @Composable
 fun InfoUser(
     modifier: Modifier = Modifier,
-    personalInfo: PersonalInfo,
+    personalInfoData: PersonalInfoData,
 ) {
     Column(
         modifier = modifier
@@ -37,11 +37,11 @@ fun InfoUser(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         PhotoProfile(
-            urlImgProfile = personalInfo.urlImg,
+            urlImgProfile = personalInfoData.urlImg,
             modifier = Modifier.padding(15.dp)
         )
         ListInfoPersonal(
-            personalInfo = personalInfo,
+            personalInfoData = personalInfoData,
             modifier = Modifier.padding(10.dp)
         )
     }
@@ -49,23 +49,23 @@ fun InfoUser(
 
 @Composable
 private fun ListInfoPersonal(
-    personalInfo: PersonalInfo,
+    personalInfoData: PersonalInfoData,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
         FieldInfoPersonal(
             nameFiled = stringResource(id = R.string.label_name_admin),
-            valueFiled = personalInfo.name
+            valueFiled = personalInfoData.name
         )
         Spacer(modifier = Modifier.height(10.dp))
         FieldInfoPersonal(
             nameFiled = stringResource(id = R.string.label_profession_admin),
-            valueFiled = personalInfo.profession
+            valueFiled = personalInfoData.profession
         )
         Spacer(modifier = Modifier.height(10.dp))
         FieldInfoPersonal(
             nameFiled = stringResource(id = R.string.label_description_admin),
-            valueFiled = personalInfo.description
+            valueFiled = personalInfoData.description
         )
     }
 }

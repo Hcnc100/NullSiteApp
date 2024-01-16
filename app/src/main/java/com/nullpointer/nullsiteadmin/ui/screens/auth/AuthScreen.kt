@@ -61,7 +61,7 @@ fun AuthScreen(
                 LOGIN -> {
                     authFieldVM.getDataAuth()?.let { userCredentials ->
                         authScreenState.hiddenKeyBoard()
-                        authViewModel.authWithEmailAndPassword(userCredentials)
+                        authViewModel.login(userCredentials)
                     }
                 }
             }

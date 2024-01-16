@@ -7,6 +7,7 @@ import com.nullpointer.nullsiteadmin.data.local.room.ProjectDAO
 import com.nullpointer.nullsiteadmin.data.remote.project.ProjectRemoteDataSource
 import com.nullpointer.nullsiteadmin.data.remote.project.ProjectRemoteDataSourceImpl
 import com.nullpointer.nullsiteadmin.domain.project.ProjectRepoImpl
+import com.nullpointer.nullsiteadmin.domain.project.ProjectRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -40,6 +41,9 @@ object ProjectModule {
     fun provideProjectRepository(
         projectRemoteDataSource: ProjectRemoteDataSource,
         projectLocalDataSource: ProjectLocalDataSource
-    ): ProjectRepoImpl = ProjectRepoImpl(projectLocalDataSource, projectRemoteDataSource)
+    ): ProjectRepository = ProjectRepoImpl(
+        projectLocalDataSource = projectLocalDataSource,
+        projectRemoteDataSource = projectRemoteDataSource
+    )
 
 }

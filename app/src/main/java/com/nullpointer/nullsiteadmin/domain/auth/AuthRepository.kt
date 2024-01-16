@@ -1,11 +1,12 @@
 package com.nullpointer.nullsiteadmin.domain.auth
 
+import com.nullpointer.nullsiteadmin.models.wrapper.CredentialsWrapper
 import kotlinx.coroutines.flow.Flow
 
 interface AuthRepository {
     val isUserAuth: Flow<Boolean>
-    suspend fun updateTokenUser(token: String)
-    suspend fun authUserWithEmailAndPassword(email: String, password: String)
     suspend fun logout()
-    suspend fun verifyTokenMessaging(): Boolean
+    suspend fun verifyTokenMessaging()
+
+    suspend fun login(credentialsWrapper: CredentialsWrapper)
 }

@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.ui.screens.infoProfile
+package com.nullpointer.nullsiteadmin.ui.screens.infoProfile.componets.items
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState

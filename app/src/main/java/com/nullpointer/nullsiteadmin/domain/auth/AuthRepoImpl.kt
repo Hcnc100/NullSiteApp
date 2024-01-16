@@ -1,41 +1,50 @@
 package com.nullpointer.nullsiteadmin.domain.auth
 
-import com.nullpointer.nullsiteadmin.core.utils.callApiTimeOut
-import com.nullpointer.nullsiteadmin.data.local.settings.SettingsDataSource
-import com.nullpointer.nullsiteadmin.data.remote.auth.AuthDataSource
+import com.nullpointer.nullsiteadmin.datasource.auth.local.AuthLocalDataSource
+import com.nullpointer.nullsiteadmin.datasource.auth.remote.AuthRemoteDataSource
+import com.nullpointer.nullsiteadmin.datasource.infoPhone.local.InfoPhoneLocalDataSource
+import com.nullpointer.nullsiteadmin.models.dto.CredentialsDTO
+import com.nullpointer.nullsiteadmin.models.dto.UpdateInfoPhoneDTO
+import com.nullpointer.nullsiteadmin.models.wrapper.CredentialsWrapper
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 
 class AuthRepoImpl(
-    private val authDataSource: AuthDataSource,
-    private val settingsDataSource: SettingsDataSource,
+    private val authLocalDataSource: AuthLocalDataSource,
+    private val authRemoteDataSource: AuthRemoteDataSource,
+    private val infoPhoneLocalDataSource: InfoPhoneLocalDataSource,
 ) : AuthRepository {
 
-    override val isUserAuth: Flow<Boolean> = settingsDataSource.isAuthUser()
+    override val isUserAuth: Flow<Boolean> = authLocalDataSource.getAuthData().map { it != null }
 
-    override suspend fun updateTokenUser(token: String) {
-        authDataSource.addingTokenUser(token)
-        settingsDataSource.updateTokenMsg(token)
+    override suspend fun logout(){
+        authRemoteDataSource.logOut()
+        authLocalDataSource.deleterAuthData()
     }
 
-    override suspend fun authUserWithEmailAndPassword(email: String, password: String) {
-        val userResponse = callApiTimeOut {
-            authDataSource.authWithEmailAndPassword(email, password)
+    override suspend fun verifyTokenMessaging() {
+
+        val currentInfoPhone= infoPhoneLocalDataSource.getCurrentInfoPhone()
+        val savedInfoPhone= infoPhoneLocalDataSource.getSavedInfoPhone()
+
+        if(currentInfoPhone!= savedInfoPhone){
+            authRemoteDataSource.updateInfoPhone(
+                uuidPhone = currentInfoPhone.uuidPhone,
+                updateInfoPhoneDTO = UpdateInfoPhoneDTO.fromInfoPhoneData(
+                    infoPhoneData = currentInfoPhone
+                )
+            )
+            infoPhoneLocalDataSource.updateSavedData(currentInfoPhone)
         }
-        settingsDataSource.saveUserAuth(userResponse)
+
+
     }
 
-    override suspend fun logout() {
-        authDataSource.logout()
-    }
-
-    override suspend fun verifyTokenMessaging(): Boolean {
-        val localToken = settingsDataSource.getUserAuth().first().tokenMsg
-        val currentToken = authDataSource.getUserToken()
-        if (localToken != currentToken) {
-            authDataSource.addingTokenUser(currentToken)
-            settingsDataSource.updateTokenMsg(currentToken)
-        }
-        return localToken != currentToken
+    override suspend fun login(credentialsWrapper: CredentialsWrapper) {
+        val credentialsDTO = CredentialsDTO.fromCredentialsWrapper(
+            credentialsWrapper = credentialsWrapper
+        )
+        val authData = authRemoteDataSource.login(credentialsDTO)
+        authLocalDataSource.updateAuthData(authData)
     }
 }
