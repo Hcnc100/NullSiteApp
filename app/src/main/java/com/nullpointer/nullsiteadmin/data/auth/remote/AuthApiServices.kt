@@ -1,12 +1,9 @@
 package com.nullpointer.nullsiteadmin.data.auth.remote
 
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.ktx.messaging
 import com.nullpointer.nullsiteadmin.core.utils.Constants.INFO_PHONE_USERS
-import com.nullpointer.nullsiteadmin.models.data.InfoPhoneData
 import com.nullpointer.nullsiteadmin.models.dto.CredentialsDTO
 import com.nullpointer.nullsiteadmin.models.dto.UpdateInfoPhoneDTO
 import com.nullpointer.nullsiteadmin.models.response.AuthResponse

@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface AuthRepository {
     val isUserAuth: Flow<Boolean>
     suspend fun logout()
-    suspend fun verifyTokenMessaging()
+    suspend fun verifyInfoPhoneData()
 
     suspend fun login(credentialsWrapper: CredentialsWrapper)
 }

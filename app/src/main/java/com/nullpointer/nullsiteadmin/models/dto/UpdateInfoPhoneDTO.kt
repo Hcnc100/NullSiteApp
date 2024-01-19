@@ -1,18 +1,23 @@
 package com.nullpointer.nullsiteadmin.models.dto
 
-import com.nullpointer.nullsiteadmin.interfaces.MappableFirebase
+import com.nullpointer.nullsiteadmin.core.utils.MappableFirebase
 import com.nullpointer.nullsiteadmin.models.data.InfoPhoneData
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class UpdateInfoPhoneDTO(
     val tokenGCM:String,
     val modelPhone:String,
     val operativeSystem:String,
     val versionOperativeSystem: String,
-):MappableFirebase {
+): MappableFirebase {
     companion object {
         fun fromInfoPhoneData(
             infoPhoneData: InfoPhoneData,
         ): UpdateInfoPhoneDTO {
+
+
+
             return UpdateInfoPhoneDTO(
                 modelPhone = infoPhoneData.modelPhone,
                 tokenGCM = infoPhoneData.tokenGCM,
@@ -21,4 +26,7 @@ data class UpdateInfoPhoneDTO(
             )
         }
     }
+
 }
+
+

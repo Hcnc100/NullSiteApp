@@ -31,7 +31,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onCreate() {
         super.onCreate()
         safeLaunchTokenOperation(message = "Error update token in services") {
-            authRepository.verifyTokenMessaging()
+            authRepository.verifyInfoPhoneData()
         }
     }
 
@@ -39,7 +39,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         safeLaunchTokenOperation("Error update token when update token") {
-            authRepository.verifyTokenMessaging()
+            authRepository.verifyInfoPhoneData()
         }
     }
 

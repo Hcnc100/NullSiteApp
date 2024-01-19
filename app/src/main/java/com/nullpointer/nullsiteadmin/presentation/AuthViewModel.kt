@@ -119,6 +119,15 @@ class AuthViewModel @Inject constructor(
 
     }
 
+     fun verifyPhoneData()=launchSafeIO(
+         blockException = {
+             Timber.e("Error register phone $it")
+         },
+         blockIO = {
+             authRepository.verifyInfoPhoneData()
+         }
+     )
+
     private fun initVerifyBiometrics() = launchSafeIO {
         when {
             !biometricRepository.checkBiometricSupport() -> true

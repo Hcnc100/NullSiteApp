@@ -6,23 +6,32 @@ import com.google.gson.reflect.TypeToken
 
 
 //convert a data class to a map
-fun <T> T.toMap(
-    listIgnoredFields: List<String> = emptyList(),
-    listTimestampFields: List<String> = emptyList()
-): Map<String, Any> {
-    val gson = Gson()
-    val json = gson.toJson(this)
-    val previewMap = gson.fromJson<Map<String, Any>>(
-        /* json = */ json,
-        /* typeOfT = */ object : TypeToken<T>() {}.type
-    ).toMutableMap()
 
-    listTimestampFields.forEach {
-        previewMap[it] = FieldValue.serverTimestamp()
+interface MappableFirebase{
+    fun toCreateMap(): Map<String, Any> {
+        val gson = Gson()
+        val json = gson.toJson(this)
+        val previewMap = gson.fromJson<Map<String, Any>>(
+            /* json = */ json,
+            /* typeOfT = */ object : TypeToken<Any>() {}.type
+        ).toMutableMap()
+
+        previewMap[Constants.nameFieldCreate] = FieldValue.serverTimestamp()
+        previewMap[Constants.nameFieldUpdate] = FieldValue.serverTimestamp()
+        return previewMap
     }
 
-    listIgnoredFields.forEach {
-        previewMap.remove(it)
+
+    fun toUpdateMap(): Map<String, Any> {
+        val gson = Gson()
+        val json = gson.toJson(this)
+        val previewMap = gson.fromJson<Map<String, Any>>(
+            /* json = */ json,
+            /* typeOfT = */ object : TypeToken<Any>() {}.type
+        ).toMutableMap()
+
+        previewMap[Constants.nameFieldUpdate] = FieldValue.serverTimestamp()
+        return previewMap
     }
-    return previewMap
+
 }

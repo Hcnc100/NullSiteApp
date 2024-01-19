@@ -3,6 +3,7 @@ package com.nullpointer.nullsiteadmin.ui.screens.home
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import com.nullpointer.nullsiteadmin.presentation.AuthViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
@@ -26,6 +27,11 @@ fun HomeScreen(
     actionRootDestinations: ActionRootDestinations,
     mainScreenState: HomeScreenState = rememberHomeScreenState()
 ) {
+
+    LaunchedEffect(key1 = Unit){
+        authViewModel.verifyPhoneData()
+    }
+
     Scaffold(
         scaffoldState = mainScreenState.scaffoldState,
         topBar = {

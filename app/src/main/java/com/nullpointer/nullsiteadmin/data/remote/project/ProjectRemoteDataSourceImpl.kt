@@ -21,22 +21,25 @@ class ProjectRemoteDataSourceImpl : ProjectRemoteDataSource {
 
 
     override suspend fun insertProject(project: Project): Project? {
-        val projectMap = project.toMap(
-            listTimestampFields = listOf(TIMESTAMP_UPDATE, TIMESTAMP_CREATE),
-            listIgnoredFields = listOf(ID_PROJECT)
-        )
-        val document = refProjects.add(projectMap).await()
-        return fromDocument(document.get().await())
+//        val projectMap = project.toMap(
+//            listTimestampFields = listOf(TIMESTAMP_UPDATE, TIMESTAMP_CREATE),
+//            listIgnoredFields = listOf(ID_PROJECT)
+//        )
+//        val document = refProjects.add(projectMap).await()
+//        return fromDocument(document.get().await())
+
+        TODO()
     }
 
     override suspend fun editProject(project: Project): Project? {
-        val projectMap = project.toMap(
-            listTimestampFields = listOf(TIMESTAMP_UPDATE),
-            listIgnoredFields = listOf(ID_PROJECT, TIMESTAMP_CREATE)
-        )
-        val refCurrentProject = refProjects.document(project.idProject)
-        refCurrentProject.update(projectMap).await()
-        return fromDocument(refCurrentProject.get().await())
+//        val projectMap = project.toMap(
+//            listTimestampFields = listOf(TIMESTAMP_UPDATE),
+//            listIgnoredFields = listOf(ID_PROJECT, TIMESTAMP_CREATE)
+//        )
+//        val refCurrentProject = refProjects.document(project.idProject)
+//        refCurrentProject.update(projectMap).await()
+//        return fromDocument(refCurrentProject.get().await())
+        TODO()
     }
 
     override suspend fun deleterProject(idProject: String) {

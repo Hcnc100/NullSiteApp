@@ -22,7 +22,7 @@ class AuthRepoImpl(
         authLocalDataSource.deleterAuthData()
     }
 
-    override suspend fun verifyTokenMessaging() {
+    override suspend fun verifyInfoPhoneData() {
 
         val currentInfoPhone= infoPhoneLocalDataSource.getCurrentInfoPhone()
         val savedInfoPhone= infoPhoneLocalDataSource.getSavedInfoPhone()
