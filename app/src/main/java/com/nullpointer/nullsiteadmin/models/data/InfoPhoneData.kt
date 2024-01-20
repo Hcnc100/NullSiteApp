@@ -9,6 +9,7 @@ data class InfoPhoneData(
     val tokenGCM:String,
     val uuidPhone:String,
     val modelPhone:String,
+    val versionNameApp:String,
     val operativeSystem:String,
-    val versionOperativeSystem: String,
+    val versionNumberApp:String,
 )

@@ -7,9 +7,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class UpdateInfoPhoneDTO(
     val tokenGCM:String,
+    val uuidPhone:String,
     val modelPhone:String,
+    val versionNameApp:String,
     val operativeSystem:String,
-    val versionOperativeSystem: String,
+    val versionNumberApp:String,
 ): MappableFirebase {
     companion object {
         fun fromInfoPhoneData(
@@ -19,10 +21,12 @@ data class UpdateInfoPhoneDTO(
 
 
             return UpdateInfoPhoneDTO(
-                modelPhone = infoPhoneData.modelPhone,
                 tokenGCM = infoPhoneData.tokenGCM,
+                uuidPhone = infoPhoneData.uuidPhone,
+                modelPhone = infoPhoneData.modelPhone,
+                versionNameApp = infoPhoneData.versionNameApp,
                 operativeSystem = infoPhoneData.operativeSystem,
-                versionOperativeSystem = infoPhoneData.versionOperativeSystem
+                versionNumberApp = infoPhoneData.versionNumberApp,
             )
         }
     }
