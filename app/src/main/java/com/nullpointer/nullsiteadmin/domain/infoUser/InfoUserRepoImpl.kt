@@ -3,8 +3,9 @@ package com.nullpointer.nullsiteadmin.domain.infoUser
 import com.nullpointer.nullsiteadmin.core.utils.callApiTimeOut
 import com.nullpointer.nullsiteadmin.datasource.user.local.InfoUserLocalDataSource
 import com.nullpointer.nullsiteadmin.datasource.auth.local.AuthLocalDataSource
+import com.nullpointer.nullsiteadmin.datasource.image.local.ImageLocalDataSource
+import com.nullpointer.nullsiteadmin.datasource.image.remote.ImageRemoteDataSource
 import com.nullpointer.nullsiteadmin.datasource.user.remote.InfoUserRemoteDataSource
-import com.nullpointer.nullsiteadmin.domain.storage.ImageRepository
 import com.nullpointer.nullsiteadmin.models.data.PersonalInfoData
 import com.nullpointer.nullsiteadmin.models.dto.PersonalInfoDTO
 import com.nullpointer.nullsiteadmin.models.wrapper.UpdateInfoProfileWrapper
@@ -13,7 +14,8 @@ import kotlinx.coroutines.flow.first
 
 class InfoUserRepoImpl(
     private val authLocalDataSource: AuthLocalDataSource,
-    private val imageRemoteDataSource: InfoUserRemoteDataSource,
+    private val imageRemoteDataSource: ImageRemoteDataSource,
+    private val imageLocalDataSource: ImageLocalDataSource,
     private val infoUserLocalDataSource: InfoUserLocalDataSource,
     private val infoUserRemoteDataSource: InfoUserRemoteDataSource,
 ) : InfoUserRepository {
@@ -26,14 +28,15 @@ class InfoUserRepoImpl(
     ) {
         val idUser = authLocalDataSource.getAuthData().first()!!.id
 
-       val imageProfile= updateInfoProfileWrapper.imageFile?.let {file->
-           // TODO add compress image
-//            imageRepository.compressImg(file)
-           null
+       val urlImg= updateInfoProfileWrapper.imageFile?.let { file->
+           val image=imageLocalDataSource.compressImage(file)
+          callApiTimeOut {
+              imageRemoteDataSource.uploadImageProfile(image,idUser)
+          }
         }
 
         val personalInfoDTO = PersonalInfoDTO.fromPersonalInfoWrapper(
-            urlImg = imageProfile,
+            urlImg = urlImg,
             infoProfileWrapper = updateInfoProfileWrapper
         )
         callApiTimeOut {
@@ -42,13 +45,8 @@ class InfoUserRepoImpl(
                 personalInfoDTO = personalInfoDTO
             )
         }
-        val newData = callApiTimeOut {
-            infoUserRemoteDataSource.getPersonalInfo(idUser)
-        }
-        infoUserLocalDataSource.updatePersonalInfo(newData!!)
-        updateInfoProfileWrapper.uriFileImgProfile?.let {
-            //! TODO add upload image
-        }
+
+        getPersonalInfo()
     }
 
     override suspend fun getPersonalInfo() {

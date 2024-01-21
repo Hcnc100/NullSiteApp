@@ -5,7 +5,7 @@ import java.io.File
 
 data class UpdateInfoProfileWrapper(
     val name:String?,
-    val imageFile:File?,
+    val imageFile:Uri?,
     val profession:String?,
     val description:String?,
     val uriFileImgProfile:Uri?,

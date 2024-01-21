@@ -1,16 +1,16 @@
 package com.nullpointer.nullsiteadmin.domain.storage
 
 import android.net.Uri
-import com.nullpointer.nullsiteadmin.data.local.compress.ImageCompressDataSource
-import com.nullpointer.nullsiteadmin.data.remote.storage.StorageDataSource
+import com.nullpointer.nullsiteadmin.datasource.image.local.ImageLocalDataSource
+import com.nullpointer.nullsiteadmin.datasource.image.remote.ImageRemoteDataSource
 
 class ImageRepositoryImpl(
-    private val storageDataSource: StorageDataSource,
-    private val imageCompressDataSource: ImageCompressDataSource
+    private val imageLocalDataSource: ImageLocalDataSource,
+    private val imageRemoteDataSource: ImageRemoteDataSource,
 ) : ImageRepository {
     override fun uploadImageProfile(uri: Uri, idUser: String) =
-        storageDataSource.uploadImageProfile(uri, idUser)
+        imageRemoteDataSource.uploadImageProfileTask(uri, idUser)
 
     override suspend fun compressImg(newImg: Uri): Uri =
-        imageCompressDataSource.compressImg(newImg)
+        imageLocalDataSource.compressImage(newImg)
 }

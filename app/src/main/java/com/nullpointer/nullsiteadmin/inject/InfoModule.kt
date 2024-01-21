@@ -7,6 +7,8 @@ import com.nullpointer.nullsiteadmin.data.local.services.ServicesManager
 import com.nullpointer.nullsiteadmin.data.user.local.UserDataStore
 import com.nullpointer.nullsiteadmin.data.user.remote.UserApiServices
 import com.nullpointer.nullsiteadmin.datasource.auth.local.AuthLocalDataSource
+import com.nullpointer.nullsiteadmin.datasource.image.local.ImageLocalDataSource
+import com.nullpointer.nullsiteadmin.datasource.image.remote.ImageRemoteDataSource
 import com.nullpointer.nullsiteadmin.datasource.user.local.InfoUserLocalDataSource
 import com.nullpointer.nullsiteadmin.datasource.user.local.InfoUserLocalDataSourceImpl
 import com.nullpointer.nullsiteadmin.datasource.user.remote.InfoUserRemoteDataSource
@@ -38,13 +40,13 @@ object InfoModule {
 
     @Provides
     @Singleton
-    fun provideLocalInfoUser(
+    fun provideInfoUserLocalDataSource(
         userDataStore: UserDataStore
     ): InfoUserLocalDataSource = InfoUserLocalDataSourceImpl(userDataStore)
 
     @Provides
     @Singleton
-    fun provideRemoteInfoUser(
+    fun provideInfoUserRemoteDataSource(
         userApiServices: UserApiServices
     ): InfoUserRemoteDataSource =
         InfoUserRemoteDataSourceImpl(userApiServices = userApiServices)
@@ -59,13 +61,15 @@ object InfoModule {
     @Singleton
     fun provideRemoteInfoRepo(
         authLocalDataSource: AuthLocalDataSource,
-        infoUserDataSource: InfoUserRemoteDataSource,
-        imageRemoteDataSource: InfoUserRemoteDataSource,
+        imageLocalDataSource: ImageLocalDataSource,
+        imageRemoteDataSource: ImageRemoteDataSource,
         infoUserLocalDataSource: InfoUserLocalDataSource,
+        infoUserRemoteDataSource: InfoUserRemoteDataSource,
     ): InfoUserRepository = InfoUserRepoImpl(
         authLocalDataSource = authLocalDataSource,
-        infoUserRemoteDataSource = infoUserDataSource,
+        imageLocalDataSource = imageLocalDataSource,
         imageRemoteDataSource = imageRemoteDataSource,
-        infoUserLocalDataSource = infoUserLocalDataSource
+        infoUserLocalDataSource = infoUserLocalDataSource,
+        infoUserRemoteDataSource = infoUserRemoteDataSource
     )
 }
