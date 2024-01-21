@@ -9,12 +9,11 @@ import java.util.Date
 
 @Serializable
 data class PersonalInfoData(
-    val id: String ="",
-    val name: String ="",
-    val urlImg: String ="",
-    val lastUpdate: Long =0,
-    val profession: String="",
-    val description: String="",
+    val name: String,
+    val urlImg: String,
+    val updateAt: Long,
+    val profession: String,
+    val description: String,
 ){
     companion object{
         fun fromPersonalInfoResponse(
@@ -22,12 +21,11 @@ data class PersonalInfoData(
         ): PersonalInfoData {
 
             return PersonalInfoData(
-                id = personalInfoResponse.id,
                 name = personalInfoResponse.name,
-                description = personalInfoResponse.description,
-                lastUpdate = personalInfoResponse.lastUpdate.time,
+                urlImg = personalInfoResponse.urlImg,
                 profession = personalInfoResponse.profession,
-                urlImg = personalInfoResponse.urlImg
+                updateAt = personalInfoResponse.updateAt!!.time,
+                description = personalInfoResponse.description,
             )
         }
     }

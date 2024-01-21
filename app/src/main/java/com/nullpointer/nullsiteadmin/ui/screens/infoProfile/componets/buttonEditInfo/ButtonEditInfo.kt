@@ -46,10 +46,12 @@ fun ButtonEditInfo(
 @Composable
 @SimplePreview
 private fun ButtonEditInfoPreview(){
-    ButtonEditInfo(
-        personalInfoData = Resource.Success(
-            PersonalInfoData()
-        ),
-        actionEditInfo = {}
-    )
+//    ButtonEditInfo(
+//        personalInfoData = Resource.Success(
+//            PersonalInfoData(
+//                description = W
+//            )
+//        ),
+//        actionEditInfo = {}
+//    )
 }

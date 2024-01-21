@@ -1,19 +1,19 @@
 package com.nullpointer.nullsiteadmin.domain.infoUser
 
-import android.net.Uri
 import com.nullpointer.nullsiteadmin.core.utils.callApiTimeOut
 import com.nullpointer.nullsiteadmin.datasource.user.local.InfoUserLocalDataSource
-import com.nullpointer.nullsiteadmin.data.local.services.ServicesManager
 import com.nullpointer.nullsiteadmin.datasource.auth.local.AuthLocalDataSource
 import com.nullpointer.nullsiteadmin.datasource.user.remote.InfoUserRemoteDataSource
+import com.nullpointer.nullsiteadmin.domain.storage.ImageRepository
 import com.nullpointer.nullsiteadmin.models.data.PersonalInfoData
 import com.nullpointer.nullsiteadmin.models.dto.PersonalInfoDTO
-import com.nullpointer.nullsiteadmin.models.wrapper.InfoProfileWrapper
+import com.nullpointer.nullsiteadmin.models.wrapper.UpdateInfoProfileWrapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
 class InfoUserRepoImpl(
     private val authLocalDataSource: AuthLocalDataSource,
+    private val imageRemoteDataSource: InfoUserRemoteDataSource,
     private val infoUserLocalDataSource: InfoUserLocalDataSource,
     private val infoUserRemoteDataSource: InfoUserRemoteDataSource,
 ) : InfoUserRepository {
@@ -22,10 +22,20 @@ class InfoUserRepoImpl(
         infoUserLocalDataSource.getPersonalInfo()
 
     override suspend fun updatePersonalInfo(
-        infoProfileWrapper: InfoProfileWrapper
+        updateInfoProfileWrapper: UpdateInfoProfileWrapper
     ) {
-        val idUser = infoUserLocalDataSource.getPersonalInfo().first()!!.id
-        val personalInfoDTO = PersonalInfoDTO.fromPersonalInfoWrapper(infoProfileWrapper)
+        val idUser = authLocalDataSource.getAuthData().first()!!.id
+
+       val imageProfile= updateInfoProfileWrapper.imageFile?.let {file->
+           // TODO add compress image
+//            imageRepository.compressImg(file)
+           null
+        }
+
+        val personalInfoDTO = PersonalInfoDTO.fromPersonalInfoWrapper(
+            urlImg = imageProfile,
+            infoProfileWrapper = updateInfoProfileWrapper
+        )
         callApiTimeOut {
             infoUserRemoteDataSource.updatePersonalInfo(
                 idUser = idUser,
@@ -36,7 +46,7 @@ class InfoUserRepoImpl(
             infoUserRemoteDataSource.getPersonalInfo(idUser)
         }
         infoUserLocalDataSource.updatePersonalInfo(newData!!)
-        infoProfileWrapper.uriImageProfile?.let {
+        updateInfoProfileWrapper.uriFileImgProfile?.let {
             //! TODO add upload image
         }
     }

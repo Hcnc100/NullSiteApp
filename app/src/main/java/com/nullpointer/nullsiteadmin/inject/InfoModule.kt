@@ -3,11 +3,12 @@ package com.nullpointer.nullsiteadmin.inject
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.nullpointer.nullsiteadmin.datasource.user.local.InfoUserLocalDataSource
-import com.nullpointer.nullsiteadmin.datasource.user.local.InfoUserLocalDataSourceImpl
 import com.nullpointer.nullsiteadmin.data.local.services.ServicesManager
 import com.nullpointer.nullsiteadmin.data.user.local.UserDataStore
+import com.nullpointer.nullsiteadmin.data.user.remote.UserApiServices
 import com.nullpointer.nullsiteadmin.datasource.auth.local.AuthLocalDataSource
+import com.nullpointer.nullsiteadmin.datasource.user.local.InfoUserLocalDataSource
+import com.nullpointer.nullsiteadmin.datasource.user.local.InfoUserLocalDataSourceImpl
 import com.nullpointer.nullsiteadmin.datasource.user.remote.InfoUserRemoteDataSource
 import com.nullpointer.nullsiteadmin.datasource.user.remote.InfoUserRemoteDataSourceImpl
 import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepoImpl
@@ -27,7 +28,12 @@ object InfoModule {
     @Singleton
     fun provideUserDataStore(
         dataStore: DataStore<Preferences>
-    )= UserDataStore(dataStore = dataStore)
+    ):UserDataStore = UserDataStore(dataStore = dataStore)
+
+
+    @Provides
+    @Singleton
+    fun provideUserApiServices(): UserApiServices = UserApiServices()
 
 
     @Provides
@@ -38,8 +44,10 @@ object InfoModule {
 
     @Provides
     @Singleton
-    fun provideRemoteInfoUser(): InfoUserRemoteDataSource =
-        InfoUserRemoteDataSourceImpl()
+    fun provideRemoteInfoUser(
+        userApiServices: UserApiServices
+    ): InfoUserRemoteDataSource =
+        InfoUserRemoteDataSourceImpl(userApiServices = userApiServices)
 
     @Provides
     @Singleton
@@ -52,10 +60,12 @@ object InfoModule {
     fun provideRemoteInfoRepo(
         authLocalDataSource: AuthLocalDataSource,
         infoUserDataSource: InfoUserRemoteDataSource,
+        imageRemoteDataSource: InfoUserRemoteDataSource,
         infoUserLocalDataSource: InfoUserLocalDataSource,
     ): InfoUserRepository = InfoUserRepoImpl(
         authLocalDataSource = authLocalDataSource,
         infoUserRemoteDataSource = infoUserDataSource,
-        infoUserLocalDataSource = infoUserLocalDataSource,
+        imageRemoteDataSource = imageRemoteDataSource,
+        infoUserLocalDataSource = infoUserLocalDataSource
     )
 }

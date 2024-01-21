@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -26,6 +28,9 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        val newsApiKey: String = gradleLocalProperties(rootDir).getProperty("ID_INFO_PROFILE_FIREBASE")
+        buildConfigField("String", "ID_INFO_PROFILE_FIREBASE", newsApiKey)
+
     }
 
     buildTypes {

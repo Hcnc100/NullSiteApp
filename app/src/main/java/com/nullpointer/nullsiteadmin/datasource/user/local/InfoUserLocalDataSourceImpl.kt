@@ -17,14 +17,9 @@ class InfoUserLocalDataSourceImpl(
     private val userDataStore: UserDataStore
 ) : InfoUserLocalDataSource {
 
-    companion object {
-        private const val KEY_USER_DATA = "KEY_USER_DATA"
-    }
 
-    private val keyUserData = stringPreferencesKey(KEY_USER_DATA)
-
-
-    override fun getPersonalInfo() = userDataStore.getPersonalInfo()
+    override fun getPersonalInfo():Flow<PersonalInfoData?>  =
+        userDataStore.getPersonalInfo()
 
     override suspend fun updatePersonalInfo(
         newPersonalInfoData: PersonalInfoData

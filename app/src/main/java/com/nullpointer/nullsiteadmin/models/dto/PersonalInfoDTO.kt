@@ -1,7 +1,7 @@
 package com.nullpointer.nullsiteadmin.models.dto
 
 import com.nullpointer.nullsiteadmin.core.utils.MappableFirebase
-import com.nullpointer.nullsiteadmin.models.wrapper.InfoProfileWrapper
+import com.nullpointer.nullsiteadmin.models.wrapper.UpdateInfoProfileWrapper
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -13,10 +13,13 @@ data class PersonalInfoDTO(
 ): MappableFirebase {
 
    companion object{
-       fun fromPersonalInfoWrapper(infoProfileWrapper: InfoProfileWrapper): PersonalInfoDTO {
+       fun fromPersonalInfoWrapper(
+           urlImg:String?,
+           infoProfileWrapper: UpdateInfoProfileWrapper,
+       ): PersonalInfoDTO {
             return PersonalInfoDTO(
+                urlImg = urlImg,
                 name = infoProfileWrapper.name,
-                urlImg = infoProfileWrapper.description,
                 profession = infoProfileWrapper.profession,
                 description = infoProfileWrapper.description
             )

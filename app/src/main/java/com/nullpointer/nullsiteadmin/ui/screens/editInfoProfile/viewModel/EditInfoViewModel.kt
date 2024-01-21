@@ -15,13 +15,13 @@ import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepository
 import com.nullpointer.nullsiteadmin.domain.storage.ImageRepository
 import com.nullpointer.nullsiteadmin.models.data.PersonalInfoData
+import com.nullpointer.nullsiteadmin.models.wrapper.UpdateInfoProfileWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -116,33 +116,38 @@ class EditInfoViewModel @Inject constructor(
         }
     }
 
+    fun validateInfoProfile():UpdateInfoProfileWrapper? {
+       if (!isDataValid) {
+            _messageError.trySend(R.string.error_invalid_data)
+            return null
+        }
+        if (!hasAnyChange) {
+            _messageError.trySend(R.string.error_no_data_change)
+            return null
+        }
+        return UpdateInfoProfileWrapper(
+            name = name.currentValue,
+            profession = profession.currentValue,
+            description = description.currentValue,
+            // TODO fix this
+            imageFile = null,
+            uriFileImgProfile = imageProfile.value,
+        )
+    }
+
     fun updatePersonalInfo(
-        personalInfoData: PersonalInfoData,
-        actionComplete: () -> Unit
+        actionComplete: () -> Unit,
+        updateInfoProfileWrapper: UpdateInfoProfileWrapper
     ) = launchSafeIO(
         blockBefore = { isUpdatedData = true },
         blockAfter = { isUpdatedData = false },
         blockIO = {
-            when {
-                !isDataValid -> _messageError.trySend(R.string.error_invalid_data)
-                !hasAnyChange -> _messageError.trySend(R.string.error_no_data_change)
-                else -> {
-//                    val newInfo = personalInfoData.copy(
-//                        name = name.currentValue,
-//                        profession = profession.currentValue,
-//                        description = description.currentValue
-//                    )
-//                    val newUri = if (imageProfile.hasChanged) imageProfile.value else null
-//                    Timber.d("$newUri")
-//                    infoUserRepository.updatePersonalInfo(personalInfoData = newInfo, uriImage = newUri)
-//                    if (!imageProfile.hasChanged) {
-//                        _messageError.trySend(R.string.message_data_upload)
-//                    }
-//                    delay(1000)
-//                    withContext(Dispatchers.Main) {
-//                        actionComplete()
-//                    }
-                }
+            infoUserRepository.updatePersonalInfo(
+                updateInfoProfileWrapper
+            )
+            delay(1000)
+            withContext(Dispatchers.Main) {
+                actionComplete()
             }
         },
         blockException = {

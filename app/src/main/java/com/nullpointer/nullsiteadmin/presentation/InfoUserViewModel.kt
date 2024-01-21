@@ -54,10 +54,10 @@ class InfoUserViewModel @Inject constructor(
 
 
     init {
-        requestLastInformation(false)
+        requestLastInformation()
     }
 
-    fun requestLastInformation(forceRefresh: Boolean = true) = launchSafeIO(
+    fun requestLastInformation() = launchSafeIO(
         isEnabled = !isRequestInfoUser,
         blockBefore = { isRequestInfoUser = true },
         blockAfter = { isRequestInfoUser = false },

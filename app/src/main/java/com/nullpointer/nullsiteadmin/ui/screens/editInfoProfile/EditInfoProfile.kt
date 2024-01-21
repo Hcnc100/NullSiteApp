@@ -107,10 +107,13 @@ fun EditInfoProfile(
                     modifier = Modifier.padding(10.dp)
                 ) {
                     stateEditInfo.hiddenKeyBoard()
-                    // TODO fix this
-//                    editInfoVM.updatePersonalInfo(personalInfoData) {
-//                        actionRootDestinations.backDestination()
-//                    }
+                    editInfoVM.validateInfoProfile()?.let {
+                        editInfoVM.updatePersonalInfo(
+                            updateInfoProfileWrapper = it,
+                            actionComplete = actionRootDestinations::backDestination
+                        )
+                    }
+
                 }
             }
 
