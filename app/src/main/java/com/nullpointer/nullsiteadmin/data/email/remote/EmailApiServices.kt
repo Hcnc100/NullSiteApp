@@ -42,27 +42,21 @@ class EmailApiServices {
 
 
     suspend fun getConcatenateEmails(
-        includeEmail: Boolean,
-        emailId: String?,
+        emailId: String,
         numberResult: Long
     ): List<EmailData> {
-        return collectionEmail.getConcatenateObjects(
-            nResults = numberResult,
-            startWithId = emailId,
-            transform = ::fromDocument,
-            includeStart = includeEmail,
-            fieldTimestamp = Constants.CREATE_AT
-        )
+        val lastEmailDoc = collectionEmail.document(emailId).get().await()
+        val response = collectionEmail.orderBy(Constants.CREATE_AT, Query.Direction.DESCENDING)
+            .startAfter(lastEmailDoc).limit(numberResult).get().await()
+        return response.documents.mapNotNull(::fromDocument)
     }
 
     suspend fun getNewEmails(
-        includeEmail: Boolean,
         numberResult: Long,
-        emailId: String?
     ): List<EmailData> {
-       val response= collectionEmail.orderBy(Constants.CREATE_AT,Query.Direction.DESCENDING).get().await()
-
-        return response.documents.mapNotNull( ::fromDocument )
+        val response = collectionEmail.orderBy(Constants.CREATE_AT, Query.Direction.DESCENDING)
+            .limit(numberResult).get().await()
+        return response.documents.mapNotNull(::fromDocument)
     }
 
     suspend fun deleterEmail(idEmail: String) {

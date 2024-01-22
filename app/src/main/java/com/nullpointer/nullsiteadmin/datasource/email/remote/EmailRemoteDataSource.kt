@@ -10,10 +10,12 @@ interface EmailRemoteDataSource {
     suspend fun updateEmail(updateEmailDTO: UpdateEmailDTO)
     suspend fun deleterListEmails(listIds: List<String>)
     suspend fun getConcatenateEmails(
-        includeEmail: Boolean, emailId: String? = null, numberResult: Long
+         emailId: String,
+         numberResult: Long
+
     ): List<EmailData>
 
     suspend fun getNewEmails(
-        includeEmail: Boolean, numberResult: Long, emailId: String?
+        numberResult: Long
     ): List<EmailData>
 }

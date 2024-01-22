@@ -33,14 +33,7 @@ class EmailsRepoImpl(
     }
 
     override suspend fun requestLastEmail(forceRefresh: Boolean): Int {
-        val email = emailLocalDataSource.getMoreRecentEmail()
-        val idEmail = if (forceRefresh) null else email?.idEmail
-        val newEmails = emailRemoteDataSource.getNewEmails(
-                numberResult = SIZE_REQUEST_EMAIL,
-                includeEmail = false,
-                emailId = idEmail
-            )
-
+        val newEmails = emailRemoteDataSource.getNewEmails(numberResult = SIZE_REQUEST_EMAIL)
         emailLocalDataSource.updateAllEmails(newEmails)
         return newEmails.size
     }
@@ -50,10 +43,8 @@ class EmailsRepoImpl(
         return if (lastEmail != null) {
             val newEmails = emailRemoteDataSource.getConcatenateEmails(
                     emailId = lastEmail.idEmail,
-                    includeEmail = false,
                     numberResult = SIZE_CONCATENATE_EMAIL
                 )
-
             emailLocalDataSource.insertListEmails(newEmails)
             return newEmails.size
         } else {

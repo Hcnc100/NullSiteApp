@@ -39,19 +39,21 @@ class EmailRemoteDataSourceImpl(
         emailApiServices.deleterListEmails(listIds)
 
     override suspend fun getConcatenateEmails(
-        includeEmail: Boolean,
-        emailId: String?,
+        emailId: String,
         numberResult: Long
     ): List<EmailData> = callApiTimeOut {
-        emailApiServices.getConcatenateEmails(includeEmail, emailId, numberResult)
+        emailApiServices.getConcatenateEmails(
+            emailId = emailId,
+            numberResult = numberResult
+        )
     }
 
     override suspend fun getNewEmails(
-        includeEmail: Boolean,
         numberResult: Long,
-        emailId: String?
     ): List<EmailData> = callApiTimeOut {
-        emailApiServices.getNewEmails(includeEmail, numberResult, emailId)
+        emailApiServices.getNewEmails(
+            numberResult = numberResult
+        )
     }
 
 }
