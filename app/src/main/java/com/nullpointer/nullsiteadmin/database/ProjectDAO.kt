@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.data.local.room
+package com.nullpointer.nullsiteadmin.database
 
 import androidx.room.*
 import com.nullpointer.nullsiteadmin.models.Project

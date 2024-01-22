@@ -1,6 +1,6 @@
 package com.nullpointer.nullsiteadmin.domain.deleter
 
-import com.nullpointer.nullsiteadmin.data.local.email.EmailLocalDataSource
+import com.nullpointer.nullsiteadmin.datasource.email.local.EmailLocalDataSource
 import com.nullpointer.nullsiteadmin.datasource.user.local.InfoUserLocalDataSource
 import com.nullpointer.nullsiteadmin.data.local.project.ProjectLocalDataSource
 import com.nullpointer.nullsiteadmin.data.local.settings.SettingsDataSource

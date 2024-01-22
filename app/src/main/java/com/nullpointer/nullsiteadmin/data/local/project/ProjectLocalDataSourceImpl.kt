@@ -1,6 +1,6 @@
 package com.nullpointer.nullsiteadmin.data.local.project
 
-import com.nullpointer.nullsiteadmin.data.local.room.ProjectDAO
+import com.nullpointer.nullsiteadmin.database.ProjectDAO
 import com.nullpointer.nullsiteadmin.models.Project
 import kotlinx.coroutines.flow.Flow
 

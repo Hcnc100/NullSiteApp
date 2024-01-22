@@ -129,8 +129,7 @@ class EditInfoViewModel @Inject constructor(
             name = name.currentValue,
             profession = profession.currentValue,
             description = description.currentValue,
-            // TODO fix this
-            imageFile = null,
+            imageFile = imageProfile.value,
             uriFileImgProfile = imageProfile.value,
         )
     }

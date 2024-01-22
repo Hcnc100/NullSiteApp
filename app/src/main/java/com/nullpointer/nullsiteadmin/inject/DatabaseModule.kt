@@ -2,8 +2,8 @@ package com.nullpointer.nullsiteadmin.inject
 
 import android.content.Context
 import androidx.room.Room
-import com.nullpointer.nullsiteadmin.data.local.room.EmailDAO
-import com.nullpointer.nullsiteadmin.data.local.room.NullSiteDatabase
+import com.nullpointer.nullsiteadmin.data.email.local.EmailDAO
+import com.nullpointer.nullsiteadmin.database.NullSiteDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

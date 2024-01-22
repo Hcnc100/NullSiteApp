@@ -6,9 +6,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.nullpointer.nullsiteadmin.BuildConfig
 import com.nullpointer.nullsiteadmin.core.utils.Constants
-import com.nullpointer.nullsiteadmin.core.utils.getNewObject
 import com.nullpointer.nullsiteadmin.core.utils.getTimeEstimate
-import com.nullpointer.nullsiteadmin.datasource.user.remote.InfoUserRemoteDataSource
 import com.nullpointer.nullsiteadmin.models.data.PersonalInfoData
 import com.nullpointer.nullsiteadmin.models.dto.PersonalInfoDTO
 import com.nullpointer.nullsiteadmin.models.response.PersonalInfoResponse
@@ -17,7 +15,7 @@ import java.util.Date
 
 class UserApiServices {
 
-    private val refMyInfo = Firebase.firestore.collection(Constants.INFO_USER_COLLECTIONS)
+    private val refMyInfo = Firebase.firestore.collection(Constants.USER_COLLECTION)
 
 
      suspend fun updatePersonalInfo(
@@ -48,8 +46,8 @@ class UserApiServices {
     private fun fromDocument(document: DocumentSnapshot): PersonalInfoResponse? {
         return document.toObject<PersonalInfoResponse>()?.copy(
             id = document.id,
-            createAt = document.getTimeEstimate(Constants.nameFieldUpdate) ?: Date(),
-            updateAt = document.getTimeEstimate(Constants.nameFieldUpdate) ?: Date()
+            createAt = document.getTimeEstimate(Constants.UPDATE_AT),
+            updateAt = document.getTimeEstimate(Constants.UPDATE_AT)
         )
     }
 }

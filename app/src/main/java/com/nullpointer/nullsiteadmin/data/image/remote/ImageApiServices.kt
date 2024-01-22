@@ -15,7 +15,7 @@ import java.util.concurrent.CancellationException
 import kotlin.math.absoluteValue
 
 class ImageApiServices {
-    private val refImgProfile = Firebase.storage.getReference(Constants.REF_IMG_PROFILE)
+    private val refImgProfile = Firebase.storage.getReference(Constants.IMAGE_PROFILE_STORE)
 
     fun uploadImageProfileTask(
         uriImg: Uri,

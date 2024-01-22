@@ -12,7 +12,7 @@ import androidx.core.net.toUri
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.utils.correctFlag
 import com.nullpointer.nullsiteadmin.core.utils.getNotifyServices
-import com.nullpointer.nullsiteadmin.models.email.EmailContact
+import com.nullpointer.nullsiteadmin.models.email.EmailData
 import com.nullpointer.nullsiteadmin.ui.activitys.MainActivity
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EmailDetailsScreenDestination
 
@@ -40,7 +40,7 @@ class NotifyMessagingHelper(private val context: Context) {
         }
     }
 
-    private fun getPendingIntentCompose(email: EmailContact): PendingIntent? {
+    private fun getPendingIntentCompose(email: EmailData): PendingIntent? {
         // * create deep link
         // * this go to post for notificaation
         val route= EmailDetailsScreenDestination(email).route
@@ -70,7 +70,7 @@ class NotifyMessagingHelper(private val context: Context) {
             .setGroup(ID_GROUP_MESSAGE)
     }
 
-    fun showNotifyForMessage(email: EmailContact) {
+    fun showNotifyForMessage(email: EmailData) {
         val baseNotify = createBaseNotify().apply {
             setContentIntent(getPendingIntentCompose(email))
             setContentTitle(context.getString(R.string.title_notify_new_email))
@@ -84,6 +84,6 @@ class NotifyMessagingHelper(private val context: Context) {
     }
 }
 
-private fun EmailContact.toFullMessage(): String {
+private fun EmailData.toFullMessage(): String {
     return "$email\n($name)\n\n$subject\n\n$message"
 }

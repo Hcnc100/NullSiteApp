@@ -7,7 +7,7 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
-import com.nullpointer.nullsiteadmin.data.local.email.EmailLocalDataSource
+import com.nullpointer.nullsiteadmin.datasource.email.local.EmailLocalDataSource
 import com.nullpointer.nullsiteadmin.datasource.user.local.InfoUserLocalDataSource
 import com.nullpointer.nullsiteadmin.data.local.project.ProjectLocalDataSource
 import com.nullpointer.nullsiteadmin.data.local.settings.SettingsDataSource

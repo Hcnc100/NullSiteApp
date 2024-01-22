@@ -9,7 +9,7 @@ import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager.sendMessageErrorToException
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.email.EmailsRepository
-import com.nullpointer.nullsiteadmin.models.email.EmailContact
+import com.nullpointer.nullsiteadmin.models.email.EmailData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -60,7 +60,7 @@ class EmailsViewModel @Inject constructor(
     }
 
     val listEmails =
-        emailsRepository.listEmails.transform<List<EmailContact>, Resource<List<EmailContact>>> {
+        emailsRepository.listEmails.transform<List<EmailData>, Resource<List<EmailData>>> {
             emit(Resource.Success(it))
         }.flowOn(Dispatchers.IO).catch {
             Timber.e("Error to load emails $it")
@@ -138,7 +138,7 @@ class EmailsViewModel @Inject constructor(
         }
     )
 
-    fun markAsOpen(email: EmailContact) = launchSafeIO(
+    fun markAsOpen(email: EmailData) = launchSafeIO(
         isEnabled = !email.isOpen,
         blockIO = { emailsRepository.markAsOpen(email.idEmail) },
         blockException = { Timber.e("Error mark as open $email : $it") }

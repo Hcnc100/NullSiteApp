@@ -19,7 +19,7 @@ import com.nullpointer.nullsiteadmin.actions.EmailsScreenActions.*
 import com.nullpointer.nullsiteadmin.core.utils.sendEmail
 import com.nullpointer.nullsiteadmin.core.utils.shareViewModel
 import com.nullpointer.nullsiteadmin.core.utils.toFormat
-import com.nullpointer.nullsiteadmin.models.email.EmailContact
+import com.nullpointer.nullsiteadmin.models.email.EmailData
 import com.nullpointer.nullsiteadmin.presentation.AuthViewModel
 import com.nullpointer.nullsiteadmin.presentation.EmailsViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
@@ -41,7 +41,7 @@ import com.ramcosta.composedestinations.annotation.FULL_ROUTE_PLACEHOLDER
 )
 @Composable
 fun EmailDetailsScreen(
-    email: EmailContact,
+    email: EmailData,
     authViewModel: AuthViewModel,
     rootDestinations: ActionRootDestinations,
     emailsViewModel: EmailsViewModel = shareViewModel(),
@@ -80,10 +80,10 @@ fun EmailDetailsScreen(
 @Composable
 private fun EmailsDetailsScreen(
     context: Context,
-    email: EmailContact,
+    email: EmailData,
     actionBack: () -> Unit,
     scaffoldState: ScaffoldState,
-    emailScreenAction: (EmailsScreenActions, EmailContact) -> Unit
+    emailScreenAction: (EmailsScreenActions, EmailData) -> Unit
 ) {
     Scaffold(
         scaffoldState = scaffoldState,
@@ -112,7 +112,8 @@ private fun EmailsDetailsScreen(
             BodyEmail(
                 body = email.message,
                 subject = email.subject,
-                timestamp = email.timestampLong.toFormat(context)
+                // ! TODO change to format date
+                timestamp ="Now"
             )
         }
     }

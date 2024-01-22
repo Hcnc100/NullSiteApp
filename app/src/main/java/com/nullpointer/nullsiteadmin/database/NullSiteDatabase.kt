@@ -1,14 +1,16 @@
-package com.nullpointer.nullsiteadmin.data.local.room
+package com.nullpointer.nullsiteadmin.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.nullpointer.nullsiteadmin.data.email.local.EmailDAO
 import com.nullpointer.nullsiteadmin.models.Project
-import com.nullpointer.nullsiteadmin.models.email.EmailContact
+import com.nullpointer.nullsiteadmin.models.email.EmailData
+import com.nullpointer.nullsiteadmin.models.email.EmailEntity
 
 
 @Database(
-    entities = [EmailContact::class, Project::class],
+    entities = [EmailEntity::class, Project::class],
     version = 2,
     exportSchema = false
 )

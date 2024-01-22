@@ -1,33 +1,31 @@
-package com.nullpointer.nullsiteadmin.data.remote.email
+package com.nullpointer.nullsiteadmin.data.email.remote
 
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import com.nullpointer.nullsiteadmin.core.utils.Constants
 import com.nullpointer.nullsiteadmin.core.utils.awaitAll
 import com.nullpointer.nullsiteadmin.core.utils.getConcatenateObjects
 import com.nullpointer.nullsiteadmin.core.utils.getNewObjects
 import com.nullpointer.nullsiteadmin.core.utils.getTimeEstimate
-import com.nullpointer.nullsiteadmin.models.email.EmailContact
+import com.nullpointer.nullsiteadmin.models.dto.UpdateEmailDTO
+import com.nullpointer.nullsiteadmin.models.email.EmailData
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
-import timber.log.Timber
+import java.util.Date
 
-class EmailRemoteDataSourceImpl : EmailRemoteDataSource {
-    companion object {
-        private const val EMAil_COLLECTION = "emails"
-        private const val TIMESTAMP_FIELD = "timestamp"
-        private const val IS_OPEN_FILED = "isOpen"
-    }
-
-    private val collectionEmail = Firebase.firestore.collection(EMAil_COLLECTION)
+class EmailApiServices {
 
 
-    override fun getAllEmails(): Flow<List<EmailContact>> = callbackFlow {
-        val listener = collectionEmail.orderBy(TIMESTAMP_FIELD, Query.Direction.DESCENDING)
+    private val collectionEmail = Firebase.firestore.collection(Constants.EMAIL_COLLECTION)
+
+
+    fun getAllEmails(): Flow<List<EmailData>> = callbackFlow {
+        val listener = collectionEmail.orderBy(Constants.CREATE_AT, Query.Direction.DESCENDING)
             .addSnapshotListener { value, error ->
                 error?.let { channel.close(it) }
                 try {
@@ -41,60 +39,57 @@ class EmailRemoteDataSourceImpl : EmailRemoteDataSource {
     }
 
 
-    override suspend fun getConcatenateEmails(
+    suspend fun getConcatenateEmails(
         includeEmail: Boolean,
         emailId: String?,
         numberResult: Long
-    ): List<EmailContact> {
+    ): List<EmailData> {
         return collectionEmail.getConcatenateObjects(
             nResults = numberResult,
             startWithId = emailId,
             transform = ::fromDocument,
             includeStart = includeEmail,
-            fieldTimestamp = TIMESTAMP_FIELD
+            fieldTimestamp = Constants.CREATE_AT
         )
     }
 
-    override suspend fun getNewEmails(
+    suspend fun getNewEmails(
         includeEmail: Boolean,
         numberResult: Long,
         emailId: String?
-    ): List<EmailContact> {
+    ): List<EmailData> {
         return collectionEmail.getNewObjects(
             endWithId = emailId,
             nResults = numberResult,
             includeEnd = includeEmail,
             transform = ::fromDocument,
-            fieldTimestamp = TIMESTAMP_FIELD
+            fieldTimestamp = Constants.CREATE_AT
         )
     }
 
-    override suspend fun deleterEmail(idEmail: String) {
+    suspend fun deleterEmail(idEmail: String) {
         collectionEmail.document(idEmail).delete().await()
     }
 
-    override suspend fun markAsOpen(idEmail: String) {
-        collectionEmail.document(idEmail).update(mapOf(IS_OPEN_FILED to true)).await()
+    suspend fun updateEmail(updateEmailDTO: UpdateEmailDTO) {
+        collectionEmail.document(updateEmailDTO.idEmail).update(updateEmailDTO.toUpdateMap())
+            .await()
     }
 
-    override suspend fun deleterListEmails(listIds: List<String>) {
+    suspend fun deleterListEmails(listIds: List<String>) {
         val listOperations = listIds.map {
             collectionEmail.document(it).delete()
         }
         listOperations.awaitAll()
     }
 
-    private fun fromDocument(document: DocumentSnapshot): EmailContact? {
-        return try {
-            val timestamp = document.getTimeEstimate(TIMESTAMP_FIELD)
-            document.toObject<EmailContact>()?.copy(
-                timestamp = timestamp,
-                timestampLong = timestamp?.time ?: 0,
-                idEmail = document.id
-            )
-        } catch (e: Exception) {
-            Timber.e("Error cast ${document.id} to email")
-            null
-        }
+    private fun fromDocument(document: DocumentSnapshot): EmailData? {
+        val createAt = document.getTimeEstimate(Constants.CREATE_AT)
+        val updateAt = document.getTimeEstimate(Constants.UPDATE_AT)
+        return document.toObject<EmailData>()?.copy(
+            idEmail = document.id,
+            createdAt = createAt,
+            updatedAt = updateAt
+        )
     }
 }

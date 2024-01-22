@@ -7,7 +7,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 @NavTypeSerializer
-class EmailNavType : DestinationsNavTypeSerializer<EmailContact> {
-    override fun toRouteString(value: EmailContact): String = Json.encodeToString(value)
-    override fun fromRouteString(routeStr: String): EmailContact = Json.decodeFromString(routeStr)
+class EmailNavType : DestinationsNavTypeSerializer<EmailData> {
+    override fun toRouteString(value: EmailData): String = Json.encodeToString(value)
+    override fun fromRouteString(routeStr: String): EmailData = Json.decodeFromString(routeStr)
 }

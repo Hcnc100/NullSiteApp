@@ -1,10 +1,10 @@
 package com.nullpointer.nullsiteadmin.inject
 
-import com.nullpointer.nullsiteadmin.data.local.email.EmailLocalDataSource
-import com.nullpointer.nullsiteadmin.data.local.email.EmailLocalDataSourceImpl
-import com.nullpointer.nullsiteadmin.data.local.room.EmailDAO
-import com.nullpointer.nullsiteadmin.data.remote.email.EmailRemoteDataSource
-import com.nullpointer.nullsiteadmin.data.remote.email.EmailRemoteDataSourceImpl
+import com.nullpointer.nullsiteadmin.datasource.email.local.EmailLocalDataSource
+import com.nullpointer.nullsiteadmin.datasource.email.local.EmailLocalDataSourceImpl
+import com.nullpointer.nullsiteadmin.data.email.local.EmailDAO
+import com.nullpointer.nullsiteadmin.datasource.email.remote.EmailRemoteDataSource
+import com.nullpointer.nullsiteadmin.datasource.email.remote.EmailRemoteDataSourceImpl
 import com.nullpointer.nullsiteadmin.domain.email.EmailsRepoImpl
 import com.nullpointer.nullsiteadmin.domain.email.EmailsRepository
 import dagger.Module

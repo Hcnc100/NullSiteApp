@@ -30,30 +30,28 @@ class InfoUserRepoImpl(
 
        val urlImg= updateInfoProfileWrapper.imageFile?.let { file->
            val image=imageLocalDataSource.compressImage(file)
-          callApiTimeOut {
+
               imageRemoteDataSource.uploadImageProfile(image,idUser)
-          }
+
         }
 
         val personalInfoDTO = PersonalInfoDTO.fromPersonalInfoWrapper(
             urlImg = urlImg,
             infoProfileWrapper = updateInfoProfileWrapper
         )
-        callApiTimeOut {
+
             infoUserRemoteDataSource.updatePersonalInfo(
                 idUser = idUser,
                 personalInfoDTO = personalInfoDTO
             )
-        }
+
 
         getPersonalInfo()
     }
 
     override suspend fun getPersonalInfo() {
         val authData= authLocalDataSource.getAuthData().first()
-        val newData = callApiTimeOut {
-            infoUserRemoteDataSource.getPersonalInfo(authData!!.id)
-        }
+        val newData = infoUserRemoteDataSource.getPersonalInfo(authData!!.id)
         infoUserLocalDataSource.updatePersonalInfo(newData!!)
     }
 

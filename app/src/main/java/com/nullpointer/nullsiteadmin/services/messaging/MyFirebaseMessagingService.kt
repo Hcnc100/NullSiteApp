@@ -6,7 +6,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.nullpointer.nullsiteadmin.domain.auth.AuthRepository
 import com.nullpointer.nullsiteadmin.domain.email.EmailsRepository
-import com.nullpointer.nullsiteadmin.models.email.EmailContact
+import com.nullpointer.nullsiteadmin.models.email.EmailData
 import com.nullpointer.nullsiteadmin.models.email.EmailDeserializer
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
@@ -46,7 +46,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
         safeLaunchTokenOperation("Error when process new message $message") {
-            val email = gson.fromJson(message.data["notify"], EmailContact::class.java)
+            val email = gson.fromJson(message.data["notify"], EmailData::class.java)
             notifyHelper.showNotifyForMessage(email)
             emailRepository.requestLastEmail(true)
         }
@@ -54,7 +54,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     private fun createGsonBuilder(): Gson {
         return GsonBuilder().registerTypeAdapter(
-            EmailContact::class.java, EmailDeserializer()
+            EmailData::class.java, EmailDeserializer()
         ).create()
     }
 

@@ -1,9 +1,9 @@
 package com.nullpointer.nullsiteadmin.domain.email
 
 import com.nullpointer.nullsiteadmin.core.utils.callApiTimeOut
-import com.nullpointer.nullsiteadmin.data.local.email.EmailLocalDataSource
-import com.nullpointer.nullsiteadmin.data.remote.email.EmailRemoteDataSource
-import com.nullpointer.nullsiteadmin.models.email.EmailContact
+import com.nullpointer.nullsiteadmin.datasource.email.local.EmailLocalDataSource
+import com.nullpointer.nullsiteadmin.datasource.email.remote.EmailRemoteDataSource
+import com.nullpointer.nullsiteadmin.models.email.EmailData
 import kotlinx.coroutines.flow.Flow
 
 class EmailsRepoImpl(
@@ -16,7 +16,7 @@ class EmailsRepoImpl(
         private const val SIZE_CONCATENATE_EMAIL = 15L
     }
 
-    override val listEmails: Flow<List<EmailContact>> = emailLocalDataSource.listEmail
+    override val listEmails: Flow<List<EmailData>> = emailLocalDataSource.listEmail
 
     override suspend fun deleterEmail(idEmail: String) {
         callApiTimeOut { emailRemoteDataSource.deleterEmail(idEmail) }

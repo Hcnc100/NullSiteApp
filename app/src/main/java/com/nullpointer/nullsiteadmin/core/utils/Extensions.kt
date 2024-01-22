@@ -239,11 +239,11 @@ suspend fun List<Task<Void>>.awaitAll() {
 
 fun DocumentSnapshot.getTimeEstimate(
     timestampField: String
-): Date? {
+): Date {
     return getTimestamp(
         /* field = */ timestampField,
         /* serverTimestampBehavior = */ DocumentSnapshot.ServerTimestampBehavior.ESTIMATE
-    )?.toDate()
+    )?.toDate() ?: Date()
 }
 
 suspend fun <T> callApiTimeOut(

@@ -8,21 +8,20 @@ import java.lang.reflect.Type
 import java.util.*
 
 
-class EmailDeserializer : JsonDeserializer<EmailContact?> {
+class EmailDeserializer : JsonDeserializer<EmailData?> {
     @Throws(JsonParseException::class)
     override fun deserialize(
         json: JsonElement,
         typeOfT: Type?,
         context: JsonDeserializationContext?,
-    ): EmailContact {
+    ): EmailData {
         val jsonObject = json.asJsonObject
-        return EmailContact(
+        return EmailData(
             name = jsonObject["name"].asString,
             message = jsonObject["message"].asString,
             subject = jsonObject["subject"].asString,
             email = jsonObject["email"].asString,
             idEmail = jsonObject["id"].asString,
-            timestampLong = jsonObject["timestamp"].asLong,
         )
     }
 }

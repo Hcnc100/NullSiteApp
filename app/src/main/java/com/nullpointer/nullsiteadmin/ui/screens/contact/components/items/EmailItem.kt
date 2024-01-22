@@ -21,11 +21,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.utils.getGrayColor
-import com.nullpointer.nullsiteadmin.models.email.EmailContact
+import com.nullpointer.nullsiteadmin.models.email.EmailData
 
 @Composable
 fun EmailItem(
-    email: EmailContact,
+    email: EmailData,
     modifier: Modifier = Modifier,
     actionDetails: () -> Unit
 ) {

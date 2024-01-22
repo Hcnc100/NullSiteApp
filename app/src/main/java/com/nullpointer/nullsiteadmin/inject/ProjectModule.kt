@@ -2,8 +2,8 @@ package com.nullpointer.nullsiteadmin.inject
 
 import com.nullpointer.nullsiteadmin.data.local.project.ProjectLocalDataSource
 import com.nullpointer.nullsiteadmin.data.local.project.ProjectLocalDataSourceImpl
-import com.nullpointer.nullsiteadmin.data.local.room.NullSiteDatabase
-import com.nullpointer.nullsiteadmin.data.local.room.ProjectDAO
+import com.nullpointer.nullsiteadmin.database.NullSiteDatabase
+import com.nullpointer.nullsiteadmin.database.ProjectDAO
 import com.nullpointer.nullsiteadmin.data.remote.project.ProjectRemoteDataSource
 import com.nullpointer.nullsiteadmin.data.remote.project.ProjectRemoteDataSourceImpl
 import com.nullpointer.nullsiteadmin.domain.project.ProjectRepoImpl
