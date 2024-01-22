@@ -28,8 +28,12 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        val newsApiKey: String = gradleLocalProperties(rootDir).getProperty("ID_INFO_PROFILE_FIREBASE")
+        val newsApiKey: String =
+            gradleLocalProperties(rootDir).getProperty("ID_INFO_PROFILE_FIREBASE")
         buildConfigField("String", "ID_INFO_PROFILE_FIREBASE", newsApiKey)
+
+        val urlMainPage: String = gradleLocalProperties(rootDir).getProperty("URL_MAIN_PAGE")
+        buildConfigField("String", "URL_MAIN_PAGE", urlMainPage)
 
     }
 
@@ -146,8 +150,6 @@ dependencies {
     implementation("com.google.firebase:firebase-crashlytics-ktx")
     implementation("com.google.firebase:firebase-analytics-ktx")
 
-// * web view
-    implementation("com.google.accompanist:accompanist-webview:0.25.0")
 
 // * gson
     implementation("com.google.code.gson:gson:2.10.1")
@@ -163,6 +165,5 @@ dependencies {
 
     // * Desugaring
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
-    implementation(kotlin("reflect"))
 
 }
