@@ -4,9 +4,9 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.nullpointer.nullsiteadmin.core.utils.Constants.PHONE_COLLECTION
-import com.nullpointer.nullsiteadmin.models.dto.CredentialsDTO
-import com.nullpointer.nullsiteadmin.models.dto.UpdateInfoPhoneDTO
-import com.nullpointer.nullsiteadmin.models.response.AuthResponse
+import com.nullpointer.nullsiteadmin.models.credentials.dto.CredentialsDTO
+import com.nullpointer.nullsiteadmin.models.phoneInfo.dto.UpdateInfoPhoneDTO
+import com.nullpointer.nullsiteadmin.models.auth.response.AuthResponse
 import kotlinx.coroutines.tasks.await
 
 class AuthApiServices {
@@ -27,7 +27,7 @@ class AuthApiServices {
     }
 
 
-    suspend fun login(credentialsDTO: CredentialsDTO):AuthResponse{
+    suspend fun login(credentialsDTO: CredentialsDTO): AuthResponse {
         val response= auth.signInWithEmailAndPassword(
             credentialsDTO.email,
             credentialsDTO.password

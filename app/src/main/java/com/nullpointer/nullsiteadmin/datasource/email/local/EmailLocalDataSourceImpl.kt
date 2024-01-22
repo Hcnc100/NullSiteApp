@@ -1,8 +1,8 @@
 package com.nullpointer.nullsiteadmin.datasource.email.local
 
 import com.nullpointer.nullsiteadmin.data.email.local.EmailDAO
-import com.nullpointer.nullsiteadmin.models.email.EmailData
-import com.nullpointer.nullsiteadmin.models.email.EmailEntity
+import com.nullpointer.nullsiteadmin.models.email.data.EmailData
+import com.nullpointer.nullsiteadmin.models.email.entity.EmailEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

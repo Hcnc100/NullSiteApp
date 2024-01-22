@@ -5,7 +5,7 @@ import android.content.Context
 import android.provider.Settings
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
-import com.nullpointer.nullsiteadmin.models.data.InfoPhoneData
+import com.nullpointer.nullsiteadmin.models.phoneInfo.data.InfoPhoneData
 import kotlinx.coroutines.tasks.await
 
 class CurrentInfoPhone(

@@ -1,8 +1,8 @@
 package com.nullpointer.nullsiteadmin.datasource.user.remote
 
 import com.nullpointer.nullsiteadmin.data.user.remote.UserApiServices
-import com.nullpointer.nullsiteadmin.models.data.PersonalInfoData
-import com.nullpointer.nullsiteadmin.models.dto.PersonalInfoDTO
+import com.nullpointer.nullsiteadmin.models.personalInfo.data.PersonalInfoData
+import com.nullpointer.nullsiteadmin.models.personalInfo.dto.PersonalInfoDTO
 
 class InfoUserRemoteDataSourceImpl(
     private val userApiServices: UserApiServices

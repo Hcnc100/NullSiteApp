@@ -4,14 +4,14 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.nullpointer.nullsiteadmin.data.email.local.EmailDAO
-import com.nullpointer.nullsiteadmin.models.Project
-import com.nullpointer.nullsiteadmin.models.email.EmailData
-import com.nullpointer.nullsiteadmin.models.email.EmailEntity
+import com.nullpointer.nullsiteadmin.data.project.local.ProjectDAO
+import com.nullpointer.nullsiteadmin.models.email.entity.EmailEntity
+import com.nullpointer.nullsiteadmin.models.project.entity.ProjectEntity
 
 
 @Database(
-    entities = [EmailEntity::class, Project::class],
-    version = 3,
+    entities = [EmailEntity::class, ProjectEntity::class],
+    version = 4,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

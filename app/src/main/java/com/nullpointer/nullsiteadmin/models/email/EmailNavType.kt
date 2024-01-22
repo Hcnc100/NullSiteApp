@@ -1,5 +1,6 @@
 package com.nullpointer.nullsiteadmin.models.email
 
+import com.nullpointer.nullsiteadmin.models.email.data.EmailData
 import com.ramcosta.composedestinations.navargs.DestinationsNavTypeSerializer
 import com.ramcosta.composedestinations.navargs.NavTypeSerializer
 import kotlinx.serialization.decodeFromString

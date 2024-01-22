@@ -16,8 +16,8 @@ interface MappableFirebase{
             /* typeOfT = */ object : TypeToken<Any>() {}.type
         ).toMutableMap()
 
-        previewMap[Constants.CREATE_AT] = FieldValue.serverTimestamp()
-        previewMap[Constants.UPDATE_AT] = FieldValue.serverTimestamp()
+        previewMap[Constants.CREATED_AT] = FieldValue.serverTimestamp()
+        previewMap[Constants.UPDATED_AT] = FieldValue.serverTimestamp()
         return previewMap
     }
 
@@ -30,7 +30,7 @@ interface MappableFirebase{
             /* typeOfT = */ object : TypeToken<Any>() {}.type
         ).toMutableMap()
 
-        previewMap[Constants.UPDATE_AT] = FieldValue.serverTimestamp()
+        previewMap[Constants.UPDATED_AT] = FieldValue.serverTimestamp()
         return previewMap
     }
 

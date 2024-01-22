@@ -1,7 +1,7 @@
 package com.nullpointer.nullsiteadmin.domain.infoUser
 
-import com.nullpointer.nullsiteadmin.models.data.PersonalInfoData
-import com.nullpointer.nullsiteadmin.models.wrapper.UpdateInfoProfileWrapper
+import com.nullpointer.nullsiteadmin.models.personalInfo.data.PersonalInfoData
+import com.nullpointer.nullsiteadmin.models.personalInfo.wrapper.UpdateInfoProfileWrapper
 import kotlinx.coroutines.flow.Flow
 
 interface InfoUserRepository {

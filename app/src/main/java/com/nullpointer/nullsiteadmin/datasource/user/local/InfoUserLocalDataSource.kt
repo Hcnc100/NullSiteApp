@@ -1,6 +1,6 @@
 package com.nullpointer.nullsiteadmin.datasource.user.local
 
-import com.nullpointer.nullsiteadmin.models.data.PersonalInfoData
+import com.nullpointer.nullsiteadmin.models.personalInfo.data.PersonalInfoData
 import kotlinx.coroutines.flow.Flow
 
 interface InfoUserLocalDataSource {

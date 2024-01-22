@@ -12,12 +12,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.nullpointer.nullsiteadmin.R
-import com.nullpointer.nullsiteadmin.models.Project
+import com.nullpointer.nullsiteadmin.models.project.data.ProjectData
 
 @Composable
 fun ProjectItem(
-    project: Project,
-    actionEditProject: (Project) -> Unit,
+    projectData: ProjectData,
+    actionEditProject: (ProjectData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Surface(
@@ -32,10 +32,10 @@ fun ProjectItem(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(15.dp)
         ) {
-            Text(text = project.name, style = MaterialTheme.typography.h6)
-            ImageProject(urlImg = project.urlImg)
-            Text(text = project.description, style = MaterialTheme.typography.body1)
-            ButtonEditProject { actionEditProject(project) }
+            Text(text = projectData.name, style = MaterialTheme.typography.h6)
+            ImageProject(urlImg = projectData.urlImg)
+            Text(text = projectData.description, style = MaterialTheme.typography.body1)
+            ButtonEditProject { actionEditProject(projectData) }
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.nullpointer.nullsiteadmin.datasource.email.remote
 
-import com.nullpointer.nullsiteadmin.models.dto.UpdateEmailDTO
-import com.nullpointer.nullsiteadmin.models.email.EmailData
+import com.nullpointer.nullsiteadmin.models.email.dto.UpdateEmailDTO
+import com.nullpointer.nullsiteadmin.models.email.data.EmailData
 import kotlinx.coroutines.flow.Flow
 
 interface EmailRemoteDataSource {

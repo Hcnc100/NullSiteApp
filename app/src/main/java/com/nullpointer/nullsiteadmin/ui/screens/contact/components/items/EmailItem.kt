@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.utils.getGrayColor
-import com.nullpointer.nullsiteadmin.models.email.EmailData
+import com.nullpointer.nullsiteadmin.models.email.data.EmailData
 
 @Composable
 fun EmailItem(

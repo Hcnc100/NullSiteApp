@@ -11,7 +11,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.states.Resource
-import com.nullpointer.nullsiteadmin.models.data.PersonalInfoData
+import com.nullpointer.nullsiteadmin.models.personalInfo.data.PersonalInfoData
 import com.nullpointer.nullsiteadmin.ui.preview.config.SimplePreview
 
 @Composable

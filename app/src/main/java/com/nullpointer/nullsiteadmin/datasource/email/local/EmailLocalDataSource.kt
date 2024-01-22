@@ -1,6 +1,6 @@
 package com.nullpointer.nullsiteadmin.datasource.email.local
 
-import com.nullpointer.nullsiteadmin.models.email.EmailData
+import com.nullpointer.nullsiteadmin.models.email.data.EmailData
 import kotlinx.coroutines.flow.Flow
 
 interface EmailLocalDataSource {

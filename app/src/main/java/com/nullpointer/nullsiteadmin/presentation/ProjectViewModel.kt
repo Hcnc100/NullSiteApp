@@ -9,7 +9,7 @@ import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.project.ProjectRepository
-import com.nullpointer.nullsiteadmin.models.Project
+import com.nullpointer.nullsiteadmin.models.project.data.ProjectData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -52,11 +52,11 @@ class ProjectViewModel @Inject constructor(
         private set
 
     init {
-        requestNewProjects(false)
+        requestNewProjects()
     }
 
-    val listProject =
-        projectRepository.listProjects.transform<List<Project>, Resource<List<Project>>> {
+    val listProjectData =
+        projectRepository.listProjects.transform<List<ProjectData>, Resource<List<ProjectData>>> {
             emit(Resource.Success(it))
         }.flowOn(Dispatchers.IO).catch {
             Timber.e("Failed to list projects $it")
@@ -91,12 +91,12 @@ class ProjectViewModel @Inject constructor(
         }
     )
 
-    fun requestNewProjects(forceRefresh: Boolean = true) = launchSafeIO(
+    fun requestNewProjects() = launchSafeIO(
         isEnabled = !isRequestProject,
         blockBefore = { isRequestProject = true },
         blockAfter = { isRequestProject = false },
         blockIO = {
-            val size = projectRepository.requestLastProject(forceRefresh)
+            val size = projectRepository.requestLastProject()
             Timber.d("new projects size: $size")
             withContext(Dispatchers.Main) {
                 isEnabledConcatenateProjects = true

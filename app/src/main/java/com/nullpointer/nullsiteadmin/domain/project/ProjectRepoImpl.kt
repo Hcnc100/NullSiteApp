@@ -1,9 +1,13 @@
 package com.nullpointer.nullsiteadmin.domain.project
 
 import com.nullpointer.nullsiteadmin.core.utils.callApiTimeOut
-import com.nullpointer.nullsiteadmin.data.local.project.ProjectLocalDataSource
-import com.nullpointer.nullsiteadmin.data.remote.project.ProjectRemoteDataSource
-import com.nullpointer.nullsiteadmin.models.Project
+import com.nullpointer.nullsiteadmin.datasource.project.local.ProjectLocalDataSource
+import com.nullpointer.nullsiteadmin.datasource.project.remote.ProjectRemoteDataSource
+import com.nullpointer.nullsiteadmin.models.project.data.ProjectData
+import com.nullpointer.nullsiteadmin.models.project.dto.CreateProjectDTO
+import com.nullpointer.nullsiteadmin.models.project.dto.UpdateProjectDTO
+import com.nullpointer.nullsiteadmin.models.project.wrapper.CreateProjectWrapper
+import com.nullpointer.nullsiteadmin.models.project.wrapper.UpdateProjectWrapper
 import kotlinx.coroutines.flow.Flow
 
 class ProjectRepoImpl(
@@ -16,63 +20,52 @@ class ProjectRepoImpl(
         private const val SIZE_CONCATENATE_PROJECT = 5L
     }
 
-    override val listProjects: Flow<List<Project>> = projectLocalDataSource.listProject
+    override val listProjects: Flow<List<ProjectData>> = projectLocalDataSource.listProjectData
 
-    override suspend fun editProject(project: Project) {
-        val projectUpdate = callApiTimeOut {
-            projectRemoteDataSource.editProject(project)
-        }
-        projectUpdate?.let { projectLocalDataSource.updateProject(project) }
+    override suspend fun editProject(
+        updateProjectWrapper: UpdateProjectWrapper
+    ) {
+        val updateProjectDTO = UpdateProjectDTO.fromUpdateProjectWrapper(updateProjectWrapper)
+        val projectUpdate = projectRemoteDataSource.editProject(
+            idProject = updateProjectWrapper.idProject,
+            updateProjectDTO = updateProjectDTO
+        )
+        projectLocalDataSource.updateProject(projectUpdate)
 
     }
 
-    override suspend fun insertProject(project: Project) {
-        val projectUpdate = callApiTimeOut {
-            projectRemoteDataSource.insertProject(project)
-        }
-        projectUpdate?.let { projectLocalDataSource.insertProject(project) }
-
+    override suspend fun insertProject(
+        createProjectWrapper: CreateProjectWrapper
+    ) {
+        val createProjectWrapper = CreateProjectDTO.fromCreateProjectWrapper(createProjectWrapper)
+        val projectUpdate = projectRemoteDataSource.addNewProject(createProjectWrapper)
+        projectLocalDataSource.insertProject(projectUpdate)
     }
 
     override suspend fun deleterListProjectById(listIdProject: List<String>) {
-        callApiTimeOut {
-            projectRemoteDataSource.deleterListProjectById(listIdProject)
-        }
+        projectRemoteDataSource.deleterListProjectById(listIdProject)
         projectLocalDataSource.deleteListProjectById(listIdProject)
     }
 
     override suspend fun deleterProjectById(idProject: String) {
-        callApiTimeOut {
-            projectRemoteDataSource.deleterProject(idProject)
-        }
+        projectRemoteDataSource.deleterProject(idProject)
         projectLocalDataSource.deleteProjectById(idProject)
     }
 
-    override suspend fun requestLastProject(forceRefresh: Boolean): Int {
-        val project = projectLocalDataSource.getMoreRecentProject()
-        val idProject = if (forceRefresh) null else project?.idProject
-        val newProjects = callApiTimeOut {
-            projectRemoteDataSource.getMoreRecentProject(
-                includeStart = false,
-                startWithId = idProject,
-                SIZE_REQUEST_PROJECT
-            )
-        }
-        if (newProjects.isNotEmpty()) projectLocalDataSource.updateAllProjects(newProjects)
+    override suspend fun requestLastProject(): Int {
+        val newProjects = projectRemoteDataSource.getLastProjects(SIZE_REQUEST_PROJECT)
+        projectLocalDataSource.updateAllProjects(newProjects)
         return newProjects.size
     }
 
     override suspend fun concatenateProjects(): Int {
         val project = projectLocalDataSource.getLastProject()
         return if (project != null) {
-            val newProjects = callApiTimeOut {
-                projectRemoteDataSource.getConcatenatePost(
-                    includeStart = false,
-                    startWithId = project.idProject,
-                    SIZE_CONCATENATE_PROJECT
-                )
-            }
-            if (newProjects.isNotEmpty()) projectLocalDataSource.insertListProjects(newProjects)
+            val newProjects = projectRemoteDataSource.concatenateProject(
+                startWithId = project.idProject,
+                SIZE_CONCATENATE_PROJECT
+            )
+            projectLocalDataSource.insertListProjects(newProjects)
             newProjects.size
         } else {
             0

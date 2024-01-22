@@ -1,6 +1,6 @@
 package com.nullpointer.nullsiteadmin.datasource.auth.local
 
-import com.nullpointer.nullsiteadmin.models.data.AuthData
+import com.nullpointer.nullsiteadmin.models.auth.data.AuthData
 import kotlinx.coroutines.flow.Flow
 
 interface AuthLocalDataSource {

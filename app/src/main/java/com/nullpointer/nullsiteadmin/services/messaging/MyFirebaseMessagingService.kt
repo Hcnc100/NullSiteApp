@@ -6,7 +6,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.nullpointer.nullsiteadmin.domain.auth.AuthRepository
 import com.nullpointer.nullsiteadmin.domain.email.EmailsRepository
-import com.nullpointer.nullsiteadmin.models.email.EmailData
+import com.nullpointer.nullsiteadmin.models.email.data.EmailData
 import com.nullpointer.nullsiteadmin.models.email.EmailDeserializer
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
@@ -48,7 +48,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         safeLaunchTokenOperation("Error when process new message $message") {
             val email = gson.fromJson(message.data["notify"], EmailData::class.java)
             notifyHelper.showNotifyForMessage(email)
-            emailRepository.requestLastEmail(true)
+            emailRepository.requestLastEmail()
         }
     }
 

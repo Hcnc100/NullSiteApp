@@ -1,11 +1,9 @@
 package com.nullpointer.nullsiteadmin.domain.settings
 
-import com.nullpointer.nullsiteadmin.models.UserAuth
+import com.nullpointer.nullsiteadmin.models.settings.data.SettingsData
 import kotlinx.coroutines.flow.Flow
 
 interface SettingsRepository {
-    val isAuthUser: Flow<Boolean>
-    val user: Flow<UserAuth>
-    suspend fun saveUser(user: UserAuth)
-    suspend fun clearData()
+    fun getSettingsData(): Flow<SettingsData?>
+    suspend fun saveSettingsData(settingsData: SettingsData)
 }

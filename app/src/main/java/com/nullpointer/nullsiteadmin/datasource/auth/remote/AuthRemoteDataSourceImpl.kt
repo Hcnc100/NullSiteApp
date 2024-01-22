@@ -2,14 +2,14 @@ package com.nullpointer.nullsiteadmin.datasource.auth.remote
 
 import com.nullpointer.nullsiteadmin.core.utils.callApiTimeOut
 import com.nullpointer.nullsiteadmin.data.auth.remote.AuthApiServices
-import com.nullpointer.nullsiteadmin.models.data.AuthData
-import com.nullpointer.nullsiteadmin.models.dto.CredentialsDTO
-import com.nullpointer.nullsiteadmin.models.dto.UpdateInfoPhoneDTO
+import com.nullpointer.nullsiteadmin.models.auth.data.AuthData
+import com.nullpointer.nullsiteadmin.models.credentials.dto.CredentialsDTO
+import com.nullpointer.nullsiteadmin.models.phoneInfo.dto.UpdateInfoPhoneDTO
 
 class AuthRemoteDataSourceImpl(
     private val authApiServices: AuthApiServices
 ):AuthRemoteDataSource {
-    override suspend fun login(credentialsDTO: CredentialsDTO):AuthData {
+    override suspend fun login(credentialsDTO: CredentialsDTO): AuthData {
         val response = callApiTimeOut {
             authApiServices.login(credentialsDTO)
         }

@@ -3,7 +3,7 @@ package com.nullpointer.nullsiteadmin.inject
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.nullpointer.nullsiteadmin.data.local.services.ServicesManager
+import com.nullpointer.nullsiteadmin.data.services.ServicesManager
 import com.nullpointer.nullsiteadmin.data.user.local.UserDataStore
 import com.nullpointer.nullsiteadmin.data.user.remote.UserApiServices
 import com.nullpointer.nullsiteadmin.datasource.auth.local.AuthLocalDataSource

@@ -1,14 +1,13 @@
 package com.nullpointer.nullsiteadmin.domain.infoUser
 
-import com.nullpointer.nullsiteadmin.core.utils.callApiTimeOut
 import com.nullpointer.nullsiteadmin.datasource.user.local.InfoUserLocalDataSource
 import com.nullpointer.nullsiteadmin.datasource.auth.local.AuthLocalDataSource
 import com.nullpointer.nullsiteadmin.datasource.image.local.ImageLocalDataSource
 import com.nullpointer.nullsiteadmin.datasource.image.remote.ImageRemoteDataSource
 import com.nullpointer.nullsiteadmin.datasource.user.remote.InfoUserRemoteDataSource
-import com.nullpointer.nullsiteadmin.models.data.PersonalInfoData
-import com.nullpointer.nullsiteadmin.models.dto.PersonalInfoDTO
-import com.nullpointer.nullsiteadmin.models.wrapper.UpdateInfoProfileWrapper
+import com.nullpointer.nullsiteadmin.models.personalInfo.data.PersonalInfoData
+import com.nullpointer.nullsiteadmin.models.personalInfo.dto.PersonalInfoDTO
+import com.nullpointer.nullsiteadmin.models.personalInfo.wrapper.UpdateInfoProfileWrapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 

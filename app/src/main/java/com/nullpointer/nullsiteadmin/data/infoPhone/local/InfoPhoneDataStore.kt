@@ -4,7 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.nullpointer.nullsiteadmin.models.data.InfoPhoneData
+import com.nullpointer.nullsiteadmin.models.phoneInfo.data.InfoPhoneData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.decodeFromString
@@ -29,7 +29,7 @@ class InfoPhoneDataStore(
         }
     }
 
-    fun getCurrentInfoPhoneSaved():Flow<InfoPhoneData?> = dataStore.data.map {pref->
+    fun getCurrentInfoPhoneSaved():Flow<InfoPhoneData?> = dataStore.data.map { pref->
         val infoPhoneEncode= pref[keyInfoPhone]
         return@map infoPhoneEncode?.let {
             Json.decodeFromString(it)

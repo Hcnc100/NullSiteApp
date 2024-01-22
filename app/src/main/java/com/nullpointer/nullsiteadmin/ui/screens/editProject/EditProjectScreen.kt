@@ -20,7 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
-import com.nullpointer.nullsiteadmin.models.Project
+import com.nullpointer.nullsiteadmin.models.project.data.ProjectData
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
 import com.nullpointer.nullsiteadmin.ui.screens.editProject.viewModel.EditProjectViewModel
@@ -35,14 +35,14 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Destination
 @Composable
 fun EditProjectScreen(
-    projectEdit: Project,
+    projectDataEdit: ProjectData,
     actionRootDestinations: ActionRootDestinations,
     editProjectVM: EditProjectViewModel = hiltViewModel(),
     editProjectState: FocusScreenState = rememberFocusScreenState()
 ) {
 
     LaunchedEffect(key1 = Unit) {
-        editProjectVM.initVM(projectEdit)
+        editProjectVM.initVM(projectDataEdit)
     }
 
     LaunchedEffect(key1 = Unit) {
@@ -77,7 +77,7 @@ fun EditProjectScreen(
             ButtonUpdateProject(isEnable = editProjectVM.isDataValid) {
                 editProjectState.hiddenKeyBoard()
                 editProjectVM.updatedProject(
-                    currentProject = projectEdit,
+                    currentProjectData = projectDataEdit,
                     actionSuccess = actionRootDestinations::backDestination
                 )
             }

@@ -18,8 +18,7 @@ import com.nullpointer.nullsiteadmin.actions.EmailsScreenActions
 import com.nullpointer.nullsiteadmin.actions.EmailsScreenActions.*
 import com.nullpointer.nullsiteadmin.core.utils.sendEmail
 import com.nullpointer.nullsiteadmin.core.utils.shareViewModel
-import com.nullpointer.nullsiteadmin.core.utils.toFormat
-import com.nullpointer.nullsiteadmin.models.email.EmailData
+import com.nullpointer.nullsiteadmin.models.email.data.EmailData
 import com.nullpointer.nullsiteadmin.presentation.AuthViewModel
 import com.nullpointer.nullsiteadmin.presentation.EmailsViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations

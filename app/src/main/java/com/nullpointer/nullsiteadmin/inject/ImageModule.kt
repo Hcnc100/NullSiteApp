@@ -6,8 +6,8 @@ import com.nullpointer.nullsiteadmin.datasource.image.local.ImageLocalDataSource
 import com.nullpointer.nullsiteadmin.datasource.image.local.ImageLocalDataSourceImpl
 import com.nullpointer.nullsiteadmin.datasource.image.remote.ImageRemoteDataSource
 import com.nullpointer.nullsiteadmin.datasource.image.remote.ImageRemoteDataSourceImpl
-import com.nullpointer.nullsiteadmin.domain.storage.ImageRepository
-import com.nullpointer.nullsiteadmin.domain.storage.ImageRepositoryImpl
+import com.nullpointer.nullsiteadmin.domain.image.ImageRepository
+import com.nullpointer.nullsiteadmin.domain.image.ImageRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

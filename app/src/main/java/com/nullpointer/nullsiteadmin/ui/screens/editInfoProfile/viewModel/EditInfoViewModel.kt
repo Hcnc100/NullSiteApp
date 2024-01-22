@@ -13,9 +13,9 @@ import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
 import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepository
-import com.nullpointer.nullsiteadmin.domain.storage.ImageRepository
-import com.nullpointer.nullsiteadmin.models.data.PersonalInfoData
-import com.nullpointer.nullsiteadmin.models.wrapper.UpdateInfoProfileWrapper
+import com.nullpointer.nullsiteadmin.domain.image.ImageRepository
+import com.nullpointer.nullsiteadmin.models.personalInfo.data.PersonalInfoData
+import com.nullpointer.nullsiteadmin.models.personalInfo.wrapper.UpdateInfoProfileWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -116,7 +116,7 @@ class EditInfoViewModel @Inject constructor(
         }
     }
 
-    fun validateInfoProfile():UpdateInfoProfileWrapper? {
+    fun validateInfoProfile(): UpdateInfoProfileWrapper? {
        if (!isDataValid) {
             _messageError.trySend(R.string.error_invalid_data)
             return null

@@ -10,7 +10,8 @@ import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.project.ProjectRepository
-import com.nullpointer.nullsiteadmin.models.Project
+import com.nullpointer.nullsiteadmin.models.project.data.ProjectData
+import com.nullpointer.nullsiteadmin.models.project.wrapper.UpdateProjectWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -96,8 +97,8 @@ class EditProjectViewModel @Inject constructor(
                 urlImgProject.hasChanged ||
                 urlRepositoryProject.hasChanged
 
-    fun initVM(project: Project) {
-        project.let {
+    fun initVM(projectData: ProjectData) {
+        projectData.let {
             nameProject.changeValue(newValue = it.name, isInit = true)
             urlImgProject.changeValue(newValue = it.urlImg, isInit = true)
             urlRepositoryProject.changeValue(newValue = it.urlRepo, isInit = true)
@@ -107,7 +108,7 @@ class EditProjectViewModel @Inject constructor(
 
 
     fun updatedProject(
-        currentProject: Project,
+        currentProjectData: ProjectData,
         actionSuccess: () -> Unit
     ) = launchSafeIO(
         blockBefore = { isUpdatedProject = true },
@@ -121,13 +122,15 @@ class EditProjectViewModel @Inject constructor(
                 _messageError.trySend(R.string.error_no_data_change)
 
             else -> {
-                val updateProject = currentProject.copy(
+                val updateProjectWrapper = UpdateProjectWrapper(
                     name = nameProject.currentValue,
                     urlImg = urlImgProject.currentValue,
                     urlRepo = urlRepositoryProject.currentValue,
-                    description = descriptionProject.currentValue
+                    description = descriptionProject.currentValue,
+                    idProject = currentProjectData.idProject,
+                    isVisible = currentProjectData.isVisible
                 )
-                projectRepository.editProject(updateProject)
+                projectRepository.editProject(updateProjectWrapper)
                 _messageError.trySend(R.string.message_data_upload)
                 delay(2000)
                 withContext(Dispatchers.Main) {

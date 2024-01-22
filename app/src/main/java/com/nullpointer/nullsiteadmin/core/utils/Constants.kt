@@ -5,7 +5,8 @@ object Constants {
     const val PHONE_COLLECTION="phones"
     const val EMAIL_COLLECTION="emails"
     const val IMAGE_PROFILE_STORE="imgProfile"
+    const val PROJECT_COLLECTION="last-projects"
 
-    const val UPDATE_AT="updateAt"
-    const val CREATE_AT="createAt"
+    const val UPDATED_AT="updatedAt"
+    const val CREATED_AT="createdAt"
 }

@@ -2,23 +2,29 @@ package com.nullpointer.nullsiteadmin.domain.biometric
 
 import com.nullpointer.nullsiteadmin.actions.BiometricResult.*
 import com.nullpointer.nullsiteadmin.actions.BiometricState
-import com.nullpointer.nullsiteadmin.data.local.biometric.BiometricDataSource
-import com.nullpointer.nullsiteadmin.data.local.settings.SettingsDataSource
+import com.nullpointer.nullsiteadmin.datasource.biometric.local.BiometricDataSource
+import com.nullpointer.nullsiteadmin.datasource.settings.local.SettingsLocalDataSource
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.transform
 
 class BiometricRepoImpl(
-    private val settingsDataSource: SettingsDataSource,
+    private val settingsLocalDataSource: SettingsLocalDataSource,
     private val biometricDataSource: BiometricDataSource,
 ) : BiometricRepository {
 
     private val _biometricState = MutableStateFlow(BiometricState.Locked)
     override val biometricState: Flow<BiometricState> = _biometricState
 
-    override val isBiometricEnabled: Flow<Boolean> = settingsDataSource.isBiometricEnabled()
-    override val timeOutLocked: Flow<Long> = settingsDataSource.timeOutLocked().transform { value ->
+    override val isBiometricEnabled: Flow<Boolean> = settingsLocalDataSource.getSettingsData().map {
+        it?.isBiometricEnabled ?: false
+    }
+
+    override val timeOutLocked: Flow<Long> = settingsLocalDataSource.getSettingsData().map {
+        it?.timeOutLock ?: 0
+    }.transform { value ->
         var restNow = value - System.currentTimeMillis()
         while (restNow > 0) {
             delay(50)
@@ -37,9 +43,9 @@ class BiometricRepoImpl(
     override suspend fun changeIsBiometricEnabled(newValue: Boolean) {
         if (newValue) {
             val result = biometricDataSource.enableFingerBiometric()
-            if (result == PASSED) settingsDataSource.changeBiometricEnabled(true)
+            if (result == PASSED) settingsLocalDataSource.changeBiometricEnabled(true)
         } else {
-            settingsDataSource.changeBiometricEnabled(false)
+            settingsLocalDataSource.changeBiometricEnabled(false)
         }
     }
 
@@ -51,13 +57,13 @@ class BiometricRepoImpl(
                 false
             }
             LOCKED_TIME_OUT -> {
-                settingsDataSource.changeTimeOutLocked(System.currentTimeMillis() + 30 * 1000)
+                settingsLocalDataSource.changeTimeOutLocked(System.currentTimeMillis() + 30 * 1000)
                 false
             }
         }
     }
 
     override suspend fun changeTimeOut(newValue: Long) {
-        settingsDataSource.changeTimeOutLocked(newValue)
+        settingsLocalDataSource.changeTimeOutLocked(newValue)
     }
 }

@@ -8,7 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.nullpointer.nullsiteadmin.core.states.Resource
-import com.nullpointer.nullsiteadmin.models.Project
+import com.nullpointer.nullsiteadmin.models.project.data.ProjectData
 import com.nullpointer.nullsiteadmin.presentation.ProjectViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.HomeNavGraph
@@ -33,13 +33,13 @@ fun ProjectScreen(
     )
 ) {
 
-    val stateListProject by projectVM.listProject.collectAsState()
+    val stateListProject by projectVM.listProjectData.collectAsState()
 
     LaunchedEffect(key1 = Unit) {
         projectVM.messageErrorProject.collect(projectScreenState::showSnackMessage)
     }
 
-    ProjectScreen(stateListProject = stateListProject,
+    ProjectScreen(stateListProjectData = stateListProject,
         isConcatenate = projectVM.isConcatenateProjects,
         scaffoldState = projectScreenState.scaffoldState,
         actionRefreshProject = projectVM::requestNewProjects,
@@ -55,8 +55,8 @@ private fun ProjectScreen(
     isConcatenate: Boolean,
     scaffoldState: ScaffoldState,
     actionConcatenateProject: () -> Unit,
-    stateListProject: Resource<List<Project>>,
-    actionEditProject: (project: Project) -> Unit,
+    stateListProjectData: Resource<List<ProjectData>>,
+    actionEditProject: (projectData: ProjectData) -> Unit,
     actionRefreshProject: () -> Unit,
     swipeRefreshState: SwipeRefreshState
 ) {
@@ -65,16 +65,16 @@ private fun ProjectScreen(
         scaffoldState = scaffoldState,
         swipeRefreshState = swipeRefreshState
     ) {
-        when (stateListProject) {
+        when (stateListProjectData) {
             Resource.Loading -> ListLoadProject()
             Resource.Failure -> ListErrorProject()
             is Resource.Success -> {
-                if (stateListProject.data.isEmpty()) {
+                if (stateListProjectData.data.isEmpty()) {
                     ListEmptyProject()
                 } else {
                     ListProjectSuccess(
                         isConcatenate = isConcatenate,
-                        listProject = stateListProject.data,
+                        listProjectData = stateListProjectData.data,
                         actionEditProject = actionEditProject,
                         concatenateProject = actionConcatenateProject
                     )

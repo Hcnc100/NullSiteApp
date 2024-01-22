@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nullpointer.nullsiteadmin.R
-import com.nullpointer.nullsiteadmin.models.email.EmailData
+import com.nullpointer.nullsiteadmin.models.email.data.EmailData
 import com.nullpointer.nullsiteadmin.ui.screens.animation.AnimationScreen
 import com.nullpointer.nullsiteadmin.ui.screens.contact.components.items.EmailItem
 import com.nullpointer.nullsiteadmin.ui.screens.contact.components.items.EmailItemLoading

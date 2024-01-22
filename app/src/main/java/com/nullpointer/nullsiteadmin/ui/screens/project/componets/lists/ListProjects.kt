@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nullpointer.nullsiteadmin.R
-import com.nullpointer.nullsiteadmin.models.Project
+import com.nullpointer.nullsiteadmin.models.project.data.ProjectData
 import com.nullpointer.nullsiteadmin.ui.screens.animation.AnimationScreen
 import com.nullpointer.nullsiteadmin.ui.screens.project.componets.items.ProjectItem
 import com.nullpointer.nullsiteadmin.ui.screens.project.componets.items.ProjectItemLoading
@@ -63,10 +63,10 @@ fun ListEmptyProject(
 @Composable
 fun ListProjectSuccess(
     isConcatenate: Boolean,
-    listProject: List<Project>,
+    listProjectData: List<ProjectData>,
     modifier: Modifier = Modifier,
     concatenateProject: () -> Unit,
-    actionEditProject: (Project) -> Unit,
+    actionEditProject: (ProjectData) -> Unit,
     lazyListState: LazyListState = rememberLazyListState()
 ) {
     LazyListConcatenate(
@@ -78,11 +78,11 @@ fun ListProjectSuccess(
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         items(
-            items = listProject,
+            items = listProjectData,
             key = { it.idProject }
         ) {
             ProjectItem(
-                project = it,
+                projectData = it,
                 actionEditProject = actionEditProject,
                 modifier = Modifier.animateItemPlacement()
             )

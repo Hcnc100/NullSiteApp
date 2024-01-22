@@ -8,7 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.nullpointer.nullsiteadmin.core.states.Resource
-import com.nullpointer.nullsiteadmin.models.data.PersonalInfoData
+import com.nullpointer.nullsiteadmin.models.personalInfo.data.PersonalInfoData
 import com.nullpointer.nullsiteadmin.presentation.InfoUserViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.HomeNavGraph

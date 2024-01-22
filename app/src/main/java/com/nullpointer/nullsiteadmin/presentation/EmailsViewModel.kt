@@ -9,7 +9,7 @@ import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager.sendMessageErrorToException
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.email.EmailsRepository
-import com.nullpointer.nullsiteadmin.models.email.EmailData
+import com.nullpointer.nullsiteadmin.models.email.data.EmailData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -56,7 +56,7 @@ class EmailsViewModel @Inject constructor(
         private set
 
     init {
-        requestLastEmail(false)
+        requestLastEmail()
     }
 
     val listEmails =
@@ -115,14 +115,12 @@ class EmailsViewModel @Inject constructor(
         }
     )
 
-    fun requestLastEmail(
-        forceRefresh: Boolean = true
-    ) = launchSafeIO(
+    fun requestLastEmail() = launchSafeIO(
         isEnabled = !isRequestEmail,
         blockBefore = { isRequestEmail = true },
         blockAfter = { isRequestEmail = false },
         blockIO = {
-            val sizeRequest = emailsRepository.requestLastEmail(forceRefresh)
+            val sizeRequest = emailsRepository.requestLastEmail()
             Timber.d("News emails receiver $sizeRequest")
             delay(200)
             withContext(Dispatchers.Main) {

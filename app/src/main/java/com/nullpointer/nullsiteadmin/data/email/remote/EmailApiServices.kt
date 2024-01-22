@@ -7,17 +7,14 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.nullpointer.nullsiteadmin.core.utils.Constants
 import com.nullpointer.nullsiteadmin.core.utils.awaitAll
-import com.nullpointer.nullsiteadmin.core.utils.getConcatenateObjects
-import com.nullpointer.nullsiteadmin.core.utils.getNewObjects
 import com.nullpointer.nullsiteadmin.core.utils.getTimeEstimate
-import com.nullpointer.nullsiteadmin.models.dto.UpdateEmailDTO
-import com.nullpointer.nullsiteadmin.models.email.EmailData
+import com.nullpointer.nullsiteadmin.models.email.dto.UpdateEmailDTO
+import com.nullpointer.nullsiteadmin.models.email.data.EmailData
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
-import java.util.Date
 
 class EmailApiServices {
 
@@ -26,7 +23,7 @@ class EmailApiServices {
 
 
     fun getAllEmails(): Flow<List<EmailData>> = callbackFlow {
-        val listener = collectionEmail.orderBy(Constants.CREATE_AT, Query.Direction.DESCENDING)
+        val listener = collectionEmail.orderBy(Constants.CREATED_AT, Query.Direction.DESCENDING)
             .addSnapshotListener { value, error ->
                 error?.let { channel.close(it) }
                 try {
@@ -46,7 +43,7 @@ class EmailApiServices {
         numberResult: Long
     ): List<EmailData> {
         val lastEmailDoc = collectionEmail.document(emailId).get().await()
-        val response = collectionEmail.orderBy(Constants.CREATE_AT, Query.Direction.DESCENDING)
+        val response = collectionEmail.orderBy(Constants.CREATED_AT, Query.Direction.DESCENDING)
             .startAfter(lastEmailDoc).limit(numberResult).get().await()
         return response.documents.mapNotNull(::fromDocument)
     }
@@ -54,7 +51,7 @@ class EmailApiServices {
     suspend fun getNewEmails(
         numberResult: Long,
     ): List<EmailData> {
-        val response = collectionEmail.orderBy(Constants.CREATE_AT, Query.Direction.DESCENDING)
+        val response = collectionEmail.orderBy(Constants.CREATED_AT, Query.Direction.DESCENDING)
             .limit(numberResult).get().await()
         return response.documents.mapNotNull(::fromDocument)
     }
@@ -76,8 +73,8 @@ class EmailApiServices {
     }
 
     private fun fromDocument(document: DocumentSnapshot): EmailData? {
-        val createAt = document.getTimeEstimate(Constants.CREATE_AT)
-        val updateAt = document.getTimeEstimate(Constants.UPDATE_AT)
+        val createAt = document.getTimeEstimate(Constants.CREATED_AT)
+        val updateAt = document.getTimeEstimate(Constants.UPDATED_AT)
         return document.toObject<EmailData>()?.copy(
             idEmail = document.id,
             createdAt = createAt,

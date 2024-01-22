@@ -2,10 +2,7 @@ package com.nullpointer.nullsiteadmin.datasource.infoPhone.local
 
 import com.nullpointer.nullsiteadmin.data.infoPhone.local.CurrentInfoPhone
 import com.nullpointer.nullsiteadmin.data.infoPhone.local.InfoPhoneDataStore
-import com.nullpointer.nullsiteadmin.datasource.user.local.InfoUserLocalDataSource
-import com.nullpointer.nullsiteadmin.models.data.InfoPhoneData
-import com.nullpointer.nullsiteadmin.models.data.PersonalInfoData
-import kotlinx.coroutines.flow.Flow
+import com.nullpointer.nullsiteadmin.models.phoneInfo.data.InfoPhoneData
 import kotlinx.coroutines.flow.first
 
 class InfoPhoneLocalDataSourceImpl(

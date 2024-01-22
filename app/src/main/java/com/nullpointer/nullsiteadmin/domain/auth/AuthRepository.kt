@@ -1,6 +1,6 @@
 package com.nullpointer.nullsiteadmin.domain.auth
 
-import com.nullpointer.nullsiteadmin.models.wrapper.CredentialsWrapper
+import com.nullpointer.nullsiteadmin.models.credentials.wrapper.CredentialsWrapper
 import kotlinx.coroutines.flow.Flow
 
 interface AuthRepository {

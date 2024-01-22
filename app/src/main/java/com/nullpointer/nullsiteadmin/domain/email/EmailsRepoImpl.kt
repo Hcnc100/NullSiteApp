@@ -1,10 +1,9 @@
 package com.nullpointer.nullsiteadmin.domain.email
 
-import com.nullpointer.nullsiteadmin.core.utils.callApiTimeOut
 import com.nullpointer.nullsiteadmin.datasource.email.local.EmailLocalDataSource
 import com.nullpointer.nullsiteadmin.datasource.email.remote.EmailRemoteDataSource
-import com.nullpointer.nullsiteadmin.models.dto.UpdateEmailDTO
-import com.nullpointer.nullsiteadmin.models.email.EmailData
+import com.nullpointer.nullsiteadmin.models.email.dto.UpdateEmailDTO
+import com.nullpointer.nullsiteadmin.models.email.data.EmailData
 import kotlinx.coroutines.flow.Flow
 
 class EmailsRepoImpl(
@@ -32,7 +31,7 @@ class EmailsRepoImpl(
         emailLocalDataSource.updateEmail(updateEmailData)
     }
 
-    override suspend fun requestLastEmail(forceRefresh: Boolean): Int {
+    override suspend fun requestLastEmail(): Int {
         val newEmails = emailRemoteDataSource.getNewEmails(numberResult = SIZE_REQUEST_EMAIL)
         emailLocalDataSource.updateAllEmails(newEmails)
         return newEmails.size

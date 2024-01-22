@@ -1,8 +1,7 @@
 package com.nullpointer.nullsiteadmin.data.email.local
 
 import androidx.room.*
-import com.nullpointer.nullsiteadmin.models.email.EmailData
-import com.nullpointer.nullsiteadmin.models.email.EmailEntity
+import com.nullpointer.nullsiteadmin.models.email.entity.EmailEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

@@ -3,9 +3,9 @@ package com.nullpointer.nullsiteadmin.domain.auth
 import com.nullpointer.nullsiteadmin.datasource.auth.local.AuthLocalDataSource
 import com.nullpointer.nullsiteadmin.datasource.auth.remote.AuthRemoteDataSource
 import com.nullpointer.nullsiteadmin.datasource.infoPhone.local.InfoPhoneLocalDataSource
-import com.nullpointer.nullsiteadmin.models.dto.CredentialsDTO
-import com.nullpointer.nullsiteadmin.models.dto.UpdateInfoPhoneDTO
-import com.nullpointer.nullsiteadmin.models.wrapper.CredentialsWrapper
+import com.nullpointer.nullsiteadmin.models.credentials.dto.CredentialsDTO
+import com.nullpointer.nullsiteadmin.models.phoneInfo.dto.UpdateInfoPhoneDTO
+import com.nullpointer.nullsiteadmin.models.credentials.wrapper.CredentialsWrapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map

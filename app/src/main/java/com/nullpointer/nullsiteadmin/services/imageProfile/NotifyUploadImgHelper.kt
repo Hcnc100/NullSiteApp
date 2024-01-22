@@ -11,7 +11,7 @@ import androidx.core.app.NotificationCompat
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.utils.correctFlag
 import com.nullpointer.nullsiteadmin.core.utils.getNotifyServices
-import com.nullpointer.nullsiteadmin.data.local.services.ServicesManager.Companion.STOP_COMMAND
+import com.nullpointer.nullsiteadmin.data.services.ServicesManager.Companion.STOP_COMMAND
 import com.nullpointer.nullsiteadmin.ui.activitys.MainActivity
 
 class NotifyUploadImgHelper(private val context: Context) {

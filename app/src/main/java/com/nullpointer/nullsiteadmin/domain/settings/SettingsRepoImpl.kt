@@ -1,20 +1,17 @@
 package com.nullpointer.nullsiteadmin.domain.settings
 
-import com.nullpointer.nullsiteadmin.data.local.settings.SettingsDataSource
-import com.nullpointer.nullsiteadmin.models.UserAuth
+import com.nullpointer.nullsiteadmin.datasource.settings.local.SettingsLocalDataSource
+import com.nullpointer.nullsiteadmin.models.settings.data.SettingsData
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 class SettingsRepoImpl(
-    private val settingsDataSource: SettingsDataSource
+    private val settingsLocalDataSource: SettingsLocalDataSource
 ) : SettingsRepository {
+    override fun getSettingsData(): Flow<SettingsData?> =
+        settingsLocalDataSource.getSettingsData()
 
-    override val user: Flow<UserAuth> = settingsDataSource.getUserAuth()
+    override suspend fun saveSettingsData(settingsData: SettingsData) =
+        settingsLocalDataSource.saveSettingsData(settingsData)
 
-    override val isAuthUser: Flow<Boolean> = user.map { it.id.isNotEmpty() }
 
-    override suspend fun saveUser(user: UserAuth) =
-        settingsDataSource.saveUserAuth(user)
-
-    override suspend fun clearData() = settingsDataSource.clearData()
 }

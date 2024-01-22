@@ -1,11 +1,12 @@
 package com.nullpointer.nullsiteadmin.inject
 
-import com.nullpointer.nullsiteadmin.data.local.project.ProjectLocalDataSource
-import com.nullpointer.nullsiteadmin.data.local.project.ProjectLocalDataSourceImpl
+import com.nullpointer.nullsiteadmin.datasource.project.local.ProjectLocalDataSource
+import com.nullpointer.nullsiteadmin.datasource.project.local.ProjectLocalDataSourceImpl
 import com.nullpointer.nullsiteadmin.database.NullSiteDatabase
-import com.nullpointer.nullsiteadmin.database.ProjectDAO
-import com.nullpointer.nullsiteadmin.data.remote.project.ProjectRemoteDataSource
-import com.nullpointer.nullsiteadmin.data.remote.project.ProjectRemoteDataSourceImpl
+import com.nullpointer.nullsiteadmin.data.project.local.ProjectDAO
+import com.nullpointer.nullsiteadmin.data.project.remote.ProjectApiServices
+import com.nullpointer.nullsiteadmin.datasource.project.remote.ProjectRemoteDataSource
+import com.nullpointer.nullsiteadmin.datasource.project.remote.ProjectRemoteDataSourceImpl
 import com.nullpointer.nullsiteadmin.domain.project.ProjectRepoImpl
 import com.nullpointer.nullsiteadmin.domain.project.ProjectRepository
 import dagger.Module
@@ -26,6 +27,11 @@ object ProjectModule {
 
     @Singleton
     @Provides
+    fun provideProjectApiServices(): ProjectApiServices =
+        ProjectApiServices()
+
+    @Singleton
+    @Provides
     fun provideProjectLocalDataSource(
         projectDAO: ProjectDAO
     ): ProjectLocalDataSource = ProjectLocalDataSourceImpl(projectDAO)
@@ -33,8 +39,12 @@ object ProjectModule {
 
     @Singleton
     @Provides
-    fun provideProjectDataSource(): ProjectRemoteDataSource =
-        ProjectRemoteDataSourceImpl()
+    fun provideProjectDataSource(
+        projectApiServices: ProjectApiServices
+    ): ProjectRemoteDataSource =
+        ProjectRemoteDataSourceImpl(
+            projectApiServices = projectApiServices
+        )
 
     @Singleton
     @Provides

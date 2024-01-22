@@ -9,9 +9,9 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.nullpointer.nullsiteadmin.datasource.email.local.EmailLocalDataSource
 import com.nullpointer.nullsiteadmin.datasource.user.local.InfoUserLocalDataSource
-import com.nullpointer.nullsiteadmin.data.local.project.ProjectLocalDataSource
-import com.nullpointer.nullsiteadmin.data.local.settings.SettingsDataSource
-import com.nullpointer.nullsiteadmin.data.local.settings.SettingsDataSourceImpl
+import com.nullpointer.nullsiteadmin.datasource.project.local.ProjectLocalDataSource
+import com.nullpointer.nullsiteadmin.datasource.settings.local.SettingsLocalDataSource
+import com.nullpointer.nullsiteadmin.datasource.settings.local.SettingsLocalDataSourceImpl
 import com.nullpointer.nullsiteadmin.domain.deleter.DeleterInfoRepository
 import com.nullpointer.nullsiteadmin.domain.deleter.DeleterInfoRepositoryImpl
 import dagger.Module
@@ -41,22 +41,17 @@ object OthersModule {
         )
     }
 
-    @Provides
-    @Singleton
-    fun provideSettingsDataSource(
-        dataStore: DataStore<Preferences>
-    ): SettingsDataSource = SettingsDataSourceImpl(dataStore)
 
 
     @Singleton
     @Provides
     fun provideDeleterInfo(
-        settingsDataSource: SettingsDataSource,
+        settingsLocalDataSource: SettingsLocalDataSource,
         emailLocalDataSource: EmailLocalDataSource,
         projectLocalDataSource: ProjectLocalDataSource,
         infoUserLocalDataSource: InfoUserLocalDataSource
     ): DeleterInfoRepository = DeleterInfoRepositoryImpl(
-        settingsDataSource = settingsDataSource,
+        settingsLocalDataSource = settingsLocalDataSource,
         emailLocalDataSource = emailLocalDataSource,
         projectLocalDataSource = projectLocalDataSource,
         infoUserLocalDataSource = infoUserLocalDataSource

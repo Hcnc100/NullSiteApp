@@ -7,11 +7,10 @@ import com.google.firebase.ktx.Firebase
 import com.nullpointer.nullsiteadmin.BuildConfig
 import com.nullpointer.nullsiteadmin.core.utils.Constants
 import com.nullpointer.nullsiteadmin.core.utils.getTimeEstimate
-import com.nullpointer.nullsiteadmin.models.data.PersonalInfoData
-import com.nullpointer.nullsiteadmin.models.dto.PersonalInfoDTO
-import com.nullpointer.nullsiteadmin.models.response.PersonalInfoResponse
+import com.nullpointer.nullsiteadmin.models.personalInfo.data.PersonalInfoData
+import com.nullpointer.nullsiteadmin.models.personalInfo.dto.PersonalInfoDTO
+import com.nullpointer.nullsiteadmin.models.personalInfo.response.PersonalInfoResponse
 import kotlinx.coroutines.tasks.await
-import java.util.Date
 
 class UserApiServices {
 
@@ -19,8 +18,8 @@ class UserApiServices {
 
 
      suspend fun updatePersonalInfo(
-        idUser: String,
-        personalInfoDTO: PersonalInfoDTO,
+         idUser: String,
+         personalInfoDTO: PersonalInfoDTO,
     ) {
          val refUser = refMyInfo.document(BuildConfig.ID_INFO_PROFILE_FIREBASE)
 
@@ -46,8 +45,8 @@ class UserApiServices {
     private fun fromDocument(document: DocumentSnapshot): PersonalInfoResponse? {
         return document.toObject<PersonalInfoResponse>()?.copy(
             id = document.id,
-            createAt = document.getTimeEstimate(Constants.UPDATE_AT),
-            updateAt = document.getTimeEstimate(Constants.UPDATE_AT)
+            createAt = document.getTimeEstimate(Constants.UPDATED_AT),
+            updateAt = document.getTimeEstimate(Constants.UPDATED_AT)
         )
     }
 }

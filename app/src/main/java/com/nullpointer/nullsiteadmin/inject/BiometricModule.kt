@@ -1,9 +1,9 @@
 package com.nullpointer.nullsiteadmin.inject
 
 import android.content.Context
-import com.nullpointer.nullsiteadmin.data.local.biometric.BiometricDataSource
-import com.nullpointer.nullsiteadmin.data.local.biometric.BiometricDataSourceImpl
-import com.nullpointer.nullsiteadmin.data.local.settings.SettingsDataSource
+import com.nullpointer.nullsiteadmin.datasource.biometric.local.BiometricDataSource
+import com.nullpointer.nullsiteadmin.datasource.biometric.local.BiometricDataSourceImpl
+import com.nullpointer.nullsiteadmin.datasource.settings.local.SettingsLocalDataSource
 import com.nullpointer.nullsiteadmin.domain.biometric.BiometricRepoImpl
 import com.nullpointer.nullsiteadmin.domain.biometric.BiometricRepository
 import dagger.Module
@@ -27,9 +27,9 @@ object BiometricModule {
     @Provides
     fun providesBiometricRepository(
         biometricDataSource: BiometricDataSource,
-        settingsDataSource: SettingsDataSource
+        settingsLocalDataSource: SettingsLocalDataSource
     ): BiometricRepository = BiometricRepoImpl(
-        settingsDataSource = settingsDataSource,
+        settingsLocalDataSource = settingsLocalDataSource,
         biometricDataSource = biometricDataSource
     )
 }
