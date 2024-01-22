@@ -9,19 +9,19 @@ import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.nullpointer.nullsiteadmin.R
-import com.nullpointer.nullsiteadmin.core.states.Resource
-import com.nullpointer.nullsiteadmin.models.personalInfo.data.PersonalInfoData
 import com.nullpointer.nullsiteadmin.ui.preview.config.SimplePreview
+import com.nullpointer.nullsiteadmin.ui.preview.provider.BooleanProvider
 
 @Composable
 fun ButtonEditInfo(
-    personalInfoData: Resource<PersonalInfoData?>,
+    showButtonEditInfo: Boolean,
     actionEditInfo: () -> Unit
 ) {
 
     AnimatedVisibility(
-        visible = personalInfoData is Resource.Success,
+        visible = showButtonEditInfo,
         enter = scaleIn(
             initialScale = 0.3f,
             animationSpec = tween(500)
@@ -45,13 +45,12 @@ fun ButtonEditInfo(
 
 @Composable
 @SimplePreview
-private fun ButtonEditInfoPreview(){
-//    ButtonEditInfo(
-//        personalInfoData = Resource.Success(
-//            PersonalInfoData(
-//                description = W
-//            )
-//        ),
-//        actionEditInfo = {}
-//    )
+private fun ButtonEditInfoPreview(
+    @PreviewParameter(BooleanProvider::class)
+    showButton: Boolean,
+) {
+    ButtonEditInfo(
+        showButtonEditInfo = showButton,
+        actionEditInfo = {}
+    )
 }
