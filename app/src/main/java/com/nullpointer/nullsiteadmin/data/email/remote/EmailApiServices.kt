@@ -16,6 +16,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 import java.util.Date
 
 class EmailApiServices {
@@ -32,6 +33,7 @@ class EmailApiServices {
                     val listEmails = value!!.documents.mapNotNull(::fromDocument)
                     trySend(listEmails)
                 } catch (e: Exception) {
+                    Timber.e("Error when transform document in email list $e")
                     channel.close(e)
                 }
             }
@@ -58,13 +60,9 @@ class EmailApiServices {
         numberResult: Long,
         emailId: String?
     ): List<EmailData> {
-        return collectionEmail.getNewObjects(
-            endWithId = emailId,
-            nResults = numberResult,
-            includeEnd = includeEmail,
-            transform = ::fromDocument,
-            fieldTimestamp = Constants.CREATE_AT
-        )
+       val response= collectionEmail.orderBy(Constants.CREATE_AT,Query.Direction.DESCENDING).get().await()
+
+        return response.documents.mapNotNull( ::fromDocument )
     }
 
     suspend fun deleterEmail(idEmail: String) {

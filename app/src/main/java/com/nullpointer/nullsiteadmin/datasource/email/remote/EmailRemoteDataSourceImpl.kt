@@ -6,10 +6,12 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.nullpointer.nullsiteadmin.core.utils.awaitAll
+import com.nullpointer.nullsiteadmin.core.utils.callApiTimeOut
 import com.nullpointer.nullsiteadmin.core.utils.getConcatenateObjects
 import com.nullpointer.nullsiteadmin.core.utils.getNewObjects
 import com.nullpointer.nullsiteadmin.core.utils.getTimeEstimate
 import com.nullpointer.nullsiteadmin.data.email.remote.EmailApiServices
+import com.nullpointer.nullsiteadmin.models.dto.UpdateEmailDTO
 import com.nullpointer.nullsiteadmin.models.email.EmailData
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -24,11 +26,14 @@ class EmailRemoteDataSourceImpl(
     override fun getAllEmails(): Flow<List<EmailData>> =
         emailApiServices.getAllEmails()
 
-    override suspend fun deleterEmail(idEmail: String) =
+    override suspend fun deleterEmail(idEmail: String) = callApiTimeOut {
         emailApiServices.deleterEmail(idEmail)
+    }
 
-    override suspend fun markAsOpen(idEmail: String) =
-        emailApiServices.markAsOpen(idEmail)
+    override suspend fun updateEmail(updateEmailDTO: UpdateEmailDTO) = callApiTimeOut {
+        emailApiServices.updateEmail(updateEmailDTO)
+    }
+
 
     override suspend fun deleterListEmails(listIds: List<String>) =
         emailApiServices.deleterListEmails(listIds)
@@ -37,14 +42,16 @@ class EmailRemoteDataSourceImpl(
         includeEmail: Boolean,
         emailId: String?,
         numberResult: Long
-    ): List<EmailData> =
+    ): List<EmailData> = callApiTimeOut {
         emailApiServices.getConcatenateEmails(includeEmail, emailId, numberResult)
+    }
 
     override suspend fun getNewEmails(
         includeEmail: Boolean,
         numberResult: Long,
         emailId: String?
-    ): List<EmailData>  =
+    ): List<EmailData> = callApiTimeOut {
         emailApiServices.getNewEmails(includeEmail, numberResult, emailId)
+    }
 
 }

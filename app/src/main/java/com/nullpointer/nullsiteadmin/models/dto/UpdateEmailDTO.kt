@@ -1,6 +1,7 @@
 package com.nullpointer.nullsiteadmin.models.dto
 
 import com.nullpointer.nullsiteadmin.core.utils.MappableFirebase
+import com.nullpointer.nullsiteadmin.models.email.EmailData
 
 data class UpdateEmailDTO(
     val idEmail:String,
@@ -8,10 +9,10 @@ data class UpdateEmailDTO(
 ): MappableFirebase {
     companion object{
         fun fromEmailData(
-            idEmail:String,
+            emailData: EmailData
         ): UpdateEmailDTO {
             return UpdateEmailDTO(
-                idEmail = idEmail,
+                idEmail = emailData.idEmail,
                 isOpen = true
             )
         }

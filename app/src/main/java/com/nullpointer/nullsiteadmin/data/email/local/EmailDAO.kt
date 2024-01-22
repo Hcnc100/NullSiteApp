@@ -8,16 +8,16 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface EmailDAO {
 
-    @Query("SELECT * FROM emails ORDER by timestamp DESC")
+    @Query("SELECT * FROM emails ORDER by createAt DESC")
     fun getListEmails(): Flow<List<EmailEntity>>
 
     @Query("SELECT * FROM emails WHERE id = :idEmail LIMIT 1")
     suspend fun getEmailById(idEmail: String): EmailEntity?
 
-    @Query("SELECT * FROM emails ORDER by timestamp DESC LIMIT 1")
+    @Query("SELECT * FROM emails ORDER by createAt DESC LIMIT 1")
     suspend fun getMoreRecentEmail(): EmailEntity?
 
-    @Query("SELECT * FROM emails ORDER by timestamp ASC LIMIT 1")
+    @Query("SELECT * FROM emails ORDER by createAt ASC LIMIT 1")
     suspend fun getLastEmail(): EmailEntity?
 
     @Query("DELETE FROM emails WHERE id = :idEmail")

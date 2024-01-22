@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
+import com.nullpointer.nullsiteadmin.BuildConfig
 import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager.NO_INTERNET_CONNECTION
 import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager.SERVER_TIME_OUT
 import com.valentinilk.shimmer.Shimmer
@@ -252,8 +253,12 @@ suspend fun <T> callApiTimeOut(
 ): T {
     if (!InternetCheck.isNetworkAvailable()) throw Exception(NO_INTERNET_CONNECTION)
     return try {
-        withTimeout(timeOut) {
-            callApi()
+
+        when(BuildConfig.DEBUG){
+            true -> callApi()
+            false -> withTimeout(timeOut){
+                callApi()
+            }
         }
     } catch (e: TimeoutCancellationException) {
         throw Exception(SERVER_TIME_OUT)

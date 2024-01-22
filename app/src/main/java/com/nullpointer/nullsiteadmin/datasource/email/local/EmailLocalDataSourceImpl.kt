@@ -10,15 +10,11 @@ class EmailLocalDataSourceImpl(
     private val emailDao: EmailDAO
 ) : EmailLocalDataSource {
     override val listEmail: Flow<List<EmailData>> = emailDao.getListEmails().map { listEmail ->
-        listEmail.map(
-            EmailData::fromEmailEntity
-        )
+        listEmail.map(EmailData::fromEmailEntity)
     }
 
     override suspend fun updateAllEmails(listIdEmails: List<EmailData>){
-
         val listEmailEntity = listIdEmails.map(EmailEntity::fromEmailData)
-
         emailDao.updateAllEmails(listEmailEntity)
     }
 
@@ -40,6 +36,11 @@ class EmailLocalDataSourceImpl(
         emailDao.updateEmail(emailEntity)
     }
 
+    override suspend fun insertListEmails(listEmails: List<EmailData>){
+        val listEmailEntity = listEmails.map(EmailEntity::fromEmailData)
+        emailDao.insertListEmails(listEmailEntity)
+    }
+
     override suspend fun deleterAllEmails() =
         emailDao.deleterAllEmails()
 
@@ -55,8 +56,5 @@ class EmailLocalDataSourceImpl(
         }
     }
 
-    override suspend fun insertListEmails(listEmails: List<EmailData>){
-        val listEmailEntity = listEmails.map(EmailEntity::fromEmailData)
-        emailDao.insertListEmails(listEmailEntity)
-    }
+
 }

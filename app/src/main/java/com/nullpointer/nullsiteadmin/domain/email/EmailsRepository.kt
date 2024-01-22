@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface EmailsRepository {
     val listEmails: Flow<List<EmailData>>
-    suspend fun markAsOpen(idEmail: String)
+    suspend fun markAsOpen(emailData: EmailData)
     suspend fun deleterEmail(idEmail: String)
     suspend fun requestLastEmail(forceRefresh: Boolean): Int
     suspend fun concatenateEmails(): Int

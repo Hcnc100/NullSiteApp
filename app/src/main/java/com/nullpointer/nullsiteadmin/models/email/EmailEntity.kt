@@ -2,18 +2,20 @@ package com.nullpointer.nullsiteadmin.models.email
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.Date
 
 
 @Entity(tableName = "emails")
 data class EmailEntity(
     @PrimaryKey
-    val id: String = "",
-    val name: String = "",
-    val message: String = "",
-    val email: String = "",
-    val subject: String = "",
-    val timestamp: Long = 0,
-    val isOpen: Boolean = false
+    val id: String,
+    val name: String,
+    val message: String,
+    val email: String,
+    val subject: String,
+    val createAt:Date,
+    val updateAt:Date,
+    val isOpen: Boolean
 ){
     companion object{
         fun fromEmailData(emailData: EmailData):EmailEntity{
@@ -24,7 +26,8 @@ data class EmailEntity(
                 email = emailData.email,
                 subject = emailData.subject,
                 isOpen = emailData.isOpen,
-                timestamp = emailData.timestamp?.time ?: 0
+                createAt = Date(emailData.createdAt!!.time),
+                updateAt = Date(emailData.updatedAt!!.time)
             )
         }
     }

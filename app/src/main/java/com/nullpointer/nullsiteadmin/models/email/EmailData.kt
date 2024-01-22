@@ -1,15 +1,20 @@
 package com.nullpointer.nullsiteadmin.models.email
 
+import com.nullpointer.nullsiteadmin.database.DateAsLongSerializer
+import kotlinx.serialization.Serializable
 import java.util.*
 
 
+@Serializable
 data class EmailData(
     val idEmail: String = "",
     val name: String = "",
     val message: String = "",
     val email: String = "",
     val subject: String = "",
+    @Serializable(with = DateAsLongSerializer::class)
     val createdAt: Date?= null,
+    @Serializable(with = DateAsLongSerializer::class)
     val updatedAt: Date?= null,
     val isOpen: Boolean = false
 ){
@@ -22,9 +27,8 @@ data class EmailData(
                 email = emailEntity.email,
                 subject = emailEntity.subject,
                 isOpen = emailEntity.isOpen,
-                // ! TODO : Fix this
-                createdAt = Date(),
-                updatedAt = Date()
+                createdAt = emailEntity.createAt,
+                updatedAt = emailEntity.updateAt
             )
         }
     }
