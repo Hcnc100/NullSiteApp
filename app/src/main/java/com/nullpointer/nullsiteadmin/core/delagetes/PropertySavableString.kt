@@ -9,44 +9,52 @@ class PropertySavableString(
     @StringRes val label: Int,
     private val maxLength: Int,
     savedState: SavedStateHandle,
-    private var valueDefault: String = "",
-    @StringRes private val emptyError: Int = RESOURCE_DEFAULT,
-    @StringRes private val lengthError: Int = RESOURCE_DEFAULT,
+    private var defaultValue: String = "",
+    @StringRes private val emptyError: Int = UNDEFINE_RESOURCE,
+    @StringRes private val lengthError: Int = UNDEFINE_RESOURCE,
 ) {
     companion object {
-        private const val RESOURCE_DEFAULT = -1
+        private const val UNDEFINE_RESOURCE = -1
     }
 
     private val idSaved = "SAVED_PROPERTY_$tagSavable"
 
-    var currentValue by SavableComposeState(savedState, "$idSaved-CURRENT-VALUE", valueDefault)
+    var currentValue by SavableComposeState(savedState, "$idSaved-CURRENT-VALUE", defaultValue)
         private set
 
-    var errorValue by SavableComposeState(savedState, "$idSaved-ERROR-VALUE", RESOURCE_DEFAULT)
+    var errorValue by SavableComposeState(savedState, "$idSaved-ERROR-VALUE", UNDEFINE_RESOURCE)
         private set
 
-    val hasChanged: Boolean get() = this.currentValue != valueDefault
+    val hasChanged: Boolean get() = this.currentValue != defaultValue
 
-    val countLength get() = "${currentValue.length}/${maxLength}"
+    val countLength get() = "${currentValue.length}/$maxLength"
 
-    val hasError get() = errorValue != RESOURCE_DEFAULT
+    val hasError get() = errorValue != UNDEFINE_RESOURCE
 
     val isEmpty get() = currentValue.isEmpty()
 
 
-    fun changeValue(newValue: String, isInit: Boolean = false) {
+    fun setDefaultValue(newValue: String) {
+        defaultValue = newValue
         currentValue = newValue
-        if (isInit) {
-            valueDefault = newValue
-        } else {
-            errorValue = when {
-                newValue.isEmpty() && emptyError != RESOURCE_DEFAULT -> emptyError
-                newValue.length > maxLength && lengthError != RESOURCE_DEFAULT -> lengthError
-                else -> RESOURCE_DEFAULT
-            }
-        }
     }
 
+    fun changeValue(newValue: String) {
+        currentValue = newValue
+        errorValue = when {
+            newValue.isEmpty() && emptyError != UNDEFINE_RESOURCE -> emptyError
+            newValue.length > maxLength && lengthError != UNDEFINE_RESOURCE -> lengthError
+            else -> UNDEFINE_RESOURCE
+        }
+
+    }
+
+    fun getValueOnlyHasChanged(): String? {
+        return when {
+            hasChanged -> currentValue
+            else -> null
+        }
+    }
 
     fun setAnotherError(@StringRes newError: Int) {
         errorValue = newError
@@ -54,9 +62,8 @@ class PropertySavableString(
 
     fun clearValue() {
         currentValue = ""
-        errorValue = RESOURCE_DEFAULT
+        errorValue = UNDEFINE_RESOURCE
     }
 
     fun reValueField() = changeValue(currentValue)
-
 }

@@ -93,8 +93,8 @@ class EditInfoViewModel @Inject constructor(
         currentImage: Uri,
         actionSuccessCompress: (Uri) -> Unit
     ) = launchSafeIO(
-        blockBefore = { imageProfile.changeImageCompress(true) },
-        blockAfter = { imageProfile.changeImageCompress(false) },
+        blockBefore = { imageProfile.changeImageLoading(true) },
+        blockAfter = { imageProfile.changeImageLoading(false) },
         blockIO = {
             val imageCompress = imageRepository.compressImg(currentImage)
             withContext(Dispatchers.Main) {
@@ -109,10 +109,10 @@ class EditInfoViewModel @Inject constructor(
 
     fun initInfoProfile(personalInfoData: PersonalInfoData?) {
         personalInfoData?.let {
-            name.changeValue(newValue = it.name, isInit = true)
-            profession.changeValue(newValue = it.profession, isInit = true)
-            description.changeValue(newValue = it.description, isInit = true)
-            imageProfile.changeValue(newValue = personalInfoData.urlImg.toUri(), isInit = true)
+            name.setDefaultValue(it.name)
+            profession.setDefaultValue(it.profession)
+            description.setDefaultValue(it.description)
+            imageProfile.setDefaultValue(personalInfoData.urlImg.toUri())
         }
     }
 
@@ -126,11 +126,10 @@ class EditInfoViewModel @Inject constructor(
             return null
         }
         return UpdateInfoProfileWrapper(
-            name = name.currentValue,
-            profession = profession.currentValue,
-            description = description.currentValue,
-            imageFile = imageProfile.value,
-            uriFileImgProfile = imageProfile.value,
+            name = name.getValueOnlyHasChanged(),
+            profession = profession.getValueOnlyHasChanged(),
+            description = description.getValueOnlyHasChanged(),
+            uriFileImgProfile = imageProfile.getValueOnlyHasChanged(),
         )
     }
 

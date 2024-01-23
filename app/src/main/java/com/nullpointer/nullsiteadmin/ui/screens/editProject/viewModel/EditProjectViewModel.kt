@@ -99,10 +99,10 @@ class EditProjectViewModel @Inject constructor(
 
     fun initVM(projectData: ProjectData) {
         projectData.let {
-            nameProject.changeValue(newValue = it.name, isInit = true)
-            urlImgProject.changeValue(newValue = it.urlImg, isInit = true)
-            urlRepositoryProject.changeValue(newValue = it.urlRepo, isInit = true)
-            descriptionProject.changeValue(newValue = it.description, isInit = true)
+            nameProject.setDefaultValue(it.name)
+            urlImgProject.setDefaultValue(it.urlImg)
+            urlRepositoryProject.setDefaultValue(it.urlRepo)
+            descriptionProject.setDefaultValue(it.description)
         }
     }
 

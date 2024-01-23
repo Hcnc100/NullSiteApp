@@ -121,5 +121,6 @@
     <string name="biometric_no_avariable">fingerprint is not available</string>
     <string name="title_biometric">Fingerprint lock</string>
     <string name="description_enable_biometric">If you enable this option, unlocking by fingerprint will be required when entering the app</string>
+    <string name="title_crop_image">Crop Image</string>
 
 </resources>

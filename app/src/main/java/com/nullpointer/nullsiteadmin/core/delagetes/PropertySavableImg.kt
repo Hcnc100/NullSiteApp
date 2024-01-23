@@ -9,7 +9,7 @@ import androidx.lifecycle.SavedStateHandle
 class PropertySavableImg(
     tagSavable: String,
     state: SavedStateHandle,
-    private var defaultValue: Uri = Uri.EMPTY
+    private var defaultValue: Uri = Uri.EMPTY,
 ) {
 
     private val idSaved = "SAVED_PROPERTY_IMG_$tagSavable"
@@ -17,24 +17,37 @@ class PropertySavableImg(
     var value: Uri by SavableComposeState(state, "$idSaved-CURRENT-VALUE", Uri.EMPTY)
         private set
 
-    var isCompress by mutableStateOf(false)
+    var isLoading by mutableStateOf(false)
         private set
 
     val hasChanged get() = value != defaultValue
 
     val isNotEmpty get() = value != Uri.EMPTY
 
-    fun changeValue(newValue: Uri, isInit: Boolean = false) {
-        if (isInit) defaultValue = newValue
+    val isEmpty get() = value == Uri.EMPTY
+
+    fun getValueOnlyHasChanged(): Uri? {
+        return when {
+            hasChanged -> value
+            else -> null
+        }
+    }
+
+    fun setDefaultValue(newValue: Uri) {
+        defaultValue = newValue
         value = newValue
     }
 
-    fun changeImageCompress(isCompress: Boolean) {
-        this.isCompress = isCompress
+    fun changeValue(newValue: Uri) {
+        value = newValue
+    }
+
+    fun changeImageLoading(isLoading: Boolean) {
+        this.isLoading = isLoading
     }
 
     fun clearValue() {
-        isCompress = false
+        isLoading = false
         value = defaultValue
     }
 }

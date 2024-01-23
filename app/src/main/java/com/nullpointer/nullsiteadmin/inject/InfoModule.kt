@@ -7,7 +7,6 @@ import com.nullpointer.nullsiteadmin.data.services.ServicesManager
 import com.nullpointer.nullsiteadmin.data.user.local.UserDataStore
 import com.nullpointer.nullsiteadmin.data.user.remote.UserApiServices
 import com.nullpointer.nullsiteadmin.datasource.auth.local.AuthLocalDataSource
-import com.nullpointer.nullsiteadmin.datasource.image.local.ImageLocalDataSource
 import com.nullpointer.nullsiteadmin.datasource.image.remote.ImageRemoteDataSource
 import com.nullpointer.nullsiteadmin.datasource.user.local.InfoUserLocalDataSource
 import com.nullpointer.nullsiteadmin.datasource.user.local.InfoUserLocalDataSourceImpl
@@ -61,13 +60,11 @@ object InfoModule {
     @Singleton
     fun provideRemoteInfoRepo(
         authLocalDataSource: AuthLocalDataSource,
-        imageLocalDataSource: ImageLocalDataSource,
         imageRemoteDataSource: ImageRemoteDataSource,
         infoUserLocalDataSource: InfoUserLocalDataSource,
         infoUserRemoteDataSource: InfoUserRemoteDataSource,
     ): InfoUserRepository = InfoUserRepoImpl(
         authLocalDataSource = authLocalDataSource,
-        imageLocalDataSource = imageLocalDataSource,
         imageRemoteDataSource = imageRemoteDataSource,
         infoUserLocalDataSource = infoUserLocalDataSource,
         infoUserRemoteDataSource = infoUserRemoteDataSource

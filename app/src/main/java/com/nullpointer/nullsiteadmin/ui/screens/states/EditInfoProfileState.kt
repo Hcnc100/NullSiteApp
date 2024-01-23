@@ -5,7 +5,12 @@ import android.graphics.Bitmap
 import android.net.Uri
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.compose.material.*
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetState
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.ScaffoldState
+import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -15,8 +20,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
+import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
-import com.canhub.cropper.options
+import com.nullpointer.nullsiteadmin.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -45,17 +51,28 @@ class EditInfoProfileState(
     }
 
     fun launchCropImage(imgUri: Uri) {
-        launcherCropImage.launch(
-            options(uri = imgUri) {
-                setFixAspectRatio(true)
-                setGuidelines(CropImageView.Guidelines.ON)
-                setOutputCompressFormat(Bitmap.CompressFormat.PNG)
-                setBackgroundColor(Color.Black.value.toInt())
-                setActivityBackgroundColor(Color.Black.value.toInt())
-                setMinCropResultSize(200, 200)
-                setMaxCropResultSize(1500, 1500)
-            }
-        )
+        val cropImageContractOptions = CropImageContractOptions(
+            imgUri,
+            CropImageOptions(
+                allowRotation = true,
+                allowFlipping = false,
+                fixAspectRatio = true,
+                outputCompressQuality = 100,
+                minCropResultHeight = 500,
+                minCropResultWidth = 500,
+                maxCropResultHeight = 1500,
+                maxCropResultWidth = 1500,
+                imageSourceIncludeGallery = false,
+                imageSourceIncludeCamera = false,
+                guidelines = CropImageView.Guidelines.ON,
+                backgroundColor = Color.Black.value.toInt(),
+                activityMenuIconColor = Color.Black.value.toInt(),
+                activityBackgroundColor = Color.Black.value.toInt(),
+                outputCompressFormat = Bitmap.CompressFormat.JPEG,
+                activityTitle = context.getString(R.string.title_crop_image),
+            )
+        );
+        launcherCropImage.launch(cropImageContractOptions)
     }
 }
 

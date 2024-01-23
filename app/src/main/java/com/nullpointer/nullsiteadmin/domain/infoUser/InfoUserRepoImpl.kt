@@ -1,9 +1,8 @@
 package com.nullpointer.nullsiteadmin.domain.infoUser
 
-import com.nullpointer.nullsiteadmin.datasource.user.local.InfoUserLocalDataSource
 import com.nullpointer.nullsiteadmin.datasource.auth.local.AuthLocalDataSource
-import com.nullpointer.nullsiteadmin.datasource.image.local.ImageLocalDataSource
 import com.nullpointer.nullsiteadmin.datasource.image.remote.ImageRemoteDataSource
+import com.nullpointer.nullsiteadmin.datasource.user.local.InfoUserLocalDataSource
 import com.nullpointer.nullsiteadmin.datasource.user.remote.InfoUserRemoteDataSource
 import com.nullpointer.nullsiteadmin.models.personalInfo.data.PersonalInfoData
 import com.nullpointer.nullsiteadmin.models.personalInfo.dto.PersonalInfoDTO
@@ -14,7 +13,6 @@ import kotlinx.coroutines.flow.first
 class InfoUserRepoImpl(
     private val authLocalDataSource: AuthLocalDataSource,
     private val imageRemoteDataSource: ImageRemoteDataSource,
-    private val imageLocalDataSource: ImageLocalDataSource,
     private val infoUserLocalDataSource: InfoUserLocalDataSource,
     private val infoUserRemoteDataSource: InfoUserRemoteDataSource,
 ) : InfoUserRepository {
@@ -27,11 +25,8 @@ class InfoUserRepoImpl(
     ) {
         val idUser = authLocalDataSource.getAuthData().first()!!.id
 
-       val urlImg= updateInfoProfileWrapper.imageFile?.let { file->
-           val image=imageLocalDataSource.compressImage(file)
-
-              imageRemoteDataSource.uploadImageProfile(image,idUser)
-
+        val urlImg = updateInfoProfileWrapper.uriFileImgProfile?.let { file ->
+            imageRemoteDataSource.uploadImageProfile(file, idUser)
         }
 
         val personalInfoDTO = PersonalInfoDTO.fromPersonalInfoWrapper(
@@ -39,17 +34,17 @@ class InfoUserRepoImpl(
             infoProfileWrapper = updateInfoProfileWrapper
         )
 
-            infoUserRemoteDataSource.updatePersonalInfo(
-                idUser = idUser,
-                personalInfoDTO = personalInfoDTO
-            )
+        infoUserRemoteDataSource.updatePersonalInfo(
+            idUser = idUser,
+            personalInfoDTO = personalInfoDTO
+        )
 
 
         getPersonalInfo()
     }
 
     override suspend fun getPersonalInfo() {
-        val authData= authLocalDataSource.getAuthData().first()
+        val authData = authLocalDataSource.getAuthData().first()
         val newData = infoUserRemoteDataSource.getPersonalInfo(authData!!.id)
         infoUserLocalDataSource.updatePersonalInfo(newData!!)
     }

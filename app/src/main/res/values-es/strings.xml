@@ -151,5 +151,6 @@
     <string name="biometric_no_avariable">La huella no está disponible</string>
     <string name="title_biometric">Bloqueo por huella dactilar</string>
     <string name="description_enable_biometric">Si habilitas esta opción, al entrar a la app se requerirá el desbloqueo por huella dactilar</string>
+    <string name="title_crop_image">Cortar Imagen</string>
 
 </resources>

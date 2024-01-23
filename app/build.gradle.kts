@@ -161,7 +161,7 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
 
-    implementation("com.vanniktech:android-image-cropper:4.3.3")
+    implementation("com.vanniktech:android-image-cropper:4.5.0")
 
     // * Desugaring
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
