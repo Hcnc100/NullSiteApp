@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.ui.screens.infoProfile.componets.composables.infoUser
+package com.nullpointer.nullsiteadmin.ui.screens.profile.infoProfile.componets.composables.infoUser
 
 import android.content.Context
 import androidx.compose.foundation.layout.fillMaxSize

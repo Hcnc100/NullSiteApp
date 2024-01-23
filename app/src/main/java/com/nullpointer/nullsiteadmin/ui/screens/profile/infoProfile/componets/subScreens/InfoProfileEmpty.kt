@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.ui.screens.infoProfile.componets.subScreens
+package com.nullpointer.nullsiteadmin.ui.screens.profile.infoProfile.componets.subScreens
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

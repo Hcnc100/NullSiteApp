@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.ui.screens.editInfoProfile.viewModel
+package com.nullpointer.nullsiteadmin.ui.screens.profile.editInfoProfile.viewModel
 
 import android.net.Uri
 import androidx.compose.runtime.getValue
@@ -12,8 +12,8 @@ import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableImg
 import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
 import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
-import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepository
 import com.nullpointer.nullsiteadmin.domain.image.ImageRepository
+import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepository
 import com.nullpointer.nullsiteadmin.models.personalInfo.data.PersonalInfoData
 import com.nullpointer.nullsiteadmin.models.personalInfo.wrapper.UpdateInfoProfileWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
