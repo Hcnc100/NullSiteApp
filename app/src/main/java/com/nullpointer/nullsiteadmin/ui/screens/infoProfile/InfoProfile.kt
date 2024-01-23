@@ -16,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.models.personalInfo.data.PersonalInfoData
@@ -23,6 +24,7 @@ import com.nullpointer.nullsiteadmin.presentation.InfoUserViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.HomeNavGraph
 import com.nullpointer.nullsiteadmin.ui.preview.config.SimplePreview
+import com.nullpointer.nullsiteadmin.ui.preview.provider.InfoProfileStateProviderProvider
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EditInfoProfileDestination
 import com.nullpointer.nullsiteadmin.ui.screens.infoProfile.componets.buttonEditInfo.ButtonEditInfo
 import com.nullpointer.nullsiteadmin.ui.screens.infoProfile.componets.items.InfoUser
@@ -92,7 +94,10 @@ fun InfoProfile(
             modifier = Modifier
                 .padding(it)
                 .then(
-                    if (personalInfoData !is Resource.Failure) Modifier.pullRefresh(pullRefreshState) else Modifier
+                    when (personalInfoData) {
+                        is Resource.Loading -> Modifier
+                        else -> Modifier.pullRefresh(pullRefreshState)
+                    }
                 ),
             contentAlignment = Alignment.TopCenter
         ) {
@@ -108,7 +113,10 @@ fun InfoProfile(
                     }
                 }
             }
-            PullRefreshIndicator(refreshing = isRefreshing, state = pullRefreshState)
+            PullRefreshIndicator(
+                state = pullRefreshState,
+                refreshing = isRefreshing && personalInfoData !is Resource.Loading
+            )
         }
     }
 }
@@ -116,14 +124,33 @@ fun InfoProfile(
 @OptIn(ExperimentalMaterialApi::class)
 @SimplePreview
 @Composable
-private fun InfoProfilePreview() {
+private fun InfoProfileNotRefreshingPreview(
+    @PreviewParameter(InfoProfileStateProviderProvider::class)
+    personalInfoData: Resource<PersonalInfoData?>,
+) {
     InfoProfile(
         isRefreshing = false,
         actionEditInfo = {},
         scaffoldState = rememberScaffoldState(),
+        personalInfoData = personalInfoData,
         pullRefreshState = rememberPullRefreshState(refreshing = false, onRefresh = {}),
-        personalInfoData = Resource.Loading,
     )
 }
 
+
+@OptIn(ExperimentalMaterialApi::class)
+@SimplePreview
+@Composable
+private fun InfoProfileRefreshingPreview(
+    @PreviewParameter(InfoProfileStateProviderProvider::class)
+    personalInfoData: Resource<PersonalInfoData?>,
+) {
+    InfoProfile(
+        isRefreshing = true,
+        actionEditInfo = {},
+        scaffoldState = rememberScaffoldState(),
+        personalInfoData = personalInfoData,
+        pullRefreshState = rememberPullRefreshState(refreshing = true, onRefresh = {}),
+    )
+}
 
