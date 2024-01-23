@@ -13,8 +13,22 @@ class PropertySavableString(
     @StringRes private val emptyError: Int = UNDEFINE_RESOURCE,
     @StringRes private val lengthError: Int = UNDEFINE_RESOURCE,
 ) {
+
+
     companion object {
         private const val UNDEFINE_RESOURCE = -1
+
+
+        val example = PropertySavableString(
+            tagSavable = "EXAMPLE",
+            hint = UNDEFINE_RESOURCE,
+            label = UNDEFINE_RESOURCE,
+            maxLength = 50,
+            savedState = SavedStateHandle(),
+            defaultValue = "DEFAULT",
+            emptyError = UNDEFINE_RESOURCE,
+            lengthError = UNDEFINE_RESOURCE
+        )
     }
 
     private val idSaved = "SAVED_PROPERTY_$tagSavable"

@@ -41,11 +41,12 @@ class EditInfoProfileState(
     val isModalVisible
         get() = modalState.isVisible
 
-    fun hideModal() {
-        scope.launch { modalState.hide() }
+    fun hiddenBottomSheet() = scope.launch {
+        modalState.hide()
     }
 
-    fun showModal() {
+
+    fun showBottomSheet() {
         hiddenKeyBoard()
         scope.launch { modalState.show() }
     }

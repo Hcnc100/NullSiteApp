@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.nullpointer.nullsiteadmin.models.personalInfo.data.PersonalInfoData
 import com.nullpointer.nullsiteadmin.ui.preview.config.SimplePreview
+import com.nullpointer.nullsiteadmin.ui.screens.profile.infoProfile.componets.composables.PhotoProfile
 
 @Composable
 fun InfoUserPortrait(

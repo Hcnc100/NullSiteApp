@@ -24,7 +24,6 @@
             android:configChanges="orientation"
             android:exported="true"
             android:launchMode="singleInstance"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.MySplash"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>

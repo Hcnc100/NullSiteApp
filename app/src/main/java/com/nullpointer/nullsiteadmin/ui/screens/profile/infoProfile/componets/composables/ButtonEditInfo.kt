@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.ui.screens.profile.infoProfile.componets.composables.buttonEditInfo
+package com.nullpointer.nullsiteadmin.ui.screens.profile.infoProfile.componets.composables
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween

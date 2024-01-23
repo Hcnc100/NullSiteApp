@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.ui.screens.profile.infoProfile.componets.composables.infoUser
+package com.nullpointer.nullsiteadmin.ui.screens.profile.infoProfile.componets.composables
 
 import android.content.Context
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +15,7 @@ import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.ui.preview.config.SimplePreview
+import com.nullpointer.nullsiteadmin.ui.screens.profile.infoProfile.componets.composables.infoUser.LoadingIconImageProfile
 
 @Composable
 fun PhotoProfile(

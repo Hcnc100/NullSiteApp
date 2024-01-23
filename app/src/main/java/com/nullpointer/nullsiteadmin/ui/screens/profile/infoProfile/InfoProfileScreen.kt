@@ -25,7 +25,7 @@ import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.HomeNavGraph
 import com.nullpointer.nullsiteadmin.ui.preview.provider.InfoProfileStateProviderProvider
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EditInfoProfileDestination
-import com.nullpointer.nullsiteadmin.ui.screens.profile.infoProfile.componets.composables.buttonEditInfo.ButtonEditInfo
+import com.nullpointer.nullsiteadmin.ui.screens.profile.infoProfile.componets.composables.ButtonEditInfo
 import com.nullpointer.nullsiteadmin.ui.screens.profile.infoProfile.componets.composables.infoUser.InfoUser
 import com.nullpointer.nullsiteadmin.ui.screens.profile.infoProfile.componets.subScreens.InfoProfileEmpty
 import com.nullpointer.nullsiteadmin.ui.screens.profile.infoProfile.componets.subScreens.InfoProfileError
