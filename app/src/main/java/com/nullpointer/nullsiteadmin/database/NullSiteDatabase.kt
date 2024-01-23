@@ -11,7 +11,7 @@ import com.nullpointer.nullsiteadmin.models.project.entity.ProjectEntity
 
 @Database(
     entities = [EmailEntity::class, ProjectEntity::class],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

@@ -60,15 +60,16 @@ class ProjectApiServices {
         startWithId: String,
         numberResult: Long
     ): List<ProjectData> {
+        val lastProjectDoc = refProjects.document(startWithId).get().await()
         val result = refProjects.orderBy(Constants.CREATED_AT, Query.Direction.DESCENDING)
-            .startAfter(startWithId).limit(numberResult).get().await()
+            .startAfter(lastProjectDoc).limit(numberResult).get().await()
         return result.documents.mapNotNull(::fromDocument)
     }
 
     private fun fromDocument(document: DocumentSnapshot): ProjectData? {
         return try {
             document.toObject<ProjectData>()?.copy(
-                lastUpdate = document.getTimeEstimate(Constants.UPDATED_AT),
+                updatedAt = document.getTimeEstimate(Constants.UPDATED_AT),
                 createdAt = document.getTimeEstimate(Constants.CREATED_AT),
                 idProject = document.id
             )
