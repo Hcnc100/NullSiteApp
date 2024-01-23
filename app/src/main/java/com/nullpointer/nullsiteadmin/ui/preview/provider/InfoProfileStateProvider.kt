@@ -8,15 +8,7 @@ class InfoProfileStateProviderProvider : PreviewParameterProvider<Resource<Perso
     override val values = listOf(
         Resource.Loading,
         Resource.Failure,
-        Resource.Success(
-            PersonalInfoData(
-                name = "name",
-                urlImg = "urlImg",
-                updateAt = 0,
-                profession = "profession",
-                description = "description"
-            )
-        ),
-        Resource.Success(null)
+        Resource.Success(null),
+        Resource.Success(PersonalInfoData.example)
     ).asSequence()
 }

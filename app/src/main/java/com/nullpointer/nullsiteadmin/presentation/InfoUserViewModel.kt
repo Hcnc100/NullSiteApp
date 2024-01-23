@@ -1,10 +1,12 @@
 package com.nullpointer.nullsiteadmin.presentation
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nullpointer.nullsiteadmin.R
-import com.nullpointer.nullsiteadmin.core.delagetes.SavableComposeState
 import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
@@ -13,7 +15,12 @@ import com.nullpointer.nullsiteadmin.models.personalInfo.data.PersonalInfoData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -23,18 +30,10 @@ class InfoUserViewModel @Inject constructor(
     private val infoUserRepository: InfoUserRepository
 ) : ViewModel() {
 
-    companion object {
-        private const val KEY_IS_REQUEST_INFO_USER = "KEY_IS_REQUEST_INFO_USER"
-    }
-
     private val _messageError = Channel<Int>()
     val messageError = _messageError.receiveAsFlow()
 
-    var isRequestInfoUser by SavableComposeState(
-        defaultValue = false,
-        key = KEY_IS_REQUEST_INFO_USER,
-        savedStateHandle = savedStateHandle
-    )
+    var isRequestInfoUser by mutableStateOf(false)
         private set
 
 
@@ -52,10 +51,6 @@ class InfoUserViewModel @Inject constructor(
         Resource.Loading
     )
 
-
-    init {
-        requestLastInformation()
-    }
 
     fun requestLastInformation() = launchSafeIO(
         isEnabled = !isRequestInfoUser,

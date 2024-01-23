@@ -23,31 +23,28 @@ import com.nullpointer.nullsiteadmin.models.personalInfo.data.PersonalInfoData
 import com.nullpointer.nullsiteadmin.presentation.InfoUserViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.HomeNavGraph
-import com.nullpointer.nullsiteadmin.ui.preview.config.SimplePreview
 import com.nullpointer.nullsiteadmin.ui.preview.provider.InfoProfileStateProviderProvider
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EditInfoProfileDestination
-import com.nullpointer.nullsiteadmin.ui.screens.infoProfile.componets.buttonEditInfo.ButtonEditInfo
-import com.nullpointer.nullsiteadmin.ui.screens.infoProfile.componets.items.InfoUser
+import com.nullpointer.nullsiteadmin.ui.screens.infoProfile.componets.composables.buttonEditInfo.ButtonEditInfo
+import com.nullpointer.nullsiteadmin.ui.screens.infoProfile.componets.composables.infoUser.InfoUser
 import com.nullpointer.nullsiteadmin.ui.screens.infoProfile.componets.subScreens.InfoProfileEmpty
 import com.nullpointer.nullsiteadmin.ui.screens.infoProfile.componets.subScreens.InfoProfileError
 import com.nullpointer.nullsiteadmin.ui.screens.shared.BlockProgress
 import com.nullpointer.nullsiteadmin.ui.screens.states.SwipeScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberSwipeScreenState
+import com.nullpointer.runningcompose.ui.preview.config.OrientationPreviews
 import com.ramcosta.composedestinations.annotation.Destination
 
 @OptIn(ExperimentalMaterialApi::class)
 @HomeNavGraph(start = true)
 @Destination
 @Composable
-fun InfoProfile(
+fun InfoProfileScreen(
     actionRootDestinations: ActionRootDestinations,
     infoViewModel: InfoUserViewModel = hiltViewModel(),
     infoProfileState: SwipeScreenState = rememberSwipeScreenState(
-        isRefreshing = infoViewModel.isRequestInfoUser
-    ),
-    pullRefreshState: PullRefreshState = rememberPullRefreshState(
-        onRefresh = infoViewModel::requestLastInformation,
-        refreshing = infoViewModel.isRequestInfoUser
+        isRefreshing = infoViewModel.isRequestInfoUser,
+        onRefresh = infoViewModel::requestLastInformation
     )
 ) {
 
@@ -55,14 +52,18 @@ fun InfoProfile(
     val stateInfoProfile by infoViewModel.infoUser.collectAsState()
 
     LaunchedEffect(key1 = Unit) {
+        infoViewModel.requestLastInformation()
+    }
+
+    LaunchedEffect(key1 = Unit) {
         infoViewModel.messageError.collect(infoProfileState::showSnackMessage)
     }
 
-    InfoProfile(
+    InfoProfileScreen(
         personalInfoData = stateInfoProfile,
-        pullRefreshState = pullRefreshState,
-        scaffoldState = infoProfileState.scaffoldState,
         isRefreshing = infoViewModel.isRequestInfoUser,
+        scaffoldState = infoProfileState.scaffoldState,
+        pullRefreshState = infoProfileState.pullRefreshState,
         actionEditInfo = {
             (stateInfoProfile as? Resource.Success)?.let {
                 actionRootDestinations.changeRoot(EditInfoProfileDestination(it.data))
@@ -73,7 +74,7 @@ fun InfoProfile(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun InfoProfile(
+fun InfoProfileScreen(
     isRefreshing: Boolean,
     actionEditInfo: () -> Unit,
     scaffoldState: ScaffoldState,
@@ -122,13 +123,13 @@ fun InfoProfile(
 }
 
 @OptIn(ExperimentalMaterialApi::class)
-@SimplePreview
+@OrientationPreviews
 @Composable
 private fun InfoProfileNotRefreshingPreview(
     @PreviewParameter(InfoProfileStateProviderProvider::class)
     personalInfoData: Resource<PersonalInfoData?>,
 ) {
-    InfoProfile(
+    InfoProfileScreen(
         isRefreshing = false,
         actionEditInfo = {},
         scaffoldState = rememberScaffoldState(),
@@ -139,13 +140,13 @@ private fun InfoProfileNotRefreshingPreview(
 
 
 @OptIn(ExperimentalMaterialApi::class)
-@SimplePreview
+@OrientationPreviews
 @Composable
 private fun InfoProfileRefreshingPreview(
     @PreviewParameter(InfoProfileStateProviderProvider::class)
     personalInfoData: Resource<PersonalInfoData?>,
 ) {
-    InfoProfile(
+    InfoProfileScreen(
         isRefreshing = true,
         actionEditInfo = {},
         scaffoldState = rememberScaffoldState(),

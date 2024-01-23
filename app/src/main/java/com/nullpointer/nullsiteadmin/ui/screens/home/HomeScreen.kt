@@ -9,7 +9,7 @@ import com.nullpointer.nullsiteadmin.presentation.AuthViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
 import com.nullpointer.nullsiteadmin.ui.screens.NavGraphs
-import com.nullpointer.nullsiteadmin.ui.screens.destinations.InfoProfileDestination
+import com.nullpointer.nullsiteadmin.ui.screens.destinations.InfoProfileScreenDestination
 import com.nullpointer.nullsiteadmin.ui.screens.states.HomeScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberHomeScreenState
 import com.nullpointer.nullsiteadmin.ui.share.NavigatorDrawer
@@ -50,7 +50,7 @@ fun HomeScreen(
     ) { paddingValues ->
 
         DestinationsNavHost(
-            startRoute = InfoProfileDestination,
+            startRoute = InfoProfileScreenDestination,
             navGraph = NavGraphs.home,
             navController = mainScreenState.navController,
             engine = rememberNavHostEngine(),

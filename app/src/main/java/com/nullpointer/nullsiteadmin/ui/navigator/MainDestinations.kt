@@ -2,7 +2,12 @@ package com.nullpointer.nullsiteadmin.ui.navigator
 
 import androidx.annotation.DrawableRes
 import com.nullpointer.nullsiteadmin.R
-import com.nullpointer.nullsiteadmin.ui.screens.destinations.*
+import com.nullpointer.nullsiteadmin.ui.screens.destinations.DirectionDestination
+import com.nullpointer.nullsiteadmin.ui.screens.destinations.EmailScreenDestination
+import com.nullpointer.nullsiteadmin.ui.screens.destinations.InfoProfileScreenDestination
+import com.nullpointer.nullsiteadmin.ui.screens.destinations.PreviewScreenDestination
+import com.nullpointer.nullsiteadmin.ui.screens.destinations.ProjectScreenDestination
+import com.nullpointer.nullsiteadmin.ui.screens.destinations.SettingsScreenDestination
 
 enum class MainDestinations(
     val label: String,
@@ -13,7 +18,7 @@ enum class MainDestinations(
     PersonalInfoScreen(
         label = "InfoPersonal",
         icon = R.drawable.ic_home,
-        destinations = InfoProfileDestination
+        destinations = InfoProfileScreenDestination
     ),
 
     ProjectsScreen(

@@ -1,5 +1,6 @@
 package com.nullpointer.nullsiteadmin.ui.screens.project
 
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,6 +23,7 @@ import com.nullpointer.nullsiteadmin.ui.screens.states.rememberLazySwipeScreenSt
 import com.nullpointer.nullsiteadmin.ui.share.ScaffoldSwipeRefresh
 import com.ramcosta.composedestinations.annotation.Destination
 
+@OptIn(ExperimentalMaterialApi::class)
 @HomeNavGraph
 @Destination
 @Composable

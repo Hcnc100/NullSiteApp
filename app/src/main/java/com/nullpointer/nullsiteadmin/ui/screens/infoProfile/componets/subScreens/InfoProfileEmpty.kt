@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.ui.screens.animation.AnimationScreen
+import com.nullpointer.runningcompose.ui.preview.config.OrientationPreviews
 import com.nullpointer.runningcompose.ui.preview.config.ThemePreviews
 
 @Composable
@@ -19,6 +20,7 @@ fun InfoProfileEmpty(
 }
 
 
+@OrientationPreviews
 @ThemePreviews
 @Composable
 private fun InfoProfileEmptyPreview() {
