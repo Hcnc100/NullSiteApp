@@ -44,10 +44,9 @@ class ProjectViewModel @Inject constructor(
     )
         private set
 
-    var isEnabledConcatenateProjects by SavableComposeState(
+    private var isEnabledConcatenateProjects by SavableComposeState(
         defaultValue = true, key = KEY_CONCATENATE_ENABLE, savedStateHandle = savedStateHandle
     )
-        private set
 
     var isRequestProject by SavableComposeState(
         defaultValue = false,
@@ -56,9 +55,6 @@ class ProjectViewModel @Inject constructor(
     )
         private set
 
-    init {
-        requestNewProjects()
-    }
 
     val listProjectData =
         projectRepository.listProjects.transform<List<ProjectData>, Resource<List<ProjectData>>> {

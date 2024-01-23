@@ -22,7 +22,7 @@ import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.models.personalInfo.data.PersonalInfoData
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.HomeNavGraph
-import com.nullpointer.nullsiteadmin.ui.preview.provider.InfoProfileStateProviderProvider
+import com.nullpointer.nullsiteadmin.ui.preview.provider.InfoProfileStateProvider
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EditInfoProfileScreenDestination
 import com.nullpointer.nullsiteadmin.ui.screens.profileScreen.infoProfile.componets.composables.ButtonEditInfo
 import com.nullpointer.nullsiteadmin.ui.screens.profileScreen.infoProfile.componets.composables.infoUser.InfoUser
@@ -126,7 +126,7 @@ fun InfoProfileScreen(
 @OrientationPreviews
 @Composable
 private fun InfoProfileNotRefreshingPreview(
-    @PreviewParameter(InfoProfileStateProviderProvider::class)
+    @PreviewParameter(InfoProfileStateProvider::class)
     personalInfoData: Resource<PersonalInfoData?>,
 ) {
     InfoProfileScreen(
@@ -143,7 +143,7 @@ private fun InfoProfileNotRefreshingPreview(
 @OrientationPreviews
 @Composable
 private fun InfoProfileRefreshingPreview(
-    @PreviewParameter(InfoProfileStateProviderProvider::class)
+    @PreviewParameter(InfoProfileStateProvider::class)
     personalInfoData: Resource<PersonalInfoData?>,
 ) {
     InfoProfileScreen(
