@@ -12,6 +12,13 @@ class PropertySavableImg(
     private var defaultValue: Uri = Uri.EMPTY,
 ) {
 
+    companion object {
+        val example = PropertySavableImg(
+            tagSavable = "example",
+            state = SavedStateHandle()
+        )
+    }
+
     private val idSaved = "SAVED_PROPERTY_IMG_$tagSavable"
 
     var value: Uri by SavableComposeState(state, "$idSaved-CURRENT-VALUE", Uri.EMPTY)

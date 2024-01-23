@@ -11,8 +11,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetState
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
+import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -28,6 +31,7 @@ import com.nullpointer.nullsiteadmin.models.personalInfo.data.PersonalInfoData
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
 import com.nullpointer.nullsiteadmin.ui.screens.profile.editInfoProfile.actions.EditInfoProfileActions
+import com.nullpointer.nullsiteadmin.ui.screens.profile.editInfoProfile.actions.EditInfoProfileActions.BACK_SCREEN
 import com.nullpointer.nullsiteadmin.ui.screens.profile.editInfoProfile.actions.EditInfoProfileActions.HIDDEN_BOTTOM_SHEET
 import com.nullpointer.nullsiteadmin.ui.screens.profile.editInfoProfile.actions.EditInfoProfileActions.HIDDEN_KEYBOARD
 import com.nullpointer.nullsiteadmin.ui.screens.profile.editInfoProfile.actions.EditInfoProfileActions.SAVE_INFO_PROFILE
@@ -40,6 +44,7 @@ import com.nullpointer.nullsiteadmin.ui.screens.states.rememberEditInfoProfileSt
 import com.nullpointer.nullsiteadmin.ui.share.BlockProcessing
 import com.nullpointer.nullsiteadmin.ui.share.ToolbarBack
 import com.nullpointer.nullsiteadmin.ui.share.bottomSheetSelectImage.BottomSheetSelectImage
+import com.nullpointer.runningcompose.ui.preview.config.OrientationPreviews
 import com.ramcosta.composedestinations.annotation.Destination
 import timber.log.Timber
 
@@ -48,7 +53,7 @@ import timber.log.Timber
 @RootNavGraph
 @Destination
 @Composable
-fun EditInfoProfile(
+fun EditInfoProfileScreen(
     personalInfoData: PersonalInfoData?,
     actionRootDestinations: ActionRootDestinations,
     editInfoVM: EditInfoViewModel = hiltViewModel(),
@@ -68,7 +73,7 @@ fun EditInfoProfile(
 
 
 
-    EditInfoProfile(
+    EditInfoProfileScreen(
         nameAdmin = editInfoVM.name,
         isDataValid = editInfoVM.isDataValid,
         sheetState = stateEditInfo.modalState,
@@ -76,7 +81,6 @@ fun EditInfoProfile(
         professionAdmin = editInfoVM.profession,
         scaffoldState = stateEditInfo.scaffoldState,
         descriptionAdmin = editInfoVM.description,
-        actionRootDestinations = actionRootDestinations,
         isLoading = editInfoVM.isUpdatedData || editInfoVM.imageProfile.isLoading,
         actionBeforeSelect = { imageSelect ->
             // * if get image or not, so hidden bottom sheet
@@ -92,6 +96,7 @@ fun EditInfoProfile(
         },
         onEditInfoProfileActions = { action ->
             when (action) {
+                BACK_SCREEN -> actionRootDestinations.backDestination()
                 SHOW_BOTTOM_SHEET -> stateEditInfo.showBottomSheet()
                 HIDDEN_BOTTOM_SHEET -> stateEditInfo.hiddenBottomSheet()
                 HIDDEN_KEYBOARD -> stateEditInfo.hiddenKeyBoard()
@@ -112,7 +117,7 @@ fun EditInfoProfile(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun EditInfoProfile(
+fun EditInfoProfileScreen(
     isLoading: Boolean,
     isDataValid: Boolean,
     scaffoldState: ScaffoldState,
@@ -122,7 +127,6 @@ fun EditInfoProfile(
     actionBeforeSelect: (Uri?) -> Unit,
     professionAdmin: PropertySavableString,
     descriptionAdmin: PropertySavableString,
-    actionRootDestinations: ActionRootDestinations,
     onEditInfoProfileActions: (EditInfoProfileActions) -> Unit,
     orientation: Int = LocalConfiguration.current.orientation
 ) {
@@ -140,7 +144,7 @@ fun EditInfoProfile(
             topBar = {
                 ToolbarBack(
                     title = stringResource(R.string.title_edit_info_personal),
-                    actionBack = actionRootDestinations::backDestination
+                    actionBack = { onEditInfoProfileActions(EditInfoProfileActions.BACK_SCREEN) }
                 )
             }) { padding ->
 
@@ -210,5 +214,22 @@ fun EditInfoProfile(
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
+@OrientationPreviews
+@Composable
+private fun EditInfoProfileScreenPreview() {
+    EditInfoProfileScreen(
+        isLoading = false,
+        isDataValid = true,
+        scaffoldState = rememberScaffoldState(),
+        imageProfile = PropertySavableImg.example,
+        sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden),
+        nameAdmin = PropertySavableString.example,
+        actionBeforeSelect = {},
+        professionAdmin = PropertySavableString.example,
+        descriptionAdmin = PropertySavableString.example,
+        onEditInfoProfileActions = {}
 
+    )
+}
 
