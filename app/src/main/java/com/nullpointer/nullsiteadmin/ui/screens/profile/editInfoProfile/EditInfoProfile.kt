@@ -79,9 +79,15 @@ fun EditInfoProfile(
         actionRootDestinations = actionRootDestinations,
         isLoading = editInfoVM.isUpdatedData || editInfoVM.imageProfile.isLoading,
         actionBeforeSelect = { imageSelect ->
+            // * if get image or not, so hidden bottom sheet
             stateEditInfo.hiddenBottomSheet()
+            // * only if get image so compress
+            // * after compress, launch crop image for a square image
             imageSelect?.let {
-                stateEditInfo.launchCropImage(it)
+                editInfoVM.changeImageSelected(
+                    currentImage = it,
+                    actionSuccessCompress = stateEditInfo::launchCropImage
+                )
             }
         },
         onEditInfoProfileActions = { action ->
