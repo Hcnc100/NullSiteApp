@@ -1,49 +1,39 @@
 package com.nullpointer.nullsiteadmin.ui.screens.profile.editInfoProfile
 
-import android.net.Uri
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.AsyncImage
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
 import com.nullpointer.nullsiteadmin.models.personalInfo.data.PersonalInfoData
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
+import com.nullpointer.nullsiteadmin.ui.screens.profile.editInfoProfile.components.ButtonUpdateInfoProfile
+import com.nullpointer.nullsiteadmin.ui.screens.profile.editInfoProfile.components.EditPhotoProfile
 import com.nullpointer.nullsiteadmin.ui.screens.profile.editInfoProfile.viewModel.EditInfoViewModel
 import com.nullpointer.nullsiteadmin.ui.screens.states.EditInfoProfileState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberEditInfoProfileState
 import com.nullpointer.nullsiteadmin.ui.share.BlockProcessing
 import com.nullpointer.nullsiteadmin.ui.share.EditableTextSavable
-import com.nullpointer.nullsiteadmin.ui.share.SelectImgButtonSheet
 import com.nullpointer.nullsiteadmin.ui.share.ToolbarBack
+import com.nullpointer.nullsiteadmin.ui.share.bottomSheetSelectImage.BottomSheetSelectImage
 import com.ramcosta.composedestinations.annotation.Destination
 import timber.log.Timber
 
@@ -71,12 +61,12 @@ fun EditInfoProfile(
     }
 
 
-    val isUpdatedData = editInfoVM.isUpdatedData
+    val enableFields = !editInfoVM.isUpdatedData && !editInfoVM.imageProfile.isLoading
 
     ModalBottomSheetLayout(
         sheetState = stateEditInfo.modalState,
         sheetContent = {
-            SelectImgButtonSheet(
+            BottomSheetSelectImage(
                 isVisible = stateEditInfo.isModalVisible,
                 actionHidden = stateEditInfo::hideModal,
                 actionBeforeSelect = { uri ->
@@ -99,24 +89,23 @@ fun EditInfoProfile(
                 modifier = Modifier
                     .padding(padding)
                     .verticalScroll(rememberScrollState()),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 EditPhotoProfile(
                     urlImg = editInfoVM.imageProfile.value,
-                    modifier = Modifier.padding(10.dp),
-                    actionClick = stateEditInfo::showModal
+                    actionClick = stateEditInfo::showModal,
+                    editEnabled = enableFields
                 )
                 EditableInformation(
                     nameAdmin = editInfoVM.name,
                     professionAdmin = editInfoVM.profession,
                     descriptionAdmin = editInfoVM.description,
-                    modifier = Modifier.padding(10.dp),
                     hiddenKeyBoard = stateEditInfo::hiddenKeyBoard,
-                    isEnable = !isUpdatedData
+                    isEnable = enableFields
                 )
                 ButtonUpdateInfoProfile(
                     isEnable = editInfoVM.isDataValid,
-                    modifier = Modifier.padding(10.dp)
                 ) {
                     stateEditInfo.hiddenKeyBoard()
                     editInfoVM.validateInfoProfile()?.let {
@@ -129,25 +118,11 @@ fun EditInfoProfile(
                 }
             }
 
-            if (isUpdatedData) BlockProcessing()
+            if (!enableFields) BlockProcessing()
         }
     }
 }
 
-@Composable
-private fun ButtonUpdateInfoProfile(
-    modifier: Modifier = Modifier,
-    isEnable: Boolean,
-    actionClick: () -> Unit
-) {
-    Button(
-        modifier = modifier,
-        onClick = actionClick,
-        enabled = isEnable
-    ) {
-        Text(text = stringResource(R.string.text_save_personal_info))
-    }
-}
 
 @Composable
 private fun EditableInformation(
@@ -183,38 +158,4 @@ private fun EditableInformation(
     }
 }
 
-@Composable
-private fun EditPhotoProfile(
-    urlImg: Uri,
-    modifier: Modifier = Modifier,
-    actionClick: () -> Unit
-) {
-    Box(
-        modifier = modifier.fillMaxWidth(),
-        contentAlignment = Alignment.Center
-    ) {
-        Box {
-            AsyncImage(
-                model = urlImg,
-                contentDescription = stringResource(R.string.description_current_img_profile),
-                modifier = Modifier
-                    .size(200.dp)
-                    .clip(CircleShape),
-                contentScale = ContentScale.Crop,
-            )
-            FloatingActionButton(
-                onClick = actionClick,
-                modifier = Modifier
-                    .padding(15.dp)
-                    .size(40.dp)
-                    .align(Alignment.BottomEnd)
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_edit),
-                    contentDescription = stringResource(R.string.description_edit_img_profile)
-                )
-            }
-        }
-    }
-}
 
