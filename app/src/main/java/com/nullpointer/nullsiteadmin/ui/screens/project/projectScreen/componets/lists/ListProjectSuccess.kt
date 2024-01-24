@@ -29,10 +29,9 @@ fun ListProjectSuccess(
     actionEditProject: (ProjectData) -> Unit,
 ) {
 
-    Box(
-        modifier = modifier.fillMaxSize()
-    ) {
+    Box {
         LazyVerticalGrid(
+            modifier = modifier.fillMaxSize(),
             state = lazyGridState,
             contentPadding = PaddingValues(10.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp),

@@ -28,11 +28,12 @@ fun ListSuccessEmails(
     lazyListState: LazyListState,
 ) {
 
-    Box(modifier = modifier.fillMaxSize()) {
+    Box {
         LazyColumn(
             state = lazyListState,
             contentPadding = PaddingValues(10.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier.fillMaxSize()
         ) {
             items(
                 items = listEmails,

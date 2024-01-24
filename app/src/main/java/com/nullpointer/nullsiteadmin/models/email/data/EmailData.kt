@@ -36,6 +36,28 @@ data class EmailData(
             idEmail = "2"
         )
 
+        val exampleLong = exampleClose.copy(
+            isOpen = true,
+            idEmail = "2",
+            message = "lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
+                    "Donec euismod, nisl eget aliquam ultricies, " +
+                    "nunc nisl aliquet nunc, quis aliquam nisl nisl nec nisl. " +
+                    "Sed euismod, nisl eget aliquam ultricies, " +
+                    "nunc nisl aliquet nunc, quis aliquam nisl nisl nec nisl. " +
+                    "Sed euismod, nisl eget aliquam ultricies, " +
+                    "nunc nisl aliquet nunc, quis aliquam nisl nisl nec nisl. " +
+                    "Sed euismod, nisl eget aliquam ultricies, " +
+                    "nunc nisl aliquet nunc, quis aliquam nisl nisl nec nisl. " +
+                    "Sed euismod, nisl eget aliquam ultricies, " +
+                    "nunc nisl aliquet nunc, quis aliquam nisl nisl nec nisl. " +
+                    "Sed euismod, nisl eget aliquam ultricies, " +
+                    "nunc nisl aliquet nunc, quis aliquam nisl nisl nec nisl. " +
+                    "Sed euismod, nisl eget aliquam ultricies, " +
+                    "nunc nisl aliquet nunc, quis aliquam nisl nisl nec nisl. " +
+                    "Sed euismod, nisl eget aliquam ultricies, " +
+                    "nunc nisl aliquet nunc, quis aliquam nisl nisl nec nisl."
+        )
+
         val exampleList = listOf(
             exampleClose,
             exampleOpen,
