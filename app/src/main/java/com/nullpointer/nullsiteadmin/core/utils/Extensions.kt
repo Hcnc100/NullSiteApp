@@ -22,18 +22,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.compose.AsyncImagePainter
 import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.Query
 import com.nullpointer.nullsiteadmin.BuildConfig
 import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager.NO_INTERNET_CONNECTION
 import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager.SERVER_TIME_OUT
 import com.valentinilk.shimmer.Shimmer
 import com.valentinilk.shimmer.shimmer
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 val Context.correctFlag: Int
     get() {
@@ -44,7 +50,14 @@ val Context.correctFlag: Int
         }
     }
 
-fun Date?.toFormat(context: Context): String {
+fun Date?.toDate(context: Context): String {
+    val pattern = "EEEE dd/MM/yyyy"
+    val format = SimpleDateFormat(pattern, Locale.getDefault())
+    val dateTimeNow = this ?: Date()
+    return format.format(dateTimeNow)
+}
+
+fun Date?.toFullDate(context: Context): String {
     val pattern = "EEEE dd/MM/yyyy HH:mm:ss".let {
         if (is24HourFormat(context)) it else it.plus(" aa")
     }
@@ -53,7 +66,7 @@ fun Date?.toFormat(context: Context): String {
     return format.format(dateTimeNow)
 }
 
-fun Long?.toFormat(context: Context): String {
+fun Long?.toFullDate(context: Context): String {
     val pattern = if (is24HourFormat(context)) {
         "EEEE dd/MM/yyyy HH:mm:ss"
     } else {
@@ -153,84 +166,6 @@ fun CoroutineScope.launchSafeIO(
         }
     } else {
         null
-    }
-}
-
-suspend fun <T> CollectionReference.getConcatenateObjects(
-    includeStart: Boolean,
-    fieldTimestamp: String,
-    startWithId: String? = null,
-    nResults: Long = Long.MAX_VALUE,
-    transform: (document: DocumentSnapshot) -> T?,
-): List<T> {
-    // * base query
-    var query = orderBy(fieldTimestamp, Query.Direction.DESCENDING)
-    if (startWithId != null) {
-        val refDocument = document(startWithId).get().await()
-        if (refDocument.exists()) {
-            query = if (includeStart)
-                query.startAt(refDocument) else query.startAfter(refDocument)
-        }
-    }
-    // * limit result or for default all
-    if (nResults != Long.MAX_VALUE) query = query.limit(nResults)
-    return query.get().await().documents.mapNotNull { transform(it) }
-}
-
-suspend fun <T> CollectionReference.getNewObject(
-    timestamp: Date?,
-    fieldTimestamp: String,
-    transform: (document: DocumentSnapshot) -> T?
-): T? {
-    val baseRequest = orderBy(fieldTimestamp, Query.Direction.DESCENDING)
-    var query = baseRequest
-    if (timestamp != null) {
-        query = baseRequest.whereGreaterThan(fieldTimestamp, timestamp)
-    }
-    val response = query.limit(1).get().await().documents
-    return if (response.isEmpty()) {
-        null
-    } else {
-        transform(response.first())
-    }
-}
-
-suspend fun <T> CollectionReference.getNewObjects(
-    includeEnd: Boolean,
-    fieldTimestamp: String,
-    endWithId: String? = null,
-    fieldQuery: Boolean = true,
-    nResults: Long = Long.MAX_VALUE,
-    transform: (document: DocumentSnapshot) -> T?
-): List<T> {
-    // * base query
-    val baseRequest = orderBy(fieldTimestamp, Query.Direction.DESCENDING)
-    var query = baseRequest
-    if (endWithId != null) {
-        val refDocument = document(endWithId).get().await()
-        if (refDocument.exists()) {
-            query = if (includeEnd)
-                query.endAt(refDocument) else query.endBefore(refDocument)
-        }
-    }
-    // * limit result or for default all
-    if (nResults != Long.MAX_VALUE) query = query.limit(nResults)
-
-    val previewDocuments = query.get().await().documents
-
-    return if (fieldQuery && previewDocuments.isNotEmpty() && previewDocuments.size < nResults) {
-        val newQuery = getConcatenateObjects(
-            includeStart = false,
-            fieldTimestamp = fieldTimestamp,
-            startWithId = previewDocuments.last().id,
-            nResults = nResults - previewDocuments.size,
-            transform = transform
-        )
-
-        previewDocuments.mapNotNull { transform(it) } + newQuery
-
-    } else {
-        previewDocuments.mapNotNull { transform(it) }
     }
 }
 

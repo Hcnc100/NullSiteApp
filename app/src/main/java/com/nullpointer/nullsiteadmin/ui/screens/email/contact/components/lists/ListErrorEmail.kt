@@ -21,6 +21,6 @@ fun ListErrorEmail(
 
 @SimplePreview
 @Composable
-fun ListErrorEmailPreview() {
+private fun ListErrorEmailPreview() {
     ListErrorEmail()
 }

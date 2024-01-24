@@ -4,12 +4,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -18,12 +21,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.core.utils.shareViewModel
 import com.nullpointer.nullsiteadmin.models.email.data.EmailData
 import com.nullpointer.nullsiteadmin.presentation.EmailsViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.HomeNavGraph
+import com.nullpointer.nullsiteadmin.ui.preview.provider.email.EmailListStateProvider
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EmailDetailsScreenDestination
 import com.nullpointer.nullsiteadmin.ui.screens.email.contact.components.lists.ListEmptyEmail
 import com.nullpointer.nullsiteadmin.ui.screens.email.contact.components.lists.ListErrorEmail
@@ -31,6 +36,7 @@ import com.nullpointer.nullsiteadmin.ui.screens.email.contact.components.lists.L
 import com.nullpointer.nullsiteadmin.ui.screens.states.LazySwipeScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberLazySwipeScreenState
 import com.nullpointer.nullsiteadmin.ui.share.BlockProcessing
+import com.nullpointer.runningcompose.ui.preview.config.OrientationPreviews
 import com.ramcosta.composedestinations.annotation.Destination
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -131,4 +137,26 @@ private fun EmailScreen(
             )
         }
     }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@OrientationPreviews
+@Composable
+private fun EmailScreenPreview(
+    @PreviewParameter(EmailListStateProvider::class)
+    emailsListState: Resource<List<EmailData>>
+) {
+    EmailScreen(
+        isRefreshing = true,
+        isConcatenate = true,
+        lazyListState = rememberLazyListState(),
+        scaffoldState = rememberScaffoldState(),
+        pullRefreshState = rememberPullRefreshState(
+            onRefresh = {},
+            refreshing = true
+        ),
+        actionDetails = {},
+        listEmails = emailsListState
+    )
+
 }

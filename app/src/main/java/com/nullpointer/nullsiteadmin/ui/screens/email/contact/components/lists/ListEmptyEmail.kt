@@ -20,6 +20,6 @@ fun ListEmptyEmail(
 
 @SimplePreview
 @Composable
-fun ListEmptyEmailPreview() {
+private fun ListEmptyEmailPreview() {
     ListEmptyEmail()
 }
