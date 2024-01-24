@@ -20,12 +20,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.ui.navigator.HomeNavGraph
+import com.nullpointer.nullsiteadmin.ui.preview.config.OrientationPreviews
 import com.nullpointer.nullsiteadmin.ui.preview.provider.BooleanProvider
 import com.nullpointer.nullsiteadmin.ui.screens.settings.viewModel.SettingsViewModel
 import com.nullpointer.nullsiteadmin.ui.screens.settings.viewModel.componets.EnableBiometricSwitchTitle
 import com.nullpointer.nullsiteadmin.ui.screens.states.SimpleScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberSimpleScreenState
-import com.nullpointer.runningcompose.ui.preview.config.OrientationPreviews
 import com.ramcosta.composedestinations.annotation.Destination
 
 @HomeNavGraph

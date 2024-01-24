@@ -30,6 +30,7 @@ import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
 import com.nullpointer.nullsiteadmin.models.personalInfo.data.PersonalInfoData
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
+import com.nullpointer.nullsiteadmin.ui.preview.config.OrientationPreviews
 import com.nullpointer.nullsiteadmin.ui.screens.profile.editInfoProfile.actions.EditInfoProfileActions
 import com.nullpointer.nullsiteadmin.ui.screens.profile.editInfoProfile.actions.EditInfoProfileActions.BACK_SCREEN
 import com.nullpointer.nullsiteadmin.ui.screens.profile.editInfoProfile.actions.EditInfoProfileActions.HIDDEN_BOTTOM_SHEET
@@ -44,7 +45,6 @@ import com.nullpointer.nullsiteadmin.ui.screens.states.rememberEditInfoProfileSt
 import com.nullpointer.nullsiteadmin.ui.share.BlockProcessing
 import com.nullpointer.nullsiteadmin.ui.share.ToolbarBack
 import com.nullpointer.nullsiteadmin.ui.share.bottomSheetSelectImage.BottomSheetSelectImage
-import com.nullpointer.runningcompose.ui.preview.config.OrientationPreviews
 import com.ramcosta.composedestinations.annotation.Destination
 import timber.log.Timber
 

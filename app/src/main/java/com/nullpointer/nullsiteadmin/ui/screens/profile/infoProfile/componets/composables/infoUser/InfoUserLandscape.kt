@@ -10,8 +10,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.nullpointer.nullsiteadmin.models.personalInfo.data.PersonalInfoData
+import com.nullpointer.nullsiteadmin.ui.preview.config.LandscapePreview
 import com.nullpointer.nullsiteadmin.ui.screens.profile.infoProfile.componets.composables.PhotoProfile
-import com.nullpointer.runningcompose.ui.preview.config.LandscapePreview
 
 @Composable
 fun InfoUserLandscape(

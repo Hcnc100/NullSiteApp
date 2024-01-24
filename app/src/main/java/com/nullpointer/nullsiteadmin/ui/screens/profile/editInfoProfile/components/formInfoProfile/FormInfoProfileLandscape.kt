@@ -11,9 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
+import com.nullpointer.nullsiteadmin.ui.preview.config.LandscapePreview
 import com.nullpointer.nullsiteadmin.ui.screens.profile.editInfoProfile.components.ButtonUpdateInfoProfile
 import com.nullpointer.nullsiteadmin.ui.share.EditableTextSavable
-import com.nullpointer.runningcompose.ui.preview.config.LandscapePreview
 
 
 @Composable

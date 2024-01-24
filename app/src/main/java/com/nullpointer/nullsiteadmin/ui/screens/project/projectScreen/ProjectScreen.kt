@@ -27,6 +27,7 @@ import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.models.project.data.ProjectData
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.HomeNavGraph
+import com.nullpointer.nullsiteadmin.ui.preview.config.OrientationPreviews
 import com.nullpointer.nullsiteadmin.ui.preview.provider.ListProjectProvider
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EditProjectScreenDestination
 import com.nullpointer.nullsiteadmin.ui.screens.project.projectScreen.componets.lists.ListEmptyProject
@@ -36,7 +37,6 @@ import com.nullpointer.nullsiteadmin.ui.screens.project.projectScreen.viewModel.
 import com.nullpointer.nullsiteadmin.ui.screens.shared.BlockProgress
 import com.nullpointer.nullsiteadmin.ui.screens.states.LazyGridSwipeScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberLazyGridSwipeScreenState
-import com.nullpointer.runningcompose.ui.preview.config.OrientationPreviews
 import com.ramcosta.composedestinations.annotation.Destination
 
 @OptIn(ExperimentalMaterialApi::class)

@@ -1,9 +1,10 @@
 package com.nullpointer.nullsiteadmin.ui.screens.login
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
@@ -22,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
 import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
+import com.nullpointer.nullsiteadmin.ui.preview.config.OrientationPreviews
+import com.nullpointer.nullsiteadmin.ui.screens.login.componets.ButtonLogin
 import com.nullpointer.nullsiteadmin.ui.screens.login.componets.FormLogin
 import com.nullpointer.nullsiteadmin.ui.screens.login.componets.LogoApp
 import com.nullpointer.nullsiteadmin.ui.screens.login.states.AuthAction
@@ -30,7 +33,6 @@ import com.nullpointer.nullsiteadmin.ui.screens.login.states.AuthAction.MOVE_NEX
 import com.nullpointer.nullsiteadmin.ui.screens.login.viewModel.LoginScreenViewModel
 import com.nullpointer.nullsiteadmin.ui.screens.states.FocusScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberFocusScreenState
-import com.nullpointer.runningcompose.ui.preview.config.OrientationPreviews
 import com.ramcosta.composedestinations.annotation.Destination
 
 @RootNavGraph(start = true)
@@ -70,85 +72,92 @@ fun LoginScreen(
     email: PropertySavableString,
     password: PropertySavableString,
     onAuthAction: (AuthAction) -> Unit,
-    orientation: Int = LocalConfiguration.current.orientation
+    orientation: Int = LocalConfiguration.current.orientation,
+    configuration: android.content.res.Configuration = LocalConfiguration.current
 ) {
+
+
     Scaffold(
         scaffoldState = scaffoldState,
         backgroundColor = MaterialTheme.colors.primary,
-    ) {
-        Column(
+    ) { paddingValues ->
+
+
+        Box(
             modifier = Modifier
-                .padding(it)
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(paddingValues)
+                .verticalScroll(rememberScrollState())
         ) {
-            Spacer(modifier = Modifier.height(50.dp))
-            LogoApp()
-            Spacer(modifier = Modifier.height(150.dp))
-            Column(
-                verticalArrangement = Arrangement.spacedBy(20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .widthIn(min = 200.dp, max = 300.dp)
-            ) {
-                FormLogin(
-                    email = email,
-                    password = password,
-                    isAuthenticating = isAuthenticating,
-                    onAuthAction = onAuthAction
-                )
+            when (orientation) {
+                android.content.res.Configuration.ORIENTATION_PORTRAIT -> {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(configuration.screenHeightDp.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.SpaceAround
+                    ) {
+                        LogoApp()
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(50.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            FormLogin(
+                                modifier = Modifier.widthIn(min = 200.dp, max = 300.dp),
+                                email = email,
+                                password = password,
+                                isAuthenticating = isAuthenticating,
+                                onAuthAction = onAuthAction
+                            )
+                            ButtonLogin(
+                                isLoading = isAuthenticating,
+                                actionClick = { onAuthAction(LOGIN) }
+                            )
+                        }
+
+                    }
+                }
+
+                else -> {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(configuration.screenHeightDp.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Column(
+                            modifier = Modifier.weight(0.4f),
+                            verticalArrangement = Arrangement.spacedBy(50.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            LogoApp()
+                            ButtonLogin(
+                                isLoading = isAuthenticating,
+                                actionClick = { onAuthAction(LOGIN) }
+                            )
+                        }
+                        Box(
+                            Modifier.weight(0.6f),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            FormLogin(
+                                modifier = Modifier.widthIn(min = 200.dp, max = 300.dp),
+                                email = email,
+                                password = password,
+                                isAuthenticating = isAuthenticating,
+                                onAuthAction = onAuthAction
+                            )
+                        }
+                    }
+                }
             }
-            Spacer(modifier = Modifier.height(10.dp))
         }
     }
-
-//        BoxWithConstraints(
-//            modifier = Modifier.padding(it)
-//        ) {
-//            val height = maxHeight
-//            when (orientation) {
-//                ORIENTATION_PORTRAIT -> {
-//
-//                }
-//
-//                else -> {
-//                    Row(
-//                        modifier = Modifier
-//                            .verticalScroll(rememberScrollState())
-//                            .height(height),
-//                        verticalAlignment = Alignment.CenterVertically,
-//                    ) {
-//                        LogoApp()
-//                        Column {
-//                            Column(
-//                                modifier = Modifier
-//                                    .padding(horizontal = 20.dp)
-//                                    .requiredWidthIn(
-//                                        min = 200.dp,
-//                                        max = 300.dp
-//                                    ),
-//                                verticalArrangement = Arrangement.spacedBy(20.dp),
-//                                horizontalAlignment = Alignment.CenterHorizontally
-//                            ) {
-//                                FormLogin(
-//                                    email = email,
-//                                    password = password,
-//                                    isAuthenticating = isAuthenticating,
-//                                    onAuthAction = onAuthAction
-//                                )
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-
 }
 
 @OrientationPreviews
 @Composable
-fun LoginScreenPreview() {
+private fun LoginScreenPreview() {
     LoginScreen(
         email = PropertySavableString.example,
         password = PropertySavableString.example,

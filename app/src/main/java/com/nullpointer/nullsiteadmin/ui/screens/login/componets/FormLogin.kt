@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -28,12 +26,14 @@ import com.nullpointer.nullsiteadmin.ui.share.PasswordTextSavable
 
 @Composable
 fun FormLogin(
+    modifier: Modifier = Modifier,
     email: PropertySavableString,
     password: PropertySavableString,
     isAuthenticating: Boolean,
     onAuthAction: (AuthAction) -> Unit
 ) {
     Column(
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -62,11 +62,6 @@ fun FormLogin(
                 keyboardActions = KeyboardActions(onDone = { onAuthAction(AuthAction.LOGIN) })
             )
         }
-        Spacer(modifier = Modifier.height(20.dp))
-        ButtonLogin(
-            isLoading = isAuthenticating,
-            actionClick = { onAuthAction(AuthAction.LOGIN) }
-        )
     }
 }
 

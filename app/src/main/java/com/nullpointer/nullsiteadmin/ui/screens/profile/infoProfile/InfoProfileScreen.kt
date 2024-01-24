@@ -25,6 +25,7 @@ import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.models.personalInfo.data.PersonalInfoData
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.HomeNavGraph
+import com.nullpointer.nullsiteadmin.ui.preview.config.OrientationPreviews
 import com.nullpointer.nullsiteadmin.ui.preview.provider.InfoProfileStateProvider
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EditInfoProfileScreenDestination
 import com.nullpointer.nullsiteadmin.ui.screens.profile.infoProfile.componets.composables.ButtonEditInfo
@@ -35,7 +36,6 @@ import com.nullpointer.nullsiteadmin.ui.screens.profile.infoProfile.viewModel.In
 import com.nullpointer.nullsiteadmin.ui.screens.shared.BlockProgress
 import com.nullpointer.nullsiteadmin.ui.screens.states.SwipeScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberSwipeScreenState
-import com.nullpointer.runningcompose.ui.preview.config.OrientationPreviews
 import com.ramcosta.composedestinations.annotation.Destination
 
 @OptIn(ExperimentalMaterialApi::class)

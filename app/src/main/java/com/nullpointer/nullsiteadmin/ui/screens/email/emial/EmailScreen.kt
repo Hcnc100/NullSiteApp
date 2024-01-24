@@ -27,6 +27,7 @@ import com.nullpointer.nullsiteadmin.core.utils.shareViewModel
 import com.nullpointer.nullsiteadmin.models.email.data.EmailData
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.HomeNavGraph
+import com.nullpointer.nullsiteadmin.ui.preview.config.OrientationPreviews
 import com.nullpointer.nullsiteadmin.ui.preview.provider.email.EmailListStateProvider
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EmailDetailsScreenDestination
 import com.nullpointer.nullsiteadmin.ui.screens.email.emial.components.lists.ListEmptyEmail
@@ -36,7 +37,6 @@ import com.nullpointer.nullsiteadmin.ui.screens.email.emial.viewModel.EmailsView
 import com.nullpointer.nullsiteadmin.ui.screens.states.LazySwipeScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberLazySwipeScreenState
 import com.nullpointer.nullsiteadmin.ui.share.BlockProcessing
-import com.nullpointer.runningcompose.ui.preview.config.OrientationPreviews
 import com.ramcosta.composedestinations.annotation.Destination
 
 @OptIn(ExperimentalMaterialApi::class)

@@ -1,4 +1,4 @@
-package com.nullpointer.runningcompose.ui.preview.config
+package com.nullpointer.nullsiteadmin.ui.preview.config
 
 import android.content.res.Configuration
 import androidx.compose.ui.tooling.preview.Devices

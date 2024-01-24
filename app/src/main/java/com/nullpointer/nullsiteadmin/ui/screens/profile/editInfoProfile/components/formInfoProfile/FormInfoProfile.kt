@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
-import com.nullpointer.runningcompose.ui.preview.config.OrientationPreviews
+import com.nullpointer.nullsiteadmin.ui.preview.config.OrientationPreviews
 
 
 @Composable
