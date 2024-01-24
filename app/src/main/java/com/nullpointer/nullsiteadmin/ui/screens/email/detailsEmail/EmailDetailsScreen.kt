@@ -25,7 +25,6 @@ import com.nullpointer.nullsiteadmin.core.utils.sendEmail
 import com.nullpointer.nullsiteadmin.core.utils.shareViewModel
 import com.nullpointer.nullsiteadmin.models.email.data.EmailData
 import com.nullpointer.nullsiteadmin.presentation.AuthViewModel
-import com.nullpointer.nullsiteadmin.presentation.EmailsViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
 import com.nullpointer.nullsiteadmin.ui.screens.email.detailsEmail.componets.BodyEmail
@@ -33,6 +32,7 @@ import com.nullpointer.nullsiteadmin.ui.screens.email.detailsEmail.componets.But
 import com.nullpointer.nullsiteadmin.ui.screens.email.detailsEmail.componets.ContainerAnimateEmail
 import com.nullpointer.nullsiteadmin.ui.screens.email.detailsEmail.componets.HeaderEmail
 import com.nullpointer.nullsiteadmin.ui.screens.email.detailsEmail.componets.ToolbarEmailDetails
+import com.nullpointer.nullsiteadmin.ui.screens.email.emial.viewModel.EmailsViewModel
 import com.nullpointer.nullsiteadmin.ui.screens.states.SimpleScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberSimpleScreenState
 import com.nullpointer.runningcompose.ui.preview.config.OrientationPreviews

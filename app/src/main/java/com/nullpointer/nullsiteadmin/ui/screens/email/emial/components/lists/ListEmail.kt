@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.ui.screens.email.contact.components.lists
+package com.nullpointer.nullsiteadmin.ui.screens.email.emial.components.lists
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -14,7 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.nullpointer.nullsiteadmin.models.email.data.EmailData
-import com.nullpointer.nullsiteadmin.ui.screens.email.contact.components.items.EmailItem
+import com.nullpointer.nullsiteadmin.ui.screens.email.emial.components.items.EmailItem
 import com.nullpointer.nullsiteadmin.ui.share.CircularProgressAnimation
 
 

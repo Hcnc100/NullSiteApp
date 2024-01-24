@@ -13,9 +13,9 @@ import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.presentation.AuthViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.screens.NavGraphs
-import com.nullpointer.nullsiteadmin.ui.screens.destinations.AuthScreenDestination
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.HomeScreenDestination
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.LockScreenDestination
+import com.nullpointer.nullsiteadmin.ui.screens.destinations.LoginScreenDestination
 import com.nullpointer.nullsiteadmin.ui.screens.states.MainScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberMainScreenState
 import com.ramcosta.composedestinations.DestinationsNavHost
@@ -58,7 +58,7 @@ fun MainScreen(
                 when {
                     isAuthUser && dataBiometric -> HomeScreenDestination
                     isAuthUser && !dataBiometric -> LockScreenDestination
-                    else -> AuthScreenDestination
+                    else -> LoginScreenDestination
                 }.let { startRoute ->
                     LaunchedEffect(key1 = Unit) {
                         actionChangeLoading()

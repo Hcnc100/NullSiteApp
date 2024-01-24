@@ -1,9 +1,15 @@
-package com.nullpointer.nullsiteadmin.ui.screens.auth.viewModel
+package com.nullpointer.nullsiteadmin.ui.screens.login.viewModel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
+import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager
+import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
+import com.nullpointer.nullsiteadmin.domain.auth.AuthRepository
 import com.nullpointer.nullsiteadmin.models.credentials.wrapper.CredentialsWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -11,8 +17,9 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class AuthFieldViewModel @Inject constructor(
-    state: SavedStateHandle
+class LoginScreenViewModel @Inject constructor(
+    state: SavedStateHandle,
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     companion object {
@@ -44,8 +51,11 @@ class AuthFieldViewModel @Inject constructor(
 
     private val isDataValid get() = !emailAdmin.hasError && !passwordAdmin.hasError
 
-    private val _messageCredentials = Channel<Int>()
-    val messageCredentials get() = _messageCredentials.receiveAsFlow()
+    var isAuthenticating by mutableStateOf(false)
+        private set
+
+    private val _messageErrorLogin = Channel<Int>()
+    val messageErrorLogin = _messageErrorLogin.receiveAsFlow()
 
     fun getDataAuth(): CredentialsWrapper? {
         emailAdmin.reValueField()
@@ -56,8 +66,27 @@ class AuthFieldViewModel @Inject constructor(
                 password = passwordAdmin.currentValue
             )
         } else {
-            _messageCredentials.trySend(R.string.error_data_invalid)
+            _messageErrorLogin.trySend(R.string.error_data_invalid)
             null
         }
     }
+
+
+    fun login(
+        userCredentialsWrapper: CredentialsWrapper
+    ) = launchSafeIO(
+        blockBefore = { isAuthenticating = true },
+        blockAfter = { isAuthenticating = false },
+        blockIO = {
+            authRepository.login(credentialsWrapper = userCredentialsWrapper)
+        },
+        blockException = {
+            ExceptionManager.sendMessageErrorToException(
+                exception = it,
+                message = "Error auth",
+                channel = _messageErrorLogin
+            )
+        }
+    )
+
 }

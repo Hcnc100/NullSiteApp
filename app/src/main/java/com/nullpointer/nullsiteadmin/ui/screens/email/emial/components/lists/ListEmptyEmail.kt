@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.ui.screens.email.contact.components.lists
+package com.nullpointer.nullsiteadmin.ui.screens.email.emial.components.lists
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -8,19 +8,18 @@ import com.nullpointer.nullsiteadmin.ui.preview.config.SimplePreview
 import com.nullpointer.nullsiteadmin.ui.screens.shared.AnimationScreen
 
 @Composable
-fun ListErrorEmail(
+fun ListEmptyEmail(
     modifier: Modifier = Modifier
 ) {
     AnimationScreen(
         modifier = modifier,
-        animation = R.raw.error,
-        textEmpty = stringResource(R.string.message_error_contact)
+        animation = R.raw.empty1,
+        textEmpty = stringResource(R.string.message_empty_contact)
     )
 }
 
-
 @SimplePreview
 @Composable
-private fun ListErrorEmailPreview() {
-    ListErrorEmail()
+private fun ListEmptyEmailPreview() {
+    ListEmptyEmail()
 }

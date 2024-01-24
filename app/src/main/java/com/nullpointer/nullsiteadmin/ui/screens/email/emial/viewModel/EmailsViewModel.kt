@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.presentation
+package com.nullpointer.nullsiteadmin.ui.screens.email.emial.viewModel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

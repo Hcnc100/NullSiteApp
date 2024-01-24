@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.ui.screens.email.contact.components.items
+package com.nullpointer.nullsiteadmin.ui.screens.email.emial.components.items
 
 import android.content.Context
 import androidx.compose.animation.animateColorAsState

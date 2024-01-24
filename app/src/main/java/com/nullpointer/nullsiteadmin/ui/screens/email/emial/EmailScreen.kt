@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.ui.screens.email.contact
+package com.nullpointer.nullsiteadmin.ui.screens.email.emial
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,14 +25,14 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.core.utils.shareViewModel
 import com.nullpointer.nullsiteadmin.models.email.data.EmailData
-import com.nullpointer.nullsiteadmin.presentation.EmailsViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.HomeNavGraph
 import com.nullpointer.nullsiteadmin.ui.preview.provider.email.EmailListStateProvider
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EmailDetailsScreenDestination
-import com.nullpointer.nullsiteadmin.ui.screens.email.contact.components.lists.ListEmptyEmail
-import com.nullpointer.nullsiteadmin.ui.screens.email.contact.components.lists.ListErrorEmail
-import com.nullpointer.nullsiteadmin.ui.screens.email.contact.components.lists.ListSuccessEmails
+import com.nullpointer.nullsiteadmin.ui.screens.email.emial.components.lists.ListEmptyEmail
+import com.nullpointer.nullsiteadmin.ui.screens.email.emial.components.lists.ListErrorEmail
+import com.nullpointer.nullsiteadmin.ui.screens.email.emial.components.lists.ListSuccessEmails
+import com.nullpointer.nullsiteadmin.ui.screens.email.emial.viewModel.EmailsViewModel
 import com.nullpointer.nullsiteadmin.ui.screens.states.LazySwipeScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberLazySwipeScreenState
 import com.nullpointer.nullsiteadmin.ui.share.BlockProcessing

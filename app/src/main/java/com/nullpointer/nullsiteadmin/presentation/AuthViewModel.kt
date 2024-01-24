@@ -8,12 +8,10 @@ import androidx.lifecycle.viewModelScope
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.actions.BiometricLockState
 import com.nullpointer.nullsiteadmin.core.states.Resource
-import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.auth.AuthRepository
 import com.nullpointer.nullsiteadmin.domain.biometric.BiometricRepository
 import com.nullpointer.nullsiteadmin.domain.deleter.DeleterInfoRepository
-import com.nullpointer.nullsiteadmin.models.credentials.wrapper.CredentialsWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -90,22 +88,6 @@ class AuthViewModel @Inject constructor(
         initVerifyBiometrics()
     }
 
-    fun login(
-        userCredentialsWrapper: CredentialsWrapper
-    ) = launchSafeIO(
-        blockBefore = { isAuthenticating = true },
-        blockAfter = { isAuthenticating = false },
-        blockIO = {
-            authRepository.login(credentialsWrapper = userCredentialsWrapper)
-        },
-        blockException = {
-            ExceptionManager.sendMessageErrorToException(
-                exception = it,
-                message = "Error auth",
-                channel = _messageErrorAuth
-            )
-        }
-    )
 
     fun logOut() = launchSafeIO {
         authRepository.logout()
