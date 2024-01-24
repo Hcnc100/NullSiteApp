@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.ui.screens.projectScreen.project.componets.lists
+package com.nullpointer.nullsiteadmin.ui.screens.project.projectScreen.componets.lists
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -15,7 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.nullpointer.nullsiteadmin.models.project.data.ProjectData
-import com.nullpointer.nullsiteadmin.ui.screens.projectScreen.project.componets.projectItem.ProjectItem
+import com.nullpointer.nullsiteadmin.ui.screens.project.projectScreen.componets.projectItem.ProjectItem
 import com.nullpointer.nullsiteadmin.ui.share.CircularProgressAnimation
 import com.nullpointer.runningcompose.ui.preview.config.OrientationPreviews
 

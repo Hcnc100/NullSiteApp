@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.ui.screens.projectScreen.project.componets.lists
+package com.nullpointer.nullsiteadmin.ui.screens.project.projectScreen.componets.lists
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

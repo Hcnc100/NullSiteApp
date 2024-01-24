@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.ui.screens.projectScreen.project
+package com.nullpointer.nullsiteadmin.ui.screens.project.projectScreen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,10 +29,10 @@ import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.HomeNavGraph
 import com.nullpointer.nullsiteadmin.ui.preview.provider.ListProjectProvider
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EditProjectScreenDestination
-import com.nullpointer.nullsiteadmin.ui.screens.projectScreen.project.componets.lists.ListEmptyProject
-import com.nullpointer.nullsiteadmin.ui.screens.projectScreen.project.componets.lists.ListErrorProject
-import com.nullpointer.nullsiteadmin.ui.screens.projectScreen.project.componets.lists.ListProjectSuccess
-import com.nullpointer.nullsiteadmin.ui.screens.projectScreen.project.viewModel.ProjectViewModel
+import com.nullpointer.nullsiteadmin.ui.screens.project.projectScreen.componets.lists.ListEmptyProject
+import com.nullpointer.nullsiteadmin.ui.screens.project.projectScreen.componets.lists.ListErrorProject
+import com.nullpointer.nullsiteadmin.ui.screens.project.projectScreen.componets.lists.ListProjectSuccess
+import com.nullpointer.nullsiteadmin.ui.screens.project.projectScreen.viewModel.ProjectViewModel
 import com.nullpointer.nullsiteadmin.ui.screens.shared.BlockProgress
 import com.nullpointer.nullsiteadmin.ui.screens.states.LazyGridSwipeScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberLazyGridSwipeScreenState

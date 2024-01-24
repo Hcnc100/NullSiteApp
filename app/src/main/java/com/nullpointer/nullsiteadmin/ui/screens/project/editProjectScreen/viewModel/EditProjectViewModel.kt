@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.ui.screens.projectScreen.editProject.viewModel
+package com.nullpointer.nullsiteadmin.ui.screens.project.editProjectScreen.viewModel
 
 
 import androidx.compose.runtime.getValue

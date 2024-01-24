@@ -122,5 +122,9 @@
     <string name="title_biometric">Fingerprint lock</string>
     <string name="description_enable_biometric">If you enable this option, unlocking by fingerprint will be required when entering the app</string>
     <string name="title_crop_image">Crop Image</string>
+    <string name="hint_example">hint_example</string>
+    <string name="label_example">label_example</string>
+    <string name="error_empty_example">Error example</string>
+    <string name="error_length_example">Error lenght example\n</string>
 
 </resources>

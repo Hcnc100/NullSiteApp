@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.ui.screens.projectScreen.project.viewModel
+package com.nullpointer.nullsiteadmin.ui.screens.project.projectScreen.viewModel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

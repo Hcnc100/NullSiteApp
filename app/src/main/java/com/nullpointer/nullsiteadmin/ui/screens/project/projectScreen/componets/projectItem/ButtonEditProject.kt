@@ -1,4 +1,4 @@
-package com.nullpointer.nullsiteadmin.ui.screens.projectScreen.project.componets.projectItem
+package com.nullpointer.nullsiteadmin.ui.screens.project.projectScreen.componets.projectItem
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
