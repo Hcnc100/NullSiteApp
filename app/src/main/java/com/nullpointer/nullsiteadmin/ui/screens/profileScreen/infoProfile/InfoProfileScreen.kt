@@ -1,7 +1,10 @@
 package com.nullpointer.nullsiteadmin.ui.screens.profileScreen.infoProfile
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
@@ -91,6 +94,7 @@ fun InfoProfileScreen(
         Box(
             modifier = Modifier
                 .padding(it)
+                .fillMaxSize()
                 .then(
                     when (personalInfoData) {
                         is Resource.Loading -> Modifier
@@ -107,6 +111,9 @@ fun InfoProfileScreen(
                         null -> InfoProfileEmpty()
                         else -> InfoUser(
                             personalInfoData = personalInfoData.data,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .verticalScroll(rememberScrollState())
                         )
                     }
                 }

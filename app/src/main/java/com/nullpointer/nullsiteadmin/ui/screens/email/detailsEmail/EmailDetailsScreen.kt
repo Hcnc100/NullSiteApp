@@ -1,11 +1,22 @@
-package com.nullpointer.nullsiteadmin.ui.screens.detailsEmail
+package com.nullpointer.nullsiteadmin.ui.screens.email.detailsEmail
 
 import android.content.Context
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
+import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -15,7 +26,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.actions.EmailsScreenActions
-import com.nullpointer.nullsiteadmin.actions.EmailsScreenActions.*
+import com.nullpointer.nullsiteadmin.actions.EmailsScreenActions.DELETER
+import com.nullpointer.nullsiteadmin.actions.EmailsScreenActions.MARK_AS_OPEN
+import com.nullpointer.nullsiteadmin.actions.EmailsScreenActions.REPLY
 import com.nullpointer.nullsiteadmin.core.utils.sendEmail
 import com.nullpointer.nullsiteadmin.core.utils.shareViewModel
 import com.nullpointer.nullsiteadmin.models.email.data.EmailData

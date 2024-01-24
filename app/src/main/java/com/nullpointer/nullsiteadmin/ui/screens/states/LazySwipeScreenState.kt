@@ -14,8 +14,6 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
-import com.google.accompanist.swiperefresh.SwipeRefreshState
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -27,16 +25,15 @@ class LazySwipeScreenState(
     private val sizeScroll: Float,
     val lazyListState: LazyListState,
     private val scope: CoroutineScope,
-    swipeRefreshState: SwipeRefreshState,
-    pullRefreshState: PullRefreshState,
-) : SwipeScreenState(
+    val pullRefreshState: PullRefreshState,
+) : SimpleScreenState(
     context = context,
     scaffoldState = scaffoldState,
-    swipeRefreshState = swipeRefreshState,
-    pullRefreshState = pullRefreshState
 ) {
-    fun scrollToMore() = scope.launch {
-        lazyListState.animateScrollBy(sizeScroll)
+    fun onScrollChanged() {
+        scope.launch {
+            lazyListState.animateScrollBy(sizeScroll)
+        }
     }
 }
 
@@ -44,21 +41,18 @@ class LazySwipeScreenState(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun rememberLazySwipeScreenState(
-    onRefresh: () -> Unit = {},
+    onRefresh: () -> Unit,
     sizeScroll: Float,
     isRefreshing: Boolean,
     context: Context = LocalContext.current,
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     lazyListState: LazyListState = rememberLazyListState(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    swipeRefreshState: SwipeRefreshState = rememberSwipeRefreshState(
-        isRefreshing = isRefreshing
-    ),
     pullRefreshState: PullRefreshState = rememberPullRefreshState(
         onRefresh = onRefresh,
         refreshing = isRefreshing
     )
-) = remember(scaffoldState, lazyListState, swipeRefreshState, coroutineScope) {
+) = remember(scaffoldState, lazyListState, coroutineScope) {
     LazySwipeScreenState(
         context = context,
         scope = coroutineScope,
@@ -66,6 +60,5 @@ fun rememberLazySwipeScreenState(
         scaffoldState = scaffoldState,
         lazyListState = lazyListState,
         pullRefreshState = pullRefreshState,
-        swipeRefreshState = swipeRefreshState
     )
 }

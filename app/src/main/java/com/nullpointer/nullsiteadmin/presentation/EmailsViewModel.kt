@@ -14,7 +14,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
@@ -73,7 +78,7 @@ class EmailsViewModel @Inject constructor(
         )
 
     fun concatenateEmails(
-        actionSuccessConcatenate: () -> Unit
+        actionSuccessConcatenate: () -> Unit = {}
     ) = launchSafeIO(
         isEnabled = isEnabledConcatenateEmail,
         blockBefore = { isConcatenateEmail = true },

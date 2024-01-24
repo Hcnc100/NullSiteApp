@@ -45,11 +45,11 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Composable
 fun ProjectScreen(
     actionRootDestinations: ActionRootDestinations,
-    projectVM: ProjectViewModel = hiltViewModel(),
+    projectViewModel: ProjectViewModel = hiltViewModel(),
     projectScreenState: LazyGridSwipeScreenState = rememberLazyGridSwipeScreenState(
         sizeScroll = 250F,
-        isRefreshing = projectVM.isRequestProject,
-        onRefresh = projectVM::requestNewProjects,
+        isRefreshing = projectViewModel.isRequestProject,
+        onRefresh = projectViewModel::requestNewProjects,
     )
 ) {
 
@@ -65,21 +65,21 @@ fun ProjectScreen(
 
     LaunchedEffect(key1 = shouldLoadMore) {
         if (shouldLoadMore) {
-            projectVM.concatenateProject()
+            projectViewModel.concatenateProject()
         }
     }
 
     LaunchedEffect(key1 = Unit) {
-        projectVM.messageErrorProject.collect(projectScreenState::showSnackMessage)
+        projectViewModel.messageErrorProject.collect(projectScreenState::showSnackMessage)
     }
 
-    val stateListProject by projectVM.listProjectData.collectAsState()
+    val stateListProject by projectViewModel.listProjectData.collectAsState()
 
 
     ProjectScreen(
         stateListProjectData = stateListProject,
-        isLoading = projectVM.isRequestProject,
-        isConcatenate = projectVM.isConcatenateProjects,
+        isLoading = projectViewModel.isRequestProject,
+        isConcatenate = projectViewModel.isConcatenateProjects,
         scaffoldState = projectScreenState.scaffoldState,
         lazyGridState = projectScreenState.lazyGridState,
         pullRefreshState = projectScreenState.pullRefreshState,
