@@ -19,7 +19,7 @@ class BiometricRepoImpl(
     private val biometricDataSource: BiometricDataSource,
 ) : BiometricRepository {
 
-    private val _biometricState = MutableStateFlow(BiometricLockState.LOCK)
+    private val _biometricState = MutableStateFlow(BiometricLockState.UNAVAILABLE)
     override val biometricState: Flow<BiometricLockState> = _biometricState
 
     override val isBiometricEnabled: Flow<Boolean> = settingsLocalDataSource.getSettingsData().map {

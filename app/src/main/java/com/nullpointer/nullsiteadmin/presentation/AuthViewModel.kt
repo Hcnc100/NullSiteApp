@@ -114,15 +114,6 @@ class AuthViewModel @Inject constructor(
 
 
 
-    fun changeBiometricEnabled(enabled: Boolean) = launchSafeIO {
-        if (isBiometricAvailable) {
-            biometricRepository.changeBiometricEnable(enabled)
-        } else {
-            _messageErrorAuth.trySend(R.string.biometric_no_avariable)
-        }
-
-
-    }
 
      fun verifyPhoneData()=launchSafeIO(
          blockException = {

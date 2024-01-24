@@ -11,7 +11,9 @@ import androidx.compose.material.FabPosition
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -33,6 +35,8 @@ import com.nullpointer.nullsiteadmin.ui.screens.lock.componets.TextStateLock
 import com.nullpointer.nullsiteadmin.ui.screens.lock.viewModel.LockScreenViewModel
 import com.nullpointer.nullsiteadmin.ui.screens.shared.BlockProgress
 import com.nullpointer.nullsiteadmin.ui.screens.shared.LottieContainer
+import com.nullpointer.nullsiteadmin.ui.screens.states.SimpleScreenState
+import com.nullpointer.nullsiteadmin.ui.screens.states.rememberSimpleScreenState
 import com.nullpointer.runningcompose.ui.preview.config.OrientationPreviews
 import com.ramcosta.composedestinations.annotation.Destination
 
@@ -40,15 +44,23 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Destination
 @Composable
 fun LockScreen(
-    lockScreenViewModel: LockScreenViewModel = hiltViewModel()
+    lockScreenViewModel: LockScreenViewModel = hiltViewModel(),
+    lockScreenState: SimpleScreenState = rememberSimpleScreenState()
 ) {
 
     val biometricLockState by lockScreenViewModel.biometricLockData.collectAsState()
     LaunchedEffect(key1 = Unit) {
         lockScreenViewModel.launchBiometric()
     }
+
+    LaunchedEffect(key1 = Unit) {
+        lockScreenViewModel.messageErrorBiometric.collect(lockScreenState::showSnackMessage)
+    }
+
+
     LockScreen(
         biometricLockDataState = biometricLockState,
+        scaffoldState = lockScreenState.scaffoldState,
         launchBiometric = lockScreenViewModel::launchBiometric
     )
 }
@@ -56,9 +68,11 @@ fun LockScreen(
 @Composable
 private fun LockScreen(
     launchBiometric: () -> Unit,
+    scaffoldState: ScaffoldState,
     biometricLockDataState: Resource<BiometricLockData>,
 ) {
     Scaffold(
+        scaffoldState = scaffoldState,
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
             (biometricLockDataState as? Resource.Success)?.let {
@@ -104,6 +118,7 @@ private fun LockScreen(
 @Composable
 private fun LockScreenDisablePreview() {
     LockScreen(
+        scaffoldState = rememberScaffoldState(),
         launchBiometric = {},
         biometricLockDataState = Resource.Success(
             BiometricLockData(
@@ -118,6 +133,7 @@ private fun LockScreenDisablePreview() {
 @Composable
 private fun LockScreenEnablePreview() {
     LockScreen(
+        scaffoldState = rememberScaffoldState(),
         launchBiometric = {},
         biometricLockDataState = Resource.Success(
             BiometricLockData(
@@ -133,6 +149,7 @@ private fun LockScreenEnablePreview() {
 @Composable
 private fun LockScreenTimeOutPreview() {
     LockScreen(
+        scaffoldState = rememberScaffoldState(),
         launchBiometric = {},
         biometricLockDataState = Resource.Success(
             BiometricLockData(
@@ -147,6 +164,7 @@ private fun LockScreenTimeOutPreview() {
 @Composable
 private fun LockScreenUndefineLockPreview() {
     LockScreen(
+        scaffoldState = rememberScaffoldState(),
         launchBiometric = {},
         biometricLockDataState = Resource.Success(
             BiometricLockData(
@@ -162,6 +180,7 @@ private fun LockScreenUndefineLockPreview() {
 @Composable
 private fun LockScreenLoadingPreview() {
     LockScreen(
+        scaffoldState = rememberScaffoldState(),
         launchBiometric = {},
         biometricLockDataState = Resource.Loading
     )
@@ -171,6 +190,7 @@ private fun LockScreenLoadingPreview() {
 @Composable
 private fun LockScreenErrorPreview() {
     LockScreen(
+        scaffoldState = rememberScaffoldState(),
         launchBiometric = {},
         biometricLockDataState = Resource.Failure
     )

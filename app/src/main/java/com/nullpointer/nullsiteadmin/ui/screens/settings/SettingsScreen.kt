@@ -1,41 +1,51 @@
 package com.nullpointer.nullsiteadmin.ui.screens.settings
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
+import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.nullsiteadmin.R
-import com.nullpointer.nullsiteadmin.presentation.AuthViewModel
 import com.nullpointer.nullsiteadmin.ui.navigator.HomeNavGraph
+import com.nullpointer.nullsiteadmin.ui.preview.provider.BooleanProvider
+import com.nullpointer.nullsiteadmin.ui.screens.settings.viewModel.SettingsViewModel
+import com.nullpointer.nullsiteadmin.ui.screens.settings.viewModel.componets.EnableBiometricSwitchTitle
 import com.nullpointer.nullsiteadmin.ui.screens.states.SimpleScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberSimpleScreenState
+import com.nullpointer.runningcompose.ui.preview.config.OrientationPreviews
 import com.ramcosta.composedestinations.annotation.Destination
 
 @HomeNavGraph
 @Destination
 @Composable
 fun SettingsScreen(
-    authViewModel: AuthViewModel,
+    settingsViewModel: SettingsViewModel = hiltViewModel(),
     settingsScreenState: SimpleScreenState = rememberSimpleScreenState()
 ) {
-    val isBiometricEnabled by authViewModel.isBiometricEnabled.collectAsState()
+    val isBiometricEnabled by settingsViewModel.isBiometricEnabled.collectAsState()
 
     LaunchedEffect(key1 = Unit) {
-        authViewModel.messageErrorAuth.collect(settingsScreenState::showSnackMessage)
+        settingsViewModel.messageErrorSettings.collect(settingsScreenState::showSnackMessage)
     }
 
     SettingsScreen(
         isBiometricEnabled = isBiometricEnabled,
         scaffoldState = settingsScreenState.scaffoldState,
-        isBiometricAvailable = authViewModel.isBiometricAvailable,
-        changeBiometricEnabled = authViewModel::changeBiometricEnabled
+        isBiometricAvailable = settingsViewModel.isBiometricAvailable,
+        changeBiometricEnabled = settingsViewModel::changeBiometricEnabled
     )
 
 }
@@ -52,33 +62,16 @@ fun SettingsScreen(
     ) {
         Column(
             modifier = Modifier
-                .padding(10.dp)
-                .padding(it),
+                .padding(it)
+                .animateContentSize(),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Text(
-                stringResource(R.string.title_biometric),
-                style = MaterialTheme.typography.h6.copy(fontSize = 16.sp)
+            EnableBiometricSwitchTitle(
+                isBiometricEnabled = isBiometricEnabled,
+                isBiometricAvailable = isBiometricAvailable,
+                changeBiometricEnabled = changeBiometricEnabled,
             )
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier
-                    .clickable { changeBiometricEnabled(!isBiometricEnabled) }
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    text = stringResource(R.string.description_enable_biometric),
-                    style = MaterialTheme.typography.body1,
-                    modifier = Modifier.weight(1f)
-                )
-                Switch(
-                    modifier = Modifier.weight(.2F),
-                    checked = isBiometricEnabled,
-                    onCheckedChange = { changeBiometricEnabled(!isBiometricEnabled) },
-                )
-            }
             if (!isBiometricAvailable) {
-                Spacer(modifier = Modifier.height(10.dp))
                 Text(
                     text = stringResource(id = R.string.biometric_no_avariable),
                     style = MaterialTheme.typography.caption.copy(
@@ -86,7 +79,36 @@ fun SettingsScreen(
                     )
                 )
             }
-
         }
     }
 }
+
+@OrientationPreviews
+@Composable
+fun SettingsScreenBiometricAvailablePreview(
+    @PreviewParameter(BooleanProvider::class)
+    isBiometricEnabled: Boolean,
+) {
+    SettingsScreen(
+        isBiometricEnabled = isBiometricEnabled,
+        scaffoldState = rememberScaffoldState(),
+        isBiometricAvailable = true,
+        changeBiometricEnabled = {}
+    )
+}
+
+
+@OrientationPreviews
+@Composable
+fun SettingsScreenBiometricDisablePreview(
+    @PreviewParameter(BooleanProvider::class)
+    isBiometricEnabled: Boolean,
+) {
+    SettingsScreen(
+        isBiometricEnabled = isBiometricEnabled,
+        scaffoldState = rememberScaffoldState(),
+        isBiometricAvailable = false,
+        changeBiometricEnabled = {}
+    )
+}
+
