@@ -5,14 +5,20 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Outline
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.LayoutDirection
 import com.nullpointer.nullsiteadmin.presentation.AuthViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
 import com.nullpointer.nullsiteadmin.ui.screens.NavGraphs
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.InfoProfileScreenDestination
+import com.nullpointer.nullsiteadmin.ui.screens.home.componets.NavigatorDrawer
 import com.nullpointer.nullsiteadmin.ui.screens.states.HomeScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberHomeScreenState
-import com.nullpointer.nullsiteadmin.ui.share.NavigatorDrawer
 import com.nullpointer.nullsiteadmin.ui.share.ToolbarMenu
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.annotation.Destination
@@ -34,6 +40,7 @@ fun HomeScreen(
 
     Scaffold(
         scaffoldState = mainScreenState.scaffoldState,
+        drawerShape = customShape(),
         topBar = {
             ToolbarMenu(
                 title = mainScreenState.titleNav,
@@ -62,4 +69,23 @@ fun HomeScreen(
         )
     }
 }
+
+// * TODO - FIXED SIZE DRAWER
+fun customShape() = object : Shape {
+    override fun createOutline(
+        size: Size,
+        layoutDirection: LayoutDirection,
+        density: Density
+    ): Outline {
+        return Outline.Rectangle(
+            Rect(
+                left = 0f,
+                top = 0f,
+                right = (size.width * 0.75).toFloat(),
+                bottom = size.height
+            )
+        )
+    }
+}
+
 

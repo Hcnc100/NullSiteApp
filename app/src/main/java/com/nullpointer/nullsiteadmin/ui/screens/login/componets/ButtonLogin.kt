@@ -1,6 +1,6 @@
 package com.nullpointer.nullsiteadmin.ui.screens.login.componets
 
-import androidx.compose.animation.Crossfade
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExtendedFloatingActionButton
@@ -20,19 +20,17 @@ fun ButtonLogin(
     actionClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier = modifier) {
-        Crossfade(
-            targetState = isLoading,
-            label = "ANIMATE_LOGIN_BUTTON"
-        ) { isLoading ->
-            if (isLoading) {
-                CircularProgressIndicator(color = MaterialTheme.colors.onPrimary)
-            } else {
-                ExtendedFloatingActionButton(
-                    text = { Text(text = stringResource(R.string.text_auth_button)) },
-                    onClick = actionClick
-                )
-            }
+    Box(
+        modifier = modifier.animateContentSize(),
+        contentAlignment = androidx.compose.ui.Alignment.Center
+    ) {
+        if (isLoading) {
+            CircularProgressIndicator(color = MaterialTheme.colors.onPrimary)
+        } else {
+            ExtendedFloatingActionButton(
+                text = { Text(text = stringResource(R.string.text_auth_button)) },
+                onClick = actionClick
+            )
         }
     }
 }
