@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.ui.preview.config.SimplePreview
-import com.nullpointer.nullsiteadmin.ui.screens.animation.LottieContainer
+import com.nullpointer.nullsiteadmin.ui.screens.shared.LottieContainer
 
 @Composable
 fun ContainerAnimateEmail(

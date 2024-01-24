@@ -6,19 +6,24 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nullpointer.nullsiteadmin.R
-import com.nullpointer.nullsiteadmin.actions.BiometricState
+import com.nullpointer.nullsiteadmin.actions.BiometricLockState
 import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.auth.AuthRepository
 import com.nullpointer.nullsiteadmin.domain.biometric.BiometricRepository
 import com.nullpointer.nullsiteadmin.domain.deleter.DeleterInfoRepository
-
 import com.nullpointer.nullsiteadmin.models.credentials.wrapper.CredentialsWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
@@ -30,10 +35,10 @@ class AuthViewModel @Inject constructor(
     private val deleterInfoRepository: DeleterInfoRepository
 ) : ViewModel() {
 
-    val stateLocked = biometricRepository.biometricState.stateIn(
+    val stateLock = biometricRepository.biometricState.stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5_000),
-        BiometricState.Locked
+        BiometricLockState.LOCK
     )
     var isAuthBiometricPassed by mutableStateOf<Boolean?>(null)
         private set
@@ -111,7 +116,7 @@ class AuthViewModel @Inject constructor(
 
     fun changeBiometricEnabled(enabled: Boolean) = launchSafeIO {
         if (isBiometricAvailable) {
-            biometricRepository.changeIsBiometricEnabled(enabled)
+            biometricRepository.changeBiometricEnable(enabled)
         } else {
             _messageErrorAuth.trySend(R.string.biometric_no_avariable)
         }
@@ -137,7 +142,6 @@ class AuthViewModel @Inject constructor(
                 isAuthBiometricPassed = it
             }
         }
-
     }
 
     fun launchBiometric() = launchSafeIO {
@@ -145,7 +149,7 @@ class AuthViewModel @Inject constructor(
         val supportBiometric = biometricRepository.checkBiometricSupport()
         when {
             !supportBiometric -> true
-            timeOut == 0L -> biometricRepository.launchBiometric()
+            timeOut == 0L -> biometricRepository.unlockByBiometric()
             else -> null
         }?.let {
             withContext(Dispatchers.Main) {

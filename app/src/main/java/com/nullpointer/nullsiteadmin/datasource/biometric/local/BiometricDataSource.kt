@@ -1,9 +1,9 @@
 package com.nullpointer.nullsiteadmin.datasource.biometric.local
 
-import com.nullpointer.nullsiteadmin.actions.BiometricResult
+import com.nullpointer.nullsiteadmin.actions.BiometricResultState
 
 interface BiometricDataSource {
     fun checkBiometricSupport(): Boolean
-    suspend fun enableFingerBiometric(): BiometricResult
-    suspend fun launchFingerBiometric(): BiometricResult
+    suspend fun enableFingerBiometric(): BiometricResultState
+    suspend fun unlockByFingerBiometric(): BiometricResultState
 }

@@ -109,7 +109,7 @@
     <string name="title_lock_screen">NullSiteApp Locked</string>
     <string name="text_lauch_biometric">Launch biometric reader</string>
     <string name="text_biometric_disable">Too many failed attempts, sensor disabled</string>
-    <string name="text_time_out_lock">Too many attempts, please try again in %l</string>
+    <string name="text_time_out_lock">Too many attempts, please try again in %d seconds</string>
     <string name="text_button_unlock">Unlock</string>
 
 
@@ -126,5 +126,6 @@
     <string name="label_example">label_example</string>
     <string name="error_empty_example">Error example</string>
     <string name="error_length_example">Error lenght example\n</string>
+    <string name="biometric_error_launch">Error when launch biometric unlock</string>
 
 </resources>

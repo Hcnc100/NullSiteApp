@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.ui.preview.config.SimplePreview
-import com.nullpointer.nullsiteadmin.ui.screens.animation.AnimationScreen
+import com.nullpointer.nullsiteadmin.ui.screens.shared.AnimationScreen
 
 @Composable
 fun ListEmptyEmail(

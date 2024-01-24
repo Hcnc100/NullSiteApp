@@ -1,110 +1,177 @@
 package com.nullpointer.nullsiteadmin.ui.screens.lock
 
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.FabPosition
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.nullsiteadmin.R
-import com.nullpointer.nullsiteadmin.actions.BiometricState
-import com.nullpointer.nullsiteadmin.actions.BiometricState.*
-import com.nullpointer.nullsiteadmin.presentation.AuthViewModel
+import com.nullpointer.nullsiteadmin.actions.BiometricLockState
+import com.nullpointer.nullsiteadmin.core.states.Resource
+import com.nullpointer.nullsiteadmin.models.biometric.data.BiometricLockData
 import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
-import com.nullpointer.nullsiteadmin.ui.screens.animation.LottieContainer
+import com.nullpointer.nullsiteadmin.ui.preview.config.SimplePreview
+import com.nullpointer.nullsiteadmin.ui.screens.lock.componets.ButtonLaunchBiometric
+import com.nullpointer.nullsiteadmin.ui.screens.lock.componets.TextStateLock
+import com.nullpointer.nullsiteadmin.ui.screens.lock.viewModel.LockScreenViewModel
+import com.nullpointer.nullsiteadmin.ui.screens.shared.BlockProgress
+import com.nullpointer.nullsiteadmin.ui.screens.shared.LottieContainer
+import com.nullpointer.runningcompose.ui.preview.config.OrientationPreviews
 import com.ramcosta.composedestinations.annotation.Destination
 
 @RootNavGraph
 @Destination
 @Composable
 fun LockScreen(
-    authViewModel: AuthViewModel
+    lockScreenViewModel: LockScreenViewModel = hiltViewModel()
 ) {
 
-    val timeOut by authViewModel.timeOutLocked.collectAsState()
-    val stateLocked by authViewModel.stateLocked.collectAsState()
-    val enableBiometrics by remember(timeOut, stateLocked) {
-        derivedStateOf { stateLocked == Locked && timeOut == 0L }
-    }
+    val biometricLockState by lockScreenViewModel.biometricLockData.collectAsState()
     LaunchedEffect(key1 = Unit) {
-        authViewModel.launchBiometric()
+        lockScreenViewModel.launchBiometric()
     }
     LockScreen(
-        timeOutLocked = timeOut,
-        stateLocked = stateLocked,
-        isEnableLaunchBiometrics = enableBiometrics,
-        launchBiometric = authViewModel::launchBiometric
+        biometricLockDataState = biometricLockState,
+        launchBiometric = lockScreenViewModel::launchBiometric
     )
 }
 
 @Composable
 private fun LockScreen(
-    timeOutLocked: Long,
     launchBiometric: () -> Unit,
-    stateLocked: BiometricState,
-    isEnableLaunchBiometrics: Boolean
+    biometricLockDataState: Resource<BiometricLockData>,
 ) {
     Scaffold(
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
-            ButtonLaunchBiometric(
-                isEnable = isEnableLaunchBiometrics,
-                actionLaunchBiometric = launchBiometric
-            )
+            (biometricLockDataState as? Resource.Success)?.let {
+                ButtonLaunchBiometric(
+                    biometricLockData = it.data,
+                    actionLaunchBiometric = launchBiometric
+                )
+            }
         }
     ) {
-        Column(
-            modifier = Modifier
-                .padding(it)
-                .padding(10.dp)
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = stringResource(R.string.title_lock_screen),
-                style = MaterialTheme.typography.h5
-            )
-            Spacer(modifier = Modifier.size(20.dp))
-            Icon(painter = painterResource(id = R.drawable.ic_lock), contentDescription = null)
-            Spacer(modifier = Modifier.height(250.dp))
-            LottieContainer(
-                modifier = Modifier.size(150.dp),
-                animation = R.raw.fingureprint
-            )
 
-            when (stateLocked) {
-                Locked -> Text(
-                    text = stringResource(R.string.text_lauch_biometric),
-                    textAlign = TextAlign.Center
+        when (biometricLockDataState) {
+            Resource.Failure -> Unit
+            Resource.Loading -> BlockProgress()
+            is Resource.Success -> Column(
+                modifier = Modifier
+                    .padding(it)
+                    .padding(10.dp)
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = stringResource(R.string.title_lock_screen),
+                    style = MaterialTheme.typography.h5
                 )
-                DisabledTimeOut -> Text(
-                    text = stringResource(R.string.text_biometric_disable),
-                    textAlign = TextAlign.Center
+                Spacer(modifier = Modifier.size(20.dp))
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_lock),
+                    contentDescription = null
                 )
-                LockedTimeOut -> Text(
-                    stringResource(R.string.text_time_out_lock, timeOutLocked),
-                    textAlign = TextAlign.Center
+                Spacer(modifier = Modifier.height(250.dp))
+                LottieContainer(
+                    modifier = Modifier.size(150.dp),
+                    animation = R.raw.fingureprint
                 )
+                TextStateLock(biometricLockData = biometricLockDataState.data)
             }
         }
     }
 }
 
+@OrientationPreviews
 @Composable
-fun ButtonLaunchBiometric(
-    isEnable: Boolean,
-    modifier: Modifier = Modifier,
-    actionLaunchBiometric: () -> Unit
-) {
-    Button(
-        modifier = modifier,
-        onClick = actionLaunchBiometric,
-        enabled = isEnable
-    ) {
-        Text(text = stringResource(R.string.text_button_unlock))
-    }
+private fun LockScreenDisablePreview() {
+    LockScreen(
+        launchBiometric = {},
+        biometricLockDataState = Resource.Success(
+            BiometricLockData(
+                timeOutLock = 10,
+                biometricState = BiometricLockState.LOCK
+            )
+        )
+    )
+}
+
+@OrientationPreviews
+@Composable
+private fun LockScreenEnablePreview() {
+    LockScreen(
+        launchBiometric = {},
+        biometricLockDataState = Resource.Success(
+            BiometricLockData(
+                timeOutLock = 0,
+                biometricState = BiometricLockState.LOCK
+            )
+        )
+    )
+}
+
+
+@OrientationPreviews
+@Composable
+private fun LockScreenTimeOutPreview() {
+    LockScreen(
+        launchBiometric = {},
+        biometricLockDataState = Resource.Success(
+            BiometricLockData(
+                timeOutLock = 10,
+                biometricState = BiometricLockState.LOCKED_BY_TIME_OUT
+            )
+        )
+    )
+}
+
+@OrientationPreviews
+@Composable
+private fun LockScreenUndefineLockPreview() {
+    LockScreen(
+        launchBiometric = {},
+        biometricLockDataState = Resource.Success(
+            BiometricLockData(
+                timeOutLock = 10,
+                biometricState = BiometricLockState.LOCKED_BY_MANY_INTENTS
+            )
+        )
+    )
+}
+
+
+@OrientationPreviews
+@Composable
+private fun LockScreenLoadingPreview() {
+    LockScreen(
+        launchBiometric = {},
+        biometricLockDataState = Resource.Loading
+    )
+}
+
+@SimplePreview
+@Composable
+private fun LockScreenErrorPreview() {
+    LockScreen(
+        launchBiometric = {},
+        biometricLockDataState = Resource.Failure
+    )
 }

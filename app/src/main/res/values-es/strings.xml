@@ -142,7 +142,7 @@
     <string name="title_lock_screen">NullSiteApp Bloqueado</string>
     <string name="text_lauch_biometric">Lance el lector de biométrico</string>
     <string name="text_biometric_disable">Demasiados intentos fallidos, sensor deshabilitado</string>
-    <string name="text_time_out_lock">Demasiados intentos, vuelta a intentarlo en %d</string>
+    <string name="text_time_out_lock">Demasiados intentos, vuelta a intentarlo en %d segundos</string>
     <string name="text_button_unlock">Desbloquear</string>
     <string name="text_title_unlock_app">Escanea tu huella para desbloquear la app</string>
     <string name="text_title_cancel">Cancelar</string>
