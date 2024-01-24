@@ -56,6 +56,10 @@ class ProjectViewModel @Inject constructor(
         private set
 
 
+    init {
+        requestNewProjects()
+    }
+
     val listProjectData =
         projectRepository.listProjects.transform<List<ProjectData>, Resource<List<ProjectData>>> {
             emit(Resource.Success(it))
@@ -70,7 +74,7 @@ class ProjectViewModel @Inject constructor(
         )
 
     fun concatenateProject(
-        actionSuccessConcatenate: () -> Unit
+        actionSuccessConcatenate: () -> Unit = {}
     ) = launchSafeIO(
         isEnabled = isEnabledConcatenateProjects,
         blockBefore = { isConcatenateProjects = true },

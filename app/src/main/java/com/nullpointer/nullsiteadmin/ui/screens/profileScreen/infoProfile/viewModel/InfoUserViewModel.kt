@@ -36,6 +36,10 @@ class InfoUserViewModel @Inject constructor(
     var isRequestInfoUser by mutableStateOf(false)
         private set
 
+    init {
+        requestLastInformation()
+    }
+
 
     val infoUser = flow<Resource<PersonalInfoData?>> {
         infoUserRepository.myPersonalInfoData.collect {

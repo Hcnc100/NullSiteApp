@@ -65,18 +65,12 @@ fun ProjectScreen(
 
     LaunchedEffect(key1 = shouldLoadMore) {
         if (shouldLoadMore) {
-            projectVM.concatenateProject {
-
-            }
+            projectVM.concatenateProject()
         }
     }
 
     LaunchedEffect(key1 = Unit) {
         projectVM.messageErrorProject.collect(projectScreenState::showSnackMessage)
-    }
-
-    LaunchedEffect(key1 = Unit) {
-        projectVM.requestNewProjects()
     }
 
     val stateListProject by projectVM.listProjectData.collectAsState()

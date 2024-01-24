@@ -51,9 +51,6 @@ fun InfoProfileScreen(
 
     val stateInfoProfile by infoViewModel.infoUser.collectAsState()
 
-    LaunchedEffect(key1 = Unit) {
-        infoViewModel.requestLastInformation()
-    }
 
     LaunchedEffect(key1 = Unit) {
         infoViewModel.messageError.collect(infoProfileState::showSnackMessage)

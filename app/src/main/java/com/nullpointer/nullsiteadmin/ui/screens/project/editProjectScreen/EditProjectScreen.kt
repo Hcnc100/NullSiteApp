@@ -39,33 +39,33 @@ import com.ramcosta.composedestinations.annotation.Destination
 fun EditProjectScreen(
     projectDataEdit: ProjectData,
     actionRootDestinations: ActionRootDestinations,
-    editProjectVM: EditProjectViewModel = hiltViewModel(),
+    editProjectViewModel: EditProjectViewModel = hiltViewModel(),
     editProjectState: FocusScreenState = rememberFocusScreenState()
 ) {
 
-    LaunchedEffect(key1 = Unit) {
-        editProjectVM.initVM(projectDataEdit)
+    LaunchedEffect(key1 = projectDataEdit) {
+        editProjectViewModel.initVM(projectDataEdit)
     }
 
     LaunchedEffect(key1 = Unit) {
-        editProjectVM.messageError.collect(editProjectState::showSnackMessage)
+        editProjectViewModel.messageError.collect(editProjectState::showSnackMessage)
     }
 
     EditProjectScreen(
         scaffoldState = editProjectState.scaffoldState,
-        isUpdatedProject = editProjectVM.isUpdatedProject,
-        isDataValid = editProjectVM.isDataValid,
-        urlImgProject = editProjectVM.urlImgProject,
-        nameProject = editProjectVM.nameProject,
-        urlRepositoryProject = editProjectVM.urlRepositoryProject,
-        descriptionProject = editProjectVM.descriptionProject,
+        isUpdatedProject = editProjectViewModel.isUpdatedProject,
+        isDataValid = editProjectViewModel.isDataValid,
+        urlImgProject = editProjectViewModel.urlImgProject,
+        nameProject = editProjectViewModel.nameProject,
+        urlRepositoryProject = editProjectViewModel.urlRepositoryProject,
+        descriptionProject = editProjectViewModel.descriptionProject,
         onEditProjectAction = { action ->
             when (action) {
                 EditProjectAction.HIDDEN_KEYBOARD -> editProjectState.hiddenKeyBoard()
                 EditProjectAction.BACK_SCREEN -> actionRootDestinations.backDestination()
                 EditProjectAction.UPDATE_PROJECT -> {
                     editProjectState.hiddenKeyBoard()
-                    editProjectVM.updatedProject(
+                    editProjectViewModel.updatedProject(
                         currentProjectData = projectDataEdit,
                         actionSuccess = actionRootDestinations::backDestination
                     )
