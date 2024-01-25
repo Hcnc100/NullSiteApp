@@ -4,8 +4,8 @@ import com.nullpointer.nullsiteadmin.datasource.auth.local.AuthLocalDataSource
 import com.nullpointer.nullsiteadmin.datasource.auth.remote.AuthRemoteDataSource
 import com.nullpointer.nullsiteadmin.datasource.infoPhone.local.InfoPhoneLocalDataSource
 import com.nullpointer.nullsiteadmin.models.credentials.dto.CredentialsDTO
-import com.nullpointer.nullsiteadmin.models.phoneInfo.dto.UpdateInfoPhoneDTO
 import com.nullpointer.nullsiteadmin.models.credentials.wrapper.CredentialsWrapper
+import com.nullpointer.nullsiteadmin.models.phoneInfo.dto.UpdateInfoPhoneDTO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -25,9 +25,7 @@ class AuthRepoImpl(
 
     override suspend fun verifyInfoPhoneData() {
 
-        val isUserAuth = isUserAuth.first()
-
-        if (!isUserAuth) return
+        val authData = authLocalDataSource.getAuthData().first() ?: return
 
         val currentInfoPhone = infoPhoneLocalDataSource.getCurrentInfoPhone()
         val savedInfoPhone = infoPhoneLocalDataSource.getSavedInfoPhone()
@@ -36,6 +34,7 @@ class AuthRepoImpl(
             authRemoteDataSource.updateInfoPhone(
                 uuidPhone = currentInfoPhone.uuidPhone,
                 updateInfoPhoneDTO = UpdateInfoPhoneDTO.fromInfoPhoneData(
+                    idUser = authData.id,
                     infoPhoneData = currentInfoPhone
                 )
             )
