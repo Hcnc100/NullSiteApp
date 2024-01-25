@@ -35,12 +35,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data
-                    android:host="https"
-                    android:scheme="www.nullsiteadmin.com" />
-                <data
-                    android:host="http"
-                    android:scheme="www.nullsiteadmin.com" />
+                <data android:scheme="https" />
+                <data android:scheme="http" />
+                <data android:host="www.nullsiteadmin.com" />
             </intent-filter>
         </activity>
         <activity
