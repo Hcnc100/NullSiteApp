@@ -24,8 +24,8 @@ import com.ramcosta.composedestinations.navigation.dependency
 
 @Composable
 fun MainScreen(
-    authViewModel: AuthViewModel = hiltViewModel(),
     actionChangeLoading: () -> Unit,
+    authViewModel: AuthViewModel = hiltViewModel(),
     rootScreenState: MainScreenState = rememberMainScreenState()
 ) {
     val isAuthUserState by authViewModel.isUserAuth.collectAsState()
