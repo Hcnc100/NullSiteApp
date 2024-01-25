@@ -2,7 +2,10 @@ package com.nullpointer.nullsiteadmin.ui.screens.home.componets
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,11 +22,13 @@ import com.ramcosta.composedestinations.navigation.navigate
 
 @Composable
 fun NavigatorDrawer(
+    percent: Float,
     closeSession: () -> Unit,
     closeDrawer: () -> Unit,
     navController: NavController
 ) {
     Drawer(
+        percent = percent,
         closeSession = {
             closeSession()
             closeDrawer()
@@ -44,6 +49,7 @@ fun NavigatorDrawer(
 
 @Composable
 private fun Drawer(
+    percent: Float,
     navController: NavController,
     closeSession: () -> Unit,
     onDestinationClicked: (destination: DirectionDestination) -> Unit
@@ -51,17 +57,22 @@ private fun Drawer(
     val currentDestination = navController.currentBackStackEntryAsState()
         .value?.appDestination()
     Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier
+            .fillMaxWidth(percent)
+            .fillMaxHeight()
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         ImageDraw()
-        MainDestinations.values().forEach {
-            ItemNavDrawer(
-                currentDestination = it,
-                isSelected = currentDestination?.route == it.destinations.route,
-                onDestinationClicked = { onDestinationClicked(it.destinations) }
-            )
+        Column {
+            MainDestinations.values().forEach {
+                ItemNavDrawer(
+                    currentDestination = it,
+                    isSelected = currentDestination?.route == it.destinations.route,
+                    onDestinationClicked = { onDestinationClicked(it.destinations) }
+                )
+            }
         }
         ButtonLogOut(
             actionLogOut = closeSession,
@@ -75,6 +86,7 @@ fun DrawerPreview() {
     Drawer(
         navController = rememberNavController(),
         closeSession = { /*TODO*/ },
-        onDestinationClicked = {}
+        onDestinationClicked = {},
+        percent = 0.75f
     )
 }

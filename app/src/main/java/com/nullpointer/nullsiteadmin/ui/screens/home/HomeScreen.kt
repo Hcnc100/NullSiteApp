@@ -1,5 +1,6 @@
 package com.nullpointer.nullsiteadmin.ui.screens.home
 
+import android.content.res.Configuration.ORIENTATION_LANDSCAPE
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -9,6 +10,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import com.nullpointer.nullsiteadmin.presentation.AuthViewModel
@@ -31,16 +33,21 @@ import com.ramcosta.composedestinations.rememberNavHostEngine
 fun HomeScreen(
     authViewModel: AuthViewModel,
     actionRootDestinations: ActionRootDestinations,
-    mainScreenState: HomeScreenState = rememberHomeScreenState()
+    mainScreenState: HomeScreenState = rememberHomeScreenState(),
 ) {
 
-    LaunchedEffect(key1 = Unit){
+    LaunchedEffect(key1 = Unit) {
         authViewModel.verifyPhoneData()
     }
 
+    val percent = when (LocalConfiguration.current.orientation) {
+        ORIENTATION_LANDSCAPE -> 0.5f
+        else -> 0.75f
+    }
+
     Scaffold(
+        drawerShape = customShape(percent),
         scaffoldState = mainScreenState.scaffoldState,
-        drawerShape = customShape(),
         topBar = {
             ToolbarMenu(
                 title = mainScreenState.titleNav,
@@ -51,7 +58,8 @@ fun HomeScreen(
             NavigatorDrawer(
                 closeSession = authViewModel::logOut,
                 closeDrawer = mainScreenState::closeDrawer,
-                navController = mainScreenState.navController
+                navController = mainScreenState.navController,
+                percent = percent,
             )
         },
     ) { paddingValues ->
@@ -71,17 +79,19 @@ fun HomeScreen(
 }
 
 // * TODO - FIXED SIZE DRAWER
-fun customShape() = object : Shape {
+fun customShape(
+    percent: Float
+) = object : Shape {
     override fun createOutline(
         size: Size,
         layoutDirection: LayoutDirection,
-        density: Density
+        density: Density,
     ): Outline {
         return Outline.Rectangle(
             Rect(
                 left = 0f,
                 top = 0f,
-                right = (size.width * 0.75).toFloat(),
+                right = (size.width * percent),
                 bottom = size.height
             )
         )
