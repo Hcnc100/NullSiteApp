@@ -13,6 +13,8 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -55,8 +57,9 @@ fun EmailDetailsScreen(
     emailsViewModel: EmailsViewModel = shareViewModel(),
     emailsDetailsState: SimpleScreenState = rememberSimpleScreenState()
 ) {
+    val isAuthBiometricPassed by authViewModel.isAuthBiometricPassed.collectAsState()
 
-    (authViewModel.isAuthBiometricPassed)?.let { isAuthPassed ->
+    (isAuthBiometricPassed)?.let { isAuthPassed ->
         if (!isAuthPassed) {
             // ! if the auth no passed back
             LaunchedEffect(key1 = Unit) {

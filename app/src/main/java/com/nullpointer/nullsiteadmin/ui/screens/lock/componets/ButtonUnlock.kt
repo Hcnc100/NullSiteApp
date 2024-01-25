@@ -21,7 +21,7 @@ fun ButtonLaunchBiometric(
 
     val isEnable = remember {
         derivedStateOf {
-            biometricLockData.biometricState == BiometricLockState.LOCK && biometricLockData.timeOutLock <= 0
+            biometricLockData.biometricLockState == BiometricLockState.LOCK && biometricLockData.timeOutLock <= 0
         }
     }
 
@@ -40,7 +40,7 @@ private fun ButtonLaunchBiometricEnablePreview() {
     ButtonLaunchBiometric(
         biometricLockData = BiometricLockData(
             timeOutLock = 10,
-            biometricState = BiometricLockState.LOCK
+            biometricLockState = BiometricLockState.LOCK
         ),
         actionLaunchBiometric = {}
     )
@@ -52,7 +52,7 @@ private fun ButtonLaunchBiometricDisablePreview() {
     ButtonLaunchBiometric(
         biometricLockData = BiometricLockData(
             timeOutLock = 0,
-            biometricState = BiometricLockState.LOCKED_BY_MANY_INTENTS
+            biometricLockState = BiometricLockState.LOCKED_BY_MANY_INTENTS
         ),
         actionLaunchBiometric = {}
     )

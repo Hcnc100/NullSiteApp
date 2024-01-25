@@ -123,7 +123,7 @@ private fun LockScreenDisablePreview() {
         biometricLockDataState = Resource.Success(
             BiometricLockData(
                 timeOutLock = 10,
-                biometricState = BiometricLockState.LOCK
+                biometricLockState = BiometricLockState.LOCK
             )
         )
     )
@@ -138,7 +138,7 @@ private fun LockScreenEnablePreview() {
         biometricLockDataState = Resource.Success(
             BiometricLockData(
                 timeOutLock = 0,
-                biometricState = BiometricLockState.LOCK
+                biometricLockState = BiometricLockState.LOCK
             )
         )
     )
@@ -154,7 +154,7 @@ private fun LockScreenTimeOutPreview() {
         biometricLockDataState = Resource.Success(
             BiometricLockData(
                 timeOutLock = 10,
-                biometricState = BiometricLockState.LOCKED_BY_TIME_OUT
+                biometricLockState = BiometricLockState.LOCKED_BY_TIME_OUT
             )
         )
     )
@@ -169,7 +169,7 @@ private fun LockScreenUndefineLockPreview() {
         biometricLockDataState = Resource.Success(
             BiometricLockData(
                 timeOutLock = 10,
-                biometricState = BiometricLockState.LOCKED_BY_MANY_INTENTS
+                biometricLockState = BiometricLockState.LOCKED_BY_MANY_INTENTS
             )
         )
     )

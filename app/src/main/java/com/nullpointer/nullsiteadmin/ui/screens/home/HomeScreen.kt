@@ -72,7 +72,6 @@ fun HomeScreen(
     }
 }
 
-// * TODO - FIXED SIZE DRAWER
 fun customShape(
     percent: Float
 ) = object : Shape {

@@ -13,7 +13,7 @@ import com.nullpointer.nullsiteadmin.ui.preview.config.SimplePreview
 fun TextStateLock(
     biometricLockData: BiometricLockData
 ) {
-    when (biometricLockData.biometricState) {
+    when (biometricLockData.biometricLockState) {
         BiometricLockState.LOCKED_BY_MANY_INTENTS -> Text(
             text = stringResource(R.string.text_biometric_disable),
             textAlign = TextAlign.Center
@@ -37,7 +37,7 @@ private fun TextStateLockPreview() {
     TextStateLock(
         biometricLockData = BiometricLockData(
             timeOutLock = 10,
-            biometricState = BiometricLockState.LOCK
+            biometricLockState = BiometricLockState.LOCK
         )
     )
 }
@@ -48,7 +48,7 @@ private fun TextStateLockDisablePreview() {
     TextStateLock(
         biometricLockData = BiometricLockData(
             timeOutLock = 0,
-            biometricState = BiometricLockState.LOCKED_BY_MANY_INTENTS
+            biometricLockState = BiometricLockState.LOCKED_BY_MANY_INTENTS
         )
     )
 }
@@ -59,7 +59,7 @@ private fun TextStateLockTimeOutPreview() {
     TextStateLock(
         biometricLockData = BiometricLockData(
             timeOutLock = 10,
-            biometricState = BiometricLockState.LOCKED_BY_TIME_OUT
+            biometricLockState = BiometricLockState.LOCKED_BY_TIME_OUT
         )
     )
 }

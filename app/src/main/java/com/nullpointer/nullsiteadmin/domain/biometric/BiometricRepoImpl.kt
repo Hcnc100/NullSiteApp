@@ -11,6 +11,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.transform
 
@@ -19,12 +20,15 @@ class BiometricRepoImpl(
     private val biometricDataSource: BiometricDataSource,
 ) : BiometricRepository {
 
-    private val _biometricState = MutableStateFlow(BiometricLockState.UNAVAILABLE)
-    override val biometricState: Flow<BiometricLockState> = _biometricState
+    private val _biometricLockState = MutableStateFlow(BiometricLockState.UNAVAILABLE)
+    override val biometricLockState: Flow<BiometricLockState> = _biometricLockState
 
     override val isBiometricEnabled: Flow<Boolean> = settingsLocalDataSource.getSettingsData().map {
         it?.isBiometricEnabled ?: false
     }
+
+    private val _isAuthBiometricPassed = MutableStateFlow<Boolean?>(null)
+    override val isAuthBiometricPassed: Flow<Boolean?> = _isAuthBiometricPassed
 
     override val timeOutLocked: Flow<Long> = settingsLocalDataSource.getSettingsData().map {
         it?.timeOutLock ?: 0
@@ -34,11 +38,22 @@ class BiometricRepoImpl(
             delay(150)
             restNow = value - System.currentTimeMillis()
             emit(restNow / 1000)
-            _biometricState.value = BiometricLockState.LOCKED_BY_TIME_OUT
+            _biometricLockState.value = BiometricLockState.LOCKED_BY_TIME_OUT
         }
-        _biometricState.value = BiometricLockState.LOCK
+        _biometricLockState.value = BiometricLockState.LOCK
         emit(0)
     }.distinctUntilChanged()
+
+    override suspend fun initVerifyBiometrics() {
+        _isAuthBiometricPassed.value = when {
+            !checkBiometricSupport() -> true
+            else -> !isBiometricEnabled.first()
+        }
+    }
+
+    override fun blockBiometric() {
+        _isAuthBiometricPassed.value = null
+    }
 
 
     override fun checkBiometricSupport(): Boolean =
@@ -56,22 +71,22 @@ class BiometricRepoImpl(
         }
     }
 
-    override suspend fun unlockByBiometric(): Boolean {
-        return when (biometricDataSource.unlockByFingerBiometric()) {
-            PASSED -> true
+    override suspend fun unlockByBiometric() {
+        when (biometricDataSource.unlockByFingerBiometric()) {
+            PASSED -> _isAuthBiometricPassed.value = true
             DISABLE -> {
-                _biometricState.value = BiometricLockState.LOCKED_BY_MANY_INTENTS
-                false
+                _biometricLockState.value = BiometricLockState.LOCKED_BY_MANY_INTENTS
+                _isAuthBiometricPassed.value = false
             }
 
             TEMPORARILY_LOCKED -> {
                 settingsLocalDataSource.changeTimeOutLocked(System.currentTimeMillis() + 30 * 1000)
-                false
+                _isAuthBiometricPassed.value = false
             }
 
             NOT_SUPPORTED -> {
-                _biometricState.value = BiometricLockState.UNAVAILABLE
-                false
+                _biometricLockState.value = BiometricLockState.UNAVAILABLE
+                _isAuthBiometricPassed.value = true
             }
         }
     }

@@ -30,12 +30,12 @@ class LockScreenViewModel @Inject constructor(
 
     val biometricLockData: StateFlow<Resource<BiometricLockData>> = combine(
         biometricRepository.timeOutLocked,
-        biometricRepository.biometricState
+        biometricRepository.biometricLockState
     ) { timeOutLocked, biometricState ->
         Resource.Success(
             BiometricLockData(
                 timeOutLock = timeOutLocked,
-                biometricState = biometricState
+                biometricLockState = biometricState
             )
         )
     }.stateIn(
