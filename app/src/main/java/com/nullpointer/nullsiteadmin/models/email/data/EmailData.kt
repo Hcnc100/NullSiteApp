@@ -1,5 +1,6 @@
 package com.nullpointer.nullsiteadmin.models.email.data
 
+import com.nullpointer.nullsiteadmin.core.utils.extensions.toDate
 import com.nullpointer.nullsiteadmin.database.DateAsLongSerializer
 import com.nullpointer.nullsiteadmin.models.email.entity.EmailEntity
 import kotlinx.serialization.Serializable
@@ -81,6 +82,19 @@ data class EmailData(
                 isOpen = emailEntity.isOpen,
                 createdAt = emailEntity.createAt,
                 updatedAt = emailEntity.updateAt
+            )
+        }
+
+        fun fromNotifyFirebase(map: Map<String, String>): EmailData {
+            return EmailData(
+                name = map["name"] ?: "",
+                email = map["email"] ?: "",
+                idEmail = map["idEmail"] ?: "",
+                message = map["message"] ?: "",
+                subject = map["subject"] ?: "",
+                isOpen = map["isOpen"]?.toBoolean() ?: false,
+                createdAt = map["createdAt"]?.toLongOrNull()?.toDate(),
+                updatedAt = map["updatedAt"]?.toLongOrNull()?.toDate()
             )
         }
     }

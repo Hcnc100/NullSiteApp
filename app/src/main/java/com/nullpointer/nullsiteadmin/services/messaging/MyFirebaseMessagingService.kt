@@ -6,10 +6,14 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.nullpointer.nullsiteadmin.domain.auth.AuthRepository
 import com.nullpointer.nullsiteadmin.domain.email.EmailsRepository
-import com.nullpointer.nullsiteadmin.models.email.data.EmailData
 import com.nullpointer.nullsiteadmin.models.email.EmailDeserializer
+import com.nullpointer.nullsiteadmin.models.email.data.EmailData
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -46,7 +50,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
         safeLaunchTokenOperation("Error when process new message $message") {
-            val email = gson.fromJson(message.data["notify"], EmailData::class.java)
+            val email = EmailData.fromNotifyFirebase(message.data)
             notifyHelper.showNotifyForMessage(email)
             emailRepository.requestLastEmail()
         }
