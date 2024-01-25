@@ -8,8 +8,8 @@ import com.google.firebase.ktx.Firebase
 import com.nullpointer.nullsiteadmin.core.utils.Constants
 import com.nullpointer.nullsiteadmin.core.utils.awaitAll
 import com.nullpointer.nullsiteadmin.core.utils.getTimeEstimate
-import com.nullpointer.nullsiteadmin.models.email.dto.UpdateEmailDTO
 import com.nullpointer.nullsiteadmin.models.email.data.EmailData
+import com.nullpointer.nullsiteadmin.models.email.dto.UpdateEmailDTO
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -60,8 +60,11 @@ class EmailApiServices {
         collectionEmail.document(idEmail).delete().await()
     }
 
-    suspend fun updateEmail(updateEmailDTO: UpdateEmailDTO) {
-        collectionEmail.document(updateEmailDTO.idEmail).update(updateEmailDTO.toUpdateMap())
+    suspend fun updateEmail(
+        idEmail: String,
+        updateEmailDTO: UpdateEmailDTO,
+    ) {
+        collectionEmail.document(idEmail).update(updateEmailDTO.toUpdateMap())
             .await()
     }
 

@@ -4,7 +4,6 @@ import com.nullpointer.nullsiteadmin.core.utils.MappableFirebase
 import com.nullpointer.nullsiteadmin.models.email.data.EmailData
 
 data class UpdateEmailDTO(
-    val idEmail:String,
     val isOpen:Boolean,
 ): MappableFirebase {
     companion object{
@@ -12,7 +11,6 @@ data class UpdateEmailDTO(
             emailData: EmailData
         ): UpdateEmailDTO {
             return UpdateEmailDTO(
-                idEmail = emailData.idEmail,
                 isOpen = true
             )
         }

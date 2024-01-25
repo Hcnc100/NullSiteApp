@@ -2,8 +2,8 @@ package com.nullpointer.nullsiteadmin.domain.email
 
 import com.nullpointer.nullsiteadmin.datasource.email.local.EmailLocalDataSource
 import com.nullpointer.nullsiteadmin.datasource.email.remote.EmailRemoteDataSource
-import com.nullpointer.nullsiteadmin.models.email.dto.UpdateEmailDTO
 import com.nullpointer.nullsiteadmin.models.email.data.EmailData
+import com.nullpointer.nullsiteadmin.models.email.dto.UpdateEmailDTO
 import kotlinx.coroutines.flow.Flow
 
 class EmailsRepoImpl(
@@ -25,9 +25,12 @@ class EmailsRepoImpl(
 
     override suspend fun markAsOpen(emailData: EmailData) {
         val updateEmailDTO = UpdateEmailDTO.fromEmailData(emailData)
-        emailRemoteDataSource.updateEmail(updateEmailDTO)
+        emailRemoteDataSource.updateEmail(
+            idEmail = emailData.idEmail,
+            updateEmailDTO = updateEmailDTO
+        )
 
-        val updateEmailData= emailData.copy(isOpen = true)
+        val updateEmailData = emailData.copy(isOpen = true)
         emailLocalDataSource.updateEmail(updateEmailData)
     }
 

@@ -2,8 +2,8 @@ package com.nullpointer.nullsiteadmin.datasource.email.remote
 
 import com.nullpointer.nullsiteadmin.core.utils.callApiTimeOut
 import com.nullpointer.nullsiteadmin.data.email.remote.EmailApiServices
-import com.nullpointer.nullsiteadmin.models.email.dto.UpdateEmailDTO
 import com.nullpointer.nullsiteadmin.models.email.data.EmailData
+import com.nullpointer.nullsiteadmin.models.email.dto.UpdateEmailDTO
 import kotlinx.coroutines.flow.Flow
 
 class EmailRemoteDataSourceImpl(
@@ -16,8 +16,14 @@ class EmailRemoteDataSourceImpl(
         emailApiServices.deleterEmail(idEmail)
     }
 
-    override suspend fun updateEmail(updateEmailDTO: UpdateEmailDTO) = callApiTimeOut {
-        emailApiServices.updateEmail(updateEmailDTO)
+    override suspend fun updateEmail(
+        idEmail: String,
+        updateEmailDTO: UpdateEmailDTO
+    ) = callApiTimeOut {
+        emailApiServices.updateEmail(
+            idEmail = idEmail,
+            updateEmailDTO = updateEmailDTO
+        )
     }
 
 
