@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
@@ -29,7 +28,7 @@ import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableImg
 import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
 import com.nullpointer.nullsiteadmin.models.personalInfo.data.PersonalInfoData
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
-import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
+import com.nullpointer.nullsiteadmin.ui.navigator.HomeNavGraph
 import com.nullpointer.nullsiteadmin.ui.preview.config.OrientationPreviews
 import com.nullpointer.nullsiteadmin.ui.screens.profile.editInfoProfile.actions.EditInfoProfileActions
 import com.nullpointer.nullsiteadmin.ui.screens.profile.editInfoProfile.actions.EditInfoProfileActions.BACK_SCREEN
@@ -49,8 +48,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import timber.log.Timber
 
 
-@OptIn(ExperimentalMaterialApi::class)
-@RootNavGraph
+@HomeNavGraph
 @Destination
 @Composable
 fun EditInfoProfileScreen(
@@ -115,7 +113,6 @@ fun EditInfoProfileScreen(
 }
 
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun EditInfoProfileScreen(
     isLoading: Boolean,
@@ -214,7 +211,7 @@ fun EditInfoProfileScreen(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+
 @OrientationPreviews
 @Composable
 private fun EditInfoProfileScreenPreview() {

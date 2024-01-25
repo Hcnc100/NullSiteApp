@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -17,7 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class)
+
 @Stable
 class LazySwipeScreenState(
     context: Context,
@@ -38,7 +37,6 @@ class LazySwipeScreenState(
 }
 
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun rememberLazySwipeScreenState(
     onRefresh: () -> Unit,

@@ -28,7 +28,6 @@ import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.actions.BiometricLockState
 import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.models.biometric.data.BiometricLockData
-import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
 import com.nullpointer.nullsiteadmin.ui.preview.config.OrientationPreviews
 import com.nullpointer.nullsiteadmin.ui.preview.config.SimplePreview
 import com.nullpointer.nullsiteadmin.ui.screens.lock.componets.ButtonLaunchBiometric
@@ -39,6 +38,7 @@ import com.nullpointer.nullsiteadmin.ui.screens.shared.LottieContainer
 import com.nullpointer.nullsiteadmin.ui.screens.states.SimpleScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberSimpleScreenState
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
 
 @RootNavGraph
 @Destination

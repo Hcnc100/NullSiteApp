@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
@@ -34,20 +33,20 @@ import com.nullpointer.nullsiteadmin.ui.screens.profile.infoProfile.componets.su
 import com.nullpointer.nullsiteadmin.ui.screens.profile.infoProfile.componets.subScreens.InfoProfileError
 import com.nullpointer.nullsiteadmin.ui.screens.profile.infoProfile.viewModel.InfoUserViewModel
 import com.nullpointer.nullsiteadmin.ui.screens.shared.BlockProgress
-import com.nullpointer.nullsiteadmin.ui.screens.states.SwipeScreenState
-import com.nullpointer.nullsiteadmin.ui.screens.states.rememberSwipeScreenState
+import com.nullpointer.nullsiteadmin.ui.screens.states.PullRefreshScreenState
+import com.nullpointer.nullsiteadmin.ui.screens.states.rememberPullRefreshScreenState
 import com.ramcosta.composedestinations.annotation.Destination
 
-@OptIn(ExperimentalMaterialApi::class)
+
 @HomeNavGraph(start = true)
 @Destination
 @Composable
-fun InfoProfileScreen(
+fun ProfileScreen(
     actionRootDestinations: ActionRootDestinations,
     infoViewModel: InfoUserViewModel = hiltViewModel(),
-    infoProfileState: SwipeScreenState = rememberSwipeScreenState(
+    infoProfileState: PullRefreshScreenState = rememberPullRefreshScreenState(
         isRefreshing = infoViewModel.isRequestInfoUser,
-        onRefresh = infoViewModel::requestLastInformation
+        onRefresh = infoViewModel::requestLastInformation,
     )
 ) {
 
@@ -59,7 +58,7 @@ fun InfoProfileScreen(
         infoViewModel.messageError.collect(infoProfileState::showSnackMessage)
     }
 
-    InfoProfileScreen(
+    ProfileScreen(
         personalInfoData = stateInfoProfile,
         isRefreshing = infoViewModel.isRequestInfoUser,
         scaffoldState = infoProfileState.scaffoldState,
@@ -72,9 +71,8 @@ fun InfoProfileScreen(
 }
 
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun InfoProfileScreen(
+fun ProfileScreen(
     isRefreshing: Boolean,
     actionEditInfo: () -> Unit,
     scaffoldState: ScaffoldState,
@@ -126,14 +124,14 @@ fun InfoProfileScreen(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+
 @OrientationPreviews
 @Composable
 private fun InfoProfileNotRefreshingPreview(
     @PreviewParameter(InfoProfileStateProvider::class)
     personalInfoData: Resource<PersonalInfoData?>,
 ) {
-    InfoProfileScreen(
+    ProfileScreen(
         isRefreshing = false,
         actionEditInfo = {},
         scaffoldState = rememberScaffoldState(),
@@ -143,14 +141,13 @@ private fun InfoProfileNotRefreshingPreview(
 }
 
 
-@OptIn(ExperimentalMaterialApi::class)
 @OrientationPreviews
 @Composable
 private fun InfoProfileRefreshingPreview(
     @PreviewParameter(InfoProfileStateProvider::class)
     personalInfoData: Resource<PersonalInfoData?>,
 ) {
-    InfoProfileScreen(
+    ProfileScreen(
         isRefreshing = true,
         actionEditInfo = {},
         scaffoldState = rememberScaffoldState(),

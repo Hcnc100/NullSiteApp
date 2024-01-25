@@ -27,7 +27,6 @@ import com.nullpointer.nullsiteadmin.actions.EmailsScreenActions.REPLY
 import com.nullpointer.nullsiteadmin.core.utils.sendEmail
 import com.nullpointer.nullsiteadmin.models.email.data.EmailData
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
-import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
 import com.nullpointer.nullsiteadmin.ui.preview.config.OrientationPreviews
 import com.nullpointer.nullsiteadmin.ui.screens.email.detailsEmail.componets.BodyEmail
 import com.nullpointer.nullsiteadmin.ui.screens.email.detailsEmail.componets.ButtonReplyEmail
@@ -40,6 +39,7 @@ import com.nullpointer.nullsiteadmin.ui.screens.states.rememberSimpleScreenState
 import com.ramcosta.composedestinations.annotation.DeepLink
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.FULL_ROUTE_PLACEHOLDER
+import com.ramcosta.composedestinations.annotation.RootNavGraph
 
 
 @RootNavGraph

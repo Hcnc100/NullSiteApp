@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.net.Uri
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.ScaffoldState
@@ -28,7 +27,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
-@OptIn(ExperimentalMaterialApi::class)
 @Stable
 class EditInfoProfileState(
     context: Context,
@@ -39,7 +37,7 @@ class EditInfoProfileState(
     private val launcherCropImage: ManagedActivityResultLauncher<CropImageContractOptions, CropImageView.CropResult>
 ) : FocusScreenState(context, scaffoldState, focusManager) {
 
-    @OptIn(ExperimentalMaterialApi::class)
+
     val isModalVisible
         get() = modalState.isVisible
 
@@ -80,7 +78,6 @@ class EditInfoProfileState(
 }
 
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun rememberEditInfoProfileState(
     actionCropSuccess: (Uri) -> Unit,

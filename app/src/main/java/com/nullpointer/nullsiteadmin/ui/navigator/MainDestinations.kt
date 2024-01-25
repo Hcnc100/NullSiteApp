@@ -4,8 +4,8 @@ import androidx.annotation.DrawableRes
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.DirectionDestination
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EmailScreenDestination
-import com.nullpointer.nullsiteadmin.ui.screens.destinations.InfoProfileScreenDestination
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.PreviewScreenDestination
+import com.nullpointer.nullsiteadmin.ui.screens.destinations.ProfileScreenDestination
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.ProjectScreenDestination
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.SettingsScreenDestination
 
@@ -18,7 +18,7 @@ enum class MainDestinations(
     PersonalInfoScreen(
         label = "InfoPersonal",
         icon = R.drawable.ic_home,
-        destinations = InfoProfileScreenDestination
+        destinations = ProfileScreenDestination
     ),
 
     ProjectsScreen(
@@ -48,12 +48,12 @@ enum class MainDestinations(
     companion object {
         fun isHomeRoute(route: String?): Boolean {
             if (route == null) return false
-            return values().find { it.destinations.route == route } != null
+            return entries.find { it.destinations.route == route } != null
         }
 
         fun getLabel(route: String?): String {
             if (route == null) return ""
-            return values().find { it.destinations.route == route }?.label ?: ""
+            return entries.find { it.destinations.route == route }?.label ?: ""
         }
     }
 }

@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
@@ -26,7 +25,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.models.project.data.ProjectData
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
-import com.nullpointer.nullsiteadmin.ui.navigator.HomeNavGraph
 import com.nullpointer.nullsiteadmin.ui.preview.config.OrientationPreviews
 import com.nullpointer.nullsiteadmin.ui.preview.provider.ListProjectProvider
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EditProjectScreenDestination
@@ -39,8 +37,7 @@ import com.nullpointer.nullsiteadmin.ui.screens.states.LazyGridSwipeScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberLazyGridSwipeScreenState
 import com.ramcosta.composedestinations.annotation.Destination
 
-@OptIn(ExperimentalMaterialApi::class)
-@HomeNavGraph
+
 @Destination
 @Composable
 fun ProjectScreen(
@@ -90,7 +87,7 @@ fun ProjectScreen(
 
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+
 @Composable
 private fun ProjectScreen(
     isLoading: Boolean,
@@ -142,7 +139,6 @@ private fun ProjectScreen(
 }
 
 
-@OptIn(ExperimentalMaterialApi::class)
 @OrientationPreviews
 @Composable
 private fun ProjectScreenPreview(

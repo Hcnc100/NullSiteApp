@@ -21,7 +21,6 @@ import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
 import com.nullpointer.nullsiteadmin.models.project.data.ProjectData
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
-import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
 import com.nullpointer.nullsiteadmin.ui.screens.project.editProjectScreen.actions.EditProjectAction
 import com.nullpointer.nullsiteadmin.ui.screens.project.editProjectScreen.components.ButtonUpdateProject
 import com.nullpointer.nullsiteadmin.ui.screens.project.editProjectScreen.components.ImageProjectEdit
@@ -32,6 +31,7 @@ import com.nullpointer.nullsiteadmin.ui.screens.states.rememberFocusScreenState
 import com.nullpointer.nullsiteadmin.ui.share.BlockProcessing
 import com.nullpointer.nullsiteadmin.ui.share.ToolbarBack
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
 
 @RootNavGraph
 @Destination

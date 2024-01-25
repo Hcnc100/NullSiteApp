@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
@@ -39,7 +38,7 @@ import com.nullpointer.nullsiteadmin.ui.screens.states.rememberLazySwipeScreenSt
 import com.nullpointer.nullsiteadmin.ui.share.BlockProcessing
 import com.ramcosta.composedestinations.annotation.Destination
 
-@OptIn(ExperimentalMaterialApi::class)
+
 @HomeNavGraph
 @Destination
 @Composable
@@ -87,7 +86,7 @@ fun EmailScreen(
 
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+
 @Composable
 private fun EmailScreen(
     isRefreshing: Boolean,
@@ -139,7 +138,7 @@ private fun EmailScreen(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+
 @OrientationPreviews
 @Composable
 private fun EmailScreenPreview(

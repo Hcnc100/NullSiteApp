@@ -22,7 +22,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
-import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
 import com.nullpointer.nullsiteadmin.ui.preview.config.OrientationPreviews
 import com.nullpointer.nullsiteadmin.ui.screens.login.componets.ButtonLogin
 import com.nullpointer.nullsiteadmin.ui.screens.login.componets.FormLogin
@@ -34,6 +33,7 @@ import com.nullpointer.nullsiteadmin.ui.screens.login.viewModel.LoginScreenViewM
 import com.nullpointer.nullsiteadmin.ui.screens.states.FocusScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberFocusScreenState
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
 
 @RootNavGraph(start = true)
 @Destination

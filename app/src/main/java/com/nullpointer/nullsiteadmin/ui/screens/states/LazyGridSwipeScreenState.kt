@@ -3,7 +3,6 @@ package com.nullpointer.nullsiteadmin.ui.screens.states
 import android.content.Context
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -15,7 +14,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.CoroutineScope
 
-@OptIn(ExperimentalMaterialApi::class)
+
 @Stable
 class LazyGridSwipeScreenState(
     context: Context,
@@ -32,7 +31,6 @@ class LazyGridSwipeScreenState(
 }
 
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun rememberLazyGridSwipeScreenState(
     onRefresh: () -> Unit = {},
