@@ -19,14 +19,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.nullsiteadmin.actions.EmailsScreenActions
 import com.nullpointer.nullsiteadmin.actions.EmailsScreenActions.DELETER
 import com.nullpointer.nullsiteadmin.actions.EmailsScreenActions.MARK_AS_OPEN
 import com.nullpointer.nullsiteadmin.actions.EmailsScreenActions.REPLY
 import com.nullpointer.nullsiteadmin.core.utils.sendEmail
-import com.nullpointer.nullsiteadmin.core.utils.shareViewModel
 import com.nullpointer.nullsiteadmin.models.email.data.EmailData
-import com.nullpointer.nullsiteadmin.presentation.AuthViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.navigator.RootNavGraph
 import com.nullpointer.nullsiteadmin.ui.preview.config.OrientationPreviews
@@ -35,7 +34,7 @@ import com.nullpointer.nullsiteadmin.ui.screens.email.detailsEmail.componets.But
 import com.nullpointer.nullsiteadmin.ui.screens.email.detailsEmail.componets.ContainerAnimateEmail
 import com.nullpointer.nullsiteadmin.ui.screens.email.detailsEmail.componets.HeaderEmail
 import com.nullpointer.nullsiteadmin.ui.screens.email.detailsEmail.componets.ToolbarEmailDetails
-import com.nullpointer.nullsiteadmin.ui.screens.email.emial.viewModel.EmailsViewModel
+import com.nullpointer.nullsiteadmin.ui.screens.email.detailsEmail.viewModel.EmailDetailsViewModel
 import com.nullpointer.nullsiteadmin.ui.screens.states.SimpleScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberSimpleScreenState
 import com.ramcosta.composedestinations.annotation.DeepLink
@@ -52,12 +51,11 @@ import com.ramcosta.composedestinations.annotation.FULL_ROUTE_PLACEHOLDER
 @Composable
 fun EmailDetailsScreen(
     email: EmailData,
-    authViewModel: AuthViewModel,
     rootDestinations: ActionRootDestinations,
-    emailsViewModel: EmailsViewModel = shareViewModel(),
+    emailsViewModel: EmailDetailsViewModel = hiltViewModel(),
     emailsDetailsState: SimpleScreenState = rememberSimpleScreenState()
 ) {
-    val isAuthBiometricPassed by authViewModel.isAuthBiometricPassed.collectAsState()
+    val isAuthBiometricPassed by emailsViewModel.isAuthBiometricPassed.collectAsState()
 
     (isAuthBiometricPassed)?.let { isAuthPassed ->
         if (!isAuthPassed) {
@@ -66,9 +64,10 @@ fun EmailDetailsScreen(
                 rootDestinations.backDestination()
             }
         } else {
-            // ! if the auth passed, show content email
-            LaunchedEffect(key1 = Unit) {
-                emailsViewModel.markAsOpen(email)
+            LaunchedEffect(key1 = email) {
+                if (!email.isOpen) {
+                    emailsViewModel.markAsOpen(email)
+                }
             }
             EmailsDetailsScreen(
                 email = email,
@@ -77,18 +76,16 @@ fun EmailDetailsScreen(
                 emailScreenAction = { action, email ->
                     when (action) {
                         MARK_AS_OPEN -> emailsViewModel.markAsOpen(email)
+                        REPLY -> emailsDetailsState.context.sendEmail(email.email)
                         DELETER -> {
                             emailsViewModel.deleterEmail(email.idEmail)
                             rootDestinations.backDestination()
                         }
-
-                        REPLY -> emailsDetailsState.context.sendEmail(email.email)
                     }
                 }
             )
         }
     }
-
 }
 
 @Composable

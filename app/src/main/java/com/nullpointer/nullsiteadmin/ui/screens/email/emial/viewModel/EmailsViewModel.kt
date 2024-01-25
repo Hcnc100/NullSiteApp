@@ -102,23 +102,6 @@ class EmailsViewModel @Inject constructor(
     )
 
 
-    fun deleterEmail(
-        idEmail: String
-    ) = launchSafeIO(
-        blockIO = {
-            emailsRepository.deleterEmail(idEmail)
-            delay(300)
-            _errorEmail.trySend(R.string.message_deleter_email_success)
-        },
-        blockException = {
-            delay(300)
-            sendMessageErrorToException(
-                exception = it,
-                channel = _errorEmail,
-                message = "Error deleter email $idEmail"
-            )
-        }
-    )
 
     fun requestLastEmail() = launchSafeIO(
         isEnabled = !isRequestEmail,
@@ -141,9 +124,5 @@ class EmailsViewModel @Inject constructor(
         }
     )
 
-    fun markAsOpen(email: EmailData) = launchSafeIO(
-        isEnabled = !email.isOpen,
-        blockIO = { emailsRepository.markAsOpen(email) },
-        blockException = { Timber.e("Error mark as open $email : $it") }
-    )
+
 }
