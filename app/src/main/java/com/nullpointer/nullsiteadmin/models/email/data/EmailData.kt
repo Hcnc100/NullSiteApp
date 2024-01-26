@@ -1,5 +1,6 @@
 package com.nullpointer.nullsiteadmin.models.email.data
 
+import com.google.firebase.firestore.PropertyName
 import com.nullpointer.nullsiteadmin.core.utils.extensions.toDate
 import com.nullpointer.nullsiteadmin.database.DateAsLongSerializer
 import com.nullpointer.nullsiteadmin.models.email.entity.EmailEntity
@@ -18,6 +19,7 @@ data class EmailData(
     val createdAt: Date?= null,
     @Serializable(with = DateAsLongSerializer::class)
     val updatedAt: Date?= null,
+    @get:PropertyName("isOpen")
     val isOpen: Boolean = false
 ){
     companion object{

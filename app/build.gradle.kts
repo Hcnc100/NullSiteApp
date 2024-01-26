@@ -19,7 +19,7 @@ android {
 
     defaultConfig {
         applicationId = "com.nullpointer.nullsiteadmin"
-        minSdk =21
+        minSdk = 21
         targetSdk = 34
         versionCode = 10
         versionName = "1.3.1"
@@ -28,9 +28,9 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        val newsApiKey: String =
+        val profileId: String =
             gradleLocalProperties(rootDir).getProperty("ID_INFO_PROFILE_FIREBASE")
-        buildConfigField("String", "ID_INFO_PROFILE_FIREBASE", newsApiKey)
+        buildConfigField("String", "ID_INFO_PROFILE_FIREBASE", profileId)
 
         val urlMainPage: String = gradleLocalProperties(rootDir).getProperty("URL_MAIN_PAGE")
         buildConfigField("String", "URL_MAIN_PAGE", urlMainPage)
@@ -86,18 +86,18 @@ android {
 dependencies {
 
     implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.compose.ui:ui:1.5.4")
-    implementation("androidx.compose.material:material:1.5.4")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.5.4")
+    implementation("androidx.compose.ui:ui:1.6.0")
+    implementation("androidx.compose.material:material:1.6.0")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.6.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.activity:activity-compose:1.8.2")
     implementation("androidx.lifecycle:lifecycle-service:2.7.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.5.4")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.5.4")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:1.5.4")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.6.0")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.6.0")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.6.0")
 
     // * coil
     implementation("io.coil-kt:coil-compose:2.5.0")
@@ -109,12 +109,12 @@ dependencies {
     implementation("com.orhanobut:logger:2.2.0")
     implementation("com.jakewharton.timber:timber:5.0.1")
 
-// * hilt
+    // * hilt
     val daggerHiltVersion = "2.50"
     implementation("com.google.dagger:hilt-android:$daggerHiltVersion")
     kapt("com.google.dagger:hilt-compiler:$daggerHiltVersion")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
-// ? hilt test
+    // ? hilt test
     testImplementation("com.google.dagger:hilt-android-testing:$daggerHiltVersion")
     androidTestImplementation("com.google.dagger:hilt-android-testing:$daggerHiltVersion")
     kaptAndroidTest("com.google.dagger:hilt-android-compiler:$daggerHiltVersion")
