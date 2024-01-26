@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nullpointer.nullsiteadmin.R
+import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.biometric.BiometricRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -41,12 +42,22 @@ class SettingsViewModel @Inject constructor(
         )
 
 
-    fun changeBiometricEnabled(enabled: Boolean) = launchSafeIO {
-        if (isBiometricAvailable) {
-            biometricRepository.changeBiometricEnable(enabled)
-        } else {
-            _messageErrorSettings.trySend(R.string.biometric_no_avariable)
+    fun changeBiometricEnabled(enabled: Boolean) = launchSafeIO(
+        blockIO = {
+            if (isBiometricAvailable) {
+                biometricRepository.changeBiometricEnable(enabled)
+            } else {
+                _messageErrorSettings.trySend(R.string.biometric_no_avariable)
+            }
+        },
+        blockException = {
+            ExceptionManager.sendMessageErrorToException(
+                exception = it,
+                channel = _messageErrorSettings,
+                messageResource = R.string.error_enable_biometric,
+                debugMessage = "Error to change biometric enabled"
+            )
         }
-    }
+    )
 
 }

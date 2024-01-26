@@ -17,8 +17,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import timber.log.Timber
@@ -41,19 +41,18 @@ class InfoUserViewModel @Inject constructor(
     }
 
 
-    val infoUser = flow<Resource<PersonalInfoData?>> {
-        infoUserRepository.myPersonalInfoData.collect {
-            emit(Resource.Success(it))
-        }
-    }.flowOn(Dispatchers.IO).catch {
-        Timber.e("Error to load info user $it")
-        _messageError.trySend(R.string.error_load_info_user)
-        emit(Resource.Failure)
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5_000),
-        Resource.Loading
-    )
+    val infoUser =
+        infoUserRepository.myPersonalInfoData.map<PersonalInfoData?, Resource<PersonalInfoData?>> {
+            Resource.Success(it)
+        }.flowOn(Dispatchers.IO).catch {
+            Timber.e("Error to load info user $it")
+            _messageError.trySend(R.string.error_load_info_user)
+            emit(Resource.Failure)
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5_000),
+            Resource.Loading
+        )
 
 
     fun requestLastInformation() = launchSafeIO(
@@ -63,8 +62,9 @@ class InfoUserViewModel @Inject constructor(
         blockException = {
             ExceptionManager.sendMessageErrorToException(
                 exception = it,
-                message = "Error update info",
-                channel = _messageError
+                debugMessage = "Error get profile info",
+                channel = _messageError,
+                messageResource = R.string.error_get_profile_info
             )
         },
         blockIO = {

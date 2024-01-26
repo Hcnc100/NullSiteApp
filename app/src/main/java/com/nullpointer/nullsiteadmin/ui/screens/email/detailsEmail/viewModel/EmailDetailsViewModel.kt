@@ -9,18 +9,19 @@ import com.nullpointer.nullsiteadmin.domain.biometric.BiometricRepository
 import com.nullpointer.nullsiteadmin.domain.email.EmailsRepository
 import com.nullpointer.nullsiteadmin.models.email.data.EmailData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
-import timber.log.Timber
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class EmailDetailsViewModel @Inject constructor(
     private val emailsRepository: EmailsRepository,
-    private val biometricRepository: BiometricRepository,
+    biometricRepository: BiometricRepository,
 ) : ViewModel() {
 
     val isAuthBiometricPassed = biometricRepository.isAuthBiometricPassed.stateIn(
@@ -34,25 +35,36 @@ class EmailDetailsViewModel @Inject constructor(
     val errorEmailDetails = _errorEmailDetails.receiveAsFlow()
 
     fun markAsOpen(email: EmailData) = launchSafeIO(
-        isEnabled = !email.isOpen,
         blockIO = { emailsRepository.markAsOpen(email) },
-        blockException = { Timber.e("Error mark as open $email : $it") }
-    )
-
-    fun deleterEmail(
-        idEmail: String
-    ) = launchSafeIO(
-        blockIO = {
-            emailsRepository.deleterEmail(idEmail)
-            delay(300)
-            _errorEmailDetails.trySend(R.string.message_deleter_email_success)
-        },
         blockException = {
             delay(300)
             ExceptionManager.sendMessageErrorToException(
                 exception = it,
                 channel = _errorEmailDetails,
-                message = "Error deleter email $idEmail"
+                messageResource = R.string.message_mark_as_open_error,
+                debugMessage = "Error to mark as open email"
+            )
+        }
+    )
+
+
+    fun deleterEmail(
+        idEmail: String,
+        actionSuccess: () -> Unit,
+    ) = launchSafeIO(
+        blockIO = {
+            emailsRepository.deleterEmail(idEmail)
+            _errorEmailDetails.trySend(R.string.message_deleter_email_success)
+            withContext(Dispatchers.Main) {
+                actionSuccess()
+            }
+        },
+        blockException = {
+            ExceptionManager.sendMessageErrorToException(
+                exception = it,
+                channel = _errorEmailDetails,
+                messageResource = R.string.message_deleter_email_error,
+                debugMessage = "Error to deleter email"
             )
         }
     )

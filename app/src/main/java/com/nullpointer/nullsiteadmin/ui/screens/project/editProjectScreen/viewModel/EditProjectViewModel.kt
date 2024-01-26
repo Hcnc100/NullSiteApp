@@ -8,6 +8,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
+import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.project.ProjectRepository
 import com.nullpointer.nullsiteadmin.models.project.data.ProjectData
@@ -114,32 +115,41 @@ class EditProjectViewModel @Inject constructor(
         actionSuccess: () -> Unit
     ) = launchSafeIO(
         blockBefore = { isUpdatedProject = true },
-        blockAfter = { isUpdatedProject = false }
-    ) {
-        when {
-            !isDataValid ->
-                _messageError.trySend(R.string.error_invalid_data)
+        blockAfter = { isUpdatedProject = false },
+        blockException = {
+            ExceptionManager.sendMessageErrorToException(
+                exception = it,
+                debugMessage = "Error to update project",
+                channel = _messageError,
+                messageResource = R.string.error_update_project
+            )
+        },
+        blockIO = {
+            when {
+                !isDataValid ->
+                    _messageError.trySend(R.string.error_invalid_data)
 
-            !hasAnyChange ->
-                _messageError.trySend(R.string.error_no_data_change)
+                !hasAnyChange ->
+                    _messageError.trySend(R.string.error_no_data_change)
 
-            else -> {
-                val updateProjectWrapper = UpdateProjectWrapper(
-                    name = nameProject.currentValue,
-                    urlImg = urlImgProject.currentValue,
-                    urlRepo = urlRepositoryProject.currentValue,
-                    description = descriptionProject.currentValue,
-                    idProject = currentProjectData.idProject,
-                    isVisible = currentProjectData.isVisible
-                )
-                projectRepository.editProject(updateProjectWrapper)
-                _messageError.trySend(R.string.message_data_upload)
-                delay(2000)
-                withContext(Dispatchers.Main) {
-                    actionSuccess()
+                else -> {
+                    val updateProjectWrapper = UpdateProjectWrapper(
+                        name = nameProject.currentValue,
+                        urlImg = urlImgProject.currentValue,
+                        urlRepo = urlRepositoryProject.currentValue,
+                        description = descriptionProject.currentValue,
+                        idProject = currentProjectData.idProject,
+                        isVisible = currentProjectData.isVisible
+                    )
+                    projectRepository.editProject(updateProjectWrapper)
+                    _messageError.trySend(R.string.message_data_upload)
+                    delay(2000)
+                    withContext(Dispatchers.Main) {
+                        actionSuccess()
+                    }
                 }
             }
-        }
 
-    }
+        }
+    )
 }

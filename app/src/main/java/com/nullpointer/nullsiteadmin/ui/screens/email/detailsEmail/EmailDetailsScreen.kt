@@ -24,7 +24,6 @@ import com.nullpointer.nullsiteadmin.actions.EmailsScreenActions
 import com.nullpointer.nullsiteadmin.actions.EmailsScreenActions.DELETER
 import com.nullpointer.nullsiteadmin.actions.EmailsScreenActions.MARK_AS_OPEN
 import com.nullpointer.nullsiteadmin.actions.EmailsScreenActions.REPLY
-import com.nullpointer.nullsiteadmin.core.utils.sendEmail
 import com.nullpointer.nullsiteadmin.models.email.data.EmailData
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.preview.config.OrientationPreviews
@@ -34,8 +33,8 @@ import com.nullpointer.nullsiteadmin.ui.screens.email.detailsEmail.componets.Con
 import com.nullpointer.nullsiteadmin.ui.screens.email.detailsEmail.componets.HeaderEmail
 import com.nullpointer.nullsiteadmin.ui.screens.email.detailsEmail.componets.ToolbarEmailDetails
 import com.nullpointer.nullsiteadmin.ui.screens.email.detailsEmail.viewModel.EmailDetailsViewModel
-import com.nullpointer.nullsiteadmin.ui.screens.states.SimpleScreenState
-import com.nullpointer.nullsiteadmin.ui.screens.states.rememberSimpleScreenState
+import com.nullpointer.nullsiteadmin.ui.screens.states.EmailDetailsScreenState
+import com.nullpointer.nullsiteadmin.ui.screens.states.rememberEmailDetailsScreen
 import com.ramcosta.composedestinations.annotation.DeepLink
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.FULL_ROUTE_PLACEHOLDER
@@ -53,7 +52,7 @@ fun EmailDetailsScreen(
     email: EmailData,
     rootDestinations: ActionRootDestinations,
     emailsViewModel: EmailDetailsViewModel = hiltViewModel(),
-    emailsDetailsState: SimpleScreenState = rememberSimpleScreenState()
+    emailsDetailsState: EmailDetailsScreenState = rememberEmailDetailsScreen(),
 ) {
     val isAuthBiometricPassed by emailsViewModel.isAuthBiometricPassed.collectAsState()
 
@@ -64,6 +63,13 @@ fun EmailDetailsScreen(
                 rootDestinations.backDestination()
             }
         } else {
+
+            LaunchedEffect(key1 = Unit) {
+                emailsViewModel.errorEmailDetails.collect(
+                    emailsDetailsState::showSnackMessage
+                )
+            }
+
             LaunchedEffect(key1 = email) {
                 if (!email.isOpen) {
                     emailsViewModel.markAsOpen(email)
@@ -76,10 +82,12 @@ fun EmailDetailsScreen(
                 emailScreenAction = { action, email ->
                     when (action) {
                         MARK_AS_OPEN -> emailsViewModel.markAsOpen(email)
-                        REPLY -> emailsDetailsState.context.sendEmail(email.email)
+                        REPLY -> emailsDetailsState.launchEmail(email.email)
                         DELETER -> {
-                            emailsViewModel.deleterEmail(email.idEmail)
-                            rootDestinations.backDestination()
+                            emailsViewModel.deleterEmail(
+                                idEmail = email.idEmail,
+                                actionSuccess = rootDestinations::backDestination
+                            )
                         }
                     }
                 }

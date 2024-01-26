@@ -152,8 +152,9 @@ class EditInfoViewModel @Inject constructor(
             delay(300)
             ExceptionManager.sendMessageErrorToException(
                 exception = it,
-                message = "Error to update info personal $it",
-                channel = _messageError
+                debugMessage = "Error to update info personal",
+                channel = _messageError,
+                messageResource = R.string.error_update_profile_info
             )
         }
     )

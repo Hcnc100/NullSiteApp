@@ -22,10 +22,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.compose.AsyncImagePainter
 import com.google.android.gms.tasks.Task
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.DocumentSnapshot
 import com.nullpointer.nullsiteadmin.BuildConfig
-import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager.NO_INTERNET_CONNECTION
-import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager.SERVER_TIME_OUT
+import com.nullpointer.nullsiteadmin.exception.NullAppException
 import com.valentinilk.shimmer.Shimmer
 import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.CancellationException
@@ -111,27 +111,29 @@ fun Modifier.myShimmer(
 
 fun ViewModel.launchSafeIO(
     isEnabled: Boolean = true,
-    blockBefore: suspend CoroutineScope.() -> Unit = {},
-    blockAfter: suspend CoroutineScope.(Boolean) -> Unit = {},
-    blockException: suspend CoroutineScope.(Exception) -> Unit = {},
-    blockIO: suspend CoroutineScope.() -> Unit,
+    blockBefore: (suspend CoroutineScope.() -> Unit)? = null,
+    blockAfter: (suspend CoroutineScope.(Boolean) -> Unit)? = null,
+    blockException: (suspend CoroutineScope.(Exception) -> Unit)? = null,
+    blockIO: (suspend CoroutineScope.() -> Unit)? = null,
 ): Job? {
     return if (isEnabled) {
         var isForCancelled = false
         viewModelScope.launch {
             try {
-                blockBefore()
-                withContext(Dispatchers.IO) { blockIO() }
+                blockBefore?.invoke(this)
+                withContext(Dispatchers.IO) { blockIO?.invoke(this) }
             } catch (e: Exception) {
                 when (e) {
                     is CancellationException -> {
                         isForCancelled = true
                         throw e
                     }
-                    else -> blockException(e)
+
+                    else -> blockException?.invoke(this, e)
+
                 }
             } finally {
-                blockAfter(isForCancelled)
+                blockAfter?.invoke(this, isForCancelled)
             }
         }
     } else {
@@ -158,7 +160,11 @@ fun CoroutineScope.launchSafeIO(
                         isForCancelled = true
                         throw e
                     }
-                    else -> blockException(e)
+
+                    else -> {
+                        FirebaseCrashlytics.getInstance().recordException(e)
+                        blockException(e)
+                    }
                 }
             } finally {
                 blockAfter(isForCancelled)
@@ -186,16 +192,16 @@ suspend fun <T> callApiTimeOut(
     timeOut: Long = 3000,
     callApi: suspend () -> T
 ): T {
-    if (!InternetCheck.isNetworkAvailable()) throw Exception(NO_INTERNET_CONNECTION)
+    if (!InternetCheck.isNetworkAvailable()) throw NullAppException.NoInternetConnection
     return try {
 
-        when(BuildConfig.DEBUG){
+        when (BuildConfig.DEBUG) {
             true -> callApi()
-            false -> withTimeout(timeOut){
+            false -> withTimeout(timeOut) {
                 callApi()
             }
         }
     } catch (e: TimeoutCancellationException) {
-        throw Exception(SERVER_TIME_OUT)
+        throw NullAppException.ServerTimeOut
     }
 }

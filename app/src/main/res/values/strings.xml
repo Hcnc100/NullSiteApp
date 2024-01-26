@@ -122,10 +122,32 @@
     <string name="title_biometric">Fingerprint lock</string>
     <string name="description_enable_biometric">If you enable this option, unlocking by fingerprint will be required when entering the app</string>
     <string name="title_crop_image">Crop Image</string>
-    <string name="hint_example">hint_example</string>
-    <string name="label_example">label_example</string>
-    <string name="error_empty_example">Error example</string>
-    <string name="error_length_example">Error lenght example\n</string>
-    <string name="biometric_error_launch">Error when launch biometric unlock</string>
 
+    <!--error example-->
+    <string name="hint_example" translatable="false">hint_example</string>
+    <string name="label_example" translatable="false">label_example</string>
+    <string name="error_empty_example" translatable="false">Error example</string>
+    <string name="error_length_example" translatable="false">Error length example</string>
+
+    <!--error login-->
+    <string name="error_login">Error logging in</string>
+
+    <!--error enabler biometric-->
+    <string name="biometric_error_launch">Error when launching biometric unlock</string>
+    <string name="error_enable_biometric">Error enabling biometrics</string>
+
+    <!--profile info-->
+    <string name="error_update_profile_info">Error updating profile info</string>
+    <string name="error_get_profile_info">Error getting profile info</string>
+
+    <!--project -->
+    <string name="error_update_project">Error updating project</string>
+    <string name="error_concatenate_project">Error concatenating projects</string>
+    <string name="error_request_last_project">Error getting project list</string>
+
+    <!--email-->
+    <string name="error_concatenate_email">Error concatenating emails</string>
+    <string name="error_request_email">Error getting latest emails</string>
+    <string name="message_deleter_email_error">Error deleting email</string>
+    <string name="message_mark_as_open_error">Error marking email as open</string>
 </resources>
