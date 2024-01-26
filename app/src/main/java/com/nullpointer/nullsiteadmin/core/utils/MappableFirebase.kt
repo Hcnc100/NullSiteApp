@@ -16,11 +16,11 @@ interface MappableFirebase {
      *
      * @return A mutable map representation of the object.
      */
-    private fun toMutableMap(): MutableMap<String, Any> {
+    private fun mapper(): Map<String, Any> {
         return this::class.memberProperties
             .associate { it.name to it.getter.call(this) }
             .filter { it.value != null }
-            .toMap() as MutableMap<String, Any>
+            .toMap() as Map<String, Any>
     }
 
     /**
@@ -30,7 +30,7 @@ interface MappableFirebase {
      * @return A map representation of the object, including 'createdAt' and 'updatedAt' timestamps.
      */
     fun toCreateMap(): Map<String, Any> {
-        val prevMap = toMutableMap()
+        val prevMap = mapper().toMutableMap()
         prevMap[Constants.CREATED_AT] = FieldValue.serverTimestamp()
         prevMap[Constants.UPDATED_AT] = FieldValue.serverTimestamp()
         return prevMap.toMap()
@@ -43,7 +43,7 @@ interface MappableFirebase {
      * @return A map representation of the object, including an 'updatedAt' timestamp.
      */
     fun toUpdateMap(): Map<String, Any> {
-        val previewMap = toMutableMap()
+        val previewMap = mapper().toMutableMap()
         previewMap[Constants.UPDATED_AT] = FieldValue.serverTimestamp()
         return previewMap.toMap()
     }
