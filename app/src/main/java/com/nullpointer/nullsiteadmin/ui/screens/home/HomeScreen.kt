@@ -1,8 +1,10 @@
 package com.nullpointer.nullsiteadmin.ui.screens.home
 
 import android.content.res.Configuration.ORIENTATION_LANDSCAPE
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Outline
@@ -12,13 +14,17 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
+import com.nullpointer.nullsiteadmin.ui.screens.NavGraphs
+import com.nullpointer.nullsiteadmin.ui.screens.destinations.ProfileScreenDestination
 import com.nullpointer.nullsiteadmin.ui.screens.home.componets.NavigatorDrawer
 import com.nullpointer.nullsiteadmin.ui.screens.home.viewModel.HomeViewModel
 import com.nullpointer.nullsiteadmin.ui.screens.states.HomeScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberHomeScreenState
 import com.nullpointer.nullsiteadmin.ui.share.ToolbarMenu
+import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.navigation.dependency
 
 @RootNavGraph
 @Destination
@@ -54,7 +60,15 @@ fun HomeScreen(
         },
     ) { paddingValues ->
 
-
+        DestinationsNavHost(
+            navGraph = NavGraphs.home,
+            startRoute = ProfileScreenDestination,
+            navController = mainScreenState.navController,
+            modifier = Modifier.padding(paddingValues),
+            dependenciesContainerBuilder = {
+                dependency(actionRootDestinations)
+            }
+        )
     }
 }
 

@@ -25,6 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.models.project.data.ProjectData
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
+import com.nullpointer.nullsiteadmin.ui.navigator.HomeNavGraph
 import com.nullpointer.nullsiteadmin.ui.preview.config.OrientationPreviews
 import com.nullpointer.nullsiteadmin.ui.preview.provider.ListProjectProvider
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EditProjectScreenDestination
@@ -38,6 +39,7 @@ import com.nullpointer.nullsiteadmin.ui.screens.states.rememberLazyGridSwipeScre
 import com.ramcosta.composedestinations.annotation.Destination
 
 
+@HomeNavGraph
 @Destination
 @Composable
 fun ProjectScreen(
