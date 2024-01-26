@@ -21,7 +21,4 @@
 #-renamesourcefileattribute SourceFile
 
 # rules for firebase
--keep class com.google.firebase.** { *; }
--keep class com.google.android.gms.** { *; }
-# rules for data classes
--keep class com.nullpointer.nullsiteadmin.models.** { *; }
+-dontobfuscate

@@ -13,9 +13,29 @@ plugins {
 }
 
 
+// * DEFINE CONSTANTS
+val profileId: String = gradleLocalProperties(rootDir).getProperty("ID_INFO_PROFILE_FIREBASE")
+val urlMainPage: String = gradleLocalProperties(rootDir).getProperty("URL_MAIN_PAGE")
+
+val storeFileProperty: String = gradleLocalProperties(rootDir).getProperty("STORE_FILE")
+val storePasswordProperty: String = gradleLocalProperties(rootDir).getProperty("STORE_PASSWORD")
+val keyAliasProperty: String = gradleLocalProperties(rootDir).getProperty("KEY_ALIAS")
+val keyPasswordProperty: String = gradleLocalProperties(rootDir).getProperty("KEY_PASSWORD")
+
+
 android {
+
     namespace = "com.nullpointer.nullsiteadmin"
-    compileSdk= 34
+    compileSdk = 34
+
+    signingConfigs {
+        create("release") {
+            storeFile = file(storeFileProperty)
+            storePassword = storePasswordProperty
+            keyAlias = keyAliasProperty
+            keyPassword = keyPasswordProperty
+        }
+    }
 
     defaultConfig {
         applicationId = "com.nullpointer.nullsiteadmin"
@@ -28,11 +48,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        val profileId: String =
-            gradleLocalProperties(rootDir).getProperty("ID_INFO_PROFILE_FIREBASE")
-        buildConfigField("String", "ID_INFO_PROFILE_FIREBASE", profileId)
 
-        val urlMainPage: String = gradleLocalProperties(rootDir).getProperty("URL_MAIN_PAGE")
+        buildConfigField("String", "ID_INFO_PROFILE_FIREBASE", profileId)
         buildConfigField("String", "URL_MAIN_PAGE", urlMainPage)
 
     }
@@ -40,10 +57,31 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
-            proguardFiles (
+            proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
+        }
+
+        create("pre-release") {
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            signingConfig = signingConfigs.getByName("debug")
+        }
+
+        create("profile") {
+            isMinifyEnabled = true
+            isDebuggable = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+                "proguard-rules-profile.pro"
+            )
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -139,7 +177,7 @@ dependencies {
     implementation("com.valentinilk.shimmer:compose-shimmer:1.2.0")
 
     // * navigation
-    val destinationsVersion = "1.9.62"
+    val destinationsVersion = "1.10.0"
     implementation("io.github.raamcosta.compose-destinations:core:$destinationsVersion")
     ksp("io.github.raamcosta.compose-destinations:ksp:$destinationsVersion")
 
@@ -153,11 +191,11 @@ dependencies {
     implementation("com.google.firebase:firebase-storage-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-messaging-ktx")
-    implementation("com.google.android.gms:play-services-auth:20.7.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
     implementation("com.google.firebase:firebase-crashlytics-ktx")
     implementation("com.google.firebase:firebase-analytics-ktx")
 
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
 
     // * gson
     implementation("com.google.code.gson:gson:2.10.1")
@@ -168,6 +206,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
 
     implementation("com.vanniktech:android-image-cropper:4.5.0")
+
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.0")
 }
 
 kapt {

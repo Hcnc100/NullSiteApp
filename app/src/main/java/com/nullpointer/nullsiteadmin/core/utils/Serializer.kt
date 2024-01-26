@@ -1,37 +1,30 @@
 package com.nullpointer.nullsiteadmin.core.utils
 
 import com.google.firebase.firestore.FieldValue
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import kotlin.reflect.full.memberProperties
 
 
 //convert a data class to a map
 
 interface MappableFirebase{
     fun toCreateMap(): Map<String, Any> {
-        val gson = Gson()
-        val json = gson.toJson(this)
-        val previewMap = gson.fromJson<Map<String, Any>>(
-            /* json = */ json,
-            /* typeOfT = */ object : TypeToken<Any>() {}.type
-        ).toMutableMap()
-
-        previewMap[Constants.CREATED_AT] = FieldValue.serverTimestamp()
-        previewMap[Constants.UPDATED_AT] = FieldValue.serverTimestamp()
-        return previewMap
+        val prevMap = this::class.memberProperties
+            .associate { it.name to it.getter.call(this) }
+            .filter { it.value != null }
+            .toMutableMap()
+        prevMap[Constants.CREATED_AT] = FieldValue.serverTimestamp()
+        prevMap[Constants.UPDATED_AT] = FieldValue.serverTimestamp()
+        return prevMap.toMap() as Map<String, Any>
     }
 
 
     fun toUpdateMap(): Map<String, Any> {
-        val gson = Gson()
-        val json = gson.toJson(this)
-        val previewMap = gson.fromJson<Map<String, Any>>(
-            /* json = */ json,
-            /* typeOfT = */ object : TypeToken<Any>() {}.type
-        ).toMutableMap()
-
+        val previewMap = this::class.memberProperties
+            .associate { it.name to it.getter.call(this) }
+            .filter { it.value != null }
+            .toMutableMap()
         previewMap[Constants.UPDATED_AT] = FieldValue.serverTimestamp()
-        return previewMap
+        return previewMap.toMap() as Map<String, Any>
     }
 
 }
