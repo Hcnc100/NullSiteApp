@@ -33,9 +33,8 @@ fun FormInfoProfilePortrait(
             valueProperty = nameAdmin,
             singleLine = true,
             isEnabled = isEnable,
-            keyboardActions = KeyboardActions(onDone = { hiddenKeyBoard() }),
             keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Done
+                imeAction = ImeAction.Next
             )
         )
         EditableTextSavable(
@@ -43,11 +42,18 @@ fun FormInfoProfilePortrait(
             singleLine = true,
             isEnabled = isEnable,
             keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Next
+            ),
+        )
+        EditableTextSavable(
+            valueProperty = descriptionAdmin,
+            singleLine = false,
+            isEnabled = isEnable,
+            keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done
             ),
             keyboardActions = KeyboardActions(onDone = { hiddenKeyBoard() })
         )
-        EditableTextSavable(valueProperty = descriptionAdmin)
         ButtonUpdateInfoProfile(
             isEnable = isDataValid,
             actionClick = actionSave

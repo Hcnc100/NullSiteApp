@@ -41,8 +41,8 @@ android {
         applicationId = "com.nullpointer.nullsiteadmin"
         minSdk = 21
         targetSdk = 34
-        versionCode = 12
-        versionName = "2.0.1"
+        versionCode = 16
+        versionName = "2.1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

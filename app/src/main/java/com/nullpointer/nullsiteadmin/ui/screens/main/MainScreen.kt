@@ -36,7 +36,8 @@ fun MainScreen(
     LaunchedEffect(key1 = lifecycleEvent) {
         when (lifecycleEvent) {
             Lifecycle.Event.ON_RESUME -> authViewModel.initVerifyBiometrics()
-            Lifecycle.Event.ON_PAUSE -> authViewModel.blockBiometric()
+            // ! TODO: Fix this, it's not working when select image profile
+//            Lifecycle.Event.ON_STOP -> authViewModel.blockBiometric()
             else -> Unit
         }
     }
