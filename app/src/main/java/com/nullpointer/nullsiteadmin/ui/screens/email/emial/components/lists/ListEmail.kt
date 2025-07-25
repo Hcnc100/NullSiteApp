@@ -42,7 +42,7 @@ fun ListSuccessEmails(
                 EmailItem(
                     email = email,
                     actionDetails = { actionDetails(email) },
-                    modifier = Modifier.animateItemPlacement()
+                    modifier = Modifier.animateItem()
                 )
             }
         }

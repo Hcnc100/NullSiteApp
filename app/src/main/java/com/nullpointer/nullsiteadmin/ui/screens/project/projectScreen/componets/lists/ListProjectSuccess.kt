@@ -45,7 +45,7 @@ fun ListProjectSuccess(
                     ProjectItem(
                         projectData = listProjectData[it],
                         actionEditProject = actionEditProject,
-                        modifier = Modifier.animateItemPlacement()
+                        modifier = Modifier.animateItem()
                     )
                 }
             })
