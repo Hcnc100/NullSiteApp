@@ -26,6 +26,9 @@ jobs:
 
       - name: Build release AAB
         run: ./gradlew bundleRelease
+        env:
+          ID_INFO_PROFILE_FIREBASE: ${{ secrets.ID_INFO_PROFILE_FIREBASE }}
+          URL_MAIN_PAGE: ${{ secrets.URL_MAIN_PAGE }}
 
       - name: Sign AAB
         uses: r0adkll/sign-android-release@v1
@@ -61,4 +64,4 @@ jobs:
           packageName: com.nullpointer.nullsiteadmin
           releaseFiles: ./*.aab
           track: production
-          status: completed
+          status: draft
