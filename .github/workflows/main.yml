@@ -26,7 +26,7 @@ jobs:
 
       - name: Decode keystore
         run: |
-          echo "${{ secrets.KEYSTORE }}" | base64 -d > release.keystore
+          echo "${{ secrets.KEYSTORE }}" | base64 -d > app/release.keystore
 
       - name: Create local.properties
         run: |
