@@ -24,20 +24,23 @@ jobs:
       - name: Grant execute permission to Gradle wrapper
         run: chmod +x ./gradlew
 
+      - name: Decode keystore
+        run: |
+          echo "${{ secrets.KEYSTORE }}" | base64 -d > release.keystore
+
+      - name: Create local.properties
+        run: |
+          cat <<EOF > local.properties
+          ID_INFO_PROFILE_FIREBASE=${{ secrets.ID_INFO_PROFILE_FIREBASE }}
+          URL_MAIN_PAGE=${{ secrets.URL_MAIN_PAGE }}
+          STORE_FILE=release.keystore
+          STORE_PASSWORD=${{ secrets.SIGNING_STORE_PASSWORD }}
+          KEY_ALIAS=${{ secrets.SIGNING_KEY_ALIAS }}
+          KEY_PASSWORD=${{ secrets.SIGNING_KEY_PASSWORD }}
+          EOF
+
       - name: Build release AAB
         run: ./gradlew bundleRelease
-        env:
-          ID_INFO_PROFILE_FIREBASE: ${{ secrets.ID_INFO_PROFILE_FIREBASE }}
-          URL_MAIN_PAGE: ${{ secrets.URL_MAIN_PAGE }}
-
-      - name: Sign AAB
-        uses: r0adkll/sign-android-release@v1
-        with:
-          releaseDirectory: app/build/outputs/bundle/release
-          signingKeyBase64: ${{ secrets.KEYSTORE }}
-          alias: ${{ secrets.SIGNING_KEY_ALIAS }}
-          keyStorePassword: ${{ secrets.SIGNING_STORE_PASSWORD }}
-          keyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
 
       - name: Upload AAB artifact
         uses: actions/upload-artifact@v4
@@ -64,4 +67,4 @@ jobs:
           packageName: com.nullpointer.nullsiteadmin
           releaseFiles: ./*.aab
           track: production
-          status: draft
+          status: completed
