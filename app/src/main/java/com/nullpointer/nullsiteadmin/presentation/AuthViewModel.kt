@@ -13,9 +13,9 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.transform
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -35,19 +35,18 @@ class AuthViewModel @Inject constructor(
     )
 
 
-    val isUserAuth = authRepository.isUserAuth.transform<Boolean, Resource<Boolean>> { isAuth ->
-        emit(Resource.Success(isAuth))
-    }.flowOn(
-        Dispatchers.IO
-    ).catch {
-        Timber.e("Error to load info auth $it")
+    val isUserAuth = authRepository.isUserAuth.map<Boolean, Resource<Boolean>> { isAuth ->
+        Resource.Success(isAuth)
+    }.catch {
+        Timber.e("Error to check user auth $it")
         _messageErrorAuth.trySend(R.string.error_unkown)
         emit(Resource.Failure)
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5_000),
-        Resource.Loading
-    )
+    }.flowOn(Dispatchers.IO)
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5_000),
+            Resource.Loading
+        )
 
 
     fun initVerifyBiometrics() = launchSafeIO {
@@ -60,3 +59,4 @@ class AuthViewModel @Inject constructor(
 
 
 }
+

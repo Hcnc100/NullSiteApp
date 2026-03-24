@@ -4,29 +4,35 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("dagger.hilt.android.plugin")
-    id("kotlin-kapt")
-    id("kotlin-parcelize")
     id("org.jetbrains.kotlin.plugin.serialization")
     id("com.google.devtools.ksp")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
+    id("org.jetbrains.kotlin.plugin.compose") version "2.0.0"
 }
 
 
-// * DEFINE CONSTANTS
-val profileId: String = gradleLocalProperties(rootDir).getProperty("ID_INFO_PROFILE_FIREBASE")
-val urlMainPage: String = gradleLocalProperties(rootDir).getProperty("URL_MAIN_PAGE")
+val localProperties = gradleLocalProperties(rootDir, providers)
 
-val storeFileProperty: String = gradleLocalProperties(rootDir).getProperty("STORE_FILE")
-val storePasswordProperty: String = gradleLocalProperties(rootDir).getProperty("STORE_PASSWORD")
-val keyAliasProperty: String = gradleLocalProperties(rootDir).getProperty("KEY_ALIAS")
-val keyPasswordProperty: String = gradleLocalProperties(rootDir).getProperty("KEY_PASSWORD")
+val profileId: String = localProperties.getProperty("ID_INFO_PROFILE_FIREBASE")
+    ?: throw IllegalStateException("Missing ID_INFO_PROFILE_FIREBASE")
+val urlMainPage: String = localProperties.getProperty("URL_MAIN_PAGE")
+    ?: throw IllegalStateException("Missing URL_MAIN_PAGE")
+
+val storeFileProperty: String = localProperties.getProperty("STORE_FILE")
+    ?: throw IllegalStateException("Missing STORE_FILE")
+val storePasswordProperty: String = localProperties.getProperty("STORE_PASSWORD")
+    ?: throw IllegalStateException("Missing STORE_PASSWORD")
+val keyAliasProperty: String = localProperties.getProperty("KEY_ALIAS")
+    ?: throw IllegalStateException("Missing KEY_ALIAS")
+val keyPasswordProperty: String = localProperties.getProperty("KEY_PASSWORD")
+    ?: throw IllegalStateException("Missing KEY_PASSWORD")
 
 
 android {
 
     namespace = "com.nullpointer.nullsiteadmin"
-    compileSdk = 34
+    compileSdk = 36
 
     signingConfigs {
         create("release") {
@@ -40,9 +46,9 @@ android {
     defaultConfig {
         applicationId = "com.nullpointer.nullsiteadmin"
         minSdk = 21
-        targetSdk = 34
-        versionCode = 12
-        versionName = "2.0.1"
+        targetSdk = 36
+        versionCode = 18
+        versionName = "3.0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -65,6 +71,7 @@ android {
         }
 
         create("pre-release") {
+            isDebuggable = true
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -123,49 +130,50 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.compose.ui:ui:1.6.0")
-    implementation("androidx.compose.material:material:1.6.0")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.6.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-    implementation("androidx.activity:activity-compose:1.8.2")
-    implementation("androidx.lifecycle:lifecycle-service:2.7.0")
+    implementation("androidx.core:core-ktx:1.16.0")
+    implementation("androidx.compose.ui:ui:1.8.3")
+    implementation("androidx.compose.material:material:1.8.3")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.8.3")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.2")
+    implementation("androidx.activity:activity-compose:1.10.1")
+    implementation("androidx.lifecycle:lifecycle-service:2.9.2")
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.6.0")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.6.0")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:1.6.0")
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.8.3")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.8.3")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.8.3")
 
     // * coil
-    implementation("io.coil-kt:coil-compose:2.5.0")
+    implementation("io.coil-kt:coil-compose:2.7.0")
 
     // *lottie compose
-    implementation("com.airbnb.android:lottie-compose:6.3.0")
+    implementation("com.airbnb.android:lottie-compose:6.6.7")
 
     // * timber
     implementation("com.orhanobut:logger:2.2.0")
     implementation("com.jakewharton.timber:timber:5.0.1")
 
     // * hilt
-    val daggerHiltVersion = "2.50"
-    implementation("com.google.dagger:hilt-android:$daggerHiltVersion")
-    kapt("com.google.dagger:hilt-compiler:$daggerHiltVersion")
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    val daggerHiltVersion = "2.57"
+    implementation("com.google.dagger:hilt-android:${daggerHiltVersion}")
+    ksp("com.google.dagger:hilt-android-compiler:$daggerHiltVersion")
+    ksp("com.google.dagger:hilt-compiler:$daggerHiltVersion")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     // ? hilt test
-    testImplementation("com.google.dagger:hilt-android-testing:$daggerHiltVersion")
-    androidTestImplementation("com.google.dagger:hilt-android-testing:$daggerHiltVersion")
-    kaptAndroidTest("com.google.dagger:hilt-android-compiler:$daggerHiltVersion")
+    testImplementation("com.google.dagger:hilt-android-testing:${daggerHiltVersion}")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:${daggerHiltVersion}")
+    kspAndroidTest("com.google.dagger:hilt-android-compiler:${daggerHiltVersion}")
 
     // * room
-    val roomVersion = "2.6.1"
-    implementation("androidx.room:room-runtime:$roomVersion")
-    ksp("androidx.room:room-compiler:$roomVersion")
-    implementation("androidx.room:room-ktx:$roomVersion")
-    testImplementation("androidx.room:room-testing:$roomVersion")
+    val roomVersion = "2.7.2"
+    implementation("androidx.room:room-runtime:${roomVersion}")
+    ksp("androidx.room:room-compiler:${roomVersion}")
+    implementation("androidx.room:room-ktx:${roomVersion}")
+    testImplementation("androidx.room:room-testing:${roomVersion}")
 
     // * save state
-    implementation("androidx.savedstate:savedstate-ktx:1.2.1")
+    implementation("androidx.savedstate:savedstate-ktx:1.3.1")
 
     // * image compressor
     implementation("com.github.Shouheng88:compressor:1.6.0")
@@ -174,7 +182,7 @@ dependencies {
     implementation("androidx.core:core-splashscreen:1.0.1")
 
     // * shimmer effect
-    implementation("com.valentinilk.shimmer:compose-shimmer:1.2.0")
+    implementation("com.valentinilk.shimmer:compose-shimmer:1.3.3")
 
     // * navigation
     val destinationsVersion = "1.10.0"
@@ -182,7 +190,7 @@ dependencies {
     ksp("io.github.raamcosta.compose-destinations:ksp:$destinationsVersion")
 
     // * data store
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.datastore:datastore-preferences:1.1.7")
 
     // * Firebase
     // Import the BoM for the Firebase platform
@@ -194,22 +202,18 @@ dependencies {
     implementation("com.google.firebase:firebase-crashlytics-ktx")
     implementation("com.google.firebase:firebase-analytics-ktx")
 
-    implementation("com.google.android.gms:play-services-auth:20.7.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
+    implementation("com.google.android.gms:play-services-auth:21.4.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.10.2")
 
     // * gson
-    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.google.code.gson:gson:2.13.1")
 
 
     implementation("androidx.biometric:biometric:1.1.0")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
 
-    implementation("com.vanniktech:android-image-cropper:4.5.0")
+    implementation("com.vanniktech:android-image-cropper:4.6.0")
 
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.0")
-}
-
-kapt {
-    correctErrorTypes = true
+    implementation("org.jetbrains.kotlin:kotlin-reflect:2.1.20")
 }

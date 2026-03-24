@@ -40,19 +40,25 @@ fun FormInfoProfileLandscape(
                 valueProperty = nameAdmin,
                 singleLine = true,
                 isEnabled = isEnable,
-                keyboardActions = KeyboardActions(onDone = { hiddenKeyBoard() }),
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done)
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next)
             )
             EditableTextSavable(
                 modifier = Modifier.weight(0.5f),
                 valueProperty = professionAdmin,
                 singleLine = true,
                 isEnabled = isEnable,
-                keyboardActions = KeyboardActions(onDone = { hiddenKeyBoard() }),
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done)
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next)
             )
         }
-        EditableTextSavable(valueProperty = descriptionAdmin)
+        EditableTextSavable(
+            valueProperty = descriptionAdmin,
+            singleLine = false,
+            isEnabled = isEnable,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(onDone = { hiddenKeyBoard() })
+        )
         ButtonUpdateInfoProfile(
             isEnable = isDataValid,
             actionClick = actionSave,

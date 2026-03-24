@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.delagetes.SavableComposeState
+import com.nullpointer.nullsiteadmin.core.delagetes.SavableProperty
 import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
@@ -16,9 +17,9 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
@@ -40,12 +41,15 @@ class ProjectViewModel @Inject constructor(
 
     var isConcatenateProjects by SavableComposeState(
         defaultValue = false,
-        key = KEY_IS_CONCATENATE, savedStateHandle = savedStateHandle
+        key = KEY_IS_CONCATENATE,
+        savedStateHandle = savedStateHandle
     )
         private set
 
-    private var isEnabledConcatenateProjects by SavableComposeState(
-        defaultValue = true, key = KEY_CONCATENATE_ENABLE, savedStateHandle = savedStateHandle
+    private var isEnabledConcatenateProjects by SavableProperty(
+        defaultValue = true,
+        key = KEY_CONCATENATE_ENABLE,
+        savedStateHandle = savedStateHandle
     )
 
     var isRequestProject by SavableComposeState(
@@ -61,8 +65,8 @@ class ProjectViewModel @Inject constructor(
     }
 
     val listProjectData =
-        projectRepository.listProjects.transform<List<ProjectData>, Resource<List<ProjectData>>> {
-            emit(Resource.Success(it))
+        projectRepository.listProjects.map<List<ProjectData>, Resource<List<ProjectData>>> {
+            Resource.Success(it)
         }.flowOn(Dispatchers.IO).catch {
             Timber.e("Failed to list projects $it")
             _messageErrorProject.trySend(R.string.error_load_project)
@@ -91,7 +95,8 @@ class ProjectViewModel @Inject constructor(
             ExceptionManager.sendMessageErrorToException(
                 exception = it,
                 channel = _messageErrorProject,
-                message = "Failed to concatenate projects"
+                debugMessage = "Failed to concatenate projects",
+                messageResource = R.string.error_concatenate_project
             )
         }
     )
@@ -111,7 +116,8 @@ class ProjectViewModel @Inject constructor(
             ExceptionManager.sendMessageErrorToException(
                 exception = it,
                 channel = _messageErrorProject,
-                message = "Error request last projects"
+                debugMessage = "Error to request last project",
+                messageResource = R.string.error_request_last_project
             )
         })
 }

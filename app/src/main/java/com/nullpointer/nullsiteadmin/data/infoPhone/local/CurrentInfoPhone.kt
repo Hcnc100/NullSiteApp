@@ -21,7 +21,7 @@ class CurrentInfoPhone(
     private fun getModelPhone(): String =
         android.os.Build.MODEL
 
-    private fun getVersionNameApp(): String =
+    private fun getVersionNameApp(): String? =
         context.packageManager.getPackageInfo(context.packageName, 0).versionName
 
     private fun getOperativeSystem(): String =
@@ -46,7 +46,7 @@ class CurrentInfoPhone(
             uuidPhone = getUUIDPhone(),
             modelPhone = getModelPhone(),
             tokenGCM = getMessagingToken(),
-            versionNameApp = getVersionNameApp(),
+            versionNameApp = getVersionNameApp() ?: "Unknown",
             operativeSystem = getOperativeSystem(),
             versionNumberApp = getVersionNumberApp(),
         )

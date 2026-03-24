@@ -83,8 +83,9 @@ class LoginScreenViewModel @Inject constructor(
         blockException = {
             ExceptionManager.sendMessageErrorToException(
                 exception = it,
-                message = "Error auth",
-                channel = _messageErrorLogin
+                debugMessage = "Error to login",
+                channel = _messageErrorLogin,
+                messageResource = R.string.error_login
             )
         }
     )

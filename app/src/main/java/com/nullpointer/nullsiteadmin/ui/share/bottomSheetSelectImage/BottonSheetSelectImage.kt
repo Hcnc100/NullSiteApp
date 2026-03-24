@@ -53,12 +53,11 @@ fun BottomSheetSelectImage(
 
     BottomSheetSelectImage(
         actionSelectImg = {
-            tmpUri.value = getTmpFileUri(context)
             launcherImg.launch("image/*")
         },
         actionTakePhoto = {
             tmpUri.value = getTmpFileUri(context)
-            launcherPhoto.launch(tmpUri.value)
+            launcherPhoto.launch(tmpUri.value!!)
         }
     )
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.delagetes.SavableComposeState
+import com.nullpointer.nullsiteadmin.core.delagetes.SavableProperty
 import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager.sendMessageErrorToException
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
@@ -39,12 +40,11 @@ class EmailsViewModel @Inject constructor(
     private val _errorEmail = Channel<Int>()
     val errorEmail = _errorEmail.receiveAsFlow()
 
-    var isEnabledConcatenateEmail by SavableComposeState(
+    private var isEnabledConcatenateEmail by SavableProperty(
         defaultValue = true,
         key = KEY_EMAIL_CONCATENATE,
         savedStateHandle = savedStateHandle
     )
-        private set
 
     var isConcatenateEmail by SavableComposeState(
         defaultValue = false,
@@ -96,7 +96,8 @@ class EmailsViewModel @Inject constructor(
             sendMessageErrorToException(
                 exception = it,
                 channel = _errorEmail,
-                message = "Error to concatenate emails"
+                debugMessage = "Error to concatenate emails",
+                messageResource = R.string.error_concatenate_email
             )
         }
     )
@@ -119,7 +120,8 @@ class EmailsViewModel @Inject constructor(
             sendMessageErrorToException(
                 exception = it,
                 channel = _errorEmail,
-                message = "Error request emails"
+                debugMessage = "Error request emails",
+                messageResource = R.string.error_request_email
             )
         }
     )

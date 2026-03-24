@@ -153,4 +153,26 @@
     <string name="description_enable_biometric">Si habilitas esta opción, al entrar a la app se requerirá el desbloqueo por huella dactilar</string>
     <string name="title_crop_image">Cortar Imagen</string>
 
+    <!--error login-->
+    <string name="error_login">Error al iniciar sesión</string>
+
+    <!--error enabler biometric-->
+    <string name="biometric_error_launch">Error al lanzar el desbloqueo biométrico</string>
+    <string name="error_enable_biometric">Error al habilitar la biometría</string>
+
+    <!--profile info-->
+    <string name="error_update_profile_info">Error al actualizar la información del perfil</string>
+    <string name="error_get_profile_info">Error al obtener la información del perfil</string>
+
+    <!--project -->
+    <string name="error_update_project">Error al actualizar el proyecto</string>
+    <string name="error_concatenate_project">Error al concatenar proyectos</string>
+    <string name="error_request_last_project">Error al obtener la lista de proyectos</string>
+
+    <!--email-->
+    <string name="error_concatenate_email">Error al concatenar correos electrónicos</string>
+    <string name="error_request_email">Error al obtener los últimos correos electrónicos</string>
+    <string name="message_deleter_email_error">Error al eliminar el correo electrónico</string>
+    <string name="message_mark_as_open_error">Error al marcar el correo electrónico como abierto</string>
+
 </resources>
