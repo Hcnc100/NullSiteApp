@@ -31,8 +31,8 @@ jobs:
       - name: Create local.properties
         run: |
           cat <<EOF > local.properties
-          ID_INFO_PROFILE_FIREBASE=${{ secrets.ID_INFO_PROFILE_FIREBASE }}
-          URL_MAIN_PAGE=${{ secrets.URL_MAIN_PAGE }}
+          ID_INFO_PROFILE_FIREBASE=\"${{ secrets.ID_INFO_PROFILE_FIREBASE }}\"
+          URL_MAIN_PAGE=\"${{ secrets.URL_MAIN_PAGE }}\"
           STORE_FILE=release.keystore
           STORE_PASSWORD=${{ secrets.SIGNING_STORE_PASSWORD }}
           KEY_ALIAS=${{ secrets.SIGNING_KEY_ALIAS }}
