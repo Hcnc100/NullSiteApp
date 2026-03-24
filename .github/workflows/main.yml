@@ -39,6 +39,12 @@ jobs:
           KEY_PASSWORD=${{ secrets.SIGNING_KEY_PASSWORD }}
           EOF
 
+      - name: Create google-services.json
+        run: |
+          cat <<EOF > app/google-services.json
+          ${{ secrets.GOOGLE_SERVICES_JSON }}
+          EOF
+
       - name: Build release AAB
         run: ./gradlew bundleRelease
 
