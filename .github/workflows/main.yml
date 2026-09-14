@@ -1,4 +1,4 @@
-name: Deploy Android to Google Play Internal Testing
+name: Deploy Android to Google Play Production
 
 on:
   push:
@@ -75,5 +75,5 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_JSON }}
           packageName: com.nullpointer.nullsiteadmin
           releaseFiles: ./*.aab
-          track: internal
+          track: production
           status: completed
