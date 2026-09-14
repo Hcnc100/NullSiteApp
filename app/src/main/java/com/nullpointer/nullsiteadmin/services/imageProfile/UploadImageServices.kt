@@ -2,6 +2,7 @@ package com.nullpointer.nullsiteadmin.services.imageProfile
 
 import android.content.Intent
 import android.net.Uri
+import androidx.core.content.IntentCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.nullpointer.nullsiteadmin.R
@@ -65,7 +66,11 @@ class UploadImageServices : LifecycleService() {
                 showToastMessage(R.string.message_init_upload)
             },
             blockIO = {
-                val uriInfo: Uri = intent.getParcelableExtra(KEY_URI_PROFILE)!!
+                val uriInfo: Uri = IntentCompat.getParcelableExtra(
+                    intent,
+                    KEY_URI_PROFILE,
+                    Uri::class.java
+                )!!
                 val personalEncode = intent.getStringExtra(KEY_INFO_PROFILE)!!
                 val personalInfoData: PersonalInfoData = Json.decodeFromString(personalEncode)
 
@@ -109,7 +114,12 @@ class UploadImageServices : LifecycleService() {
     }
 
     private fun killServices() {
-        stopForeground(true)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            stopForeground(STOP_FOREGROUND_REMOVE)
+        } else {
+            @Suppress("DEPRECATION")
+            stopForeground(true)
+        }
         stopSelf()
     }
 
