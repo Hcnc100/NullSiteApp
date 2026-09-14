@@ -61,4 +61,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             }
         }
     }
+
+    override fun onDestroy() {
+        job.cancel()
+        super.onDestroy()
+    }
 }
