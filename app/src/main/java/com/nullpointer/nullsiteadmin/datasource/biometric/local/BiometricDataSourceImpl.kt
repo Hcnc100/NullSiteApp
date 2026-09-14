@@ -75,10 +75,10 @@ class BiometricDataSourceImpl(
                     super.onAuthenticationError(errorCode, errString)
                     Timber.d("Error biometric: $errorCode $errString")
                     when (errorCode) {
-                        BIOMETRIC_ERROR_LOCKOUT -> continuation.resume(BiometricResultState.TEMPORARILY_LOCKED) {}
-                        BIOMETRIC_ERROR_LOCKOUT_PERMANENT -> continuation.resume(
-                            BiometricResultState.DISABLE
-                        ) {}
+                        BIOMETRIC_ERROR_LOCKOUT -> continuation.resumeWith(Result.success(BiometricResultState.TEMPORARILY_LOCKED))
+                        BIOMETRIC_ERROR_LOCKOUT_PERMANENT -> continuation.resumeWith(
+                            Result.success(BiometricResultState.DISABLE)
+                        )
 
                         BIOMETRIC_ERROR_USER_CANCELED -> continuation.cancel()
                     }
@@ -88,7 +88,7 @@ class BiometricDataSourceImpl(
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
                     Timber.d("Auth success")
-                    continuation.resume(BiometricResultState.PASSED) {}
+                    continuation.resumeWith(Result.success(BiometricResultState.PASSED))
                 }
             }
 

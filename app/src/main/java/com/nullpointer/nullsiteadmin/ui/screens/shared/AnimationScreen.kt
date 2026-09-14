@@ -67,7 +67,7 @@ fun LottieContainer(modifier: Modifier, @RawRes animation: Int) {
     )
     LottieAnimation(
         composition = composition,
-        progress = progress,
+        progress = { progress },
         modifier = modifier,
     )
 }

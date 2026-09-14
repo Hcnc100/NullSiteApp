@@ -29,15 +29,9 @@ class CurrentInfoPhone(
 
     private fun getVersionNumberApp(): String {
         val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
-        return when {
-            android.os.Build.VERSION.SDK_INT >= 28 -> {
-                packageInfo.longVersionCode.toString()
-            }
-
-            else -> {
-                packageInfo.versionCode.toString()
-            }
-        }
+        return androidx.core.content.pm.PackageInfoCompat
+            .getLongVersionCode(packageInfo)
+            .toString()
     }
 
 
