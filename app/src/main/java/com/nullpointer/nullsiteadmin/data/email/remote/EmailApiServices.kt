@@ -25,9 +25,12 @@ class EmailApiServices {
     fun getAllEmails(): Flow<List<EmailData>> = callbackFlow {
         val listener = collectionEmail.orderBy(Constants.CREATED_AT, Query.Direction.DESCENDING)
             .addSnapshotListener { value, error ->
-                error?.let { channel.close(it) }
+                if (error != null) {
+                    channel.close(error)
+                    return@addSnapshotListener
+                }
                 try {
-                    val listEmails = value!!.documents.mapNotNull(::fromDocument)
+                    val listEmails = value?.documents.orEmpty().mapNotNull(::fromDocument)
                     trySend(listEmails)
                 } catch (e: Exception) {
                     Timber.e("Error when transform document in email list $e")

@@ -8,6 +8,7 @@ import com.nullpointer.nullsiteadmin.models.credentials.dto.CredentialsDTO
 import com.nullpointer.nullsiteadmin.models.phoneInfo.dto.UpdateInfoPhoneDTO
 import com.nullpointer.nullsiteadmin.models.auth.response.AuthResponse
 import kotlinx.coroutines.tasks.await
+import com.nullpointer.nullsiteadmin.exception.NullAppException
 
 class AuthApiServices {
     private val auth = Firebase.auth
@@ -21,8 +22,8 @@ class AuthApiServices {
     ){
         val documentExist=refCollectionPhones.document(uuidPhone).get().await()
         when(documentExist.exists()){
-            true-> refCollectionPhones.document(uuidPhone).update(updateInfoPhoneDTO.toUpdateMap())
-            false -> refCollectionPhones.document(uuidPhone).set(updateInfoPhoneDTO.toCreateMap())
+            true-> refCollectionPhones.document(uuidPhone).update(updateInfoPhoneDTO.toUpdateMap()).await()
+            false -> refCollectionPhones.document(uuidPhone).set(updateInfoPhoneDTO.toCreateMap()).await()
         }
     }
 
@@ -33,10 +34,9 @@ class AuthApiServices {
             credentialsDTO.password
         ).await()
 
-        return AuthResponse(
-            idUser = response.user!!.uid,
-            email = response.user!!.email!!
-        )
+        val user = response.user ?: throw NullAppException.AuthException.Authenticated
+        val email = user.email ?: throw NullAppException.AuthException.Authenticated
+        return AuthResponse(idUser = user.uid, email = email)
     }
 
 

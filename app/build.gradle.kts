@@ -72,7 +72,7 @@ android {
 
         create("pre-release") {
             isDebuggable = true
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -82,7 +82,7 @@ android {
 
         create("profile") {
             isMinifyEnabled = true
-            isDebuggable = true
+            isDebuggable = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
