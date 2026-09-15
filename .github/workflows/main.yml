@@ -24,9 +24,6 @@ jobs:
       - name: Grant execute permission to Gradle wrapper
         run: chmod +x ./gradlew
 
-      - name: Run unit tests
-        run: ./gradlew testDebugUnitTest
-
       - name: Decode keystore
         run: |
           echo "${{ secrets.KEYSTORE }}" | base64 -d > app/release.keystore
@@ -47,6 +44,9 @@ jobs:
           cat <<EOF > app/google-services.json
           ${{ secrets.GOOGLE_SERVICES_JSON }}
           EOF
+
+      - name: Run unit tests
+        run: ./gradlew testDebugUnitTest
 
       - name: Build release AAB
         run: ./gradlew bundleRelease
