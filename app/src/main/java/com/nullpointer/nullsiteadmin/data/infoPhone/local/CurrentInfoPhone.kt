@@ -3,8 +3,8 @@ package com.nullpointer.nullsiteadmin.data.infoPhone.local
 import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.Settings
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.ktx.messaging
+import com.google.firebase.Firebase
+import com.google.firebase.messaging.messaging
 import com.nullpointer.nullsiteadmin.models.phoneInfo.data.InfoPhoneData
 import kotlinx.coroutines.tasks.await
 

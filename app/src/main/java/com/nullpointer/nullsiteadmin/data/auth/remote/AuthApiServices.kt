@@ -1,14 +1,14 @@
 package com.nullpointer.nullsiteadmin.data.auth.remote
 
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.firestore
 import com.nullpointer.nullsiteadmin.core.utils.Constants.PHONE_COLLECTION
+import com.nullpointer.nullsiteadmin.exception.NullAppException
+import com.nullpointer.nullsiteadmin.models.auth.response.AuthResponse
 import com.nullpointer.nullsiteadmin.models.credentials.dto.CredentialsDTO
 import com.nullpointer.nullsiteadmin.models.phoneInfo.dto.UpdateInfoPhoneDTO
-import com.nullpointer.nullsiteadmin.models.auth.response.AuthResponse
 import kotlinx.coroutines.tasks.await
-import com.nullpointer.nullsiteadmin.exception.NullAppException
 
 class AuthApiServices {
     private val auth = Firebase.auth

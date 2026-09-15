@@ -1,9 +1,9 @@
 package com.nullpointer.nullsiteadmin.data.image.remote
 
 import android.net.Uri
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.Firebase
 import com.google.firebase.storage.UploadTask
-import com.google.firebase.storage.ktx.storage
+import com.google.firebase.storage.storage
 import com.nullpointer.nullsiteadmin.BuildConfig
 import com.nullpointer.nullsiteadmin.core.states.StorageTaskResult
 import com.nullpointer.nullsiteadmin.core.utils.Constants

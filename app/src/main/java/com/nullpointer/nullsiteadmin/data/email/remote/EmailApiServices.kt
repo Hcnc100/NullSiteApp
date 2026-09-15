@@ -1,10 +1,10 @@
 package com.nullpointer.nullsiteadmin.data.email.remote
 
+import com.google.firebase.Firebase
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.firestore
+import com.google.firebase.firestore.toObject
 import com.nullpointer.nullsiteadmin.core.utils.Constants
 import com.nullpointer.nullsiteadmin.core.utils.awaitAll
 import com.nullpointer.nullsiteadmin.core.utils.getTimeEstimate

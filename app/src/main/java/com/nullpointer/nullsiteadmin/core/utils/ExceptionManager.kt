@@ -1,8 +1,8 @@
 package com.nullpointer.nullsiteadmin.core.utils
 
-import com.google.firebase.crashlytics.ktx.crashlytics
-import com.google.firebase.crashlytics.ktx.setCustomKeys
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.Firebase
+import com.google.firebase.crashlytics.crashlytics
+import com.google.firebase.crashlytics.setCustomKeys
 import com.nullpointer.nullsiteadmin.BuildConfig
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.exception.NullAppException
