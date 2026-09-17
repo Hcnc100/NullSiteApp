@@ -9,7 +9,7 @@ data class CreateProjectDTO(
     val name: String,
     val urlImg: String,
     val urlRepo: String,
-    val isVisible: Boolean,
+    val published: Boolean,
     val description: String,
 ): MappableFirebase {
     companion object{
@@ -20,7 +20,7 @@ data class CreateProjectDTO(
                 name = createProjectWrapper.name,
                 urlImg = createProjectWrapper.urlImg,
                 urlRepo = createProjectWrapper.urlRepo,
-                isVisible = createProjectWrapper.isVisible,
+                published = createProjectWrapper.isVisible,
                 description = createProjectWrapper.description
             )
         }

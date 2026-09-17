@@ -10,7 +10,7 @@ data class UpdateProjectDTO(
     val description: String?,
     val urlImg: String?,
     val urlRepo: String?,
-    val isVisible: Boolean?
+    val published: Boolean?
 ): MappableFirebase{
     companion object{
         fun fromUpdateProjectWrapper(
@@ -20,7 +20,7 @@ data class UpdateProjectDTO(
                 name = updateProjectWrapper.name,
                 urlImg = updateProjectWrapper.urlImg,
                 urlRepo = updateProjectWrapper.urlRepo,
-                isVisible = updateProjectWrapper.isVisible,
+                published = updateProjectWrapper.isVisible,
                 description = updateProjectWrapper.description
             )
         }

@@ -71,6 +71,7 @@ class ProjectApiServices {
             document.toObject<ProjectData>()?.copy(
                 updatedAt = document.getTimeEstimate(Constants.UPDATED_AT),
                 createdAt = document.getTimeEstimate(Constants.CREATED_AT),
+                isVisible = document.getBoolean("published") ?: false,
                 idProject = document.id
             )
         } catch (e: Exception) {
