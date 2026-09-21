@@ -100,10 +100,9 @@ private fun EmailScreen(
 
     Scaffold(
         scaffoldState = scaffoldState,
-    ) {
+    ) { innerPadding ->
         Box(
             modifier = Modifier
-                .padding(it)
                 .fillMaxSize()
                 .then(
                     when (listEmails) {
@@ -123,6 +122,7 @@ private fun EmailScreen(
                         ListSuccessEmails(
                             listEmails = listEmails.data,
                             lazyListState = lazyListState,
+                            contentPadding = innerPadding,
                             actionDetails = actionDetails,
                             isConcatenate = isConcatenate,
                         )

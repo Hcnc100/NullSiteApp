@@ -82,14 +82,18 @@ private fun LockScreen(
                 )
             }
         }
-    ) {
-
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
         when (biometricLockDataState) {
             Resource.Failure -> Unit
             Resource.Loading -> BlockProgress()
             is Resource.Success -> Column(
                 modifier = Modifier
-                    .padding(it)
                     .padding(10.dp)
                     .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -110,6 +114,7 @@ private fun LockScreen(
                 )
                 TextStateLock(biometricLockData = biometricLockDataState.data)
             }
+        }
         }
     }
 }

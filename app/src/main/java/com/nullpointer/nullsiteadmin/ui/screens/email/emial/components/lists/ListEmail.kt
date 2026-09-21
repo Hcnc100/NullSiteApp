@@ -26,14 +26,17 @@ fun ListSuccessEmails(
     listEmails: List<EmailData>,
     actionDetails: (EmailData) -> Unit,
     lazyListState: LazyListState,
+    contentPadding: PaddingValues = PaddingValues(10.dp),
 ) {
 
     Box {
         LazyColumn(
             state = lazyListState,
-            contentPadding = PaddingValues(10.dp),
+            contentPadding = contentPadding,
             verticalArrangement = Arrangement.spacedBy(10.dp),
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 10.dp)
         ) {
             items(
                 items = listEmails,

@@ -1,6 +1,8 @@
 package com.nullpointer.nullsiteadmin.ui.share
 
 import androidx.compose.material.*
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -13,6 +15,7 @@ fun ToolbarMenu(
     actionClickMenu: () -> Unit
 ) {
     TopAppBar(
+        windowInsets = WindowInsets.statusBars,
         backgroundColor = MaterialTheme.colors.primary,
         title = { Text(text = title, color = Color.White) },
         navigationIcon = { IconMenu(actionClickMenu) }
@@ -47,6 +50,7 @@ fun ToolbarBack(
     actionBack: () -> Unit
 ) {
     TopAppBar(
+        windowInsets = WindowInsets.statusBars,
         backgroundColor = MaterialTheme.colors.primary,
         title = { Text(text = title, color = Color.White) },
         navigationIcon = {
@@ -70,6 +74,7 @@ fun ToolbarBackWithDeleter(
     actionDeleter: () -> Unit,
 ) {
     TopAppBar(
+        windowInsets = WindowInsets.statusBars,
         backgroundColor = MaterialTheme.colors.primary,
         title = { Text(text = title, color = Color.White) },
         navigationIcon = {
