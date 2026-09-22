@@ -9,8 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
 
     steps:
       - name: Checkout code
@@ -27,9 +25,8 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Decode keystore
-        if: ${{ env.ANDROID_KEYSTORE_BASE64 != '' }}
         run: |
-          echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > app/release.keystore
+          echo "${{ secrets.KEYSTORE }}" | base64 -d > app/release.keystore
 
       - name: Create local.properties
         run: |
