@@ -51,7 +51,7 @@ android {
         versionCode = providers.gradleProperty("versionCode")
             .map(String::toInt)
             .getOrElse(10)
-        versionName = "5.0.1"
+        versionName = "5.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -119,7 +119,7 @@ android {
         compilerOptions {
             freeCompilerArgs.addAll(
                 "-opt-in=androidx.compose.animation.ExperimentalAnimationApi",
-                "-opt-in=androidx.compose.material.ExperimentalMaterialApi",
+                "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
             )
         }
     }
@@ -135,7 +135,8 @@ dependencies {
 
     implementation("androidx.core:core-ktx:1.16.0")
     implementation("androidx.compose.ui:ui:1.8.3")
-    implementation("androidx.compose.material:material:1.8.3")
+    // Material 3 1.3.2 preserves this app's minSdk 21.
+    implementation("androidx.compose.material3:material3:1.3.2")
     implementation("androidx.compose.ui:ui-tooling-preview:1.8.3")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.2")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.9.2")

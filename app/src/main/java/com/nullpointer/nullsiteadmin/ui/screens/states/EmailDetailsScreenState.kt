@@ -3,18 +3,18 @@ package com.nullpointer.nullsiteadmin.ui.screens.states
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.remember
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
 class EmailDetailsScreenState(
     context: Context,
-    scaffoldState: ScaffoldState,
+    snackbarHostState: SnackbarHostState,
 ) : SimpleScreenState(
     context = context,
-    scaffoldState = scaffoldState
+    snackbarHostState = snackbarHostState
 ) {
     fun launchEmail(
         email: String
@@ -29,10 +29,10 @@ class EmailDetailsScreenState(
 @Composable
 fun rememberEmailDetailsScreen(
     context: Context = LocalContext.current,
-    scaffoldState: ScaffoldState = rememberScaffoldState()
-) = remember(scaffoldState) {
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
+) = remember(snackbarHostState) {
     EmailDetailsScreenState(
         context = context,
-        scaffoldState = scaffoldState
+        snackbarHostState = snackbarHostState
     )
 }

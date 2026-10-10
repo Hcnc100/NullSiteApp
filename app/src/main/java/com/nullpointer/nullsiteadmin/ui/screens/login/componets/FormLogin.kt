@@ -6,10 +6,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,6 +40,7 @@ fun FormLogin(
             EditableTextSavable(
                 modifier = Modifier.padding(10.dp),
                 isEnabled = !isAuthenticating,
+                singleLine = true,
                 valueProperty = email,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Next,
@@ -54,6 +54,7 @@ fun FormLogin(
             PasswordTextSavable(
                 modifier = Modifier.padding(10.dp),
                 isEnabled = !isAuthenticating,
+                singleLine = true,
                 valueProperty = password,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Password,
@@ -82,8 +83,8 @@ private fun ContainerFieldAuth(
 ) {
     Box(
         modifier = Modifier
-            .clip(RoundedCornerShape(10.dp))
-            .background(MaterialTheme.colors.background),
+            .clip(MaterialTheme.shapes.medium)
+            .background(MaterialTheme.colorScheme.background),
         content = content
     )
 }

@@ -7,12 +7,13 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Card
-import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.nullpointer.nullsiteadmin.core.utils.getGrayColor
 
 @Composable
 fun CircularProgressAnimation(
@@ -27,7 +28,7 @@ fun CircularProgressAnimation(
     ) {
         Card(
             shape = CircleShape,
-            backgroundColor = getGrayColor()
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
         ) {
             CircularProgressIndicator(modifier = Modifier.padding(5.dp))
         }

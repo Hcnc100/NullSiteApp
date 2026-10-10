@@ -60,7 +60,7 @@ fun FormInfoProfileLandscape(
             keyboardActions = KeyboardActions(onDone = { hiddenKeyBoard() })
         )
         ButtonUpdateInfoProfile(
-            isEnable = isDataValid,
+            isEnable = isDataValid && isEnable,
             actionClick = actionSave,
         )
     }

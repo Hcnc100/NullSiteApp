@@ -4,14 +4,15 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Text
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.runtime.remember
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -35,7 +36,7 @@ fun SettingsScreen(
     settingsViewModel: SettingsViewModel = hiltViewModel(),
     settingsScreenState: SimpleScreenState = rememberSimpleScreenState()
 ) {
-    val isBiometricEnabled by settingsViewModel.isBiometricEnabled.collectAsState()
+    val isBiometricEnabled by settingsViewModel.isBiometricEnabled.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit) {
         settingsViewModel.messageErrorSettings.collect(settingsScreenState::showSnackMessage)
@@ -43,7 +44,7 @@ fun SettingsScreen(
 
     SettingsScreen(
         isBiometricEnabled = isBiometricEnabled,
-        scaffoldState = settingsScreenState.scaffoldState,
+        snackbarHostState = settingsScreenState.snackbarHostState,
         isBiometricAvailable = settingsViewModel.isBiometricAvailable,
         changeBiometricEnabled = settingsViewModel::changeBiometricEnabled
     )
@@ -53,12 +54,12 @@ fun SettingsScreen(
 @Composable
 fun SettingsScreen(
     isBiometricEnabled: Boolean,
-    scaffoldState: ScaffoldState,
+    snackbarHostState: SnackbarHostState,
     isBiometricAvailable: Boolean,
     changeBiometricEnabled: (Boolean) -> Unit
 ) {
     Scaffold(
-        scaffoldState = scaffoldState,
+        snackbarHost = { SnackbarHost(snackbarHostState) },
     ) {
         Column(
             modifier = Modifier
@@ -74,8 +75,8 @@ fun SettingsScreen(
             if (!isBiometricAvailable) {
                 Text(
                     text = stringResource(id = R.string.biometric_no_avariable),
-                    style = MaterialTheme.typography.caption.copy(
-                        color = MaterialTheme.colors.error
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        color = MaterialTheme.colorScheme.error
                     )
                 )
             }
@@ -91,7 +92,7 @@ fun SettingsScreenBiometricAvailablePreview(
 ) {
     SettingsScreen(
         isBiometricEnabled = isBiometricEnabled,
-        scaffoldState = rememberScaffoldState(),
+        snackbarHostState = remember { SnackbarHostState() },
         isBiometricAvailable = true,
         changeBiometricEnabled = {}
     )
@@ -106,7 +107,7 @@ fun SettingsScreenBiometricDisablePreview(
 ) {
     SettingsScreen(
         isBiometricEnabled = isBiometricEnabled,
-        scaffoldState = rememberScaffoldState(),
+        snackbarHostState = remember { SnackbarHostState() },
         isBiometricAvailable = false,
         changeBiometricEnabled = {}
     )

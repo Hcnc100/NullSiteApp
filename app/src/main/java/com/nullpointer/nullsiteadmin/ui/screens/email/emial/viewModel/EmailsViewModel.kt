@@ -80,7 +80,7 @@ class EmailsViewModel @Inject constructor(
     fun concatenateEmails(
         actionSuccessConcatenate: () -> Unit = {}
     ) = launchSafeIO(
-        isEnabled = isEnabledConcatenateEmail,
+        isEnabled = isEnabledConcatenateEmail && !isConcatenateEmail && !isRequestEmail,
         blockBefore = { isConcatenateEmail = true },
         blockAfter = { isConcatenateEmail = false },
         blockIO = {

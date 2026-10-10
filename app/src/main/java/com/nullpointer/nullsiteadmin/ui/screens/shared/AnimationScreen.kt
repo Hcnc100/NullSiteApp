@@ -3,12 +3,16 @@ package com.nullpointer.nullsiteadmin.ui.screens.shared
 import androidx.annotation.RawRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -31,24 +35,23 @@ fun AnimationScreen(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         LottieContainer(
             modifier = Modifier
-                .weight(.8f)
+                .height(180.dp)
                 .fillMaxWidth(),
             animation = animation
         )
-        Box(
-            modifier = Modifier
-                .weight(.2f)
-                .fillMaxWidth()
-        ) {
+        Box(modifier = Modifier.fillMaxWidth()) {
             Text(
                 text = textEmpty,
                 modifier = Modifier
-                    .fillMaxWidth(.8f)
+                    .fillMaxWidth()
                     .align(Alignment.TopCenter),
-                style = MaterialTheme.typography.h6,
+                style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.W600,
                 textAlign = TextAlign.Center
             )

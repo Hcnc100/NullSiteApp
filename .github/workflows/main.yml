@@ -4,7 +4,17 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
+
+# A single publication path: push to main. Do not upload a second AAB manually.
+concurrency:
+  group: google-play-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
 
 jobs:
   build:
@@ -66,6 +76,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout release notes
+        uses: actions/checkout@v4
+
       - name: Download AAB artifact
         uses: actions/download-artifact@v4
         with:
@@ -80,3 +93,6 @@ jobs:
           releaseFiles: ./*.aab
           track: production
           status: completed
+          whatsNewDirectory: distribution/whatsnew
+          # Submit the AAB and Console listing changes together, once, after verification.
+          changesNotSentForReview: true

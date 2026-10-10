@@ -5,9 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
@@ -28,6 +29,7 @@ fun ItemButtonSheet(
 ) {
     Row(modifier = modifier
         .fillMaxWidth()
+        .heightIn(min = 48.dp)
         .clickable { actionLaunch() }
         .padding(10.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -35,7 +37,7 @@ fun ItemButtonSheet(
     ) {
         Icon(
             painter = iconResource,
-            tint = MaterialTheme.colors.onSurface,
+            tint = MaterialTheme.colorScheme.onSurface,
             contentDescription = textDescriptionRes
         )
         Text(text = textOptionRes)

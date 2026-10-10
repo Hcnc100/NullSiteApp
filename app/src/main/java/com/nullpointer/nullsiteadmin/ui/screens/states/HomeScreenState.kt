@@ -1,13 +1,16 @@
 package com.nullpointer.nullsiteadmin.ui.screens.states
 
 import android.content.Context
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.rememberDrawerState
+import androidx.compose.runtime.remember
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
@@ -21,9 +24,10 @@ import kotlinx.coroutines.launch
 class HomeScreenState(
     context: Context,
     val scope: CoroutineScope,
-    scaffoldState: ScaffoldState,
+    snackbarHostState: SnackbarHostState,
+    val drawerState: DrawerState,
     val navController: NavHostController
-) : SimpleScreenState(context, scaffoldState) {
+) : SimpleScreenState(context, snackbarHostState) {
 
     var titleNav by mutableStateOf("")
         private set
@@ -36,13 +40,13 @@ class HomeScreenState(
 
     fun openDrawer() {
         scope.launch {
-            scaffoldState.drawerState.open()
+            drawerState.open()
         }
     }
 
     fun closeDrawer() {
         scope.launch {
-            scaffoldState.drawerState.close()
+            drawerState.close()
         }
     }
 }
@@ -50,14 +54,16 @@ class HomeScreenState(
 @Composable
 fun rememberHomeScreenState(
     context: Context = LocalContext.current,
-    scaffoldState: ScaffoldState = rememberScaffoldState(),
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
+    drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
     navController: NavHostController = rememberNavController(),
-) = remember(scaffoldState, navController, coroutineScope) {
+) = remember(context, snackbarHostState, navController, coroutineScope, drawerState) {
     HomeScreenState(
         context = context,
         scope = coroutineScope,
+        drawerState = drawerState,
         navController = navController,
-        scaffoldState = scaffoldState
+        snackbarHostState = snackbarHostState
     )
 }

@@ -44,7 +44,8 @@ class EditProjectViewModel @Inject constructor(
         emptyError = R.string.error_empty_name_project,
         lengthError = R.string.error_length_name_project,
         maxLength = MAX_LENGTH_NAME,
-        tagSavable = TAG_NAME_PROJECT
+        tagSavable = TAG_NAME_PROJECT,
+        rejectBlank = true,
     )
 
     val descriptionProject = PropertySavableString(
@@ -54,7 +55,8 @@ class EditProjectViewModel @Inject constructor(
         emptyError = R.string.error_description_project,
         lengthError = R.string.error_length_description_project,
         maxLength = MAX_LENGTH_DESCRIPTION,
-        tagSavable = TAG_DESCRIPTION_PROJECT
+        tagSavable = TAG_DESCRIPTION_PROJECT,
+        rejectBlank = true,
     )
 
     val urlRepositoryProject = PropertySavableString(
@@ -64,7 +66,8 @@ class EditProjectViewModel @Inject constructor(
         emptyError = R.string.error_empty_link_project,
         lengthError = R.string.error_length_link_project,
         maxLength = MAX_LENGTH_URL,
-        tagSavable = TAG_URL_REPO_PROJECT
+        tagSavable = TAG_URL_REPO_PROJECT,
+        rejectBlank = true,
     )
 
     val urlImgProject = PropertySavableString(
@@ -74,7 +77,8 @@ class EditProjectViewModel @Inject constructor(
         emptyError = R.string.error_empty_link_project,
         lengthError = R.string.error_length_link_project,
         maxLength = MAX_LENGTH_URL,
-        tagSavable = TAG_URL_IMG_PROJECT
+        tagSavable = TAG_URL_IMG_PROJECT,
+        rejectBlank = true,
     )
 
 
@@ -114,7 +118,14 @@ class EditProjectViewModel @Inject constructor(
         currentProjectData: ProjectData,
         actionSuccess: () -> Unit
     ) = launchSafeIO(
-        blockBefore = { isUpdatedProject = true },
+        isEnabled = !isUpdatedProject,
+        blockBefore = {
+            nameProject.reValueField()
+            descriptionProject.reValueField()
+            urlRepositoryProject.reValueField()
+            urlImgProject.reValueField()
+            isUpdatedProject = true
+        },
         blockAfter = { isUpdatedProject = false },
         blockException = {
             ExceptionManager.sendMessageErrorToException(

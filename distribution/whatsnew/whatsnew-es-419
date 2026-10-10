@@ -1,0 +1,4 @@
+Renovamos la interfaz con Material 3 y temas claro y oscuro más consistentes.
+Mejoramos la lectura con texto grande y el uso de formularios con el teclado abierto.
+Añadimos validaciones de correo y campos obligatorios, y protección contra envíos duplicados.
+La carga de estados respeta el ciclo de vida de la app y la paginación evita solicitudes repetidas.

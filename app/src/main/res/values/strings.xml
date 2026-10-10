@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="error_email_format">Enter a valid email address</string>
     <string name="app_name">NullSiteAdmin</string>
     <string name="description_icon_back">Back icon</string>
     <string name="description_drawer_menu">Icon to open the menu</string>

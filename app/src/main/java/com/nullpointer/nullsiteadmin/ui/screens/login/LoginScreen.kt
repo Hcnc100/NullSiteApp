@@ -5,15 +5,17 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.remember
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -49,7 +51,7 @@ fun LoginScreen(
     LoginScreen(
         email = loginScreenViewModel.emailAdmin,
         password = loginScreenViewModel.passwordAdmin,
-        scaffoldState = authScreenState.scaffoldState,
+        snackbarHostState = authScreenState.snackbarHostState,
         isAuthenticating = loginScreenViewModel.isAuthenticating,
         onAuthAction = { action ->
             when (action) {
@@ -67,7 +69,7 @@ fun LoginScreen(
 
 @Composable
 fun LoginScreen(
-    scaffoldState: ScaffoldState,
+    snackbarHostState: SnackbarHostState,
     isAuthenticating: Boolean,
     email: PropertySavableString,
     password: PropertySavableString,
@@ -78,8 +80,9 @@ fun LoginScreen(
 
 
     Scaffold(
-        scaffoldState = scaffoldState,
-        backgroundColor = MaterialTheme.colors.primary,
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+        modifier = Modifier.imePadding(),
+        containerColor = MaterialTheme.colorScheme.background,
     ) { paddingValues ->
 
 
@@ -93,7 +96,7 @@ fun LoginScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(configuration.screenHeightDp.dp),
+                            .heightIn(min = configuration.screenHeightDp.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.SpaceAround
                     ) {
@@ -122,7 +125,7 @@ fun LoginScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(configuration.screenHeightDp.dp),
+                            .heightIn(min = configuration.screenHeightDp.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Column(
@@ -161,7 +164,7 @@ private fun LoginScreenPreview() {
     LoginScreen(
         email = PropertySavableString.example,
         password = PropertySavableString.example,
-        scaffoldState = rememberScaffoldState(),
+        snackbarHostState = remember { SnackbarHostState() },
         isAuthenticating = false,
         onAuthAction = { /*TODO*/ }
     )

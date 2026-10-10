@@ -4,13 +4,13 @@ import android.content.Context
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.pullrefresh.PullRefreshState
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.SnackbarHostState
+import com.nullpointer.nullsiteadmin.ui.share.AppRefreshState
+import com.nullpointer.nullsiteadmin.ui.share.rememberAppRefreshState
+import androidx.compose.runtime.remember
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.CoroutineScope
@@ -20,14 +20,14 @@ import kotlinx.coroutines.launch
 @Stable
 class LazySwipeScreenState(
     context: Context,
-    scaffoldState: ScaffoldState,
+    snackbarHostState: SnackbarHostState,
     private val sizeScroll: Float,
     val lazyListState: LazyListState,
     private val scope: CoroutineScope,
-    val pullRefreshState: PullRefreshState,
+    val pullRefreshState: AppRefreshState,
 ) : SimpleScreenState(
     context = context,
-    scaffoldState = scaffoldState,
+    snackbarHostState = snackbarHostState,
 ) {
     fun onScrollChanged() {
         scope.launch {
@@ -43,19 +43,19 @@ fun rememberLazySwipeScreenState(
     sizeScroll: Float,
     isRefreshing: Boolean,
     context: Context = LocalContext.current,
-    scaffoldState: ScaffoldState = rememberScaffoldState(),
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     lazyListState: LazyListState = rememberLazyListState(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    pullRefreshState: PullRefreshState = rememberPullRefreshState(
+    pullRefreshState: AppRefreshState = rememberAppRefreshState(
         onRefresh = onRefresh,
         refreshing = isRefreshing
     )
-) = remember(scaffoldState, lazyListState, coroutineScope) {
+) = remember(snackbarHostState, lazyListState, coroutineScope) {
     LazySwipeScreenState(
         context = context,
         scope = coroutineScope,
         sizeScroll = sizeScroll,
-        scaffoldState = scaffoldState,
+        snackbarHostState = snackbarHostState,
         lazyListState = lazyListState,
         pullRefreshState = pullRefreshState,
     )

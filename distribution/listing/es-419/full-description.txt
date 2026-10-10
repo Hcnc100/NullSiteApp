@@ -1,0 +1,11 @@
+NullSiteApp es la herramienta de administración de NullSite para gestionar el contenido del sitio desde Android. Requiere una cuenta autorizada.
+
+• Actualiza la información de tu perfil.
+• Consulta y edita tus proyectos.
+• Revisa los mensajes recibidos desde el formulario de contacto de tu sitio.
+• Recibe notificaciones de nuevos mensajes.
+• Usa el bloqueo biométrico en dispositivos compatibles.
+
+La interfaz utiliza Material 3, con temas claro y oscuro. Los formularios se adaptan al teclado y al texto grande, validan los campos obligatorios y ayudan a evitar envíos duplicados.
+
+Las funciones de administración requieren conexión a Internet y acceso a la cuenta correspondiente.

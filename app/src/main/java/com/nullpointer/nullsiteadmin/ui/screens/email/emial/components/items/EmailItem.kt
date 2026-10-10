@@ -10,17 +10,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -44,8 +42,13 @@ fun EmailItem(
 ) {
 
     val colorBackground by animateColorAsState(
-        if (email.isOpen) MaterialTheme.colors.surface else MaterialTheme.colors.primary,
+        if (email.isOpen) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.primary,
         label = "BACKGROUND_COLOR_EMAIL_ITEM"
+    )
+
+    val colorForeground by animateColorAsState(
+        if (email.isOpen) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onPrimary,
+        label = "FOREGROUND_COLOR_EMAIL_ITEM"
     )
 
     val timeShow = remember(email.createdAt) {
@@ -60,21 +63,22 @@ fun EmailItem(
         true -> Triple(
             R.drawable.ic_email_open,
             R.string.description_email_open,
-            Color.Black
+            MaterialTheme.colorScheme.onSurface
         )
 
         false -> Triple(
             R.drawable.ic_email_pending,
             R.string.description_email_pending,
-            Color.White
+            MaterialTheme.colorScheme.onPrimary
         )
     }
 
     Surface(
         color = colorBackground,
-        shape = RoundedCornerShape(4.dp),
+        contentColor = colorForeground,
+        shape = MaterialTheme.shapes.medium,
         modifier = modifier,
-        elevation = 10.dp
+        shadowElevation = 1.dp
     ) {
         Row(
             modifier = Modifier
@@ -97,7 +101,7 @@ fun EmailItem(
                     text = timeShow,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.caption,
+                    style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.W500,
                     fontSize = 12.sp,
                     modifier = Modifier
@@ -108,7 +112,7 @@ fun EmailItem(
                     text = email.subject,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.caption,
+                    style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.W500,
                     fontSize = 16.sp
                 )

@@ -2,11 +2,11 @@ package com.nullpointer.nullsiteadmin.ui.screens.states
 
 import android.content.Context
 import android.net.Uri
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.remember
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -17,9 +17,9 @@ import com.ramcosta.composedestinations.spec.Direction
 @Stable
 class MainScreenState(
     context: Context,
-    scaffoldState: ScaffoldState,
+    snackbarHostState: SnackbarHostState,
     val navController: NavHostController
-) : SimpleScreenState(context, scaffoldState) {
+) : SimpleScreenState(context, snackbarHostState) {
 
     val actionRootDestinations = object : ActionRootDestinations {
         override fun backDestination() = navController.popBackStack()
@@ -31,12 +31,12 @@ class MainScreenState(
 @Composable
 fun rememberMainScreenState(
     context: Context = LocalContext.current,
-    scaffoldState: ScaffoldState = rememberScaffoldState(),
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     navHostController: NavHostController = rememberNavController()
-) = remember(scaffoldState, navHostController) {
+) = remember(snackbarHostState, navHostController) {
     MainScreenState(
         context = context,
-        scaffoldState = scaffoldState,
+        snackbarHostState = snackbarHostState,
         navController = navHostController
     )
 }

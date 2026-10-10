@@ -6,15 +6,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.ModalBottomSheetState
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Scaffold
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.remember
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -41,7 +42,7 @@ import com.nullpointer.nullsiteadmin.ui.screens.profile.editInfoProfile.viewMode
 import com.nullpointer.nullsiteadmin.ui.screens.states.EditInfoProfileState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberEditInfoProfileState
 import com.nullpointer.nullsiteadmin.ui.share.BlockProcessing
-import com.nullpointer.nullsiteadmin.ui.share.ToolbarBack
+import com.nullpointer.nullsiteadmin.ui.share.EditorToolbarBack
 import com.nullpointer.nullsiteadmin.ui.share.bottomSheetSelectImage.BottomSheetSelectImage
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
@@ -75,9 +76,10 @@ fun EditInfoProfileScreen(
         nameAdmin = editInfoVM.name,
         isDataValid = editInfoVM.isDataValid,
         sheetState = stateEditInfo.modalState,
+        sheetVisible = stateEditInfo.isModalVisible,
         imageProfile = editInfoVM.imageProfile,
         professionAdmin = editInfoVM.profession,
-        scaffoldState = stateEditInfo.scaffoldState,
+        snackbarHostState = stateEditInfo.snackbarHostState,
         descriptionAdmin = editInfoVM.description,
         isLoading = editInfoVM.isUpdatedData || editInfoVM.imageProfile.isLoading,
         actionBeforeSelect = { imageSelect ->
@@ -117,9 +119,10 @@ fun EditInfoProfileScreen(
 fun EditInfoProfileScreen(
     isLoading: Boolean,
     isDataValid: Boolean,
-    scaffoldState: ScaffoldState,
+    snackbarHostState: SnackbarHostState,
     imageProfile: PropertySavableImg,
-    sheetState: ModalBottomSheetState,
+    sheetState: SheetState,
+    sheetVisible: Boolean = false,
     nameAdmin: PropertySavableString,
     actionBeforeSelect: (Uri?) -> Unit,
     professionAdmin: PropertySavableString,
@@ -127,19 +130,23 @@ fun EditInfoProfileScreen(
     onEditInfoProfileActions: (EditInfoProfileActions) -> Unit,
     orientation: Int = LocalConfiguration.current.orientation
 ) {
-    ModalBottomSheetLayout(
-        sheetState = sheetState,
-        sheetContent = {
+    if (sheetVisible) {
+        ModalBottomSheet(
+            sheetState = sheetState,
+            onDismissRequest = { onEditInfoProfileActions(HIDDEN_BOTTOM_SHEET) },
+        ) {
             BottomSheetSelectImage(
-                isVisible = sheetState.isVisible,
+                isVisible = true,
                 actionBeforeSelect = actionBeforeSelect,
-                actionHidden = { onEditInfoProfileActions(HIDDEN_BOTTOM_SHEET) }
+                actionHidden = { onEditInfoProfileActions(HIDDEN_BOTTOM_SHEET) },
             )
-        }) {
-        Scaffold(
-            scaffoldState = scaffoldState,
+        }
+    }
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+            modifier = Modifier.imePadding(),
             topBar = {
-                ToolbarBack(
+                EditorToolbarBack(
                     title = stringResource(R.string.title_edit_info_personal),
                     actionBack = { onEditInfoProfileActions(EditInfoProfileActions.BACK_SCREEN) }
                 )
@@ -208,7 +215,6 @@ fun EditInfoProfileScreen(
             }
             if (isLoading) BlockProcessing()
         }
-    }
 }
 
 
@@ -218,9 +224,9 @@ private fun EditInfoProfileScreenPreview() {
     EditInfoProfileScreen(
         isLoading = false,
         isDataValid = true,
-        scaffoldState = rememberScaffoldState(),
+        snackbarHostState = remember { SnackbarHostState() },
         imageProfile = PropertySavableImg.example,
-        sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden),
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         nameAdmin = PropertySavableString.example,
         actionBeforeSelect = {},
         professionAdmin = PropertySavableString.example,

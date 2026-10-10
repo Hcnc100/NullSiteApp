@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import android.util.Patterns
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
 import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager
@@ -60,6 +61,9 @@ class LoginScreenViewModel @Inject constructor(
     fun getDataAuth(): CredentialsWrapper? {
         emailAdmin.reValueField()
         passwordAdmin.reValueField()
+        if (!emailAdmin.hasError && !Patterns.EMAIL_ADDRESS.matcher(emailAdmin.currentValue).matches()) {
+            emailAdmin.setAnotherError(R.string.error_email_format)
+        }
         return if (isDataValid) {
             CredentialsWrapper(
                 email = emailAdmin.currentValue,
@@ -75,6 +79,7 @@ class LoginScreenViewModel @Inject constructor(
     fun login(
         userCredentialsWrapper: CredentialsWrapper
     ) = launchSafeIO(
+        isEnabled = !isAuthenticating,
         blockBefore = { isAuthenticating = true },
         blockAfter = { isAuthenticating = false },
         blockIO = {

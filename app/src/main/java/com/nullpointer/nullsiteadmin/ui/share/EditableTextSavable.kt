@@ -1,22 +1,23 @@
 package com.nullpointer.nullsiteadmin.ui.share
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -54,20 +55,9 @@ fun EditableTextSavable(
                 visualTransformation = visualTransformation,
                 label = { Text(stringResource(id = valueProperty.label)) },
                 placeholder = { Text(stringResource(id = valueProperty.hint)) },
+                supportingText = { FieldSupportingText(valueProperty) },
             )
-            Row {
-                Text(
-                    color = MaterialTheme.colors.error,
-                    style = MaterialTheme.typography.caption,
-                    modifier = Modifier.weight(.9f),
-                    text = if (valueProperty.hasError) stringResource(id = valueProperty.errorValue) else ""
-                )
-                Text(
-                    text = valueProperty.countLength,
-                    style = MaterialTheme.typography.caption,
-                    color = if (valueProperty.hasError) MaterialTheme.colors.error else Color.Unspecified
-                )
-            }
+
         }
     }
 }
@@ -89,11 +79,11 @@ fun PasswordTextSavable(
         if (passwordVisible)
             Pair(
                 R.drawable.ic_visibility,
-                R.string.description_show_password
+                R.string.description_hide_password
             ) else
             Pair(
                 R.drawable.ic_visibility_off,
-                R.string.description_hide_password
+                R.string.description_show_password
             )
     }
 
@@ -111,11 +101,12 @@ fun PasswordTextSavable(
                 onValueChange = valueProperty::changeValue,
                 label = { Text(stringResource(id = valueProperty.label)) },
                 placeholder = { Text(stringResource(id = valueProperty.hint)) },
+                supportingText = { FieldSupportingText(valueProperty) },
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     val (iconRes, descriptionRes) = iconAndDescription
                     if (valueProperty.currentValue.isNotEmpty())
-                        IconButton(onClick = { changeVisible(!passwordVisible) }) {
+                        IconButton(enabled = isEnabled, onClick = { changeVisible(!passwordVisible) }) {
                             Icon(
                                 painter = painterResource(id = iconRes),
                                 contentDescription = stringResource(id = descriptionRes)
@@ -123,19 +114,24 @@ fun PasswordTextSavable(
                         }
                 }
             )
-            Row {
-                Text(
-                    color = MaterialTheme.colors.error,
-                    style = MaterialTheme.typography.caption,
-                    modifier = Modifier.weight(.9f),
-                    text = if (valueProperty.hasError) stringResource(id = valueProperty.errorValue) else ""
-                )
-                Text(
-                    text = valueProperty.countLength,
-                    style = MaterialTheme.typography.caption,
-                    color = if (valueProperty.hasError) MaterialTheme.colors.error else Color.Unspecified
-                )
-            }
+
         }
+    }
+}
+
+@Composable
+private fun FieldSupportingText(value: PropertySavableString) {
+    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(
+            text = if (value.hasError) stringResource(value.errorValue) else "",
+            modifier = Modifier.weight(1f),
+            color = MaterialTheme.colorScheme.error,
+            style = MaterialTheme.typography.bodySmall,
+        )
+        Text(
+            text = value.countLength,
+            color = if (value.hasError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
+            style = MaterialTheme.typography.bodySmall,
+        )
     }
 }

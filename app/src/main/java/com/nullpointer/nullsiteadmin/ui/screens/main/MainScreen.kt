@@ -1,10 +1,10 @@
 package com.nullpointer.nullsiteadmin.ui.screens.main
 
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -42,9 +42,9 @@ fun MainScreen(
         }
     }
 
-    val isAuthUserState by authViewModel.isUserAuth.collectAsState()
+    val isAuthUserState by authViewModel.isUserAuth.collectAsStateWithLifecycle()
 
-    val isAuthBiometricPassed by authViewModel.isAuthBiometricPassed.collectAsState()
+    val isAuthBiometricPassed by authViewModel.isAuthBiometricPassed.collectAsStateWithLifecycle()
 
     MainScreen(
         isAuthUserState = isAuthUserState,
@@ -65,7 +65,8 @@ fun MainScreen(
     actionRootDestinations: ActionRootDestinations,
 ) {
 
-    Scaffold { padding ->
+    // Leaf Scaffolds own system insets; a root Scaffold would apply them twice.
+    Box(Modifier.fillMaxSize()) {
         (isAuthUserState as? Resource.Success)?.let { dataAuth ->
             (isAuthBiometricPassed)?.let { isBiometricPassed ->
                 val isAuthUser = dataAuth.data
@@ -81,7 +82,7 @@ fun MainScreen(
                         startRoute = startRoute,
                         navGraph = NavGraphs.root,
                         navController = navHostController,
-                        modifier = Modifier.padding(padding),
+                        modifier = Modifier.fillMaxSize(),
                         dependenciesContainerBuilder = {
                             dependency(actionRootDestinations)
                         },

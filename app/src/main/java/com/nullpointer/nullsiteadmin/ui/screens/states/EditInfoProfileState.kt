@@ -5,14 +5,18 @@ import android.graphics.Bitmap
 import android.net.Uri
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.compose.material.ModalBottomSheetState
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.SheetState
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.remember
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
@@ -32,23 +36,25 @@ class EditInfoProfileState(
     context: Context,
     val scope: CoroutineScope,
     focusManager: FocusManager,
-    scaffoldState: ScaffoldState,
-    val modalState: ModalBottomSheetState,
+    snackbarHostState: SnackbarHostState,
+    val modalState: SheetState,
+    private val sheetVisibility: MutableState<Boolean>,
     private val launcherCropImage: ManagedActivityResultLauncher<CropImageContractOptions, CropImageView.CropResult>
-) : FocusScreenState(context, scaffoldState, focusManager) {
+) : FocusScreenState(context, snackbarHostState, focusManager) {
 
 
-    val isModalVisible
-        get() = modalState.isVisible
+    var isModalVisible by sheetVisibility
+        private set
 
     fun hiddenBottomSheet() = scope.launch {
         modalState.hide()
+        isModalVisible = false
     }
 
 
     fun showBottomSheet() {
         hiddenKeyBoard()
-        scope.launch { modalState.show() }
+        isModalVisible = true
     }
 
     fun launchCropImage(imgUri: Uri) {
@@ -84,9 +90,10 @@ fun rememberEditInfoProfileState(
     actionCropFailure: (Exception?) -> Unit,
     context: Context = LocalContext.current,
     focusManager: FocusManager = LocalFocusManager.current,
-    scaffoldState: ScaffoldState = rememberScaffoldState(),
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    modalState: ModalBottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden),
+    modalState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+    sheetVisibility: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     launcherCropImage: ManagedActivityResultLauncher<CropImageContractOptions, CropImageView.CropResult> =
         rememberLauncherForActivityResult(CropImageContract()) { result ->
             if (result.isSuccessful) {
@@ -99,13 +106,14 @@ fun rememberEditInfoProfileState(
                 actionCropFailure(result.error)
             }
         }
-) = remember(scaffoldState, coroutineScope, modalState) {
+) = remember(context, snackbarHostState, coroutineScope, modalState, sheetVisibility, launcherCropImage) {
     EditInfoProfileState(
         context = context,
         scope = coroutineScope,
         modalState = modalState,
+        sheetVisibility = sheetVisibility,
         focusManager = focusManager,
-        scaffoldState = scaffoldState,
+        snackbarHostState = snackbarHostState,
         launcherCropImage = launcherCropImage
     )
 }

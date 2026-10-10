@@ -1,23 +1,23 @@
 package com.nullpointer.nullsiteadmin.ui.screens.states
 
 import android.content.Context
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.pullrefresh.PullRefreshState
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.SnackbarHostState
+import com.nullpointer.nullsiteadmin.ui.share.AppRefreshState
+import com.nullpointer.nullsiteadmin.ui.share.rememberAppRefreshState
+import androidx.compose.runtime.remember
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 
 @Stable
 class PullRefreshScreenState(
     context: Context,
-    scaffoldState: ScaffoldState,
-    val pullRefreshState: PullRefreshState
+    snackbarHostState: SnackbarHostState,
+    val pullRefreshState: AppRefreshState
 ) : SimpleScreenState(
     context = context,
-    scaffoldState = scaffoldState
+    snackbarHostState = snackbarHostState
 )
 
 @Composable
@@ -25,18 +25,18 @@ fun rememberPullRefreshScreenState(
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
     context: Context = LocalContext.current,
-    scaffoldState: ScaffoldState = rememberScaffoldState(),
-    pullRefreshState: PullRefreshState = rememberPullRefreshState(
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    pullRefreshState: AppRefreshState = rememberAppRefreshState(
         refreshing = isRefreshing,
         onRefresh = onRefresh
     )
 ) = remember(
-    scaffoldState,
+    snackbarHostState,
     pullRefreshState
 ) {
     PullRefreshScreenState(
         context = context,
-        scaffoldState = scaffoldState,
+        snackbarHostState = snackbarHostState,
         pullRefreshState = pullRefreshState
     )
 }

@@ -2,8 +2,8 @@ package com.nullpointer.nullsiteadmin.ui.screens.profile.infoProfile.componets.c
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -60,12 +60,12 @@ private fun FieldInfoPersonal(
     ) {
         Text(
             text = nameFiled,
-            style = MaterialTheme.typography.h6,
+            style = MaterialTheme.typography.titleLarge,
             fontSize = 12.sp,
         )
         Text(
             text = valueFiled,
-            style = MaterialTheme.typography.body1,
+            style = MaterialTheme.typography.bodyLarge,
             overflow = TextOverflow.Ellipsis,
         )
     }

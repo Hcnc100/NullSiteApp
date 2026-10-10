@@ -5,16 +5,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.PullRefreshState
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
+import com.nullpointer.nullsiteadmin.ui.share.AppRefreshState
+import com.nullpointer.nullsiteadmin.ui.share.AppPullToRefreshBox
+import com.nullpointer.nullsiteadmin.ui.share.rememberAppRefreshState
+import androidx.compose.runtime.remember
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,7 +51,7 @@ fun ProfileScreen(
 ) {
 
 
-    val stateInfoProfile by infoViewModel.infoUser.collectAsState()
+    val stateInfoProfile by infoViewModel.infoUser.collectAsStateWithLifecycle()
 
 
     LaunchedEffect(key1 = Unit) {
@@ -61,7 +61,7 @@ fun ProfileScreen(
     ProfileScreen(
         personalInfoData = stateInfoProfile,
         isRefreshing = infoViewModel.isRequestInfoUser,
-        scaffoldState = infoProfileState.scaffoldState,
+        snackbarHostState = infoProfileState.snackbarHostState,
         pullRefreshState = infoProfileState.pullRefreshState,
         actionEditInfo = {
             (stateInfoProfile as? Resource.Success)?.let {
@@ -75,12 +75,12 @@ fun ProfileScreen(
 fun ProfileScreen(
     isRefreshing: Boolean,
     actionEditInfo: () -> Unit,
-    scaffoldState: ScaffoldState,
-    pullRefreshState: PullRefreshState,
+    snackbarHostState: SnackbarHostState,
+    pullRefreshState: AppRefreshState,
     personalInfoData: Resource<PersonalInfoData?>,
 ) {
     Scaffold(
-        scaffoldState = scaffoldState,
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         floatingActionButton = {
             ButtonEditInfo(
                 actionEditInfo = actionEditInfo,
@@ -89,17 +89,12 @@ fun ProfileScreen(
         }
     ) {
 
-        Box(
+        AppPullToRefreshBox(
+            refreshState = pullRefreshState,
+            enabled = personalInfoData !is Resource.Loading,
             modifier = Modifier
                 .padding(it)
                 .fillMaxSize()
-                .then(
-                    when (personalInfoData) {
-                        is Resource.Loading -> Modifier
-                        else -> Modifier.pullRefresh(pullRefreshState)
-                    }
-                ),
-            contentAlignment = Alignment.TopCenter
         ) {
             when (personalInfoData) {
                 is Resource.Loading -> BlockProgress()
@@ -116,10 +111,6 @@ fun ProfileScreen(
                     }
                 }
             }
-            PullRefreshIndicator(
-                state = pullRefreshState,
-                refreshing = isRefreshing && personalInfoData !is Resource.Loading
-            )
         }
     }
 }
@@ -134,9 +125,9 @@ private fun InfoProfileNotRefreshingPreview(
     ProfileScreen(
         isRefreshing = false,
         actionEditInfo = {},
-        scaffoldState = rememberScaffoldState(),
+        snackbarHostState = remember { SnackbarHostState() },
         personalInfoData = personalInfoData,
-        pullRefreshState = rememberPullRefreshState(refreshing = false, onRefresh = {}),
+        pullRefreshState = rememberAppRefreshState(refreshing = false, onRefresh = {}),
     )
 }
 
@@ -150,9 +141,9 @@ private fun InfoProfileRefreshingPreview(
     ProfileScreen(
         isRefreshing = true,
         actionEditInfo = {},
-        scaffoldState = rememberScaffoldState(),
+        snackbarHostState = remember { SnackbarHostState() },
         personalInfoData = personalInfoData,
-        pullRefreshState = rememberPullRefreshState(refreshing = true, onRefresh = {}),
+        pullRefreshState = rememberAppRefreshState(refreshing = true, onRefresh = {}),
     )
 }
 

@@ -2,12 +2,12 @@ package com.nullpointer.nullsiteadmin.ui.screens.project.projectScreen.componets
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,9 +23,9 @@ fun ProjectItem(
     actionEditProject: (ProjectData) -> Unit,
 ) {
     Card(
-        elevation = 10.dp,
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
         modifier = modifier,
-        shape = RoundedCornerShape(10.dp),
+        shape = MaterialTheme.shapes.medium,
     ) {
         Column(
             modifier = Modifier.padding(10.dp),
@@ -34,17 +34,17 @@ fun ProjectItem(
         ) {
             Text(
                 text = projectData.name,
-                style = MaterialTheme.typography.h6,
+                style = MaterialTheme.typography.titleLarge,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
             ImageProject(urlImg = projectData.urlImg)
             Text(
                 text = projectData.description,
-                style = MaterialTheme.typography.body1,
+                style = MaterialTheme.typography.bodyLarge,
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.height(80.dp)
+                modifier = Modifier.heightIn(min = 80.dp)
             )
             ButtonEditProject(
                 actionClick = { actionEditProject(projectData) }

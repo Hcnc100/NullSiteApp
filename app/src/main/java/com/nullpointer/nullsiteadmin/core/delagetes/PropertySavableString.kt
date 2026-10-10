@@ -13,6 +13,7 @@ class PropertySavableString(
     private var defaultValue: String = "",
     @StringRes private val emptyError: Int = UNDEFINE_RESOURCE,
     @StringRes private val lengthError: Int = UNDEFINE_RESOURCE,
+    private val rejectBlank: Boolean = false,
 ) {
 
 
@@ -57,7 +58,7 @@ class PropertySavableString(
     fun changeValue(newValue: String) {
         currentValue = newValue
         errorValue = when {
-            newValue.isEmpty() && emptyError != UNDEFINE_RESOURCE -> emptyError
+            (newValue.isEmpty() || (rejectBlank && newValue.isBlank())) && emptyError != UNDEFINE_RESOURCE -> emptyError
             newValue.length > maxLength && lengthError != UNDEFINE_RESOURCE -> lengthError
             else -> UNDEFINE_RESOURCE
         }

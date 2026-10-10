@@ -2,21 +2,21 @@ package com.nullpointer.nullsiteadmin.ui.screens.states
 
 import android.content.Context
 import androidx.annotation.StringRes
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.remember
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 
 @Stable
 open class SimpleScreenState(
     val context: Context,
-    val scaffoldState: ScaffoldState,
+    val snackbarHostState: SnackbarHostState,
 ) {
     suspend fun showSnackMessage(@StringRes stringRes: Int) {
-        scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
-        scaffoldState.snackbarHostState.showSnackbar(
+        snackbarHostState.currentSnackbarData?.dismiss()
+        snackbarHostState.showSnackbar(
             context.getString(stringRes)
         )
     }
@@ -25,10 +25,10 @@ open class SimpleScreenState(
 @Composable
 fun rememberSimpleScreenState(
     context: Context = LocalContext.current,
-    scaffoldState: ScaffoldState = rememberScaffoldState()
-) = remember(scaffoldState) {
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
+) = remember(snackbarHostState) {
     SimpleScreenState(
         context = context,
-        scaffoldState = scaffoldState
+        snackbarHostState = snackbarHostState
     )
 }

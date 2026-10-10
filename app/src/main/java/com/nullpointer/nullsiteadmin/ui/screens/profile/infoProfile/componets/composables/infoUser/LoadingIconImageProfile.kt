@@ -1,15 +1,14 @@
 package com.nullpointer.nullsiteadmin.ui.screens.profile.infoProfile.componets.composables.infoUser
 
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -29,7 +28,7 @@ fun LoadingIconImageProfile(
         Icon(
             painter = painterResource(id = R.drawable.ic_person),
             contentDescription = null,
-            tint = if (isSystemInDarkTheme()) Color.White else Color.Black,
+            tint = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.fillMaxSize(0.7f)
         )
         if (showLoading)

@@ -5,7 +5,7 @@
         <item name="android:windowLayoutInDisplayCutoutMode">default</item>
         <item name="windowSplashScreenAnimationDuration">300</item>
         <item name="splashScreenIconSize">150dp</item>
-        <item name="windowSplashScreenBackground">@color/primary_color</item>
+        <item name="windowSplashScreenBackground">@color/window_background</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/splash_background</item>
         <item name="postSplashScreenTheme">@style/Theme.NullSiteAdmin</item>
     </style>

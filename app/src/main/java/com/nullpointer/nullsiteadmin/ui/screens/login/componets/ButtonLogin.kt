@@ -2,10 +2,10 @@ package com.nullpointer.nullsiteadmin.ui.screens.login.componets
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.ExtendedFloatingActionButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -25,12 +25,11 @@ fun ButtonLogin(
         contentAlignment = androidx.compose.ui.Alignment.Center
     ) {
         if (isLoading) {
-            CircularProgressIndicator(color = MaterialTheme.colors.onPrimary)
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
         } else {
-            ExtendedFloatingActionButton(
-                text = { Text(text = stringResource(R.string.text_auth_button)) },
-                onClick = actionClick
-            )
+            ExtendedFloatingActionButton(onClick = actionClick) {
+                Text(text = stringResource(R.string.text_auth_button))
+            }
         }
     }
 }

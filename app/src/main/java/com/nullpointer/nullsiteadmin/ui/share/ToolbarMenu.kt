@@ -1,13 +1,26 @@
 package com.nullpointer.nullsiteadmin.ui.share
 
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.ime
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
+import android.content.res.Configuration.ORIENTATION_LANDSCAPE
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
+
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.res.stringResource
 import com.nullpointer.nullsiteadmin.R
+
+/** Reclaim the toolbar's height for large text fields in the compact landscape IME viewport. */
+@Composable
+fun EditorToolbarBack(title: String, actionBack: () -> Unit) {
+    val landscapeIme = LocalConfiguration.current.orientation == ORIENTATION_LANDSCAPE &&
+        WindowInsets.ime.getBottom(LocalDensity.current) > 0
+    if (!landscapeIme) ToolbarBack(title, actionBack)
+}
 
 @Composable
 fun ToolbarMenu(
@@ -16,8 +29,13 @@ fun ToolbarMenu(
 ) {
     TopAppBar(
         windowInsets = WindowInsets.statusBars,
-        backgroundColor = MaterialTheme.colors.primary,
-        title = { Text(text = title, color = Color.White) },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            titleContentColor = MaterialTheme.colorScheme.onSurface,
+            navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
+            actionIconContentColor = MaterialTheme.colorScheme.onSurface,
+        ),
+        title = { Text(text = title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
         navigationIcon = { IconMenu(actionClickMenu) }
     )
 }
@@ -28,7 +46,7 @@ private fun IconBack(actionClickMenu: () -> Unit) {
         Icon(
             painter = painterResource(id = R.drawable.ic_arrow_back),
             contentDescription = stringResource(R.string.description_icon_back),
-            tint = Color.White
+            tint = MaterialTheme.colorScheme.onSurface
         )
     }
 }
@@ -39,7 +57,7 @@ private fun IconMenu(actionClickMenu: () -> Unit) {
         Icon(
             painter = painterResource(id = R.drawable.ic_menu),
             contentDescription = stringResource(R.string.description_drawer_menu),
-            tint = Color.White
+            tint = MaterialTheme.colorScheme.onSurface
         )
     }
 }
@@ -51,14 +69,19 @@ fun ToolbarBack(
 ) {
     TopAppBar(
         windowInsets = WindowInsets.statusBars,
-        backgroundColor = MaterialTheme.colors.primary,
-        title = { Text(text = title, color = Color.White) },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            titleContentColor = MaterialTheme.colorScheme.onSurface,
+            navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
+            actionIconContentColor = MaterialTheme.colorScheme.onSurface,
+        ),
+        title = { Text(text = title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
         navigationIcon = {
             IconButton(onClick = actionBack) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_arrow_back),
                     contentDescription = stringResource(R.string.description_icon_back),
-                    tint = Color.White
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -75,14 +98,19 @@ fun ToolbarBackWithDeleter(
 ) {
     TopAppBar(
         windowInsets = WindowInsets.statusBars,
-        backgroundColor = MaterialTheme.colors.primary,
-        title = { Text(text = title, color = Color.White) },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            titleContentColor = MaterialTheme.colorScheme.onSurface,
+            navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
+            actionIconContentColor = MaterialTheme.colorScheme.onSurface,
+        ),
+        title = { Text(text = title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
         navigationIcon = {
             IconButton(onClick = actionBack) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_arrow_back),
                     contentDescription = stringResource(R.string.description_icon_back),
-                    tint = Color.White
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
             }
         },
@@ -91,7 +119,7 @@ fun ToolbarBackWithDeleter(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_deleter),
                     contentDescription = contentDescription,
-                    tint = Color.White
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
             }
         }

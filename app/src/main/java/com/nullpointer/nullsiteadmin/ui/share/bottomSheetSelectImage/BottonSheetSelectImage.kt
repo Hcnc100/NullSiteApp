@@ -1,5 +1,6 @@
 package com.nullpointer.nullsiteadmin.ui.share.bottomSheetSelectImage
 
+import androidx.compose.material3.MaterialTheme
 import android.content.Context
 import android.net.Uri
 import androidx.activity.compose.BackHandler
@@ -9,8 +10,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -71,7 +73,8 @@ fun BottomSheetSelectImage(
         modifier = Modifier
             .padding(10.dp)
             .fillMaxWidth()
-            .clip(shape = RoundedCornerShape(10.dp))
+            .clip(shape = MaterialTheme.shapes.medium)
+            .verticalScroll(rememberScrollState())
     ) {
         Text(
             text = stringResource(R.string.text_select_option),

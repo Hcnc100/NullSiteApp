@@ -8,12 +8,13 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.remember
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,7 +55,7 @@ fun EmailDetailsScreen(
     emailsViewModel: EmailDetailsViewModel = hiltViewModel(),
     emailsDetailsState: EmailDetailsScreenState = rememberEmailDetailsScreen(),
 ) {
-    val isAuthBiometricPassed by emailsViewModel.isAuthBiometricPassed.collectAsState()
+    val isAuthBiometricPassed by emailsViewModel.isAuthBiometricPassed.collectAsStateWithLifecycle()
 
     (isAuthBiometricPassed)?.let { isAuthPassed ->
         if (!isAuthPassed) {
@@ -78,7 +79,7 @@ fun EmailDetailsScreen(
             EmailsDetailsScreen(
                 email = email,
                 actionBack = rootDestinations::backDestination,
-                scaffoldState = emailsDetailsState.scaffoldState,
+                snackbarHostState = emailsDetailsState.snackbarHostState,
                 emailScreenAction = { action, email ->
                     when (action) {
                         MARK_AS_OPEN -> emailsViewModel.markAsOpen(email)
@@ -100,12 +101,12 @@ fun EmailDetailsScreen(
 private fun EmailsDetailsScreen(
     email: EmailData,
     actionBack: () -> Unit,
-    scaffoldState: ScaffoldState,
+    snackbarHostState: SnackbarHostState,
     emailScreenAction: (EmailsScreenActions, EmailData) -> Unit,
     orientation: Int = LocalConfiguration.current.orientation
 ) {
     Scaffold(
-        scaffoldState = scaffoldState,
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             ToolbarEmailDetails(
                 actionBack = actionBack,
@@ -171,7 +172,7 @@ private fun EmailsDetailsPreview() {
     EmailsDetailsScreen(
         email = EmailData.exampleLong,
         actionBack = {},
-        scaffoldState = rememberScaffoldState(),
+        snackbarHostState = remember { SnackbarHostState() },
         emailScreenAction = { _, _ -> }
     )
 }

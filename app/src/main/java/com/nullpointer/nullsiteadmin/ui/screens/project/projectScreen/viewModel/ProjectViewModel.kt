@@ -80,7 +80,7 @@ class ProjectViewModel @Inject constructor(
     fun concatenateProject(
         actionSuccessConcatenate: () -> Unit = {}
     ) = launchSafeIO(
-        isEnabled = isEnabledConcatenateProjects,
+        isEnabled = isEnabledConcatenateProjects && !isConcatenateProjects && !isRequestProject,
         blockBefore = { isConcatenateProjects = true },
         blockAfter = { isConcatenateProjects = false },
         blockIO = {

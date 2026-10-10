@@ -1,4 +1,5 @@
 <resources>
+    <string name="error_email_format">Introduce un correo electrónico válido</string>
     <string name="app_name">NullSiteApp</string>
 
     <string name="description_icon_back">Icono de retroceder</string>

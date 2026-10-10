@@ -51,7 +51,8 @@ class EditInfoViewModel @Inject constructor(
         lengthError = R.string.error_name_admin_length,
         label = R.string.label_name_admin,
         hint = R.string.hint_name_admin,
-        tagSavable = TAG_NAME_ADMIN
+        tagSavable = TAG_NAME_ADMIN,
+        rejectBlank = true,
     )
     val profession = PropertySavableString(
         savedState = state,
@@ -60,7 +61,8 @@ class EditInfoViewModel @Inject constructor(
         lengthError = R.string.error_profess_admin_length,
         label = R.string.label_profession_admin,
         hint = R.string.hint_profession_admin,
-        tagSavable = TAG_PROFESSION_ADMIN
+        tagSavable = TAG_PROFESSION_ADMIN,
+        rejectBlank = true,
     )
     val description = PropertySavableString(
         savedState = state,
@@ -69,7 +71,8 @@ class EditInfoViewModel @Inject constructor(
         lengthError = R.string.error_description_admin_length,
         label = R.string.label_description_admin,
         hint = R.string.hint_description_admin,
-        tagSavable = TAG_DESCRIPTION_ADMIN
+        tagSavable = TAG_DESCRIPTION_ADMIN,
+        rejectBlank = true,
     )
 
     val imageProfile = PropertySavableImg(
@@ -117,6 +120,9 @@ class EditInfoViewModel @Inject constructor(
     }
 
     fun validateInfoProfile(): UpdateInfoProfileWrapper? {
+        name.reValueField()
+        profession.reValueField()
+        description.reValueField()
        if (!isDataValid) {
             _messageError.trySend(R.string.error_invalid_data)
             return null
@@ -137,6 +143,7 @@ class EditInfoViewModel @Inject constructor(
         actionComplete: () -> Unit,
         updateInfoProfileWrapper: UpdateInfoProfileWrapper
     ) = launchSafeIO(
+        isEnabled = !isUpdatedData,
         blockBefore = { isUpdatedData = true },
         blockAfter = { isUpdatedData = false },
         blockIO = {
