@@ -94,5 +94,3 @@ jobs:
           track: production
           status: completed
           whatsNewDirectory: distribution/whatsnew
-          # Submit the AAB and Console listing changes together, once, after verification.
-          changesNotSentForReview: true

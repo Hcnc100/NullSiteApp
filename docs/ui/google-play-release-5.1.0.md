@@ -28,10 +28,13 @@ Fecha: 2026-10-10. App: `com.nullpointer.nullsiteadmin`.
 - Concurrencia `google-play-production`, sin cancelar una publicación en curso.
   Serializa ejecuciones; no se presenta como deduplicación universal de commits.
 - Solo los cambios de documentación/Markdown no disparan otro despliegue.
-- CI construye un AAB con `versionCode = 1000 + github.run_number`, lo sube una
-  sola vez a producción con `changesNotSentForReview: true` y las notas nuevas.
-- Después de verificar CI, se envían ficha y versión juntas desde Console.
-  Este envío de revisión **no sube un segundo AAB**.
+- CI construye un AAB con `versionCode = 1000 + github.run_number`, lo sube a
+  producción con las notas nuevas y envío automático a revisión.
+- Esta app no admite `changesNotSentForReview: true`: Google rechazó el commit
+  del edit en la ejecución 24. No se confirmó esa publicación. Se retira el
+  parámetro y se realiza una nueva ejecución, sin carga manual en paralelo.
+- Después de CI se comprueba Console; si la ficha aún está pendiente, se envía
+  únicamente ese cambio. El envío de revisión **no sube un segundo AAB**.
 - No se ejecuta `gh workflow run`, no se sube el bundle local y no se crea una
   segunda versión desde el navegador. Google decide aprobación y disponibilidad.
 
@@ -46,12 +49,14 @@ Fecha: 2026-10-10. App: `com.nullpointer.nullsiteadmin`.
 
 ## Resultado
 
-Pendiente de verificar el push, la ejecución CI y el envío conjunto en Console.
+Push inicial: `3845389`, ejecución 24 (`38083496142`), build correcto; carga de
+1024 completada pero commit del edit rechazado por la opción de revisión.
+No se cuenta como publicación exitosa. Corrección y ejecución final pendientes.
 
 ## Key Learnings:
 
 1. Push y carga manual de AAB son vías distintas: elegir solo CI evita dos publicaciones para el mismo trabajo.
-2. changesNotSentForReview permite verificar el AAB y enviar ficha y versión juntas desde Console, sin otra carga.
+2. Esta app exige envío automático a revisión: changesNotSentForReview=true rechaza el commit del edit aunque el AAB ya se haya cargado.
 3. Las capturas de instrumentación con datos de ejemplo no deben confundirse con una sesión real para la tienda.
 
 ## Handoff
