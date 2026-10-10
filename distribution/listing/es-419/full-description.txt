@@ -1,11 +1,19 @@
-NullSiteApp es la herramienta de administración de NullSite para gestionar el contenido del sitio desde Android. Requiere una cuenta autorizada.
+NullSiteApp es el panel privado de administración del sitio web NullSite de NullPointerDev. Permite a sus administradores autorizados actualizar el perfil profesional y los proyectos publicados, y consultar los mensajes que llegan desde el formulario de contacto del sitio.
 
-• Actualiza la información de tu perfil.
-• Consulta y edita tus proyectos.
-• Revisa los mensajes recibidos desde el formulario de contacto de tu sitio.
-• Recibe notificaciones de nuevos mensajes.
-• Usa el bloqueo biométrico en dispositivos compatibles.
+QUÉ PUEDES HACER
 
-La interfaz utiliza Material 3, con temas claro y oscuro. Los formularios se adaptan al teclado y al texto grande, validan los campos obligatorios y ayudan a evitar envíos duplicados.
+Perfil profesional: consulta y edita el nombre, la profesión y la descripción. Actualiza la imagen del perfil desde la cámara o la galería del dispositivo y recorta la imagen antes de usarla.
 
-Las funciones de administración requieren conexión a Internet y acceso a la cuenta correspondiente.
+Proyectos: consulta la lista de proyectos del sitio y edita sus datos, incluidos el nombre, la descripción, el enlace de imagen y el enlace del repositorio.
+
+Mensajes de contacto: consulta los mensajes enviados desde el sitio web, abre su detalle y prepara una respuesta con una aplicación de correo compatible. Puedes recibir notificaciones cuando llegan mensajes nuevos.
+
+Acceso: inicia sesión con correo y contraseña de una cuenta autorizada. Puedes configurar el bloqueo biométrico en dispositivos compatibles.
+
+INTERFAZ
+
+Diseño Material 3 con temas claro y oscuro. Formularios desplazables cuando se abre el teclado, soporte de texto grande y validación de campos obligatorios y formato de correo.
+
+IMPORTANTE ANTES DE INSTALAR
+
+Esta app no es un creador de páginas web ni permite registrar cuentas nuevas. Está destinada a la administración del sitio NullSite, no a gestionar sitios de terceros. Se necesita una cuenta previamente autorizada y conexión a Internet para acceder a las funciones de administración. Las capturas de acceso muestran los temas claro y oscuro; las opciones de gestión aparecen después de iniciar sesión.

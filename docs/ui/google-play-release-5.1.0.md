@@ -19,6 +19,10 @@ Fecha: 2026-10-10. App: `com.nullpointer.nullsiteadmin`.
 - Ícono y gráfico de funciones existentes conservados. No se cambian privacidad,
   seguridad de datos, precios, países ni condiciones contractuales.
 - Ficha guardada en Console: «Cambios listos para enviar a revisión».
+- Las verificaciones rápidas señalaron falta de claridad en la primera redacción.
+  Se precisó que es el panel privado del sitio NullSite de NullPointerDev, sus
+  funciones concretas por pantalla y sus límites: sin registro, sin creación de
+  sitios ni administración de sitios de terceros. Nueva comprobación en curso.
 - Notas de versión en español e inglés: `distribution/whatsnew/`.
 
 ## Una sola vía de despliegue
@@ -51,7 +55,28 @@ Fecha: 2026-10-10. App: `com.nullpointer.nullsiteadmin`.
 
 Push inicial: `3845389`, ejecución 24 (`38083496142`), build correcto; carga de
 1024 completada pero commit del edit rechazado por la opción de revisión.
-No se cuenta como publicación exitosa. Corrección y ejecución final pendientes.
+No se cuenta como publicación exitosa.
+
+Corrección: `1ed4209`, [ejecución 25](https://github.com/Hcnc100/NullSiteApp/actions/runs/38084048516).
+Build y deploy **success**. Google Play aceptó un AAB 5.1.0, versionCode **1025**;
+log: «Successfully uploaded 1 artifacts» y «Successfully committed».
+
+Console confirmó en **Cambios en la etapa de revisión**:
+
+- Producción: **5.1.0 — Iniciar lanzamiento completo**.
+- Ficha es-419: descripción breve, descripción completa y capturas de teléfono.
+- Verificaciones rápidas de Google aún en curso al cerrar; no se afirma que la
+  versión ya esté visible ni que la aprobación esté garantizada. Con publicación
+  administrada desactivada, Google la publicará si aprueba los cambios.
+
+No hubo carga manual de AAB ni workflow_dispatch ni segunda versión exitosa
+para este trabajo. Hubo dos intentos CI (uno rechazado y uno confirmado), no dos
+despliegues efectivos. Los textos finales y este registro se sincronizan con
+un commit **[skip ci]** exclusivamente de metadatos/documentación para no crear
+otro AAB/versionCode. El código de la versión aceptada permanece sin cambios.
+
+Evidencia local ignorada: `build/play-ci-failure.log`, `play-ci-success.log`,
+`play-ci-final-watch.log`. Página de Console abierta como resultado verificable.
 
 ## Key Learnings:
 
@@ -63,3 +88,9 @@ No se cuenta como publicación exitosa. Corrección y ejecución final pendiente
 
 Código, pruebas, textos e imágenes de tienda versionados; resultados finales
 de revisión se documentarán sin disparar otra publicación del binario.
+Pendiente externo: resultado de verificaciones/aprobación de Google. Si vuelve
+a aparecer el problema de claridad, revisar el motivo concreto y el acceso de
+revisión de la cuenta, sin inventar credenciales ni prometer aprobación.
+
+Referencias: [notas de la acción Play](https://github.com/r0adkll/upload-google-play/blob/v1.1.3/README.md),
+[omitir workflows de GitHub](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/skip-workflow-runs).

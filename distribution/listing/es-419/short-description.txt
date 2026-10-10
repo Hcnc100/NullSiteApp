@@ -1,1 +1,1 @@
-Gestiona tu perfil, proyectos y mensajes de contacto de NullSite.
+Panel privado de NullSite: edita el perfil, proyectos y consulta mensajes.
