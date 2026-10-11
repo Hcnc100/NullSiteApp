@@ -2,6 +2,7 @@ package com.nullpointer.nullsiteadmin.ui.screens.project.projectScreen.componets
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CardDefaults
@@ -28,7 +29,7 @@ fun ProjectItem(
         shape = MaterialTheme.shapes.medium,
     ) {
         Column(
-            modifier = Modifier.padding(10.dp),
+            modifier = Modifier.fillMaxWidth().padding(10.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(15.dp)
         ) {
