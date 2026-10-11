@@ -8,13 +8,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.nullpointer.nullsiteadmin.core.utils.toFullDate
 import com.nullpointer.nullsiteadmin.models.email.data.EmailData
 import com.nullpointer.nullsiteadmin.ui.preview.config.SimplePreview
 
@@ -25,25 +24,26 @@ fun BodyEmail(
     context: Context = LocalContext.current
 ) {
 
-    val fullTime = remember(emailData.createdAt) {
-        emailData.createdAt.toFullDate(context)
-    }
+    val fullTime = android.text.format.DateFormat.getMediumDateFormat(context).format(emailData.createdAt) +
+        " · " + android.text.format.DateFormat.getTimeFormat(context).format(emailData.createdAt)
 
     Card(
         shape = MaterialTheme.shapes.medium,
         modifier = modifier.fillMaxWidth()
     ) {
-        Column(
-            modifier = Modifier.padding(10.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+        SelectionContainer { Column(
+            modifier = Modifier.padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            Text(text = emailData.subject, style = MaterialTheme.typography.titleLarge)
             Text(
                 text = fullTime,
-                modifier = Modifier.align(Alignment.End)
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            Text(text = emailData.subject)
-            Text(text = emailData.message)
-        }
+            HorizontalDivider()
+            Text(text = emailData.message, style = MaterialTheme.typography.bodyLarge)
+        } }
     }
 }
 

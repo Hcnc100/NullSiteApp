@@ -2,6 +2,9 @@ package com.nullpointer.nullsiteadmin.ui.screens.email.detailsEmail.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
@@ -10,6 +13,7 @@ import com.nullpointer.nullsiteadmin.domain.email.EmailsRepository
 import com.nullpointer.nullsiteadmin.models.email.data.EmailData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,6 +27,8 @@ class EmailDetailsViewModel @Inject constructor(
     private val emailsRepository: EmailsRepository,
     biometricRepository: BiometricRepository,
 ) : ViewModel() {
+    var isDeleting by mutableStateOf(false)
+        private set
 
     val isAuthBiometricPassed = biometricRepository.isAuthBiometricPassed.stateIn(
         viewModelScope,
@@ -51,22 +57,27 @@ class EmailDetailsViewModel @Inject constructor(
     fun deleterEmail(
         idEmail: String,
         actionSuccess: () -> Unit,
-    ) = launchSafeIO(
-        blockIO = {
-            emailsRepository.deleterEmail(idEmail)
-            _errorEmailDetails.trySend(R.string.message_deleter_email_success)
-            withContext(Dispatchers.Main) {
-                actionSuccess()
+    ): Job? {
+        if (isDeleting) return null
+        isDeleting = true
+        return launchSafeIO(
+            blockAfter = { isDeleting = false },
+            blockIO = {
+                emailsRepository.deleterEmail(idEmail)
+                _errorEmailDetails.trySend(R.string.message_deleter_email_success)
+                withContext(Dispatchers.Main) {
+                    actionSuccess()
+                }
+            },
+            blockException = {
+                ExceptionManager.sendMessageErrorToException(
+                    exception = it,
+                    channel = _errorEmailDetails,
+                    messageResource = R.string.message_deleter_email_error,
+                    debugMessage = "Error to deleter email"
+                )
             }
-        },
-        blockException = {
-            ExceptionManager.sendMessageErrorToException(
-                exception = it,
-                channel = _errorEmailDetails,
-                messageResource = R.string.message_deleter_email_error,
-                debugMessage = "Error to deleter email"
-            )
-        }
-    )
+        )
+    }
 
 }

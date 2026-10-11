@@ -1,6 +1,7 @@
 package com.nullpointer.nullsiteadmin.ui.screens.email.detailsEmail.componets
 
-import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Text
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,15 +15,16 @@ fun ButtonReplyEmail(
     actionReplay: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    FloatingActionButton(
+    ExtendedFloatingActionButton(
         modifier = modifier,
-        onClick = actionReplay
-    ) {
+        onClick = actionReplay,
+        text = { Text(stringResource(R.string.email_reply)) },
+        icon = {
         Icon(
             painter = painterResource(id = R.drawable.ic_reply),
-            contentDescription = stringResource(R.string.description_reply_email)
+            contentDescription = null
         )
-    }
+    })
 }
 
 @SimplePreview

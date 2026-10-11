@@ -176,4 +176,11 @@
     <string name="message_deleter_email_error">Error al eliminar el correo electrónico</string>
     <string name="message_mark_as_open_error">Error al marcar el correo electrónico como abierto</string>
 
+    <string name="email_sender">Remitente</string>
+    <string name="email_reply">Responder</string>
+    <string name="email_delete_title">¿Eliminar correo?</string>
+    <string name="email_delete_confirmation">El mensaje de %1$s se eliminará de forma permanente. Esta acción no se puede deshacer.</string>
+    <string name="email_delete_confirm">Eliminar</string>
+    <string name="email_delete_cancel">Cancelar</string>
+    <string name="email_deleting">Eliminando correo…</string>
 </resources>

@@ -16,6 +16,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.activity.compose.BackHandler
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.ui.res.stringResource
+import com.nullpointer.nullsiteadmin.R
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -80,6 +92,7 @@ fun EmailDetailsScreen(
                 email = email,
                 actionBack = rootDestinations::backDestination,
                 snackbarHostState = emailsDetailsState.snackbarHostState,
+                isDeleting = emailsViewModel.isDeleting,
                 emailScreenAction = { action, email ->
                     when (action) {
                         MARK_AS_OPEN -> emailsViewModel.markAsOpen(email)
@@ -98,26 +111,55 @@ fun EmailDetailsScreen(
 }
 
 @Composable
-private fun EmailsDetailsScreen(
+internal fun EmailsDetailsScreen(
     email: EmailData,
     actionBack: () -> Unit,
     snackbarHostState: SnackbarHostState,
     emailScreenAction: (EmailsScreenActions, EmailData) -> Unit,
-    orientation: Int = LocalConfiguration.current.orientation
+    orientation: Int = LocalConfiguration.current.orientation,
+    isDeleting: Boolean = false,
 ) {
+    var confirmDelete by rememberSaveable(email.idEmail) { mutableStateOf(false) }
+    BackHandler(enabled = isDeleting) { /* Keep the deletion's ViewModel alive until completion. */ }
+    if (confirmDelete && !isDeleting) {
+        // Resolve in the screen's locale before entering the dialog's window context.
+        val title = stringResource(R.string.email_delete_title)
+        val message = stringResource(R.string.email_delete_confirmation, email.name)
+        val confirmLabel = stringResource(R.string.email_delete_confirm)
+        val cancelLabel = stringResource(R.string.email_delete_cancel)
+        AlertDialog(
+            onDismissRequest = { confirmDelete = false },
+            title = { Text(title) },
+            text = { Text(message) },
+            confirmButton = {
+                TextButton(onClick = {
+                    confirmDelete = false
+                    emailScreenAction(DELETER, email)
+                }) { Text(confirmLabel, color = MaterialTheme.colorScheme.error) }
+            },
+            dismissButton = {
+                TextButton(onClick = { confirmDelete = false }) { Text(cancelLabel) }
+            },
+        )
+    }
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
-            ToolbarEmailDetails(
+            Column { ToolbarEmailDetails(
                 actionBack = actionBack,
-                actionDeleter = {
-                    emailScreenAction(DELETER, email)
-                    actionBack()
-                }
+                enabled = !isDeleting,
+                actionDeleter = { confirmDelete = true }
             )
+                if (isDeleting) {
+                    LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                    Text(stringResource(R.string.email_deleting),
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                        style = MaterialTheme.typography.labelLarge)
+                }
+            }
         },
         floatingActionButton = {
-            ButtonReplyEmail(
+            if (!isDeleting) ButtonReplyEmail(
                 actionReplay = { emailScreenAction(REPLY, email) }
             )
         }
@@ -128,11 +170,12 @@ private fun EmailsDetailsScreen(
                 Column(
                     modifier = Modifier
                         .padding(it)
-                        .padding(10.dp)
-                        .verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                        .padding(horizontal = 16.dp, vertical = 12.dp)
+                        .verticalScroll(rememberScrollState())
+                        .padding(bottom = 96.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    ContainerAnimateEmail()
+                    ContainerAnimateEmail(height = 96.dp)
                     HeaderEmail(emailData = email)
                     BodyEmail(emailData = email)
                 }
@@ -142,7 +185,7 @@ private fun EmailsDetailsScreen(
                 Row(
                     modifier = Modifier
                         .padding(it)
-                        .padding(10.dp)
+                        .padding(16.dp)
                         .fillMaxHeight(),
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
                     verticalAlignment = Alignment.CenterVertically
@@ -153,7 +196,8 @@ private fun EmailsDetailsScreen(
                     Column(
                         modifier = Modifier
                             .weight(0.7f)
-                            .verticalScroll(rememberScrollState()),
+                            .verticalScroll(rememberScrollState())
+                            .padding(bottom = 96.dp),
                         verticalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         HeaderEmail(emailData = email)

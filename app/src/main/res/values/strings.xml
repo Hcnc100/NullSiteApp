@@ -151,4 +151,11 @@
     <string name="error_request_email">Error getting latest emails</string>
     <string name="message_deleter_email_error">Error deleting email</string>
     <string name="message_mark_as_open_error">Error marking email as open</string>
+    <string name="email_sender">From</string>
+    <string name="email_reply">Reply</string>
+    <string name="email_delete_title">Delete email?</string>
+    <string name="email_delete_confirmation">The message from %1$s will be permanently deleted. This cannot be undone.</string>
+    <string name="email_delete_confirm">Delete</string>
+    <string name="email_delete_cancel">Cancel</string>
+    <string name="email_deleting">Deleting email…</string>
 </resources>
