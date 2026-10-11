@@ -9,5 +9,5 @@ object FormLengthLimits {
     const val URL = 2_048
     const val EMAIL = 254
     // Login must accommodate existing credentials without trimming or truncation.
-    const val PASSWORD = 4_096
+    const val MAX_CREDENTIAL_LENGTH = 4_096
 }

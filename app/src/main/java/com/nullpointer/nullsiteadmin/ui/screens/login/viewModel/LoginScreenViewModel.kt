@@ -26,7 +26,7 @@ class LoginScreenViewModel @Inject constructor(
 
     companion object {
         private const val MAX_LENGTH_EMAIL = FormLengthLimits.EMAIL
-        private const val MAX_LENGTH_PASSWORD = FormLengthLimits.PASSWORD
+        private const val MAX_LENGTH_PASSWORD = FormLengthLimits.MAX_CREDENTIAL_LENGTH
         private const val TAG_EMAIL_SIGN_IN = "TAG_EMAIL_SIGN_IN"
         private const val TAG_PASSWORD_SIGN_IN = "TAG_PASSWORD_SIGN_IN"
     }
