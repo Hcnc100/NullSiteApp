@@ -29,6 +29,58 @@ import java.util.concurrent.TimeUnit
 /** Production ViewModels and field delegates, with local repository boundaries only. */
 @RunWith(AndroidJUnit4::class)
 class FormValidationPolicyTest {
+    @Test fun allEditableFieldsAcceptLimitAndRejectOverflowWithoutTruncation() = onMain {
+        val project = EditProjectViewModel(SavedStateHandle(), localRepo())
+        val profile = EditInfoViewModel(SavedStateHandle(), localRepo(), localRepo())
+        val login = LoginScreenViewModel(SavedStateHandle(), localRepo())
+        // Literal expectations make unintended policy changes visible.
+        val fields = listOf(
+            project.nameProject to 100,
+            project.descriptionProject to 2000,
+            project.urlImgProject to 2048,
+            project.urlRepositoryProject to 2048,
+            profile.name to 100,
+            profile.profession to 120,
+            profile.description to 2000,
+            login.emailAdmin to 254,
+            login.passwordAdmin to 4096,
+        )
+        fields.forEach { (field, limit) ->
+            field.changeValue("a".repeat(limit - 1))
+            assertFalse(field.hasError)
+            field.changeValue("a".repeat(limit))
+            assertFalse(field.hasError)
+            assertEquals("$limit/$limit", field.countLength)
+            val overflow = "a".repeat(limit + 1)
+            field.changeValue(overflow)
+            assertTrue(field.hasError)
+            assertEquals(overflow, field.currentValue)
+            field.changeValue("valid")
+            assertFalse(field.hasError)
+        }
+    }
+
+    @Test fun persistedStorageUrlAllowsEditingAnotherProjectField() {
+        val writes = AtomicInteger()
+        var job: Job? = null
+        onMain {
+            val vm = EditProjectViewModel(SavedStateHandle(), localRepo<ProjectRepository>(writes))
+            val prefix = "https://firebasestorage.googleapis.com/v0/b/example/o/"
+            val url = prefix + "a".repeat(167 - prefix.length)
+            val project = ProjectData.example.copy(
+                urlImg = url,
+                urlRepo = "https://github.com/example/project",
+            )
+            vm.initVM(project)
+            vm.nameProject.changeValue("Updated project")
+            job = vm.updatedProject(project) {}
+            assertFalse(vm.urlImgProject.hasError)
+            assertEquals("167/2048", vm.urlImgProject.countLength)
+        }
+        runBlocking { job?.join() }
+        assertEquals(1, writes.get())
+    }
+
     @Test fun untouchedProfileFieldsBlockPartialSave() = onMain {
         val vm = EditInfoViewModel(SavedStateHandle(), localRepo(), localRepo())
         vm.name.changeValue("Nurse")

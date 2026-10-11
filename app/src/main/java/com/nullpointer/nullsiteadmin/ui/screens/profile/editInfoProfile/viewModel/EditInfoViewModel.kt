@@ -11,6 +11,7 @@ import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableImg
 import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
 import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager
+import com.nullpointer.nullsiteadmin.core.utils.FormLengthLimits
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.image.ImageRepository
 import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepository
@@ -31,9 +32,9 @@ class EditInfoViewModel @Inject constructor(
     private val imageRepository: ImageRepository
 ) : ViewModel() {
     companion object {
-        private const val MAX_LENGTH_NAME = 50
-        private const val MAX_LENGTH_DESCRIPTION = 250
-        private const val MAX_LENGTH_PROFESSION = 50
+        private const val MAX_LENGTH_NAME = FormLengthLimits.NAME
+        private const val MAX_LENGTH_DESCRIPTION = FormLengthLimits.DESCRIPTION
+        private const val MAX_LENGTH_PROFESSION = FormLengthLimits.PROFESSION
         private const val TAG_IMG_ADMIN = "TAG_IMG_ADMIN"
         private const val TAG_NAME_ADMIN = "TAG_NAME_ADMIN"
         private const val TAG_PROFESSION_ADMIN = "TAG_PROFESSION_ADMIN"

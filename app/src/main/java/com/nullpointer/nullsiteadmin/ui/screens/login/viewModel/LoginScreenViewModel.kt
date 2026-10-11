@@ -9,6 +9,7 @@ import android.util.Patterns
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
 import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager
+import com.nullpointer.nullsiteadmin.core.utils.FormLengthLimits
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.auth.AuthRepository
 import com.nullpointer.nullsiteadmin.models.credentials.wrapper.CredentialsWrapper
@@ -24,8 +25,8 @@ class LoginScreenViewModel @Inject constructor(
 ) : ViewModel() {
 
     companion object {
-        private const val MAX_LENGTH_EMAIL = 50
-        private const val MAX_LENGTH_PASSWORD = 50
+        private const val MAX_LENGTH_EMAIL = FormLengthLimits.EMAIL
+        private const val MAX_LENGTH_PASSWORD = FormLengthLimits.PASSWORD
         private const val TAG_EMAIL_SIGN_IN = "TAG_EMAIL_SIGN_IN"
         private const val TAG_PASSWORD_SIGN_IN = "TAG_PASSWORD_SIGN_IN"
     }

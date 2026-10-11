@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.core.delagetes.PropertySavableString
 import com.nullpointer.nullsiteadmin.core.utils.ExceptionManager
+import com.nullpointer.nullsiteadmin.core.utils.FormLengthLimits
 import com.nullpointer.nullsiteadmin.core.utils.launchSafeIO
 import com.nullpointer.nullsiteadmin.domain.project.ProjectRepository
 import com.nullpointer.nullsiteadmin.models.project.data.ProjectData
@@ -27,9 +28,9 @@ class EditProjectViewModel @Inject constructor(
     private val projectRepository: ProjectRepository
 ) : ViewModel() {
     companion object {
-        private const val MAX_LENGTH_NAME = 50
-        private const val MAX_LENGTH_URL = 100
-        private const val MAX_LENGTH_DESCRIPTION = 200
+        private const val MAX_LENGTH_NAME = FormLengthLimits.NAME
+        private const val MAX_LENGTH_URL = FormLengthLimits.URL
+        private const val MAX_LENGTH_DESCRIPTION = FormLengthLimits.DESCRIPTION
 
         private const val TAG_NAME_PROJECT = "TAG_NAME_PROJECT"
         private const val TAG_URL_IMG_PROJECT = "TAG_URL_IMG_PROJECT"
