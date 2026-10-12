@@ -6,18 +6,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavHostController
 import com.nullpointer.nullsiteadmin.core.states.Resource
 import com.nullpointer.nullsiteadmin.presentation.AuthViewModel
 import com.nullpointer.nullsiteadmin.ui.interfaces.ActionRootDestinations
 import com.nullpointer.nullsiteadmin.ui.screens.NavGraphs
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.HomeScreenDestination
-import com.nullpointer.nullsiteadmin.ui.screens.destinations.LockScreenDestination
+import com.nullpointer.nullsiteadmin.ui.screens.lock.LockScreen
+import com.nullpointer.nullsiteadmin.ui.screens.shared.BlockProgress
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.LoginScreenDestination
-import com.nullpointer.nullsiteadmin.ui.screens.shared.rememberLifecycleEvent
 import com.nullpointer.nullsiteadmin.ui.screens.states.MainScreenState
 import com.nullpointer.nullsiteadmin.ui.screens.states.rememberMainScreenState
 import com.ramcosta.composedestinations.DestinationsNavHost
@@ -31,16 +31,8 @@ fun MainScreen(
     rootScreenState: MainScreenState = rememberMainScreenState()
 ) {
 
-    val lifecycleEvent = rememberLifecycleEvent()
-
-    LaunchedEffect(key1 = lifecycleEvent) {
-        when (lifecycleEvent) {
-            Lifecycle.Event.ON_RESUME -> authViewModel.initVerifyBiometrics()
-            // ! TODO: Fix this, it's not working when select image profile
-//            Lifecycle.Event.ON_STOP -> authViewModel.blockBiometric()
-            else -> Unit
-        }
-    }
+    BiometricLifecycleEffect(onPause = authViewModel::blockBiometric,
+        onResume = { authViewModel.initVerifyBiometrics() })
 
     val isAuthUserState by authViewModel.isUserAuth.collectAsStateWithLifecycle()
 
@@ -68,24 +60,23 @@ fun MainScreen(
     // Leaf Scaffolds own system insets; a root Scaffold would apply them twice.
     Box(Modifier.fillMaxSize()) {
         (isAuthUserState as? Resource.Success)?.let { dataAuth ->
-            (isAuthBiometricPassed)?.let { isBiometricPassed ->
-                val isAuthUser = dataAuth.data
-                when {
-                    isAuthUser && isBiometricPassed -> HomeScreenDestination
-                    isAuthUser && !isBiometricPassed -> LockScreenDestination
-                    else -> LoginScreenDestination
-                }.let { startRoute ->
-                    LaunchedEffect(key1 = Unit) {
-                        actionChangeLoading()
+            val isAuthUser = dataAuth.data
+            val startRoute = if (isAuthUser) HomeScreenDestination else LoginScreenDestination
+            // Logout/login may dispose navigation; a local biometric lock must not.
+            key(isAuthUser) {
+                BiometricContentGate(
+                    locked = isAuthUser && isAuthBiometricPassed != true,
+                    lockContent = {
+                        if (isAuthBiometricPassed == null) BlockProgress() else LockScreen()
                     }
+                ) {
+                    LaunchedEffect(Unit) { actionChangeLoading() }
                     DestinationsNavHost(
                         startRoute = startRoute,
                         navGraph = NavGraphs.root,
                         navController = navHostController,
                         modifier = Modifier.fillMaxSize(),
-                        dependenciesContainerBuilder = {
-                            dependency(actionRootDestinations)
-                        },
+                        dependenciesContainerBuilder = { dependency(actionRootDestinations) },
                     )
                 }
             }

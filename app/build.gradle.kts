@@ -51,7 +51,7 @@ android {
         versionCode = providers.gradleProperty("versionCode")
             .map(String::toInt)
             .getOrElse(10)
-        versionName = "5.2.0"
+        versionName = "5.2.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

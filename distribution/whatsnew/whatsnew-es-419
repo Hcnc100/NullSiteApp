@@ -1,5 +1,3 @@
-Perfil bilingüe y enlaces sociales, con protección frente a ediciones simultáneas.
-Proyectos con galería ordenable, miniaturas y descripciones accesibles ES/EN.
-Administración de habilidades y CV por idioma, con progreso y retirada segura.
-Borradores privados del blog y acceso al editor web para publicación y documentos legales.
-Mejoras de temas claro/oscuro, texto grande, validación y conservación de borradores.
+Corregimos la pérdida de archivos seleccionados al volver al bloqueo por huella.
+La selección y la pantalla de edición se conservan al regresar del selector de PDF o imágenes.
+El bloqueo sigue protegiendo la app y evita que Atrás cierre el editor mientras está bloqueado.
