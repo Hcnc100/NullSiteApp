@@ -9,4 +9,5 @@ data class CreateProjectWrapper(
     val urlRepo: String,
     val isVisible: Boolean,
     val description: String,
+    val content: com.nullpointer.nullsiteadmin.models.project.data.ProjectContent = com.nullpointer.nullsiteadmin.models.project.data.ProjectContent(),
 )

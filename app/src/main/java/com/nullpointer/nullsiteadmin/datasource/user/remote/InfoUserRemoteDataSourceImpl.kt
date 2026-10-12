@@ -9,11 +9,13 @@ class InfoUserRemoteDataSourceImpl(
 ) : InfoUserRemoteDataSource {
     override suspend fun updatePersonalInfo(
         idUser: String,
-        personalInfoDTO: PersonalInfoDTO
+        personalInfoDTO: PersonalInfoDTO,
+        baseline: PersonalInfoData?,
     ) =
         userApiServices.updatePersonalInfo(
             idUser = idUser,
-            personalInfoDTO = personalInfoDTO
+            personalInfoDTO = personalInfoDTO,
+            baseline = baseline,
         )
 
     override suspend fun getPersonalInfo(

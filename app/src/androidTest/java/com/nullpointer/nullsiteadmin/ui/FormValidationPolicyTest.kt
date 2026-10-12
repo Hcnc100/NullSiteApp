@@ -35,13 +35,13 @@ class FormValidationPolicyTest {
         val login = LoginScreenViewModel(SavedStateHandle(), localRepo())
         // Literal expectations make unintended policy changes visible.
         val fields = listOf(
-            project.nameProject to 100,
-            project.descriptionProject to 2000,
+            project.nameProject to 120,
+            project.descriptionProject to 10000,
             project.urlImgProject to 2048,
             project.urlRepositoryProject to 2048,
-            profile.name to 100,
-            profile.profession to 120,
-            profile.description to 2000,
+            profile.name to 120,
+            profile.profession to 180,
+            profile.description to 5000,
             login.emailAdmin to 254,
             login.passwordAdmin to 4096,
         )
@@ -83,6 +83,7 @@ class FormValidationPolicyTest {
 
     @Test fun untouchedProfileFieldsBlockPartialSave() = onMain {
         val vm = EditInfoViewModel(SavedStateHandle(), localRepo(), localRepo())
+        vm.initInfoProfile(null)
         vm.name.changeValue("Nurse")
         assertNull(vm.validateInfoProfile())
         assertTrue(vm.profession.hasError)
@@ -91,6 +92,7 @@ class FormValidationPolicyTest {
 
     @Test fun whitespaceOnlyProfileIsRejectedWithoutTrimmingUserText() = onMain {
         val vm = EditInfoViewModel(SavedStateHandle(), localRepo(), localRepo())
+        vm.initInfoProfile(null)
         vm.name.changeValue("   ")
         vm.profession.changeValue("RN")
         vm.description.changeValue("Description")
@@ -132,7 +134,7 @@ class FormValidationPolicyTest {
         var first: Job? = null
         try { onMain {
             val vm = EditInfoViewModel(SavedStateHandle(), localRepo<InfoUserRepository>(writes, release), localRepo<ImageRepository>())
-            val wrapper = UpdateInfoProfileWrapper("Nurse", null, null, null)
+            val wrapper = UpdateInfoProfileWrapper("Nurse", null, null, null, baseline = PersonalInfoData.example)
             first = vm.updatePersonalInfo({}, wrapper)
             assertTrue(vm.isUpdatedData)
             assertNull(vm.updatePersonalInfo({}, wrapper))

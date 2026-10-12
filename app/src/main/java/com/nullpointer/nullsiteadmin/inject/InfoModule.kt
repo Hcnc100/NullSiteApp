@@ -1,9 +1,7 @@
 package com.nullpointer.nullsiteadmin.inject
 
-import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.nullpointer.nullsiteadmin.data.services.ServicesManager
 import com.nullpointer.nullsiteadmin.data.user.local.UserDataStore
 import com.nullpointer.nullsiteadmin.data.user.remote.UserApiServices
 import com.nullpointer.nullsiteadmin.datasource.auth.local.AuthLocalDataSource
@@ -17,7 +15,6 @@ import com.nullpointer.nullsiteadmin.domain.infoUser.InfoUserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -49,12 +46,6 @@ object InfoModule {
         userApiServices: UserApiServices
     ): InfoUserRemoteDataSource =
         InfoUserRemoteDataSourceImpl(userApiServices = userApiServices)
-
-    @Provides
-    @Singleton
-    fun provideServicesManager(
-        @ApplicationContext context: Context
-    ): ServicesManager = ServicesManager(context)
 
     @Provides
     @Singleton

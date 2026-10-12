@@ -23,23 +23,30 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 @HiltViewModel
 class EditInfoViewModel @Inject constructor(
-    state: SavedStateHandle,
+    private val state: SavedStateHandle,
     private val infoUserRepository: InfoUserRepository,
     private val imageRepository: ImageRepository
 ) : ViewModel() {
     companion object {
-        private const val MAX_LENGTH_NAME = FormLengthLimits.NAME
-        private const val MAX_LENGTH_DESCRIPTION = FormLengthLimits.DESCRIPTION
-        private const val MAX_LENGTH_PROFESSION = FormLengthLimits.PROFESSION
+        private const val MAX_LENGTH_NAME = FormLengthLimits.PROFILE_NAME
+        private const val MAX_LENGTH_DESCRIPTION = FormLengthLimits.PROFILE_DESCRIPTION
+        private const val MAX_LENGTH_PROFESSION = FormLengthLimits.PROFILE_PROFESSION
+        private const val TAG_BASELINE = "PROFILE_EDIT_BASELINE"
         private const val TAG_IMG_ADMIN = "TAG_IMG_ADMIN"
         private const val TAG_NAME_ADMIN = "TAG_NAME_ADMIN"
         private const val TAG_PROFESSION_ADMIN = "TAG_PROFESSION_ADMIN"
         private const val TAG_DESCRIPTION_ADMIN = "TAG_DESCRIPTION_ADMIN"
     }
+
+    private var initialized = false
+    private var baseline: PersonalInfoData? = null
+    val profileContent = ProfileContentEditorState(state)
 
     private val _messageError = Channel<Int>()
     val messageError = _messageError.receiveAsFlow()
@@ -82,12 +89,14 @@ class EditInfoViewModel @Inject constructor(
     )
 
     val isDataValid: Boolean
-        get() = !name.hasError && !profession.hasError && !description.hasError
+        get() = !name.hasError && !profession.hasError && !description.hasError && profileContent.isValid
 
     private val hasAnyChange: Boolean
         get() = name.hasChanged ||
                 profession.hasChanged ||
-                description.hasChanged || imageProfile.hasChanged
+                description.hasChanged || imageProfile.hasChanged || profileContent.hasChanged(baseline)
+
+    val hasUnsavedChanges: Boolean get() = initialized && hasAnyChange
 
     var isUpdatedData by mutableStateOf(false)
         private set
@@ -112,15 +121,22 @@ class EditInfoViewModel @Inject constructor(
 
 
     fun initInfoProfile(personalInfoData: PersonalInfoData?) {
-        personalInfoData?.let {
-            name.setDefaultValue(it.name)
-            profession.setDefaultValue(it.profession)
-            description.setDefaultValue(it.description)
-            imageProfile.setDefaultValue(personalInfoData.urlImg.toUri())
+        if (initialized) return
+        val saved: String? = state[TAG_BASELINE]
+        baseline = if (saved != null) Json.decodeFromString<PersonalInfoData?>(saved) else personalInfoData
+        state[TAG_BASELINE] = Json.encodeToString(baseline)
+        profileContent.initialize(baseline)
+        baseline?.let {
+            name.setDefaultValue(it.name, preserveCurrentValue = saved != null)
+            profession.setDefaultValue(it.profession, preserveCurrentValue = saved != null)
+            description.setDefaultValue(it.description, preserveCurrentValue = saved != null)
+            imageProfile.setDefaultValue(it.urlImg.toUri(), preserveCurrentValue = saved != null)
         }
+        initialized = true
     }
 
     fun validateInfoProfile(): UpdateInfoProfileWrapper? {
+        if (!initialized) return null
         name.reValueField()
         profession.reValueField()
         description.reValueField()
@@ -137,6 +153,9 @@ class EditInfoViewModel @Inject constructor(
             profession = profession.getValueOnlyHasChanged(),
             description = description.getValueOnlyHasChanged(),
             uriFileImgProfile = imageProfile.getValueOnlyHasChanged(),
+            baseline = baseline,
+            socialLinks = profileContent.content.socialLinks.takeIf { profileContent.linksChanged(baseline) },
+            translations = profileContent.content.translations.takeIf { profileContent.translationsChanged(baseline) },
         )
     }
 

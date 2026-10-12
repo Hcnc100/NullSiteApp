@@ -10,4 +10,7 @@ sealed class NullAppException : Exception() {
     data object NoInternetConnection : NullAppException()
     data object ServerTimeOut : NullAppException()
 
+    data object ContentConflict : NullAppException()
+    data object AdminRequired : NullAppException()
+
 }

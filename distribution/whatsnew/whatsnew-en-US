@@ -1,4 +1,5 @@
-Updated interface with Material 3 and more consistent light and dark themes.
-Improved large-text readability and forms while the keyboard is open.
-Added email and required-field validation, plus protection against duplicate submissions.
-State collection now follows the app lifecycle, and pagination avoids duplicate requests.
+Bilingual profile and social links, with protection against concurrent edits.
+Projects with sortable galleries, thumbnails and accessible ES/EN descriptions.
+Skills and language-specific CV management, with progress and safe withdrawal.
+Private blog drafts and access to the web editor for publishing and legal documents.
+Improved light/dark themes, large text, validation and draft preservation.

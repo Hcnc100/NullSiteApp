@@ -10,6 +10,8 @@ data class PersonalInfoData(
     val updateAt: Long,
     val profession: String,
     val description: String,
+    val socialLinks: List<ProfileSocialLink>? = null,
+    val translations: Map<String, Map<String, String>> = emptyMap(),
 ){
     companion object{
 

@@ -9,6 +9,7 @@ import android.os.Build
 import android.text.format.DateFormat.is24HourFormat
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -92,7 +93,9 @@ fun Context.sendEmail(email: String) {
 
 @Composable
 inline fun <reified VM : ViewModel> shareViewModel(): VM {
-    val activity = LocalContext.current as ComponentActivity
+    val activity = checkNotNull(LocalActivity.current as? ComponentActivity) {
+        "Shared ViewModel requires a ComponentActivity host"
+    }
     return hiltViewModel(activity)
 }
 

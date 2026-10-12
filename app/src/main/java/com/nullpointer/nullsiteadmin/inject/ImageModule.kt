@@ -18,6 +18,9 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object ImageModule {
+    @Provides
+    fun provideProjectImageUploader(uploader: com.nullpointer.nullsiteadmin.data.image.remote.FirebaseProjectImageUploader):
+        com.nullpointer.nullsiteadmin.domain.image.ProjectImageUploader = uploader
 
     @Provides
     @Singleton

@@ -11,10 +11,10 @@ import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.ui.preview.config.SimplePreview
 
 @Composable
-fun ImageProject(urlImg: String) {
+fun ImageProject(urlImg: String, alt: String? = null) {
     AsyncImage(
         model = urlImg,
-        contentDescription = stringResource(R.string.description_current_img_project),
+        contentDescription = alt?.takeIf { it.isNotBlank() } ?: stringResource(R.string.description_current_img_project),
         contentScale = ContentScale.Crop,
         modifier = Modifier.size(250.dp)
     )

@@ -1,4 +1,5 @@
-Renovamos la interfaz con Material 3 y temas claro y oscuro más consistentes.
-Mejoramos la lectura con texto grande y el uso de formularios con el teclado abierto.
-Añadimos validaciones de correo y campos obligatorios, y protección contra envíos duplicados.
-La carga de estados respeta el ciclo de vida de la app y la paginación evita solicitudes repetidas.
+Perfil bilingüe y enlaces sociales, con protección frente a ediciones simultáneas.
+Proyectos con galería ordenable, miniaturas y descripciones accesibles ES/EN.
+Administración de habilidades y CV por idioma, con progreso y retirada segura.
+Borradores privados del blog y acceso al editor web para publicación y documentos legales.
+Mejoras de temas claro/oscuro, texto grande, validación y conservación de borradores.

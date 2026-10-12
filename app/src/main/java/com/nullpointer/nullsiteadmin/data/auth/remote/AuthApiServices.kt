@@ -4,6 +4,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 import com.nullpointer.nullsiteadmin.core.utils.Constants.PHONE_COLLECTION
+import com.nullpointer.nullsiteadmin.core.utils.AdminAccessPolicy
 import com.nullpointer.nullsiteadmin.exception.NullAppException
 import com.nullpointer.nullsiteadmin.models.auth.response.AuthResponse
 import com.nullpointer.nullsiteadmin.models.credentials.dto.CredentialsDTO
@@ -34,9 +35,16 @@ class AuthApiServices {
             credentialsDTO.password
         ).await()
 
-        val user = response.user ?: throw NullAppException.AuthException.Authenticated
-        val email = user.email ?: throw NullAppException.AuthException.Authenticated
-        return AuthResponse(idUser = user.uid, email = email)
+        try {
+            val user = response.user ?: throw NullAppException.AuthException.Authenticated
+            AdminAccessPolicy.requireAdmin(user.getIdToken(true).await().claims)
+            val email = user.email ?: throw NullAppException.AuthException.Authenticated
+            return AuthResponse(idUser = user.uid, email = email)
+        } catch (error: Exception) {
+            // Do not leave a Firebase session behind when claim validation fails.
+            auth.signOut()
+            throw error
+        }
     }
 
 

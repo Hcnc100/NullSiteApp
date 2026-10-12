@@ -4,6 +4,7 @@ import com.nullpointer.nullsiteadmin.core.utils.callApiTimeOut
 import com.nullpointer.nullsiteadmin.data.project.remote.ProjectApiServices
 import com.nullpointer.nullsiteadmin.models.project.dto.CreateProjectDTO
 import com.nullpointer.nullsiteadmin.models.project.dto.UpdateProjectDTO
+import com.nullpointer.nullsiteadmin.models.project.data.ProjectData
 
 class ProjectRemoteDataSourceImpl(
     private val projectApiServices: ProjectApiServices
@@ -16,9 +17,10 @@ class ProjectRemoteDataSourceImpl(
 
     override suspend fun editProject(
         idProject: String,
-        updateProjectDTO: UpdateProjectDTO
+        updateProjectDTO: UpdateProjectDTO,
+        baseline: ProjectData,
     )= callApiTimeOut {
-        projectApiServices.editProject(idProject, updateProjectDTO)
+        projectApiServices.editProject(idProject, updateProjectDTO, baseline)
     }
 
     override suspend fun deleterProject(

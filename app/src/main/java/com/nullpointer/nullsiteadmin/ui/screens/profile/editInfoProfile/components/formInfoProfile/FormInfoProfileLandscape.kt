@@ -25,7 +25,8 @@ fun FormInfoProfileLandscape(
     modifier: Modifier = Modifier,
     nameAdmin: PropertySavableString,
     professionAdmin: PropertySavableString,
-    descriptionAdmin: PropertySavableString
+    descriptionAdmin: PropertySavableString,
+    extraContent: @Composable () -> Unit = {},
 ) {
     Column(
         modifier = modifier,
@@ -59,6 +60,7 @@ fun FormInfoProfileLandscape(
             ),
             keyboardActions = KeyboardActions(onDone = { hiddenKeyBoard() })
         )
+        extraContent()
         ButtonUpdateInfoProfile(
             isEnable = isDataValid && isEnable,
             actionClick = actionSave,

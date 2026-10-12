@@ -1,6 +1,9 @@
 package com.nullpointer.nullsiteadmin.ui.navigator
 
 import androidx.annotation.DrawableRes
+import android.content.Context
+import com.nullpointer.nullsiteadmin.ui.screens.destinations.CareerScreenDestination
+import com.nullpointer.nullsiteadmin.ui.screens.destinations.EditorialScreenDestination
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.DirectionDestination
 import com.nullpointer.nullsiteadmin.ui.screens.destinations.EmailScreenDestination
@@ -13,7 +16,8 @@ enum class MainDestinations(
     val label: String,
     @DrawableRes
     val icon: Int,
-    val destinations: DirectionDestination
+    val destinations: DirectionDestination,
+    val labelRes: Int? = null
 ) {
     PersonalInfoScreen(
         label = "InfoPersonal",
@@ -27,6 +31,18 @@ enum class MainDestinations(
         destinations = ProjectScreenDestination
     ),
 
+    CareerScreen(
+        label = "Skills and CV",
+        icon = R.drawable.ic_work,
+        destinations = CareerScreenDestination,
+        labelRes = R.string.career_title
+    ),
+    EditorialScreen(
+        label = "Blog and legal",
+        icon = R.drawable.ic_comment,
+        destinations = EditorialScreenDestination,
+        labelRes = R.string.editor_title
+    ),
     ContactScreen(
         label = "Contact",
         icon = R.drawable.ic_comment,
@@ -51,9 +67,10 @@ enum class MainDestinations(
             return entries.find { it.destinations.route == route } != null
         }
 
-        fun getLabel(route: String?): String {
+        fun getLabel(route: String?, context: Context? = null): String {
             if (route == null) return ""
-            return entries.find { it.destinations.route == route }?.label ?: ""
+            val entry = entries.find { it.destinations.route == route } ?: return ""
+            return entry.labelRes?.let { context?.getString(it) } ?: entry.label
         }
     }
 }

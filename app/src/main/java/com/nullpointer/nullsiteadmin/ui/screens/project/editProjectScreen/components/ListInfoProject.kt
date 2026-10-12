@@ -23,7 +23,8 @@ fun ListInfoProject(
     urlImgProject: PropertySavableString,
     descriptionProject: PropertySavableString,
     urlRepositoryProject: PropertySavableString,
-    isEnable: Boolean
+    isEnable: Boolean,
+    extraContent: @Composable () -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
     Column(
@@ -63,6 +64,7 @@ fun ListInfoProject(
             valueProperty = descriptionProject,
             isEnabled = isEnable
         )
+        extraContent()
     }
 }
 

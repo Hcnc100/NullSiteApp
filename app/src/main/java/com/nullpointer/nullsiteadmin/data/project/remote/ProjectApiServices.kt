@@ -6,9 +6,11 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
 import com.nullpointer.nullsiteadmin.core.utils.Constants
+import com.nullpointer.nullsiteadmin.core.utils.ContentEditGuard
 import com.nullpointer.nullsiteadmin.core.utils.awaitAll
 import com.nullpointer.nullsiteadmin.core.utils.getTimeEstimate
 import com.nullpointer.nullsiteadmin.models.project.data.ProjectData
+import com.nullpointer.nullsiteadmin.models.project.data.ProjectContentContract
 import com.nullpointer.nullsiteadmin.models.project.dto.CreateProjectDTO
 import com.nullpointer.nullsiteadmin.models.project.dto.UpdateProjectDTO
 import kotlinx.coroutines.tasks.await
@@ -29,9 +31,17 @@ class ProjectApiServices {
 
     suspend fun editProject(
         idProject: String,
-        updateProjectDTO: UpdateProjectDTO
+        updateProjectDTO: UpdateProjectDTO,
+        baseline: ProjectData,
     ):ProjectData {
-        refProjects.document(idProject).update(updateProjectDTO.toUpdateMap()).await()
+        require(baseline.idProject == idProject)
+        val target = refProjects.document(idProject)
+        val patch = updateProjectDTO.toUpdateMap()
+        Firebase.firestore.runTransaction { transaction ->
+            val current = transaction.get(target)
+            ContentEditGuard.requireUnchanged(current.data, ContentEditGuard.projectBaseline(baseline))
+            transaction.update(target, patch)
+        }.await()
         val newProject = refProjects.document(idProject).get().await()
         return fromDocument(newProject)!!
     }
@@ -72,7 +82,8 @@ class ProjectApiServices {
                 updatedAt = document.getTimeEstimate(Constants.UPDATED_AT),
                 createdAt = document.getTimeEstimate(Constants.CREATED_AT),
                 isVisible = document.getBoolean("published") ?: false,
-                idProject = document.id
+                idProject = document.id,
+                content = ProjectContentContract.read(document.data.orEmpty()),
             )
         } catch (e: Exception) {
             Timber.e("Error cast ${document.id} to email $e")

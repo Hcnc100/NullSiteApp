@@ -23,11 +23,12 @@ class UserDataStore(
     }
 
     private val keyUserData = stringPreferencesKey(KEY_USER_DATA)
+    private val profileJson = Json { ignoreUnknownKeys = true }
 
 
     fun getPersonalInfo(): Flow<PersonalInfoData?> = dataStore.data.map { pref ->
         return@map pref[keyUserData]?.let {
-            Json.decodeFromString(it)
+            profileJson.decodeFromString(it)
         }
     }
 
@@ -35,7 +36,7 @@ class UserDataStore(
         newPersonalInfoData: PersonalInfoData
     ) {
         dataStore.edit { pref ->
-           val userDataEncode= Json.encodeToString(newPersonalInfoData)
+           val userDataEncode= profileJson.encodeToString(newPersonalInfoData)
             pref[keyUserData]= userDataEncode
         }
     }

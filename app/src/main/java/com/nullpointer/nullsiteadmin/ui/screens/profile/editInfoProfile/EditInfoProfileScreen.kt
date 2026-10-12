@@ -2,6 +2,14 @@ package com.nullpointer.nullsiteadmin.ui.screens.profile.editInfoProfile
 
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.net.Uri
+import androidx.activity.compose.BackHandler
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,10 +25,13 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.remember
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -37,6 +48,7 @@ import com.nullpointer.nullsiteadmin.ui.screens.profile.editInfoProfile.actions.
 import com.nullpointer.nullsiteadmin.ui.screens.profile.editInfoProfile.actions.EditInfoProfileActions.SAVE_INFO_PROFILE
 import com.nullpointer.nullsiteadmin.ui.screens.profile.editInfoProfile.actions.EditInfoProfileActions.SHOW_BOTTOM_SHEET
 import com.nullpointer.nullsiteadmin.ui.screens.profile.editInfoProfile.components.EditPhotoProfile
+import com.nullpointer.nullsiteadmin.ui.screens.profile.editInfoProfile.components.ProfileContentEditor
 import com.nullpointer.nullsiteadmin.ui.screens.profile.editInfoProfile.components.formInfoProfile.FormInfoProfile
 import com.nullpointer.nullsiteadmin.ui.screens.profile.editInfoProfile.viewModel.EditInfoViewModel
 import com.nullpointer.nullsiteadmin.ui.screens.states.EditInfoProfileState
@@ -62,6 +74,31 @@ fun EditInfoProfileScreen(
     )
 ) {
 
+    var showDiscard by rememberSaveable { mutableStateOf(false) }
+    // Resolve in the screen's locale; Dialog creates its own Android composition.
+    val discardTitle = stringResource(R.string.profile_discard_title)
+    val discardMessage = stringResource(R.string.profile_discard_message)
+    val discardConfirm = stringResource(R.string.profile_discard_confirm)
+    val keepEditing = stringResource(R.string.profile_keep_editing)
+    val dialogDensity = LocalDensity.current
+    val requestBack: () -> Unit = {
+        if (!editInfoVM.isUpdatedData) {
+            if (editInfoVM.hasUnsavedChanges) showDiscard = true
+            else actionRootDestinations.backDestination()
+        }
+    }
+    BackHandler(enabled = editInfoVM.hasUnsavedChanges || editInfoVM.isUpdatedData) { requestBack() }
+    if (showDiscard) AlertDialog(
+        onDismissRequest = { showDiscard = false },
+        title = { CompositionLocalProvider(LocalDensity provides dialogDensity) { Text(discardTitle) } },
+        text = { CompositionLocalProvider(LocalDensity provides dialogDensity) { Text(discardMessage,
+            modifier = Modifier.verticalScroll(rememberScrollState()).testTag("profile-discard-message")) } },
+        confirmButton = { CompositionLocalProvider(LocalDensity provides dialogDensity) { TextButton(onClick = { showDiscard = false; actionRootDestinations.backDestination() }) {
+            Text(discardConfirm)
+        } } },
+        dismissButton = { CompositionLocalProvider(LocalDensity provides dialogDensity) { TextButton(onClick = { showDiscard = false }) { Text(keepEditing) } } },
+    )
+
     LaunchedEffect(key1 = personalInfoData) {
         editInfoVM.initInfoProfile(personalInfoData)
     }
@@ -81,6 +118,11 @@ fun EditInfoProfileScreen(
         professionAdmin = editInfoVM.profession,
         snackbarHostState = stateEditInfo.snackbarHostState,
         descriptionAdmin = editInfoVM.description,
+        extraContent = {
+            ProfileContentEditor(editInfoVM.profileContent, editInfoVM.name.currentValue,
+                editInfoVM.profession.currentValue, editInfoVM.description.currentValue,
+                enabled = !editInfoVM.isUpdatedData && !editInfoVM.imageProfile.isLoading)
+        },
         isLoading = editInfoVM.isUpdatedData || editInfoVM.imageProfile.isLoading,
         actionBeforeSelect = { imageSelect ->
             // * if get image or not, so hidden bottom sheet
@@ -96,7 +138,7 @@ fun EditInfoProfileScreen(
         },
         onEditInfoProfileActions = { action ->
             when (action) {
-                BACK_SCREEN -> actionRootDestinations.backDestination()
+                BACK_SCREEN -> requestBack()
                 SHOW_BOTTOM_SHEET -> stateEditInfo.showBottomSheet()
                 HIDDEN_BOTTOM_SHEET -> stateEditInfo.hiddenBottomSheet()
                 HIDDEN_KEYBOARD -> stateEditInfo.hiddenKeyBoard()
@@ -128,7 +170,8 @@ fun EditInfoProfileScreen(
     professionAdmin: PropertySavableString,
     descriptionAdmin: PropertySavableString,
     onEditInfoProfileActions: (EditInfoProfileActions) -> Unit,
-    orientation: Int = LocalConfiguration.current.orientation
+    orientation: Int = LocalConfiguration.current.orientation,
+    extraContent: @Composable () -> Unit = {},
 ) {
     if (sheetVisible) {
         ModalBottomSheet(
@@ -168,6 +211,7 @@ fun EditInfoProfileScreen(
                             editEnabled = !isLoading
                         )
                         FormInfoProfile(
+                            extraContent = extraContent,
                             nameAdmin = nameAdmin,
                             professionAdmin = professionAdmin,
                             descriptionAdmin = descriptionAdmin,
@@ -199,6 +243,7 @@ fun EditInfoProfileScreen(
                             modifier = Modifier.weight(0.3f)
                         )
                         FormInfoProfile(
+                            extraContent = extraContent,
                             modifier = Modifier.weight(0.7f),
                             nameAdmin = nameAdmin,
                             professionAdmin = professionAdmin,

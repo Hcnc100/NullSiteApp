@@ -34,7 +34,7 @@ class HomeScreenState(
 
     init {
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            titleNav = MainDestinations.getLabel(destination.route)
+            titleNav = MainDestinations.getLabel(destination.route, context)
         }
     }
 

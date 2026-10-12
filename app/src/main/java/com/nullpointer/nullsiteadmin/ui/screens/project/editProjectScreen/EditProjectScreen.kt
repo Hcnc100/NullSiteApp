@@ -1,6 +1,17 @@
 package com.nullpointer.nullsiteadmin.ui.screens.project.editProjectScreen
 
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
+import android.content.Intent
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.platform.LocalContext
+import com.nullpointer.nullsiteadmin.ui.screens.project.editProjectScreen.components.ProjectContentEditor
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -44,6 +55,25 @@ fun EditProjectScreen(
     editProjectViewModel: EditProjectViewModel = hiltViewModel(),
     editProjectState: FocusScreenState = rememberFocusScreenState()
 ) {
+    val context = LocalContext.current
+    val picker = rememberLauncherForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { uris ->
+        uris.forEach { uri -> runCatching { context.contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION) } }
+        editProjectViewModel.enqueueImages(uris)
+    }
+    var discard by rememberSaveable { mutableStateOf(false) }
+    val requestBack = {
+        if (!editProjectViewModel.isUpdatedProject && !editProjectViewModel.isUploading) {
+            if (editProjectViewModel.hasUnsavedChanges) discard = true else actionRootDestinations.backDestination()
+        }
+        Unit
+    }
+    BackHandler(editProjectViewModel.hasUnsavedChanges || editProjectViewModel.isUpdatedProject || editProjectViewModel.isUploading) { requestBack() }
+    val discardTitle = stringResource(R.string.project_discard_title)
+    val keepEditing = stringResource(R.string.profile_keep_editing)
+    val discardConfirm = stringResource(R.string.profile_discard_confirm)
+    if (discard) AlertDialog(onDismissRequest = { discard = false }, title = { Text(discardTitle) },
+        confirmButton = { TextButton({ discard = false; actionRootDestinations.backDestination() }) { Text(discardConfirm) } },
+        dismissButton = { TextButton({ discard = false }) { Text(keepEditing) } })
 
     LaunchedEffect(key1 = projectDataEdit) {
         editProjectViewModel.initVM(projectDataEdit)
@@ -56,15 +86,25 @@ fun EditProjectScreen(
     EditProjectScreen(
         snackbarHostState = editProjectState.snackbarHostState,
         isUpdatedProject = editProjectViewModel.isUpdatedProject,
+        isUploading = editProjectViewModel.isUploading,
         isDataValid = editProjectViewModel.isDataValid,
         urlImgProject = editProjectViewModel.urlImgProject,
         nameProject = editProjectViewModel.nameProject,
         urlRepositoryProject = editProjectViewModel.urlRepositoryProject,
         descriptionProject = editProjectViewModel.descriptionProject,
+        extraContent = {
+            ProjectContentEditor(editProjectViewModel.contentEditor,
+                enabled = !editProjectViewModel.isUpdatedProject && !editProjectViewModel.isUploading,
+                published = editProjectViewModel.published, onPublished = { editProjectViewModel.published = it },
+                onUpload = { picker.launch(arrayOf("image/jpeg", "image/png", "image/webp", "image/gif")) },
+                pending = editProjectViewModel.pendingUploads.size, uploading = editProjectViewModel.isUploading,
+                progress = editProjectViewModel.uploadProgress, onRetry = editProjectViewModel::retryUploads,
+                onCancel = editProjectViewModel::cancelUploads, onDiscardPending = editProjectViewModel::discardPendingUploads)
+        },
         onEditProjectAction = { action ->
             when (action) {
                 EditProjectAction.HIDDEN_KEYBOARD -> editProjectState.hiddenKeyBoard()
-                EditProjectAction.BACK_SCREEN -> actionRootDestinations.backDestination()
+                EditProjectAction.BACK_SCREEN -> requestBack()
                 EditProjectAction.UPDATE_PROJECT -> {
                     editProjectState.hiddenKeyBoard()
                     editProjectViewModel.updatedProject(
@@ -90,7 +130,9 @@ fun EditProjectScreen(
     urlRepositoryProject: PropertySavableString,
     descriptionProject: PropertySavableString,
     onEditProjectAction: (EditProjectAction) -> Unit,
-    orientation: Int = LocalConfiguration.current.orientation
+    orientation: Int = LocalConfiguration.current.orientation,
+    extraContent: @Composable () -> Unit = {},
+    isUploading: Boolean = false,
 ) {
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -115,13 +157,14 @@ fun EditProjectScreen(
                         urlImgProject = urlImgProject.currentValue
                     )
                     ListInfoProject(
+                        extraContent = extraContent,
                         urlImgProject = urlImgProject,
                         nameProject = nameProject,
                         urlRepositoryProject = urlRepositoryProject,
                         descriptionProject = descriptionProject,
                         modifier = Modifier.padding(10.dp),
                         hiddenKeyBoard = { onEditProjectAction(EditProjectAction.HIDDEN_KEYBOARD) },
-                        isEnable = !isUpdatedProject
+                        isEnable = !isUpdatedProject && !isUploading
                     )
                     ButtonUpdateProject(
                         isEnable = isDataValid && !isUpdatedProject,
@@ -153,6 +196,7 @@ fun EditProjectScreen(
                     }
 
                     ListInfoProject(
+                        extraContent = extraContent,
                         modifier = Modifier
                             .padding(10.dp)
                             .weight(0.7f)
@@ -162,7 +206,7 @@ fun EditProjectScreen(
                         urlRepositoryProject = urlRepositoryProject,
                         descriptionProject = descriptionProject,
                         hiddenKeyBoard = { onEditProjectAction(EditProjectAction.HIDDEN_KEYBOARD) },
-                        isEnable = !isUpdatedProject
+                        isEnable = !isUpdatedProject && !isUploading
                     )
                 }
             }

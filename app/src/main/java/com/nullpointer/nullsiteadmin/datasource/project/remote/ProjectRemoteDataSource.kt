@@ -8,7 +8,7 @@ interface ProjectRemoteDataSource {
 
     suspend fun addNewProject(createProjectDTO: CreateProjectDTO):ProjectData
 
-    suspend fun editProject(idProject: String, updateProjectDTO: UpdateProjectDTO):ProjectData
+    suspend fun editProject(idProject: String, updateProjectDTO: UpdateProjectDTO, baseline: ProjectData):ProjectData
 
     suspend fun deleterProject(idProject: String)
 

@@ -6,7 +6,8 @@ import com.nullpointer.nullsiteadmin.models.personalInfo.dto.PersonalInfoDTO
 interface InfoUserRemoteDataSource {
     suspend fun updatePersonalInfo(
         idUser:String,
-        personalInfoDTO: PersonalInfoDTO
+        personalInfoDTO: PersonalInfoDTO,
+        baseline: PersonalInfoData?,
     )
     suspend fun getPersonalInfo(
         idUser: String

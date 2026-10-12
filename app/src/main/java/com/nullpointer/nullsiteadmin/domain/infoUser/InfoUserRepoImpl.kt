@@ -36,7 +36,8 @@ class InfoUserRepoImpl(
 
         infoUserRemoteDataSource.updatePersonalInfo(
             idUser = idUser,
-            personalInfoDTO = personalInfoDTO
+            personalInfoDTO = personalInfoDTO,
+            baseline = updateInfoProfileWrapper.baseline,
         )
 
 

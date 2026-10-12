@@ -2,6 +2,8 @@ package com.nullpointer.nullsiteadmin.models.project.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.ColumnInfo
+import com.nullpointer.nullsiteadmin.models.project.data.ProjectContentContract
 import com.nullpointer.nullsiteadmin.models.project.data.ProjectData
 import java.util.Date
 
@@ -16,6 +18,7 @@ data class ProjectEntity(
     val createdAt: Date,
     val updatedAt: Date,
     val isVisible: Boolean,
+    @ColumnInfo(defaultValue = "'{}'") val contentJson: String = "{}",
 ){
     companion object{
         fun fromProjectData(projectData: ProjectData) = ProjectEntity(
@@ -26,7 +29,8 @@ data class ProjectEntity(
             urlRepo = projectData.urlRepo,
             createdAt = projectData.createdAt!!,
             updatedAt = projectData.updatedAt!!,
-            isVisible = projectData.isVisible
+            isVisible = projectData.isVisible,
+            contentJson = ProjectContentContract.encode(projectData.content),
         )
     }
 }

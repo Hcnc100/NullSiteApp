@@ -50,9 +50,9 @@ class PropertySavableString(
     val isEmpty get() = currentValue.isEmpty()
 
 
-    fun setDefaultValue(newValue: String) {
+    fun setDefaultValue(newValue: String, preserveCurrentValue: Boolean = false) {
         defaultValue = newValue
-        currentValue = newValue
+        if (!preserveCurrentValue) currentValue = newValue
     }
 
     fun changeValue(newValue: String) {

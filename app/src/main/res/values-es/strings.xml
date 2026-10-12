@@ -1,4 +1,52 @@
 <resources>
+    <string name="project_enriched">Detalles y galería del proyecto</string>
+    <string name="project_publication">Publicado en la web</string>
+    <string name="project_privacy_notice">No publicado oculta el listado, pero no vuelve privados el documento ni las imágenes subidas.</string>
+    <string name="project_demo">URL HTTPS de demo / tienda</string>
+    <string name="project_technologies">IDs de tecnologías (separados por comas)</string>
+    <string name="project_links">Enlaces adicionales</string>
+    <string name="project_add_link">Añadir enlace</string>
+    <string name="project_link_label">Etiqueta del enlace</string>
+    <string name="project_url">URL HTTPS</string>
+    <string name="project_gallery">Galería · máximo 60 imágenes</string>
+    <string name="project_add_capture">Añadir captura por URL</string>
+    <string name="project_upload_images">Seleccionar y subir imágenes (hasta 20)</string>
+    <string name="project_alt">Descripción accesible (máximo 300)</string>
+    <string name="project_cover_alt">Descripción accesible de portada</string>
+    <string name="project_thumbnail">Miniatura HTTPS opcional</string>
+    <string name="project_order">Orden de presentación (entero)</string>
+    <string name="project_move_up">Subir posición</string>
+    <string name="project_move_down">Bajar posición</string>
+    <string name="project_remove">Eliminar</string>
+    <string name="project_upload_error">Falló la subida. Usa JPEG, PNG, WebP o GIF de hasta 10 MB; revisa permisos y conexión, y reintenta.</string>
+    <string name="project_retry">Reintentar subidas pendientes</string>
+    <string name="project_clear_pending">Descartar subidas pendientes</string>
+    <string name="project_cancel_upload">Cancelar subida</string>
+    <string name="project_pending">Subidas pendientes: %1$d</string>
+    <string name="project_invalid_content">Revisa las URLs HTTPS, etiquetas y límites de caracteres.</string>
+    <string name="project_translations">Traducciones del proyecto · ES / EN</string>
+    <string name="project_discard_title">¿Descartar cambios del proyecto?</string>
+    <string name="project_preview">Vista previa de galería</string>
+    <string name="profile_translations">Contenido del perfil · ES / EN</string>
+    <string name="profile_translation_help">Estas traducciones cambian el contenido de la web, no el idioma de la app. Deja un campo vacío para usar su texto base.</string>
+    <string name="profile_social_links">Editar redes sociales</string>
+    <string name="profile_hide_social_links">Ocultar redes sociales</string>
+    <string name="profile_legacy_links_help">No hay enlaces personalizados. La web conserva sus enlaces históricos hasta editar esta lista. Añadir un enlace reemplaza esa lista histórica.</string>
+    <string name="profile_links_help">Usa enlaces HTTPS. Borra una URL individual o vacía la lista para eliminar tus enlaces personalizados.</string>
+    <string name="profile_clear_links">Eliminar todos los enlaces</string>
+    <string name="profile_remove_link">Quitar</string>
+    <string name="profile_https_error">Usa una URL HTTPS sin usuario ni contraseña, de hasta 2048 caracteres.</string>
+    <string name="profile_length_error">Máximo %1$d caracteres</string>
+    <string name="profile_preview">Mostrar vista previa del perfil</string>
+    <string name="profile_hide_preview">Ocultar vista previa</string>
+    <string name="profile_preview_fallback">Los campos sin traducción usan el texto base del perfil.</string>
+    <string name="profile_no_links">No hay redes sociales publicadas.</string>
+    <string name="profile_discard_title">¿Descartar cambios sin guardar?</string>
+    <string name="profile_discard_message">Tus cambios del perfil todavía no se han guardado.</string>
+    <string name="profile_discard_confirm">Descartar</string>
+    <string name="profile_keep_editing">Seguir editando</string>
+    <string name="error_content_conflict">Este contenido cambió en otro dispositivo. No se guardaron tus cambios. Vuelve atrás, actualiza la lista o el perfil y abre de nuevo el editor antes de reintentar.</string>
+    <string name="error_admin_required">Esta cuenta no tiene acceso de administrador. Pide al propietario del sitio que revise sus permisos.</string>
     <string name="error_email_format">Introduce un correo electrónico válido</string>
     <string name="app_name">NullSiteApp</string>
 
@@ -15,7 +63,7 @@
     <string name="error_name_admin_length">El nombre no puede ser tan largo</string>
     <string name="hint_name_admin">Escribe un nombre</string>
 
-    <string name="label_profession_admin">Perfil</string>
+    <string name="label_profession_admin">Profesión</string>
     <string name="error_profess_admin_empty">La profesión es requerida</string>
     <string name="error_profess_admin_length">La profesión es muy larga</string>
     <string name="hint_profession_admin">Escribe la profesión</string>
@@ -40,7 +88,7 @@
 
     <string name="label_repo_project">Link del Proyecto</string>
     <string name="hint_repo_project">Escribe el link del proyecto</string>
-    <string name="error_empty_link_project">El link no puede estar vacío</string>
+    <string name="error_empty_link_project">El enlace no puede estar vacío</string>
     <string name="error_length_link_project">El link no puede ser tan largo</string>
     <string name="hint_img_project">Proporciona el link de la imagen</string>
     <string name="label_img_project">Link de la imagen</string>
@@ -62,19 +110,19 @@
     <string name="description_edit_info_user">Icono para ir a la edición de la información del usuario</string>
 
     <!-- screen contact-->
-    <string name="message_error_contact">Error al cargar los emails</string>
-    <string name="message_empty_contact">La bandeja de entrada esta vacia</string>
-    <string name="text_number_emails">Número de emails: %d</string>
+    <string name="message_error_contact">Error al cargar los correos</string>
+    <string name="message_empty_contact">La bandeja de entrada está vacía</string>
+    <string name="text_number_emails">Número de correos: %d</string>
     <string name="text_to_email">De: %s</string>
     <string name="text_subject_email">Asunto: %s</string>
     <string name="text_date_email">Fecha: %s</string>
-    <string name="description_deleter_email">Icono de eliminar, para eliminar el email</string>
+    <string name="description_deleter_email">Eliminar el correo</string>
 
     <!-- screen auth -->
-    <string name="label_email">Email</string>
-    <string name="hint_email">Escribe tu email</string>
+    <string name="label_email">Correo electrónico</string>
+    <string name="hint_email">Escribe tu correo electrónico</string>
     <string name="error_empty_email">Se necesita el correo</string>
-    <string name="error_length_email">El email no puede ser tan largo</string>
+    <string name="error_length_email">El correo electrónico supera el límite de caracteres</string>
     <string name="label_password">Contraseña</string>
     <string name="hint_password">Escribe la contraseña</string>
     <string name="error_empty_passwod">La contraseña es indispensable</string>
@@ -103,17 +151,17 @@
 
     <!-- services upload -->
     <string name="error_upload_info">Error al subir los cambios</string>
-    <string name="message_change_upload">Cambios Guardados</string>
+    <string name="message_change_upload">Cambios guardados</string>
     <string name="message_cancel_upload">Se canceló la actualización</string>
-    <string name="message_init_upload">Subiendo Cambios</string>
-    <string name="error_load_list_email">Error al cargar la lista de emails</string>
-    <string name="error_deleter_email">Error al eliminar el email</string>
+    <string name="message_init_upload">Subiendo cambios</string>
+    <string name="error_load_list_email">Error al cargar la lista de correos</string>
+    <string name="error_deleter_email">Error al eliminar el correo</string>
     <string name="error_load_info_user">Error al cargar la información del usuario</string>
     <string name="message_data_upload">Datos actualizados</string>
     <string name="error_data_user_upload">Error al actualizar la información del usuario</string>
     <string name="error_load_project">Error al cargar proyectos</string>
     <string name="message_upload_project">Proyecto actualizado</string>
-    <string name="message_error_upload_project">Error al editar proyecto</string>
+    <string name="message_error_upload_project">Error al actualizar el proyecto</string>
 
 
     <!-- services -->
@@ -121,16 +169,16 @@
     <string name="title_upload_notify">Actualizando datos</string>
     <string name="name_Action_stop">Detener</string>
     <string name="name_channel_contact">Mensajes de contacto</string>
-    <string name="title_notify_new_email">Nuevo Email</string>
+    <string name="title_notify_new_email">Nuevo correo</string>
     <string name="back_again">Presione nuevamente</string>
-    <string name="description_reply_email">Contestar el email actual</string>
-    <string name="title_email_details">Detalles del Email</string>
-    <string name="message_deleter_email_success">Email eliminado con éxito</string>
+    <string name="description_reply_email">Responder al correo actual</string>
+    <string name="title_email_details">Detalles del correo</string>
+    <string name="message_deleter_email_success">Correo eliminado con éxito</string>
 
     <string name="description_show_password">Muestra la contraseña</string>
     <string name="description_hide_password">Oculta la contraseña</string>
-    <string name="description_email_open">El email ya fue leído</string>
-    <string name="description_email_pending">El email no ha sido leído</string>
+    <string name="description_email_open">El correo ya fue leído</string>
+    <string name="description_email_pending">El correo no ha sido leído</string>
 
     <string name="title_edit_info_personal">Editar información personal</string>
     <string name="message_empty_info_user">La información del usuario está vacía</string>
@@ -167,11 +215,11 @@
 
     <!--project -->
     <string name="error_update_project">Error al actualizar el proyecto</string>
-    <string name="error_concatenate_project">Error al concatenar proyectos</string>
+    <string name="error_concatenate_project">Error al cargar más proyectos</string>
     <string name="error_request_last_project">Error al obtener la lista de proyectos</string>
 
     <!--email-->
-    <string name="error_concatenate_email">Error al concatenar correos electrónicos</string>
+    <string name="error_concatenate_email">Error al cargar más correos</string>
     <string name="error_request_email">Error al obtener los últimos correos electrónicos</string>
     <string name="message_deleter_email_error">Error al eliminar el correo electrónico</string>
     <string name="message_mark_as_open_error">Error al marcar el correo electrónico como abierto</string>
@@ -183,4 +231,84 @@
     <string name="email_delete_confirm">Eliminar</string>
     <string name="email_delete_cancel">Cancelar</string>
     <string name="email_deleting">Eliminando correo…</string>
+    <string name="career_title">Habilidades y CV</string>
+    <string name="career_skills">Habilidades</string>
+    <string name="career_resume">CV</string>
+    <string name="career_saved">Cambios guardados.</string>
+    <string name="career_pdf_invalid">Elige un archivo PDF con extensión .pdf, contenido PDF y tamaño mayor de 5 bytes, hasta 10 MB.</string>
+    <string name="career_import_required">Importa las habilidades iniciales antes de editar. Se conservan las existentes. Esto activa las habilidades administradas en la web.</string>
+    <string name="career_operation_failed">La operación falló. Se conserva tu borrador. Revisa la conexión; recarga para confirmar el estado remoto antes de reintentar una publicación.</string>
+    <string name="career_import">Importar habilidades iniciales</string>
+    <string name="career_new">Nueva habilidad</string>
+    <string name="career_empty">Aún no hay habilidades.</string>
+    <string name="career_published">Publicado</string>
+    <string name="career_unpublished">No publicado</string>
+    <string name="career_edit">Editar</string>
+    <string name="career_save">Guardar habilidad</string>
+    <string name="career_delete">Eliminar habilidad</string>
+    <string name="career_close">Descartar y recargar</string>
+    <string name="career_reload">Recargar</string>
+    <string name="career_working">Procesando…</string>
+    <string name="career_upload_progress">Subiendo PDF: %1$d%%</string>
+    <string name="career_resume_active">CV activo para este idioma</string>
+    <string name="career_resume_inactive">Sin CV activo para este idioma</string>
+    <string name="career_resume_help">Solo PDF, hasta 10 MB. Selecciona un archivo y después publícalo. El CV anterior sigue activo hasta que el nuevo archivo se suba y guarde correctamente.</string>
+    <string name="career_select_pdf">Seleccionar o reemplazar PDF</string>
+    <string name="career_pdf_selected">PDF seleccionado. Todavía no está publicado.</string>
+    <string name="career_publish">Publicar PDF seleccionado</string>
+    <string name="career_withdraw">Retirar CV</string>
+    <string name="career_confirm_delete">¿Eliminar esta habilidad?</string>
+    <string name="career_confirm_withdraw">¿Retirar este CV?</string>
+    <string name="career_confirm_import">¿Activar habilidades administradas?</string>
+    <string name="career_withdraw_help">Desactiva el CV de este idioma sin eliminarlo. La web puede seguir ofreciendo el CV activo del otro idioma como alternativa.</string>
+    <string name="career_confirm_help">Confirma para continuar. Los cambios sin publicar no se guardarán.</string>
+    <string name="career_confirm">Confirmar</string>
+    <string name="career_name">Nombre</string>
+    <string name="career_description">Descripción</string>
+    <string name="career_category">Categoría</string>
+    <string name="career_language">Lenguaje</string>
+    <string name="career_tech">Tecnología / herramienta</string>
+    <string name="career_icon">Icono permitido</string>
+    <string name="career_color">Color (#RRGGBB)</string>
+    <string name="career_order">Orden (0–9999)</string>
+    <string name="career_translated_name">Nombre traducido</string>
+    <string name="career_translated_description">Descripción traducida</string>
+    <string name="career_skill_invalid">Revisa el nombre, límites de texto, categoría e icono permitidos, color hexadecimal de seis dígitos y orden de 0 a 9999.</string>
+    <string name="editor_title">Blog y documentos legales</string>
+    <string name="editor_blog">Blog</string>
+    <string name="editor_legal">Documentos legales</string>
+    <string name="editor_hybrid_help">Administra aquí los metadatos de borradores privados. Usa el editor web para texto enriquecido, imágenes, publicación, retirada y cambios legales.</string>
+    <string name="editor_open_web">Abrir editor web seguro</string>
+    <string name="editor_session_help">El navegador usa su propio acceso de administrador. No se envía el token móvil. Los cambios locales sin guardar no se transfieren. Guárdalos primero si los necesitas; recarga al volver de la web.</string>
+    <string name="editor_browser_error">No se pudo abrir el sitio HTTPS configurado. Revisa la URL de compilación o instala un navegador.</string>
+    <string name="editor_slug_taken">Otro borrador ya tiene reservados este idioma y slug.</string>
+    <string name="editor_unsupported">Este borrador usa un formato o etiquetas que el editor móvil no puede cambiar de forma segura. Usa el editor web.</string>
+    <string name="editor_operation_failed">La operación falló. Se conserva tu borrador. Revisa la conexión; descarta y recarga para confirmar el estado remoto antes de reintentar.</string>
+    <string name="editor_saved">Borrador privado guardado. No se modificó el artículo público.</string>
+    <string name="editor_limited">Vista previa: hasta 20 documentos por colección. Puede haber más; usa el editor web para la lista completa.</string>
+    <string name="editor_blog_enabled">El blog está habilitado en la configuración del sitio.</string>
+    <string name="editor_blog_disabled">El blog está deshabilitado en la configuración del sitio. Una referencia pública no confirma que el artículo sea visible ahora.</string>
+    <string name="editor_new">Nuevo borrador privado</string>
+    <string name="editor_empty">No hay registros en esta vista previa.</string>
+    <string name="editor_draft_revision">Borrador privado · revisión %1$d</string>
+    <string name="editor_public_reference">Referencia pública: %1$s · revisión %2$d</string>
+    <string name="editor_private">Sin referencia pública en este borrador.</string>
+    <string name="editor_edit_metadata">Editar metadatos del borrador</string>
+    <string name="editor_save">Guardar borrador privado</string>
+    <string name="editor_legal_help">El contenido legal y su historial conservan el flujo de publicación web. Esta pantalla no renderiza HTML ni escribe directamente en términos públicos.</string>
+    <string name="editor_public_included">Documento público incluido en esta vista previa.</string>
+    <string name="editor_public_missing">Documento público no incluido en esta vista previa.</string>
+    <string name="editor_draft_missing">Borrador privado no incluido en esta vista previa.</string>
+    <string name="editor_legal_revision">Revisión del borrador %1$d · revisión publicada %2$d</string>
+    <string name="editor_history">Cargar historial reciente</string>
+    <string name="editor_history_for">Historial de %1$s (hasta 20)</string>
+    <string name="editor_history_empty">Sin entradas de historial.</string>
+    <string name="editor_history_row">Revisión %1$d · %2$s</string>
+    <string name="editor_name">Título</string>
+    <string name="editor_slug">Slug (palabras minúsculas separadas por guiones)</string>
+    <string name="editor_excerpt">Resumen</string>
+    <string name="editor_tags">Etiquetas separadas por comas (máximo 20 × 40)</string>
+    <string name="editor_initial_text">Texto inicial sin formato (no HTML)</string>
+    <string name="editor_body_preserved">Se conservan el HTML, las imágenes y las referencias de publicación. Edita el contenido enriquecido en el editor web.</string>
+    <string name="editor_invalid">Revisa título, slug, resumen, idioma y etiquetas únicas. Un borrador nuevo también necesita texto inicial.</string>
 </resources>

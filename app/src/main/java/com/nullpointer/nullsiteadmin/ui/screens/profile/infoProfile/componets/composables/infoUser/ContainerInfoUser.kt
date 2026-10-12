@@ -5,6 +5,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import com.nullpointer.nullsiteadmin.ui.screens.profile.editInfoProfile.components.ProfileLocaleSelector
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -20,22 +25,13 @@ fun ContainerInfoUser(
     modifier: Modifier = Modifier,
     personalInfoData: PersonalInfoData
 ) {
+    var locale by rememberSaveable { mutableStateOf("es") }
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
-        FieldInfoPersonal(
-            nameFiled = stringResource(id = R.string.label_name_admin),
-            valueFiled = personalInfoData.name
-        )
-        FieldInfoPersonal(
-            nameFiled = stringResource(id = R.string.label_profession_admin),
-            valueFiled = personalInfoData.profession
-        )
-        FieldInfoPersonal(
-            nameFiled = stringResource(id = R.string.label_description_admin),
-            valueFiled = personalInfoData.description
-        )
+        ProfileLocaleSelector(locale = locale, onSelect = { locale = it })
+        ProfileContentPreview(profile = personalInfoData, locale = locale)
     }
 }
 

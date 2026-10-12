@@ -40,9 +40,9 @@ class PropertySavableImg(
         }
     }
 
-    fun setDefaultValue(newValue: Uri) {
+    fun setDefaultValue(newValue: Uri, preserveCurrentValue: Boolean = false) {
         defaultValue = newValue
-        value = newValue
+        if (!preserveCurrentValue) value = newValue
     }
 
     fun changeValue(newValue: Uri) {

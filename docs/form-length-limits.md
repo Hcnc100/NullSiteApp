@@ -6,9 +6,10 @@ Se cuentan unidades UTF-16 (`String.length`), igual que antes.
 
 | Tipo | Límite |
 | --- | ---: |
-| Nombre de perfil/proyecto | 100 |
-| Profesión | 120 |
-| Descripción de perfil/proyecto | 2000 |
+| Nombre de perfil/proyecto | 120 |
+| Profesión de perfil | 180 |
+| Descripción de perfil | 5000 |
+| Descripción de proyecto | 10000 |
 | URL de imagen/repositorio | 2048 |
 | Correo de acceso | 254 |
 | Contraseña de acceso | 4096 |
@@ -27,3 +28,11 @@ ni restricciones nuevas en el servidor. La contraseña no se consultó: el lími
 de acceso admite credenciales largas y conserva espacios. Los campos `urlPlay`
 y `coverAlt` no tienen editor en esta app; la imagen de perfil usa un selector,
 no una entrada de URL. No se cambiaron datos ni reglas de Firebase.
+
+## Compatibilidad web/móvil — fase 1
+
+Desde esta fase los límites se separan por recurso (`PROFILE_*`, `PROJECT_*`)
+y coinciden con los validadores locales actuales del administrador web. No se
+truncan textos existentes. El repositorio de un proyecto es opcional, como en
+la web; la URL de portada sigue siendo obligatoria. No se implementaron todavía
+las traducciones ni los demás campos enriquecidos.

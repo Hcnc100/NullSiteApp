@@ -39,7 +39,9 @@ fun ProjectItem(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-            ImageProject(urlImg = projectData.urlImg)
+            ImageProject(urlImg = projectData.content.thumbnailUrl?.takeIf {
+                com.nullpointer.nullsiteadmin.models.project.data.ProjectContentContract.https(it, false)
+            } ?: projectData.urlImg, alt = projectData.content.coverAlt)
             Text(
                 text = projectData.description,
                 style = MaterialTheme.typography.bodyLarge,

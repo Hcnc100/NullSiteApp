@@ -28,7 +28,8 @@ class ProjectRepoImpl(
         val updateProjectDTO = UpdateProjectDTO.fromUpdateProjectWrapper(updateProjectWrapper)
         val projectUpdate = projectRemoteDataSource.editProject(
             idProject = updateProjectWrapper.idProject,
-            updateProjectDTO = updateProjectDTO
+            updateProjectDTO = updateProjectDTO,
+            baseline = updateProjectWrapper.baseline,
         )
         projectLocalDataSource.updateProject(projectUpdate)
 

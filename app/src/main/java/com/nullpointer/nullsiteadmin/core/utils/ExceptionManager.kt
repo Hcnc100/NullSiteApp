@@ -3,6 +3,7 @@ package com.nullpointer.nullsiteadmin.core.utils
 import com.google.firebase.Firebase
 import com.google.firebase.crashlytics.crashlytics
 import com.google.firebase.crashlytics.setCustomKeys
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.nullpointer.nullsiteadmin.BuildConfig
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.exception.NullAppException
@@ -17,6 +18,13 @@ object ExceptionManager {
         messageToUser: Int? = null,
         debugMessage: String? = null
     ): Int {
+        if (throwable is FirebaseFirestoreException) {
+            when (throwable.code) {
+                FirebaseFirestoreException.Code.PERMISSION_DENIED -> return R.string.error_admin_required
+                FirebaseFirestoreException.Code.UNAVAILABLE -> return R.string.error_network
+                else -> Unit // Preserve reporting for unexpected Firestore failures.
+            }
+        }
         return when (throwable) {
             is NullAppException -> {
                 when (throwable) {
@@ -24,6 +32,8 @@ object ExceptionManager {
                     is NullAppException.NoInternetConnection -> R.string.error_network
                     is NullAppException.AuthException.Authenticated -> R.string.error_authenticated
                     is NullAppException.AuthException.UserNotFound -> R.string.error_user_not_found
+                    is NullAppException.ContentConflict -> R.string.error_content_conflict
+                    is NullAppException.AdminRequired -> R.string.error_admin_required
                 }
             }
 

@@ -18,7 +18,8 @@ fun FormInfoProfile(
     nameAdmin: PropertySavableString,
     professionAdmin: PropertySavableString,
     descriptionAdmin: PropertySavableString,
-    orientation: Int = LocalConfiguration.current.orientation
+    orientation: Int = LocalConfiguration.current.orientation,
+    extraContent: @Composable () -> Unit = {},
 ) {
 
     when (orientation) {
@@ -30,7 +31,8 @@ fun FormInfoProfile(
             modifier = modifier,
             nameAdmin = nameAdmin,
             professionAdmin = professionAdmin,
-            descriptionAdmin = descriptionAdmin
+            descriptionAdmin = descriptionAdmin,
+            extraContent = extraContent,
         )
 
         else -> FormInfoProfileLandscape(
@@ -41,7 +43,8 @@ fun FormInfoProfile(
             modifier = modifier,
             nameAdmin = nameAdmin,
             professionAdmin = professionAdmin,
-            descriptionAdmin = descriptionAdmin
+            descriptionAdmin = descriptionAdmin,
+            extraContent = extraContent,
         )
     }
 }

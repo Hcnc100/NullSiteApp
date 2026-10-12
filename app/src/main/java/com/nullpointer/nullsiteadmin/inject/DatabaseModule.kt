@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.nullpointer.nullsiteadmin.data.email.local.EmailDAO
 import com.nullpointer.nullsiteadmin.database.NullSiteDatabase
+import com.nullpointer.nullsiteadmin.database.PROJECT_CONTENT_MIGRATION
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,7 +25,7 @@ object DatabaseModule {
         context,
         NullSiteDatabase::class.java,
         NullSiteDatabase.DATABASE_NAME
-    ).fallbackToDestructiveMigration(dropAllTables = true).build()
+    ).addMigrations(PROJECT_CONTENT_MIGRATION).build()
 
     @Singleton
     @Provides

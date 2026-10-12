@@ -1,5 +1,7 @@
 package com.nullpointer.nullsiteadmin.models.project.wrapper
 
+import com.nullpointer.nullsiteadmin.models.project.data.ProjectData
+
 import com.nullpointer.nullsiteadmin.core.utils.MappableFirebase
 import com.nullpointer.nullsiteadmin.database.DateAsLongSerializer
 import com.nullpointer.nullsiteadmin.models.project.dto.CreateProjectDTO
@@ -13,5 +15,7 @@ data class UpdateProjectWrapper(
     val description: String?,
     val urlImg: String?,
     val urlRepo: String?,
-    val isVisible: Boolean?
+    val isVisible: Boolean?,
+    val baseline: ProjectData,
+    val content: com.nullpointer.nullsiteadmin.models.project.data.ProjectContent? = null,
 )

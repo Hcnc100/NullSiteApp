@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.CancellationException
 import kotlin.math.absoluteValue
+import java.util.UUID
 
 class ImageApiServices {
     private val refImgProfile = Firebase.storage.getReference(Constants.IMAGE_PROFILE_STORE)
@@ -21,7 +22,7 @@ class ImageApiServices {
         uriImg: Uri,
         idUser: String
     ): Flow<StorageTaskResult> = callbackFlow {
-        refImgProfile.child(BuildConfig.ID_INFO_PROFILE_FIREBASE).putFile(uriImg)
+        refImgProfile.child(newProfileImageName()).putFile(uriImg)
             .addOnSuccessListener { task ->
                 task.storage.downloadUrl.addOnSuccessListener {
                     trySend(StorageTaskResult.Complete.Success(it.toString()))
@@ -55,12 +56,15 @@ class ImageApiServices {
         idUser: String
     ): String {
         val result =
-            refImgProfile.child(BuildConfig.ID_INFO_PROFILE_FIREBASE).putFile(uriImg).await()
+            refImgProfile.child(newProfileImageName()).putFile(uriImg).await()
         return result.storage.downloadUrl.await().toString()
     }
 
 
     private val UploadTask.TaskSnapshot.percentTransfer: Float
         get() = (bytesTransferred.toFloat() / totalByteCount.absoluteValue.toFloat()) * 100
+
+    // A failed Firestore conflict check must not overwrite the currently published photo.
+    private fun newProfileImageName() = "${BuildConfig.ID_INFO_PROFILE_FIREBASE}-${UUID.randomUUID()}"
 
 }

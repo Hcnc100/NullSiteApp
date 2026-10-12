@@ -16,7 +16,8 @@ data class ProjectData(
     val createdAt: Date? = null,
     @Serializable(with = DateAsLongSerializer::class)
     val updatedAt: Date? = null,
-    val isVisible: Boolean = false
+    val isVisible: Boolean = false,
+    val content: ProjectContent = ProjectContent(),
 ){
     companion object {
 
@@ -46,7 +47,8 @@ data class ProjectData(
             urlRepo = projectEntity.urlRepo,
             createdAt = projectEntity.createdAt,
             isVisible = projectEntity.isVisible,
-            updatedAt = projectEntity.updatedAt
+            updatedAt = projectEntity.updatedAt,
+            content = ProjectContentContract.decode(projectEntity.contentJson),
         )
     }
 }
