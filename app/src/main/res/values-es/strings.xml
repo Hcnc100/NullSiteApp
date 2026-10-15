@@ -248,6 +248,7 @@
     <string name="career_delete">Eliminar habilidad</string>
     <string name="career_close">Descartar y recargar</string>
     <string name="career_reload">Recargar</string>
+    <string name="refresh_content">Actualizar contenido</string>
     <string name="career_working">Procesando…</string>
     <string name="career_upload_progress">Subiendo PDF: %1$d%%</string>
     <string name="career_resume_active">CV activo para este idioma</string>

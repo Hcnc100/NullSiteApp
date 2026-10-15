@@ -1,3 +1,3 @@
-Fixed selected files being lost when returning to the fingerprint lock.
-Your selection and editing screen are preserved after choosing a PDF or image.
-The lock still protects the app and prevents Back from closing the editor while locked.
+Consistent pull-to-refresh in Skills, CV, Blog and Legal, matching Profile and Projects.
+Refreshing protects your drafts and selected files and prevents duplicate loads.
+Accessible refresh action in English and Spanish, plus retry when loading fails.

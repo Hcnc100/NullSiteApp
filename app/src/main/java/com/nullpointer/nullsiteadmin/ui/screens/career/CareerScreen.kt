@@ -23,6 +23,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.models.career.*
 import com.nullpointer.nullsiteadmin.ui.navigator.HomeNavGraph
+import com.nullpointer.nullsiteadmin.ui.share.AppPullToRefreshBox
+import com.nullpointer.nullsiteadmin.ui.share.rememberAppRefreshState
 import com.ramcosta.composedestinations.annotation.Destination
 
 @HomeNavGraph
@@ -45,10 +47,13 @@ fun CareerContent(vm: CareerViewModel, selectPdf: () -> Unit) {
     var confirmation by remember { mutableStateOf<String?>(null) }
     val enabled = vm.busy == null
     val canChangeTab = enabled && vm.draft == null && vm.pendingUri == null
+    val refreshState = rememberAppRefreshState(vm.busy == "load", vm::refresh)
     BackHandler(vm.busy != null || vm.draft != null || vm.pendingUri != null) {
         if (enabled) confirmation = "discard"
     }
     Surface(Modifier.fillMaxSize()) {
+    AppPullToRefreshBox(refreshState, Modifier.fillMaxSize().testTag("career-refresh-container"),
+        enabled = vm.draft == null && vm.pendingUri == null && (enabled || vm.busy == "load")) {
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(stringResource(R.string.career_title), style = MaterialTheme.typography.headlineSmall)
         FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -59,7 +64,7 @@ fun CareerContent(vm: CareerViewModel, selectPdf: () -> Unit) {
         }
         vm.error?.let { Text(stringResource(it), color = MaterialTheme.colorScheme.error, modifier = Modifier.testTag("career-error")) }
         vm.notice?.let { Text(stringResource(it), modifier = Modifier.testTag("career-notice")) }
-        if (vm.busy != null) {
+        if (vm.busy != null && vm.busy != "load") {
             if (vm.busy == "upload") {
                 LinearProgressIndicator(progress = { vm.progress / 100f }, modifier = Modifier.fillMaxWidth())
                 Text(stringResource(R.string.career_upload_progress, vm.progress.toInt()))
@@ -67,7 +72,8 @@ fun CareerContent(vm: CareerViewModel, selectPdf: () -> Unit) {
             } else { LinearProgressIndicator(Modifier.fillMaxWidth()); Text(stringResource(R.string.career_working)) }
         }
         if (vm.snapshot == null) {
-            if (enabled) OutlinedButton(onClick = vm::refresh) { Text(stringResource(R.string.career_reload)) }
+            if (enabled && vm.error != null) OutlinedButton(onClick = vm::refresh,
+                modifier = Modifier.testTag("career-retry")) { Text(stringResource(R.string.career_reload)) }
         } else if (vm.tab == "skills") {
             if (vm.snapshot?.skillsManaged != true) {
                 Text(stringResource(R.string.career_import_required))
@@ -111,9 +117,7 @@ fun CareerContent(vm: CareerViewModel, selectPdf: () -> Unit) {
             OutlinedButton(onClick = { confirmation = "withdraw" }, enabled = enabled && !vm.conflict && vm.pendingUri == null && resume.enabled,
                 modifier = Modifier.testTag("career-withdraw")) { Text(stringResource(R.string.career_withdraw)) }
         }
-        if (vm.snapshot != null && vm.draft == null && vm.pendingUri == null) {
-            TextButton(onClick = vm::refresh, enabled = enabled) { Text(stringResource(R.string.career_reload)) }
-        }
+    }
     }
     }
     confirmation?.let { action ->

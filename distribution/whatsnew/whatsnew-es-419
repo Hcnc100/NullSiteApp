@@ -1,3 +1,3 @@
-Corregimos la pérdida de archivos seleccionados al volver al bloqueo por huella.
-La selección y la pantalla de edición se conservan al regresar del selector de PDF o imágenes.
-El bloqueo sigue protegiendo la app y evita que Atrás cierre el editor mientras está bloqueado.
+Actualización consistente al deslizar hacia abajo en Habilidades, CV, Blog y Legal, igual que en Perfil y Proyectos.
+La actualización protege tus borradores y archivos seleccionados y evita cargas duplicadas.
+Acción accesible de actualización en español e inglés y reintento cuando falla la carga.

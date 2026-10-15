@@ -223,6 +223,7 @@
     <string name="career_delete">Delete skill</string>
     <string name="career_close">Discard and reload</string>
     <string name="career_reload">Reload</string>
+    <string name="refresh_content">Refresh content</string>
     <string name="career_working">Working…</string>
     <string name="career_upload_progress">Uploading PDF: %1$d%%</string>
     <string name="career_resume_active">Active CV for this language</string>

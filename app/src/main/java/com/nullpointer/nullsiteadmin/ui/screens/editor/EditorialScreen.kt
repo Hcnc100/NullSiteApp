@@ -19,6 +19,8 @@ import com.nullpointer.nullsiteadmin.BuildConfig
 import com.nullpointer.nullsiteadmin.R
 import com.nullpointer.nullsiteadmin.models.editor.*
 import com.nullpointer.nullsiteadmin.ui.navigator.HomeNavGraph
+import com.nullpointer.nullsiteadmin.ui.share.AppPullToRefreshBox
+import com.nullpointer.nullsiteadmin.ui.share.rememberAppRefreshState
 import com.ramcosta.composedestinations.annotation.Destination
 
 @HomeNavGraph
@@ -37,8 +39,11 @@ fun EditorialScreen(viewModel: EditorialViewModel = hiltViewModel()) {
 @Composable
 fun EditorialContent(vm: EditorialViewModel, openEditor: (WebEditor) -> Unit) {
     var confirmation by remember { mutableStateOf<String?>(null) }
+    val refreshState = rememberAppRefreshState(vm.refreshing, vm::refresh)
     BackHandler(vm.busy || vm.draft != null) { if (!vm.busy) confirmation = "discard" }
     Surface(Modifier.fillMaxSize()) {
+        AppPullToRefreshBox(refreshState, Modifier.fillMaxSize().testTag("editor-refresh-container"),
+            enabled = vm.draft == null && (!vm.busy || vm.refreshing)) {
         Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text(stringResource(R.string.editor_title), style = MaterialTheme.typography.headlineSmall)
             FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -49,12 +54,13 @@ fun EditorialContent(vm: EditorialViewModel, openEditor: (WebEditor) -> Unit) {
             }
             Text(stringResource(R.string.editor_hybrid_help))
             OutlinedButton(onClick = { confirmation = "web" }, enabled = !vm.busy, modifier = Modifier.testTag("editor-open-web")) { Text(stringResource(R.string.editor_open_web)) }
-            if (vm.busy) LinearProgressIndicator(Modifier.fillMaxWidth())
+            if (vm.busy && !vm.refreshing) LinearProgressIndicator(Modifier.fillMaxWidth())
             vm.error?.let { Text(stringResource(it), color = MaterialTheme.colorScheme.error, modifier = Modifier.testTag("editor-error")) }
             if (vm.saved) Text(stringResource(R.string.editor_saved), modifier = Modifier.testTag("editor-saved"))
             if (vm.snapshot?.limited == true) Text(stringResource(R.string.editor_limited))
             if (vm.snapshot == null) {
-                if (!vm.busy) TextButton(onClick = vm::refresh) { Text(stringResource(R.string.career_reload)) }
+                if (!vm.busy && vm.error != null) TextButton(onClick = vm::refresh,
+                    modifier = Modifier.testTag("editor-retry")) { Text(stringResource(R.string.career_reload)) }
             } else if (vm.section == "blog") {
                 Text(stringResource(if (vm.snapshot!!.blogEnabled) R.string.editor_blog_enabled else R.string.editor_blog_disabled))
                 val draft = vm.draft
@@ -101,8 +107,7 @@ fun EditorialContent(vm: EditorialViewModel, openEditor: (WebEditor) -> Unit) {
                     entries.forEach { Text(stringResource(R.string.editor_history_row, it.revision, it.title), modifier = Modifier.testTag("editor-history-row-${it.id}")) }
                 }
             }
-            if (vm.draft == null && vm.snapshot != null) TextButton(onClick = vm::refresh, enabled = !vm.busy,
-                modifier = Modifier.testTag("editor-refresh")) { Text(stringResource(R.string.career_reload)) }
+        }
         }
     }
     confirmation?.let { action ->
